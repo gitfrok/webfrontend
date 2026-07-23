@@ -1,0 +1,11 @@
+version: v2
+# Generate TypeScript types from governance/contracts into the webfrontend's own gen tree.
+# webfrontend consumes only the generated TS types (via the BFF's shaped API); it never
+# links Go or reaches backend directly (invariant 22).
+inputs:
+  - directory: ../governance/contracts
+plugins:
+  - local: protoc-gen-es
+    out: src/gen
+    opt:
+      - target=ts

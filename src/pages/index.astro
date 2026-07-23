@@ -1,0 +1,19 @@
+---
+// Baseline landing page. Proves the Astro SSR shell builds (T-0001 AC3).
+// Real repo/file/diff views arrive in T-0015; they call the BFF only.
+const app = 'gitfrok';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{app}</title>
+  </head>
+  <body>
+    <main>
+      <h1>{app}</h1>
+      <p>webfrontend baseline — SSR shell wired (ADR-0015).</p>
+    </main>
+  </body>
+</html>
