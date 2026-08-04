@@ -1,0 +1,65 @@
+# webfrontend CI. This repo had no workflow at all, which made it the one repo where ADR-0031's
+# `main-integrity` ruleset could enforce PR-only, no-force-push and no-deletion but had no required
+# check to enforce — the gap ADR-0031 recorded as a follow-up. `ci-gates.md` says what this repo
+# should eventually gate (lint/format, contract schema, unit, E2E, boundary/arch, version floors);
+# what is wired here is everything that exists today, and the header of each step says which.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    # Job name is the required-status-check context in `main-integrity` — renaming it silently
+    # unrequires the gate, so keep it in step with scripts/apply-rulesets.sh in the super-repo.
+    name: build + typecheck + test + arch gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .tool-versions
+          cache: npm
+
+      - name: install
+        run: npm ci
+
+      # ADR-0023 floors: Node >= 26, TypeScript >= 7. The super-repo checks the *declared* floors
+      # across submodules; this checks what CI actually resolved, which is the number that matters.
+      - name: version floors (ADR-0023)
+        run: |
+          node_major=$(node -p 'process.versions.node.split(".")[0]')
+          [ "$node_major" -ge 26 ] || { echo "node $node_major < floor 26 (ADR-0023)"; exit 1; }
+          ts_major=$(node -p 'require("typescript").version.split(".")[0]')
+          [ "$ts_major" -ge 7 ] || { echo "typescript $ts_major < floor 7 (ADR-0023)"; exit 1; }
+          echo "floors: node $node_major, tsc $ts_major"
+
+      # Invariant 22 + ADR-0025: no other repo's source, no infra clients, src/gen stays generated.
+      # Linted before it is trusted, same as the super-repo's fitness scripts (T-0009).
+      - name: shellcheck
+        run: shellcheck scripts/*.sh
+
+      - name: boundary gates
+        run: ./scripts/check-boundaries.sh
+
+      - name: typecheck
+        run: npm run check
+
+      - name: unit tests
+        run: npm test
+
+      - name: build
+        run: npm run build
+
+      # Not wired yet, and deliberately not faked with a passing no-op step:
+      #  - lint/format: no ESLint/Prettier in this repo yet.
+      #  - E2E: no Playwright yet (AGENTS.md wants a few on critical paths).
+      #  - contract codegen freshness (`npm run gen` + `git diff --exit-code src/gen`): buf.gen.yaml
+      #    reads ../governance/contracts, a sibling checkout that does not exist in a standalone CI
+      #    run. Needs the generated-type publishing follow-up in ADR-0027/0028 first.
