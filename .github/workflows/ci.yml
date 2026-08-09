@@ -67,6 +67,11 @@ jobs:
       - name: build
         run: npm run build
 
+      # T-0021 / ADR-0035: build the SSR image and assert non-root, no-shell, read-only-root
+      # runtime posture. Node needs a non-scratch base, so the final stage removes BusyBox and apk.
+      - name: container image
+        run: bash scripts/test-container-image.sh
+
       # Not wired yet, and deliberately not faked with a passing no-op step:
       #  - lint/format: no ESLint/Prettier in this repo yet.
       #  - E2E: no Playwright yet (AGENTS.md wants a few on critical paths).
