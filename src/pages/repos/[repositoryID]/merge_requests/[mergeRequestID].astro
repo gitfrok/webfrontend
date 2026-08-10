@@ -1,0 +1,55 @@
+---
+// Minimal merge-request view (T-0016 web bar; plan risk note: "minimal MR page
+// is sufficient"). Served via SSR from the BFF only (invariant 22). It renders
+// the review state and links to the diff between the source and target refs;
+// it never renders a policy outcome, approval count, or authorization result.
+import { mergeRequest } from '../../../../lib/bff';
+import Layout from '../../../../layouts/Layout.astro';
+import CommandPalette from '../../../../components/CommandPalette';
+
+const { repositoryID, mergeRequestID } = Astro.params;
+let mr: Awaited<ReturnType<typeof mergeRequest>> | null = null;
+let loadError = false;
+
+try {
+  mr = await mergeRequest(Astro.request, repositoryID!, mergeRequestID!);
+} catch {
+  loadError = true;
+}
+
+const diffHref = mr
+  ? `/repos/${repositoryID}/diff/${encodeURIComponent(mr.head_revision)}?base_revision=${encodeURIComponent(mr.source_ref)}`
+  : '#';
+---
+
+<Layout title={mr ? `${mr.title} · ${repositoryID}` : `${repositoryID} MR`}>
+  <CommandPalette client:load repositoryID={repositoryID!} revision="main" />
+  <main style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
+    {loadError && (
+      <p style={{ color: '#cf222e' }}>This merge request is unavailable. Check your session.</p>
+    )}
+
+    {mr && (
+      <>
+        <header style={{ padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
+          <h1 style={{ fontSize: 20, margin: 0 }}>{mr.title}</h1>
+          <p style={{ color: '#57606a', margin: '8px 0 0', fontSize: 14 }}>
+            {mr.state} · {mr.source_ref} → {mr.target_ref}
+          </p>
+        </header>
+
+        {mr.description && <p style={{ margin: '16px 0' }}>{mr.description}</p>}
+
+        <div style={{ display: 'flex', gap: 12, margin: '16px 0' }}>
+          <a href={diffHref} style={{ color: '#0969da', textDecoration: 'none', fontSize: 14 }}>
+            View diff
+          </a>
+        </div>
+
+        <p style={{ color: '#6e7781', fontSize: 13 }}>
+          Head revision {mr.head_revision.slice(0, 8)} · opened by {mr.creator_id} · version {mr.version}
+        </p>
+      </>
+    )}
+  </main>
+</Layout>
