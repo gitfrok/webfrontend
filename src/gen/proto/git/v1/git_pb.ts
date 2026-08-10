@@ -16,7 +16,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/git/v1/git.proto.
  */
 export const file_proto_git_v1_git: GenFile = /*@__PURE__*/
-  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSKoAQoQT3BlcmF0aW9uQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJEi8KCXRyYW5zcG9ydBgGIAEoDjIcLmdpdHNhYXMuZ2l0LnYxLkdpdFRyYW5zcG9ydCJ0ChFVcGxvYWRQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIgoSVXBsb2FkUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidQoSUmVjZWl2ZVBhY2tSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5PcGVyYXRpb25Db250ZXh0SAASDgoEZGF0YRgCIAEoDEgAEg8KBWNsb3NlGAMgASgISABCCQoHcGF5bG9hZCIjChNSZWNlaXZlUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidwoQUmVmVXBkYXRlQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIo0BCg9NZXJnZVJlZlJlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZUNvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIQCghyZXZpc2lvbhgDIAEoCRIhChlleHBlY3RlZF9jdXJyZW50X3JldmlzaW9uGAQgASgJIjgKEE1lcmdlUmVmUmVzcG9uc2USEgoKdGFyZ2V0X3JlZhgBIAEoCRIQCghyZXZpc2lvbhgCIAEoCSqOAQoMR2l0VHJhbnNwb3J0Eh0KGUdJVF9UUkFOU1BPUlRfVU5TUEVDSUZJRUQQABIVChFHSVRfVFJBTlNQT1JUX1NTSBABEiYKIkdJVF9UUkFOU1BPUlRfU01BUlRfSFRUUF9ESVNDT1ZFUlkQAhIgChxHSVRfVFJBTlNQT1JUX1NNQVJUX0hUVFBfUlBDEAMykAIKCkdpdFN0b3JhZ2USVwoKVXBsb2FkUGFjaxIhLmdpdHNhYXMuZ2l0LnYxLlVwbG9hZFBhY2tSZXF1ZXN0GiIuZ2l0c2Fhcy5naXQudjEuVXBsb2FkUGFja1Jlc3BvbnNlKAEwARJaCgtSZWNlaXZlUGFjaxIiLmdpdHNhYXMuZ2l0LnYxLlJlY2VpdmVQYWNrUmVxdWVzdBojLmdpdHNhYXMuZ2l0LnYxLlJlY2VpdmVQYWNrUmVzcG9uc2UoATABEk0KCE1lcmdlUmVmEh8uZ2l0c2Fhcy5naXQudjEuTWVyZ2VSZWZSZXF1ZXN0GiAuZ2l0c2Fhcy5naXQudjEuTWVyZ2VSZWZSZXNwb25zZUIzWjFnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vcHJvdG8vZ2l0L3YxO2dpdHYxYgZwcm90bzM");
+  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSKoAQoQT3BlcmF0aW9uQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJEi8KCXRyYW5zcG9ydBgGIAEoDjIcLmdpdHNhYXMuZ2l0LnYxLkdpdFRyYW5zcG9ydCJ0ChFVcGxvYWRQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIgoSVXBsb2FkUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidQoSUmVjZWl2ZVBhY2tSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5PcGVyYXRpb25Db250ZXh0SAASDgoEZGF0YRgCIAEoDEgAEg8KBWNsb3NlGAMgASgISABCCQoHcGF5bG9hZCIjChNSZWNlaXZlUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidwoQUmVmVXBkYXRlQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIo0BCg9NZXJnZVJlZlJlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZUNvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIQCghyZXZpc2lvbhgDIAEoCRIhChlleHBlY3RlZF9jdXJyZW50X3JldmlzaW9uGAQgASgJIjgKEE1lcmdlUmVmUmVzcG9uc2USEgoKdGFyZ2V0X3JlZhgBIAEoCRIQCghyZXZpc2lvbhgCIAEoCSJwChFJbXBvcnRSZWZzUmVxdWVzdBIxCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dBISCgpzb3VyY2VfdXJsGAIgASgJEhQKDHNvdXJjZV90b2tlbhgDIAEoCSI9ChJJbXBvcnRSZWZzUmVzcG9uc2USJwoEcmVmcxgBIAMoCzIZLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZSIqCglSZWZVcGRhdGUSCwoDcmVmGAEgASgJEhAKCHJldmlzaW9uGAIgASgJKo4BCgxHaXRUcmFuc3BvcnQSHQoZR0lUX1RSQU5TUE9SVF9VTlNQRUNJRklFRBAAEhUKEUdJVF9UUkFOU1BPUlRfU1NIEAESJgoiR0lUX1RSQU5TUE9SVF9TTUFSVF9IVFRQX0RJU0NPVkVSWRACEiAKHEdJVF9UUkFOU1BPUlRfU01BUlRfSFRUUF9SUEMQAzLlAgoKR2l0U3RvcmFnZRJXCgpVcGxvYWRQYWNrEiEuZ2l0c2Fhcy5naXQudjEuVXBsb2FkUGFja1JlcXVlc3QaIi5naXRzYWFzLmdpdC52MS5VcGxvYWRQYWNrUmVzcG9uc2UoATABEloKC1JlY2VpdmVQYWNrEiIuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXF1ZXN0GiMuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXNwb25zZSgBMAESTQoITWVyZ2VSZWYSHy5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlcXVlc3QaIC5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlc3BvbnNlElMKCkltcG9ydFJlZnMSIS5naXRzYWFzLmdpdC52MS5JbXBvcnRSZWZzUmVxdWVzdBoiLmdpdHNhYXMuZ2l0LnYxLkltcG9ydFJlZnNSZXNwb25zZUIzWjFnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vcHJvdG8vZ2l0L3YxO2dpdHYxYgZwcm90bzM");
 
 /**
  * OperationContext identifies one Git operation. It is sent as the first client-stream message;
@@ -289,6 +289,85 @@ export const MergeRefResponseSchema: GenMessage<MergeRefResponse> = /*@__PURE__*
   messageDesc(file_proto_git_v1_git, 7);
 
 /**
+ * ImportRefsRequest carries the import's git phase to storage. The source URL is
+ * a request-only secret: it never becomes an event, an audit record, a log line,
+ * or an error. The token is a request-only secret too, and must never be stored.
+ *
+ * @generated from message gitsaas.git.v1.ImportRefsRequest
+ */
+export type ImportRefsRequest = Message<"gitsaas.git.v1.ImportRefsRequest"> & {
+  /**
+   * @generated from field: gitsaas.git.v1.OperationContext context = 1;
+   */
+  context?: OperationContext | undefined;
+
+  /**
+   * The source repository URL (https or ssh). Never stored, never logged.
+   *
+   * @generated from field: string source_url = 2;
+   */
+  sourceUrl: string;
+
+  /**
+   * Optional bearer token for a private source. Request-only, never stored.
+   *
+   * @generated from field: string source_token = 3;
+   */
+  sourceToken: string;
+};
+
+/**
+ * Describes the message gitsaas.git.v1.ImportRefsRequest.
+ * Use `create(ImportRefsRequestSchema)` to create a new message.
+ */
+export const ImportRefsRequestSchema: GenMessage<ImportRefsRequest> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 8);
+
+/**
+ * ImportRefsResponse reports the refs that moved. A refused import returns a
+ * coarse error and no partial state.
+ *
+ * @generated from message gitsaas.git.v1.ImportRefsResponse
+ */
+export type ImportRefsResponse = Message<"gitsaas.git.v1.ImportRefsResponse"> & {
+  /**
+   * One entry per ref that moved, with the new revision.
+   *
+   * @generated from field: repeated gitsaas.git.v1.RefUpdate refs = 1;
+   */
+  refs: RefUpdate[];
+};
+
+/**
+ * Describes the message gitsaas.git.v1.ImportRefsResponse.
+ * Use `create(ImportRefsResponseSchema)` to create a new message.
+ */
+export const ImportRefsResponseSchema: GenMessage<ImportRefsResponse> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 9);
+
+/**
+ * @generated from message gitsaas.git.v1.RefUpdate
+ */
+export type RefUpdate = Message<"gitsaas.git.v1.RefUpdate"> & {
+  /**
+   * @generated from field: string ref = 1;
+   */
+  ref: string;
+
+  /**
+   * @generated from field: string revision = 2;
+   */
+  revision: string;
+};
+
+/**
+ * Describes the message gitsaas.git.v1.RefUpdate.
+ * Use `create(RefUpdateSchema)` to create a new message.
+ */
+export const RefUpdateSchema: GenMessage<RefUpdate> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 10);
+
+/**
  * GitTransport distinguishes SSH's stateful exchange from Smart-HTTP's
  * stateless discovery and RPC framing. All modes retain the same verified
  * principal, opaque repository handle, and GitStorage PDP enforcement.
@@ -365,6 +444,27 @@ export const GitStorage: GenService<{
     methodKind: "unary";
     input: typeof MergeRefRequestSchema;
     output: typeof MergeRefResponseSchema;
+  },
+  /**
+   * ImportRefs fetches a source repository's refs and tags into this repository
+   * on behalf of an authorized import (SPEC-0011, T-0018).
+   *
+   * It is the import path's git phase: the caller has already been PDP-authorized
+   * by Code Review's ImportService; storage asks the PDP again with its own
+   * server-derived context, then runs `git fetch` from the source URL and
+   * publishes RefUpdated for every ref that moved. The fetch is acknowledged
+   * through the same durability path as a push — the primary and one in-sync
+   * replica must both hold the objects before the refs are announced (ADR-0016).
+   *
+   * The source URL and token are request-only secrets. They are never stored,
+   * never logged, and never copied into an event, audit record, or error.
+   *
+   * @generated from rpc gitsaas.git.v1.GitStorage.ImportRefs
+   */
+  importRefs: {
+    methodKind: "unary";
+    input: typeof ImportRefsRequestSchema;
+    output: typeof ImportRefsResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_git_v1_git, 0);

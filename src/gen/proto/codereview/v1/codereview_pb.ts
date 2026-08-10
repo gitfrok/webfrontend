@@ -15,13 +15,15 @@ import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobu
 import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
+import type { Provenance } from "../../contracts/v1/provenance_pb";
+import { file_proto_contracts_v1_provenance } from "../../contracts/v1/provenance_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file proto/codereview/v1/codereview.proto.
  */
 export const file_proto_codereview_v1_codereview: GenFile = /*@__PURE__*/
-  fileDesc("CiRwcm90by9jb2RlcmV2aWV3L3YxL2NvZGVyZXZpZXcucHJvdG8SFWdpdHNhYXMuY29kZXJldmlldy52MSJ7ChRSZXZpZXdDb21tYW5kQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRITCgthY3Rvcl9yb2xlcxgEIAMoCRISCgpyZXF1ZXN0X2lkGAUgASgJIvMCCgxNZXJnZVJlcXVlc3QSGAoQbWVyZ2VfcmVxdWVzdF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSFQoNcmVwb3NpdG9yeV9pZBgDIAEoCRISCgpzb3VyY2VfcmVmGAQgASgJEhIKCnRhcmdldF9yZWYYBSABKAkSDQoFdGl0bGUYBiABKAkSEwoLZGVzY3JpcHRpb24YByABKAkSEgoKY3JlYXRvcl9pZBgIIAEoCRI3CgVzdGF0ZRgJIAEoDjIoLmdpdHNhYXMuY29kZXJldmlldy52MS5NZXJnZVJlcXVlc3RTdGF0ZRIVCg1oZWFkX3JldmlzaW9uGAogASgJEi4KCmNyZWF0ZWRfYXQYCyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYDCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEg8KB3ZlcnNpb24YDSABKAMipQEKGUNyZWF0ZU1lcmdlUmVxdWVzdFJlcXVlc3QSPAoHY29udGV4dBgBIAEoCzIrLmdpdHNhYXMuY29kZXJldmlldy52MS5SZXZpZXdDb21tYW5kQ29udGV4dBISCgpzb3VyY2VfcmVmGAIgASgJEhIKCnRhcmdldF9yZWYYAyABKAkSDQoFdGl0bGUYBCABKAkSEwoLZGVzY3JpcHRpb24YBSABKAkiWAoaQ3JlYXRlTWVyZ2VSZXF1ZXN0UmVzcG9uc2USOgoNbWVyZ2VfcmVxdWVzdBgBIAEoCzIjLmdpdHNhYXMuY29kZXJldmlldy52MS5NZXJnZVJlcXVlc3QicAoWR2V0TWVyZ2VSZXF1ZXN0UmVxdWVzdBI8Cgdjb250ZXh0GAEgASgLMisuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLlJldmlld0NvbW1hbmRDb250ZXh0EhgKEG1lcmdlX3JlcXVlc3RfaWQYAiABKAkiVQoXR2V0TWVyZ2VSZXF1ZXN0UmVzcG9uc2USOgoNbWVyZ2VfcmVxdWVzdBgBIAEoCzIjLmdpdHNhYXMuY29kZXJldmlldy52MS5NZXJnZVJlcXVlc3Qi7gEKE1N1Ym1pdFJldmlld1JlcXVlc3QSPAoHY29udGV4dBgBIAEoCzIrLmdpdHNhYXMuY29kZXJldmlldy52MS5SZXZpZXdDb21tYW5kQ29udGV4dBIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEj0KC2Rpc3Bvc2l0aW9uGAMgASgOMiguZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLlJldmlld0Rpc3Bvc2l0aW9uEg8KB2NvbW1lbnQYBCABKAkSFQoNaGVhZF9yZXZpc2lvbhgFIAEoCRIYChBleHBlY3RlZF92ZXJzaW9uGAYgASgDIlIKFFN1Ym1pdFJldmlld1Jlc3BvbnNlEjoKDW1lcmdlX3JlcXVlc3QYASABKAsyIy5naXRzYWFzLmNvZGVyZXZpZXcudjEuTWVyZ2VSZXF1ZXN0IowBChhNZXJnZU1lcmdlUmVxdWVzdFJlcXVlc3QSPAoHY29udGV4dBgBIAEoCzIrLmdpdHNhYXMuY29kZXJldmlldy52MS5SZXZpZXdDb21tYW5kQ29udGV4dBIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEhgKEGV4cGVjdGVkX3ZlcnNpb24YAyABKAMiVwoZTWVyZ2VNZXJnZVJlcXVlc3RSZXNwb25zZRI6Cg1tZXJnZV9yZXF1ZXN0GAEgASgLMiMuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLk1lcmdlUmVxdWVzdCJ9ChBCcmFuY2hQcm90ZWN0aW9uEhEKCXRlbmFudF9pZBgBIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAIgASgJEhIKCnRhcmdldF9yZWYYAyABKAkSGgoScmVxdWlyZWRfYXBwcm92YWxzGAQgASgFEg8KB3ZlcnNpb24YBSABKAMipAEKGlNldEJyYW5jaFByb3RlY3Rpb25SZXF1ZXN0EjwKB2NvbnRleHQYASABKAsyKy5naXRzYWFzLmNvZGVyZXZpZXcudjEuUmV2aWV3Q29tbWFuZENvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIaChJyZXF1aXJlZF9hcHByb3ZhbHMYAyABKAUSGAoQZXhwZWN0ZWRfdmVyc2lvbhgEIAEoAyJhChtTZXRCcmFuY2hQcm90ZWN0aW9uUmVzcG9uc2USQgoRYnJhbmNoX3Byb3RlY3Rpb24YASABKAsyJy5naXRzYWFzLmNvZGVyZXZpZXcudjEuQnJhbmNoUHJvdGVjdGlvbiqWAQoRTWVyZ2VSZXF1ZXN0U3RhdGUSIwofTUVSR0VfUkVRVUVTVF9TVEFURV9VTlNQRUNJRklFRBAAEhwKGE1FUkdFX1JFUVVFU1RfU1RBVEVfT1BFThABEh4KGk1FUkdFX1JFUVVFU1RfU1RBVEVfQ0xPU0VEEAISHgoaTUVSR0VfUkVRVUVTVF9TVEFURV9NRVJHRUQQAyqfAQoRUmV2aWV3RGlzcG9zaXRpb24SIgoeUkVWSUVXX0RJU1BPU0lUSU9OX1VOU1BFQ0lGSUVEEAASHgoaUkVWSUVXX0RJU1BPU0lUSU9OX0FQUFJPVkUQARImCiJSRVZJRVdfRElTUE9TSVRJT05fUkVRVUVTVF9DSEFOR0VTEAISHgoaUkVWSUVXX0RJU1BPU0lUSU9OX0NPTU1FTlQQAzLhBAoTTWVyZ2VSZXF1ZXN0U2VydmljZRJ5ChJDcmVhdGVNZXJnZVJlcXVlc3QSMC5naXRzYWFzLmNvZGVyZXZpZXcudjEuQ3JlYXRlTWVyZ2VSZXF1ZXN0UmVxdWVzdBoxLmdpdHNhYXMuY29kZXJldmlldy52MS5DcmVhdGVNZXJnZVJlcXVlc3RSZXNwb25zZRJwCg9HZXRNZXJnZVJlcXVlc3QSLS5naXRzYWFzLmNvZGVyZXZpZXcudjEuR2V0TWVyZ2VSZXF1ZXN0UmVxdWVzdBouLmdpdHNhYXMuY29kZXJldmlldy52MS5HZXRNZXJnZVJlcXVlc3RSZXNwb25zZRJnCgxTdWJtaXRSZXZpZXcSKi5naXRzYWFzLmNvZGVyZXZpZXcudjEuU3VibWl0UmV2aWV3UmVxdWVzdBorLmdpdHNhYXMuY29kZXJldmlldy52MS5TdWJtaXRSZXZpZXdSZXNwb25zZRJ2ChFNZXJnZU1lcmdlUmVxdWVzdBIvLmdpdHNhYXMuY29kZXJldmlldy52MS5NZXJnZU1lcmdlUmVxdWVzdFJlcXVlc3QaMC5naXRzYWFzLmNvZGVyZXZpZXcudjEuTWVyZ2VNZXJnZVJlcXVlc3RSZXNwb25zZRJ8ChNTZXRCcmFuY2hQcm90ZWN0aW9uEjEuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLlNldEJyYW5jaFByb3RlY3Rpb25SZXF1ZXN0GjIuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLlNldEJyYW5jaFByb3RlY3Rpb25SZXNwb25zZUJBWj9naXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vcHJvdG8vY29kZXJldmlldy92MTtjb2RlcmV2aWV3djFiBnByb3RvMw", [file_google_protobuf_timestamp]);
+  fileDesc("CiRwcm90by9jb2RlcmV2aWV3L3YxL2NvZGVyZXZpZXcucHJvdG8SFWdpdHNhYXMuY29kZXJldmlldy52MSJ7ChRSZXZpZXdDb21tYW5kQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRITCgthY3Rvcl9yb2xlcxgEIAMoCRISCgpyZXF1ZXN0X2lkGAUgASgJIqkDCgxNZXJnZVJlcXVlc3QSGAoQbWVyZ2VfcmVxdWVzdF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSFQoNcmVwb3NpdG9yeV9pZBgDIAEoCRISCgpzb3VyY2VfcmVmGAQgASgJEhIKCnRhcmdldF9yZWYYBSABKAkSDQoFdGl0bGUYBiABKAkSEwoLZGVzY3JpcHRpb24YByABKAkSEgoKY3JlYXRvcl9pZBgIIAEoCRI3CgVzdGF0ZRgJIAEoDjIoLmdpdHNhYXMuY29kZXJldmlldy52MS5NZXJnZVJlcXVlc3RTdGF0ZRIVCg1oZWFkX3JldmlzaW9uGAogASgJEi4KCmNyZWF0ZWRfYXQYCyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnVwZGF0ZWRfYXQYDCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEg8KB3ZlcnNpb24YDSABKAMSNAoKcHJvdmVuYW5jZRgOIAEoCzIgLmdpdHNhYXMuY29udHJhY3RzLnYxLlByb3ZlbmFuY2UizwIKDkltcG9ydGVkVGhyZWFkEhEKCXRocmVhZF9pZBgBIAEoCRIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEgwKBHBhdGgYAyABKAkSPAoGYW5jaG9yGAQgASgOMiwuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkltcG9ydGVkVGhyZWFkLkFuY2hvchI4Cghjb21tZW50cxgFIAMoCzImLmdpdHNhYXMuY29kZXJldmlldy52MS5JbXBvcnRlZENvbW1lbnQSNAoKcHJvdmVuYW5jZRgGIAEoCzIgLmdpdHNhYXMuY29udHJhY3RzLnYxLlByb3ZlbmFuY2UiVAoGQW5jaG9yEhYKEkFOQ0hPUl9VTlNQRUNJRklFRBAAEg8KC0FOQ0hPUl9ESUZGEAESDwoLQU5DSE9SX0ZJTEUQAhIQCgxBTkNIT1JfTUVSR0UQAyKyAQoPSW1wb3J0ZWRDb21tZW50EhIKCmNvbW1lbnRfaWQYASABKAkSFgoOZGVjbGFyZWRfYWN0b3IYAiABKAkSDAoEYm9keRgDIAEoCRIvCgtkZWNsYXJlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASNAoKcHJvdmVuYW5jZRgFIAEoCzIgLmdpdHNhYXMuY29udHJhY3RzLnYxLlByb3ZlbmFuY2UiwAEKEEltcG9ydGVkQXBwcm92YWwSEwoLYXBwcm92YWxfaWQYASABKAkSGAoQbWVyZ2VfcmVxdWVzdF9pZBgCIAEoCRIWCg5kZWNsYXJlZF9hY3RvchgDIAEoCRIvCgtkZWNsYXJlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASNAoKcHJvdmVuYW5jZRgFIAEoCzIgLmdpdHNhYXMuY29udHJhY3RzLnYxLlByb3ZlbmFuY2UipQEKGUNyZWF0ZU1lcmdlUmVxdWVzdFJlcXVlc3QSPAoHY29udGV4dBgBIAEoCzIrLmdpdHNhYXMuY29kZXJldmlldy52MS5SZXZpZXdDb21tYW5kQ29udGV4dBISCgpzb3VyY2VfcmVmGAIgASgJEhIKCnRhcmdldF9yZWYYAyABKAkSDQoFdGl0bGUYBCABKAkSEwoLZGVzY3JpcHRpb24YBSABKAkiWAoaQ3JlYXRlTWVyZ2VSZXF1ZXN0UmVzcG9uc2USOgoNbWVyZ2VfcmVxdWVzdBgBIAEoCzIjLmdpdHNhYXMuY29kZXJldmlldy52MS5NZXJnZVJlcXVlc3QicAoWR2V0TWVyZ2VSZXF1ZXN0UmVxdWVzdBI8Cgdjb250ZXh0GAEgASgLMisuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLlJldmlld0NvbW1hbmRDb250ZXh0EhgKEG1lcmdlX3JlcXVlc3RfaWQYAiABKAkiVQoXR2V0TWVyZ2VSZXF1ZXN0UmVzcG9uc2USOgoNbWVyZ2VfcmVxdWVzdBgBIAEoCzIjLmdpdHNhYXMuY29kZXJldmlldy52MS5NZXJnZVJlcXVlc3Qi7gEKE1N1Ym1pdFJldmlld1JlcXVlc3QSPAoHY29udGV4dBgBIAEoCzIrLmdpdHNhYXMuY29kZXJldmlldy52MS5SZXZpZXdDb21tYW5kQ29udGV4dBIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEj0KC2Rpc3Bvc2l0aW9uGAMgASgOMiguZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLlJldmlld0Rpc3Bvc2l0aW9uEg8KB2NvbW1lbnQYBCABKAkSFQoNaGVhZF9yZXZpc2lvbhgFIAEoCRIYChBleHBlY3RlZF92ZXJzaW9uGAYgASgDIlIKFFN1Ym1pdFJldmlld1Jlc3BvbnNlEjoKDW1lcmdlX3JlcXVlc3QYASABKAsyIy5naXRzYWFzLmNvZGVyZXZpZXcudjEuTWVyZ2VSZXF1ZXN0IowBChhNZXJnZU1lcmdlUmVxdWVzdFJlcXVlc3QSPAoHY29udGV4dBgBIAEoCzIrLmdpdHNhYXMuY29kZXJldmlldy52MS5SZXZpZXdDb21tYW5kQ29udGV4dBIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEhgKEGV4cGVjdGVkX3ZlcnNpb24YAyABKAMiVwoZTWVyZ2VNZXJnZVJlcXVlc3RSZXNwb25zZRI6Cg1tZXJnZV9yZXF1ZXN0GAEgASgLMiMuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLk1lcmdlUmVxdWVzdCJ9ChBCcmFuY2hQcm90ZWN0aW9uEhEKCXRlbmFudF9pZBgBIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAIgASgJEhIKCnRhcmdldF9yZWYYAyABKAkSGgoScmVxdWlyZWRfYXBwcm92YWxzGAQgASgFEg8KB3ZlcnNpb24YBSABKAMipAEKGlNldEJyYW5jaFByb3RlY3Rpb25SZXF1ZXN0EjwKB2NvbnRleHQYASABKAsyKy5naXRzYWFzLmNvZGVyZXZpZXcudjEuUmV2aWV3Q29tbWFuZENvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIaChJyZXF1aXJlZF9hcHByb3ZhbHMYAyABKAUSGAoQZXhwZWN0ZWRfdmVyc2lvbhgEIAEoAyJhChtTZXRCcmFuY2hQcm90ZWN0aW9uUmVzcG9uc2USQgoRYnJhbmNoX3Byb3RlY3Rpb24YASABKAsyJy5naXRzYWFzLmNvZGVyZXZpZXcudjEuQnJhbmNoUHJvdGVjdGlvbiKmAwoGSW1wb3J0EhEKCWltcG9ydF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSFQoNcmVwb3NpdG9yeV9pZBgDIAEoCRISCgpzb3VyY2VfdXJsGAQgASgJEhUKDXNvdXJjZV9zeXN0ZW0YBSABKAkSFwoPc291cmNlX2luc3RhbmNlGAYgASgJEjEKBXN0YXRlGAcgASgOMiIuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkltcG9ydFN0YXRlEhcKD21hbmlmZXN0X2RpZ2VzdBgIIAEoCRIaChJnaXRfcGhhc2VfY29tcGxldGUYCSABKAgSHgoWaGlzdG9yeV9waGFzZV9jb21wbGV0ZRgKIAEoCBJGCg1yZWNvcmRfY291bnRzGAsgAygLMi8uZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkltcG9ydC5SZWNvcmRDb3VudHNFbnRyeRIWCg5mYWlsdXJlX3JlYXNvbhgMIAEoCRozChFSZWNvcmRDb3VudHNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAM6AjgBIq0BChNDcmVhdGVJbXBvcnRSZXF1ZXN0EjwKB2NvbnRleHQYASABKAsyKy5naXRzYWFzLmNvZGVyZXZpZXcudjEuUmV2aWV3Q29tbWFuZENvbnRleHQSEgoKc291cmNlX3VybBgCIAEoCRIVCg1zb3VyY2Vfc3lzdGVtGAMgASgJEhcKD3NvdXJjZV9pbnN0YW5jZRgEIAEoCRIUCgxzb3VyY2VfdG9rZW4YBSABKAkiRQoUQ3JlYXRlSW1wb3J0UmVzcG9uc2USLQoGaW1wb3J0GAEgASgLMh0uZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkltcG9ydCJjChBHZXRJbXBvcnRSZXF1ZXN0EjwKB2NvbnRleHQYASABKAsyKy5naXRzYWFzLmNvZGVyZXZpZXcudjEuUmV2aWV3Q29tbWFuZENvbnRleHQSEQoJaW1wb3J0X2lkGAIgASgJIkIKEUdldEltcG9ydFJlc3BvbnNlEi0KBmltcG9ydBgBIAEoCzIdLmdpdHNhYXMuY29kZXJldmlldy52MS5JbXBvcnQiaQoSTGlzdEltcG9ydHNSZXF1ZXN0EjwKB2NvbnRleHQYASABKAsyKy5naXRzYWFzLmNvZGVyZXZpZXcudjEuUmV2aWV3Q29tbWFuZENvbnRleHQSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCSJFChNMaXN0SW1wb3J0c1Jlc3BvbnNlEi4KB2ltcG9ydHMYASADKAsyHS5naXRzYWFzLmNvZGVyZXZpZXcudjEuSW1wb3J0ImYKE1Jldm9rZUltcG9ydFJlcXVlc3QSPAoHY29udGV4dBgBIAEoCzIrLmdpdHNhYXMuY29kZXJldmlldy52MS5SZXZpZXdDb21tYW5kQ29udGV4dBIRCglpbXBvcnRfaWQYAiABKAkiRQoUUmV2b2tlSW1wb3J0UmVzcG9uc2USLQoGaW1wb3J0GAEgASgLMh0uZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkltcG9ydCqWAQoRTWVyZ2VSZXF1ZXN0U3RhdGUSIwofTUVSR0VfUkVRVUVTVF9TVEFURV9VTlNQRUNJRklFRBAAEhwKGE1FUkdFX1JFUVVFU1RfU1RBVEVfT1BFThABEh4KGk1FUkdFX1JFUVVFU1RfU1RBVEVfQ0xPU0VEEAISHgoaTUVSR0VfUkVRVUVTVF9TVEFURV9NRVJHRUQQAyqfAQoRUmV2aWV3RGlzcG9zaXRpb24SIgoeUkVWSUVXX0RJU1BPU0lUSU9OX1VOU1BFQ0lGSUVEEAASHgoaUkVWSUVXX0RJU1BPU0lUSU9OX0FQUFJPVkUQARImCiJSRVZJRVdfRElTUE9TSVRJT05fUkVRVUVTVF9DSEFOR0VTEAISHgoaUkVWSUVXX0RJU1BPU0lUSU9OX0NPTU1FTlQQAyrHAQoLSW1wb3J0U3RhdGUSHAoYSU1QT1JUX1NUQVRFX1VOU1BFQ0lGSUVEEAASGAoUSU1QT1JUX1NUQVRFX1BFTkRJTkcQARIYChRJTVBPUlRfU1RBVEVfUlVOTklORxACEhkKFUlNUE9SVF9TVEFURV9DT01QTEVURRADEhcKE0lNUE9SVF9TVEFURV9GQUlMRUQQBBIYChRJTVBPUlRfU1RBVEVfU1RBTExFRBAFEhgKFElNUE9SVF9TVEFURV9SRVZPS0VEEAYy4QQKE01lcmdlUmVxdWVzdFNlcnZpY2USeQoSQ3JlYXRlTWVyZ2VSZXF1ZXN0EjAuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkNyZWF0ZU1lcmdlUmVxdWVzdFJlcXVlc3QaMS5naXRzYWFzLmNvZGVyZXZpZXcudjEuQ3JlYXRlTWVyZ2VSZXF1ZXN0UmVzcG9uc2UScAoPR2V0TWVyZ2VSZXF1ZXN0Ei0uZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkdldE1lcmdlUmVxdWVzdFJlcXVlc3QaLi5naXRzYWFzLmNvZGVyZXZpZXcudjEuR2V0TWVyZ2VSZXF1ZXN0UmVzcG9uc2USZwoMU3VibWl0UmV2aWV3EiouZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLlN1Ym1pdFJldmlld1JlcXVlc3QaKy5naXRzYWFzLmNvZGVyZXZpZXcudjEuU3VibWl0UmV2aWV3UmVzcG9uc2USdgoRTWVyZ2VNZXJnZVJlcXVlc3QSLy5naXRzYWFzLmNvZGVyZXZpZXcudjEuTWVyZ2VNZXJnZVJlcXVlc3RSZXF1ZXN0GjAuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLk1lcmdlTWVyZ2VSZXF1ZXN0UmVzcG9uc2USfAoTU2V0QnJhbmNoUHJvdGVjdGlvbhIxLmdpdHNhYXMuY29kZXJldmlldy52MS5TZXRCcmFuY2hQcm90ZWN0aW9uUmVxdWVzdBoyLmdpdHNhYXMuY29kZXJldmlldy52MS5TZXRCcmFuY2hQcm90ZWN0aW9uUmVzcG9uc2UypwMKDUltcG9ydFNlcnZpY2USZwoMQ3JlYXRlSW1wb3J0EiouZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkNyZWF0ZUltcG9ydFJlcXVlc3QaKy5naXRzYWFzLmNvZGVyZXZpZXcudjEuQ3JlYXRlSW1wb3J0UmVzcG9uc2USXgoJR2V0SW1wb3J0EicuZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkdldEltcG9ydFJlcXVlc3QaKC5naXRzYWFzLmNvZGVyZXZpZXcudjEuR2V0SW1wb3J0UmVzcG9uc2USZAoLTGlzdEltcG9ydHMSKS5naXRzYWFzLmNvZGVyZXZpZXcudjEuTGlzdEltcG9ydHNSZXF1ZXN0GiouZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLkxpc3RJbXBvcnRzUmVzcG9uc2USZwoMUmV2b2tlSW1wb3J0EiouZ2l0c2Fhcy5jb2RlcmV2aWV3LnYxLlJldm9rZUltcG9ydFJlcXVlc3QaKy5naXRzYWFzLmNvZGVyZXZpZXcudjEuUmV2b2tlSW1wb3J0UmVzcG9uc2VCQVo/Z2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL2NvZGVyZXZpZXcvdjE7Y29kZXJldmlld3YxYgZwcm90bzM", [file_google_protobuf_timestamp, file_proto_contracts_v1_provenance]);
 
 /**
  * ReviewCommandContext is derived from an authenticated principal by the PEP.
@@ -137,6 +139,14 @@ export type MergeRequest = Message<"gitsaas.codereview.v1.MergeRequest"> & {
    * @generated from field: int64 version = 13;
    */
   version: bigint;
+
+  /**
+   * Present only on imported MRs. An imported MR's approvals never satisfy a
+   * merge policy and are never rendered as a platform approval (ADR-0029 §4).
+   *
+   * @generated from field: gitsaas.contracts.v1.Provenance provenance = 14;
+   */
+  provenance?: Provenance | undefined;
 };
 
 /**
@@ -145,6 +155,167 @@ export type MergeRequest = Message<"gitsaas.codereview.v1.MergeRequest"> & {
  */
 export const MergeRequestSchema: GenMessage<MergeRequest> = /*@__PURE__*/
   messageDesc(file_proto_codereview_v1_codereview, 1);
+
+/**
+ * ImportedThread is one imported review thread (SPEC-0011 AC4). It is
+ * display-only history: declared_actor stays an opaque foreign handle until a
+ * tenant admin asserts a verified mapping (ADR-0029 §4), and the anchor
+ * degrades from diff-position to file-level to MR-level rather than dropping a
+ * comment (AC5).
+ *
+ * @generated from message gitsaas.codereview.v1.ImportedThread
+ */
+export type ImportedThread = Message<"gitsaas.codereview.v1.ImportedThread"> & {
+  /**
+   * @generated from field: string thread_id = 1;
+   */
+  threadId: string;
+
+  /**
+   * @generated from field: string merge_request_id = 2;
+   */
+  mergeRequestId: string;
+
+  /**
+   * @generated from field: string path = 3;
+   */
+  path: string;
+
+  /**
+   * Anchor precision: DIFF when the diff position resolves, FILE when only the
+   * file remains, MERGE when the file is also gone. An approximate anchor is
+   * marked in the API response so the UI can render it as such (AC5).
+   *
+   * @generated from field: gitsaas.codereview.v1.ImportedThread.Anchor anchor = 4;
+   */
+  anchor: ImportedThread_Anchor;
+
+  /**
+   * @generated from field: repeated gitsaas.codereview.v1.ImportedComment comments = 5;
+   */
+  comments: ImportedComment[];
+
+  /**
+   * @generated from field: gitsaas.contracts.v1.Provenance provenance = 6;
+   */
+  provenance?: Provenance | undefined;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.ImportedThread.
+ * Use `create(ImportedThreadSchema)` to create a new message.
+ */
+export const ImportedThreadSchema: GenMessage<ImportedThread> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 2);
+
+/**
+ * @generated from enum gitsaas.codereview.v1.ImportedThread.Anchor
+ */
+export enum ImportedThread_Anchor {
+  /**
+   * @generated from enum value: ANCHOR_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: ANCHOR_DIFF = 1;
+   */
+  DIFF = 1,
+
+  /**
+   * @generated from enum value: ANCHOR_FILE = 2;
+   */
+  FILE = 2,
+
+  /**
+   * @generated from enum value: ANCHOR_MERGE = 3;
+   */
+  MERGE = 3,
+}
+
+/**
+ * Describes the enum gitsaas.codereview.v1.ImportedThread.Anchor.
+ */
+export const ImportedThread_AnchorSchema: GenEnum<ImportedThread_Anchor> = /*@__PURE__*/
+  enumDesc(file_proto_codereview_v1_codereview, 2, 0);
+
+/**
+ * @generated from message gitsaas.codereview.v1.ImportedComment
+ */
+export type ImportedComment = Message<"gitsaas.codereview.v1.ImportedComment"> & {
+  /**
+   * @generated from field: string comment_id = 1;
+   */
+  commentId: string;
+
+  /**
+   * @generated from field: string declared_actor = 2;
+   */
+  declaredActor: string;
+
+  /**
+   * @generated from field: string body = 3;
+   */
+  body: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp declared_at = 4;
+   */
+  declaredAt?: Timestamp | undefined;
+
+  /**
+   * @generated from field: gitsaas.contracts.v1.Provenance provenance = 5;
+   */
+  provenance?: Provenance | undefined;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.ImportedComment.
+ * Use `create(ImportedCommentSchema)` to create a new message.
+ */
+export const ImportedCommentSchema: GenMessage<ImportedComment> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 3);
+
+/**
+ * ImportedApproval is one imported approval (SPEC-0011 AC4). It never
+ * satisfies a required-reviewer approval policy: an MR whose only approvals are
+ * imported is blocked from merge by the PDP (AC13, ADR-0029 §4).
+ *
+ * @generated from message gitsaas.codereview.v1.ImportedApproval
+ */
+export type ImportedApproval = Message<"gitsaas.codereview.v1.ImportedApproval"> & {
+  /**
+   * @generated from field: string approval_id = 1;
+   */
+  approvalId: string;
+
+  /**
+   * @generated from field: string merge_request_id = 2;
+   */
+  mergeRequestId: string;
+
+  /**
+   * @generated from field: string declared_actor = 3;
+   */
+  declaredActor: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp declared_at = 4;
+   */
+  declaredAt?: Timestamp | undefined;
+
+  /**
+   * @generated from field: gitsaas.contracts.v1.Provenance provenance = 5;
+   */
+  provenance?: Provenance | undefined;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.ImportedApproval.
+ * Use `create(ImportedApprovalSchema)` to create a new message.
+ */
+export const ImportedApprovalSchema: GenMessage<ImportedApproval> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 4);
 
 /**
  * @generated from message gitsaas.codereview.v1.CreateMergeRequestRequest
@@ -181,7 +352,7 @@ export type CreateMergeRequestRequest = Message<"gitsaas.codereview.v1.CreateMer
  * Use `create(CreateMergeRequestRequestSchema)` to create a new message.
  */
 export const CreateMergeRequestRequestSchema: GenMessage<CreateMergeRequestRequest> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 2);
+  messageDesc(file_proto_codereview_v1_codereview, 5);
 
 /**
  * @generated from message gitsaas.codereview.v1.CreateMergeRequestResponse
@@ -198,7 +369,7 @@ export type CreateMergeRequestResponse = Message<"gitsaas.codereview.v1.CreateMe
  * Use `create(CreateMergeRequestResponseSchema)` to create a new message.
  */
 export const CreateMergeRequestResponseSchema: GenMessage<CreateMergeRequestResponse> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 3);
+  messageDesc(file_proto_codereview_v1_codereview, 6);
 
 /**
  * @generated from message gitsaas.codereview.v1.GetMergeRequestRequest
@@ -220,7 +391,7 @@ export type GetMergeRequestRequest = Message<"gitsaas.codereview.v1.GetMergeRequ
  * Use `create(GetMergeRequestRequestSchema)` to create a new message.
  */
 export const GetMergeRequestRequestSchema: GenMessage<GetMergeRequestRequest> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 4);
+  messageDesc(file_proto_codereview_v1_codereview, 7);
 
 /**
  * @generated from message gitsaas.codereview.v1.GetMergeRequestResponse
@@ -237,7 +408,7 @@ export type GetMergeRequestResponse = Message<"gitsaas.codereview.v1.GetMergeReq
  * Use `create(GetMergeRequestResponseSchema)` to create a new message.
  */
 export const GetMergeRequestResponseSchema: GenMessage<GetMergeRequestResponse> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 5);
+  messageDesc(file_proto_codereview_v1_codereview, 8);
 
 /**
  * SubmitReview supersedes the submitting actor's current review without
@@ -284,7 +455,7 @@ export type SubmitReviewRequest = Message<"gitsaas.codereview.v1.SubmitReviewReq
  * Use `create(SubmitReviewRequestSchema)` to create a new message.
  */
 export const SubmitReviewRequestSchema: GenMessage<SubmitReviewRequest> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 6);
+  messageDesc(file_proto_codereview_v1_codereview, 9);
 
 /**
  * @generated from message gitsaas.codereview.v1.SubmitReviewResponse
@@ -301,7 +472,7 @@ export type SubmitReviewResponse = Message<"gitsaas.codereview.v1.SubmitReviewRe
  * Use `create(SubmitReviewResponseSchema)` to create a new message.
  */
 export const SubmitReviewResponseSchema: GenMessage<SubmitReviewResponse> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 7);
+  messageDesc(file_proto_codereview_v1_codereview, 10);
 
 /**
  * MergeMergeRequest accepts only the opaque merge-request ID and expected
@@ -333,7 +504,7 @@ export type MergeMergeRequestRequest = Message<"gitsaas.codereview.v1.MergeMerge
  * Use `create(MergeMergeRequestRequestSchema)` to create a new message.
  */
 export const MergeMergeRequestRequestSchema: GenMessage<MergeMergeRequestRequest> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 8);
+  messageDesc(file_proto_codereview_v1_codereview, 11);
 
 /**
  * @generated from message gitsaas.codereview.v1.MergeMergeRequestResponse
@@ -350,7 +521,7 @@ export type MergeMergeRequestResponse = Message<"gitsaas.codereview.v1.MergeMerg
  * Use `create(MergeMergeRequestResponseSchema)` to create a new message.
  */
 export const MergeMergeRequestResponseSchema: GenMessage<MergeMergeRequestResponse> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 9);
+  messageDesc(file_proto_codereview_v1_codereview, 12);
 
 /**
  * BranchProtection is an exact refs/heads/... rule owned by Code Review and
@@ -392,7 +563,7 @@ export type BranchProtection = Message<"gitsaas.codereview.v1.BranchProtection">
  * Use `create(BranchProtectionSchema)` to create a new message.
  */
 export const BranchProtectionSchema: GenMessage<BranchProtection> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 10);
+  messageDesc(file_proto_codereview_v1_codereview, 13);
 
 /**
  * SetBranchProtection replaces the exact-ref rule for the target ref, guarded
@@ -427,7 +598,7 @@ export type SetBranchProtectionRequest = Message<"gitsaas.codereview.v1.SetBranc
  * Use `create(SetBranchProtectionRequestSchema)` to create a new message.
  */
 export const SetBranchProtectionRequestSchema: GenMessage<SetBranchProtectionRequest> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 11);
+  messageDesc(file_proto_codereview_v1_codereview, 14);
 
 /**
  * @generated from message gitsaas.codereview.v1.SetBranchProtectionResponse
@@ -444,7 +615,268 @@ export type SetBranchProtectionResponse = Message<"gitsaas.codereview.v1.SetBran
  * Use `create(SetBranchProtectionResponseSchema)` to create a new message.
  */
 export const SetBranchProtectionResponseSchema: GenMessage<SetBranchProtectionResponse> = /*@__PURE__*/
-  messageDesc(file_proto_codereview_v1_codereview, 12);
+  messageDesc(file_proto_codereview_v1_codereview, 15);
+
+/**
+ * @generated from message gitsaas.codereview.v1.Import
+ */
+export type Import = Message<"gitsaas.codereview.v1.Import"> & {
+  /**
+   * @generated from field: string import_id = 1;
+   */
+  importId: string;
+
+  /**
+   * @generated from field: string tenant_id = 2;
+   */
+  tenantId: string;
+
+  /**
+   * @generated from field: string repository_id = 3;
+   */
+  repositoryId: string;
+
+  /**
+   * The source URL the git data is fetched from (https or ssh).
+   *
+   * @generated from field: string source_url = 4;
+   */
+  sourceUrl: string;
+
+  /**
+   * e.g. "github" or "gitlab"; selects the history API client.
+   *
+   * @generated from field: string source_system = 5;
+   */
+  sourceSystem: string;
+
+  /**
+   * @generated from field: string source_instance = 6;
+   */
+  sourceInstance: string;
+
+  /**
+   * @generated from field: gitsaas.codereview.v1.ImportState state = 7;
+   */
+  state: ImportState;
+
+  /**
+   * One HistoryImported manifest digest, set when the import completes.
+   *
+   * @generated from field: string manifest_digest = 8;
+   */
+  manifestDigest: string;
+
+  /**
+   * True once the git phase is durably imported through the ordinary write
+   * path (primary + one sync replica acknowledged, ADR-0016).
+   *
+   * @generated from field: bool git_phase_complete = 9;
+   */
+  gitPhaseComplete: boolean;
+
+  /**
+   * True once the history phase is imported and verified.
+   *
+   * @generated from field: bool history_phase_complete = 10;
+   */
+  historyPhaseComplete: boolean;
+
+  /**
+   * Record counts per type, matching HistoryImported.record_counts.
+   *
+   * @generated from field: map<string, int64> record_counts = 11;
+   */
+  recordCounts: { [key: string]: bigint };
+
+  /**
+   * Set when the import stalled (source-side rate limiting) or failed.
+   *
+   * @generated from field: string failure_reason = 12;
+   */
+  failureReason: string;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.Import.
+ * Use `create(ImportSchema)` to create a new message.
+ */
+export const ImportSchema: GenMessage<Import> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 16);
+
+/**
+ * @generated from message gitsaas.codereview.v1.CreateImportRequest
+ */
+export type CreateImportRequest = Message<"gitsaas.codereview.v1.CreateImportRequest"> & {
+  /**
+   * @generated from field: gitsaas.codereview.v1.ReviewCommandContext context = 1;
+   */
+  context?: ReviewCommandContext | undefined;
+
+  /**
+   * @generated from field: string source_url = 2;
+   */
+  sourceUrl: string;
+
+  /**
+   * @generated from field: string source_system = 3;
+   */
+  sourceSystem: string;
+
+  /**
+   * @generated from field: string source_instance = 4;
+   */
+  sourceInstance: string;
+
+  /**
+   * Optional credentials for a private source. Never logged, never stored in
+   * the audit trail, never echoed (SPEC-0011 AC22).
+   *
+   * @generated from field: string source_token = 5;
+   */
+  sourceToken: string;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.CreateImportRequest.
+ * Use `create(CreateImportRequestSchema)` to create a new message.
+ */
+export const CreateImportRequestSchema: GenMessage<CreateImportRequest> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 17);
+
+/**
+ * @generated from message gitsaas.codereview.v1.CreateImportResponse
+ */
+export type CreateImportResponse = Message<"gitsaas.codereview.v1.CreateImportResponse"> & {
+  /**
+   * @generated from field: gitsaas.codereview.v1.Import import = 1;
+   */
+  import?: Import | undefined;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.CreateImportResponse.
+ * Use `create(CreateImportResponseSchema)` to create a new message.
+ */
+export const CreateImportResponseSchema: GenMessage<CreateImportResponse> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 18);
+
+/**
+ * @generated from message gitsaas.codereview.v1.GetImportRequest
+ */
+export type GetImportRequest = Message<"gitsaas.codereview.v1.GetImportRequest"> & {
+  /**
+   * @generated from field: gitsaas.codereview.v1.ReviewCommandContext context = 1;
+   */
+  context?: ReviewCommandContext | undefined;
+
+  /**
+   * @generated from field: string import_id = 2;
+   */
+  importId: string;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.GetImportRequest.
+ * Use `create(GetImportRequestSchema)` to create a new message.
+ */
+export const GetImportRequestSchema: GenMessage<GetImportRequest> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 19);
+
+/**
+ * @generated from message gitsaas.codereview.v1.GetImportResponse
+ */
+export type GetImportResponse = Message<"gitsaas.codereview.v1.GetImportResponse"> & {
+  /**
+   * @generated from field: gitsaas.codereview.v1.Import import = 1;
+   */
+  import?: Import | undefined;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.GetImportResponse.
+ * Use `create(GetImportResponseSchema)` to create a new message.
+ */
+export const GetImportResponseSchema: GenMessage<GetImportResponse> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 20);
+
+/**
+ * @generated from message gitsaas.codereview.v1.ListImportsRequest
+ */
+export type ListImportsRequest = Message<"gitsaas.codereview.v1.ListImportsRequest"> & {
+  /**
+   * @generated from field: gitsaas.codereview.v1.ReviewCommandContext context = 1;
+   */
+  context?: ReviewCommandContext | undefined;
+
+  /**
+   * @generated from field: string repository_id = 2;
+   */
+  repositoryId: string;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.ListImportsRequest.
+ * Use `create(ListImportsRequestSchema)` to create a new message.
+ */
+export const ListImportsRequestSchema: GenMessage<ListImportsRequest> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 21);
+
+/**
+ * @generated from message gitsaas.codereview.v1.ListImportsResponse
+ */
+export type ListImportsResponse = Message<"gitsaas.codereview.v1.ListImportsResponse"> & {
+  /**
+   * @generated from field: repeated gitsaas.codereview.v1.Import imports = 1;
+   */
+  imports: Import[];
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.ListImportsResponse.
+ * Use `create(ListImportsResponseSchema)` to create a new message.
+ */
+export const ListImportsResponseSchema: GenMessage<ListImportsResponse> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 22);
+
+/**
+ * @generated from message gitsaas.codereview.v1.RevokeImportRequest
+ */
+export type RevokeImportRequest = Message<"gitsaas.codereview.v1.RevokeImportRequest"> & {
+  /**
+   * @generated from field: gitsaas.codereview.v1.ReviewCommandContext context = 1;
+   */
+  context?: ReviewCommandContext | undefined;
+
+  /**
+   * @generated from field: string import_id = 2;
+   */
+  importId: string;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.RevokeImportRequest.
+ * Use `create(RevokeImportRequestSchema)` to create a new message.
+ */
+export const RevokeImportRequestSchema: GenMessage<RevokeImportRequest> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 23);
+
+/**
+ * @generated from message gitsaas.codereview.v1.RevokeImportResponse
+ */
+export type RevokeImportResponse = Message<"gitsaas.codereview.v1.RevokeImportResponse"> & {
+  /**
+   * @generated from field: gitsaas.codereview.v1.Import import = 1;
+   */
+  import?: Import | undefined;
+};
+
+/**
+ * Describes the message gitsaas.codereview.v1.RevokeImportResponse.
+ * Use `create(RevokeImportResponseSchema)` to create a new message.
+ */
+export const RevokeImportResponseSchema: GenMessage<RevokeImportResponse> = /*@__PURE__*/
+  messageDesc(file_proto_codereview_v1_codereview, 24);
 
 /**
  * @generated from enum gitsaas.codereview.v1.MergeRequestState
@@ -509,6 +941,66 @@ export const ReviewDispositionSchema: GenEnum<ReviewDisposition> = /*@__PURE__*/
   enumDesc(file_proto_codereview_v1_codereview, 1);
 
 /**
+ * ImportState is the coarse lifecycle of an import job.
+ *
+ * @generated from enum gitsaas.codereview.v1.ImportState
+ */
+export enum ImportState {
+  /**
+   * @generated from enum value: IMPORT_STATE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * created, not yet started
+   *
+   * @generated from enum value: IMPORT_STATE_PENDING = 1;
+   */
+  PENDING = 1,
+
+  /**
+   * git and/or history phase in progress
+   *
+   * @generated from enum value: IMPORT_STATE_RUNNING = 2;
+   */
+  RUNNING = 2,
+
+  /**
+   * both phases done
+   *
+   * @generated from enum value: IMPORT_STATE_COMPLETE = 3;
+   */
+  COMPLETE = 3,
+
+  /**
+   * aborted; nothing partially visible
+   *
+   * @generated from enum value: IMPORT_STATE_FAILED = 4;
+   */
+  FAILED = 4,
+
+  /**
+   * rate-limited or waiting on the source
+   *
+   * @generated from enum value: IMPORT_STATE_STALLED = 5;
+   */
+  STALLED = 5,
+
+  /**
+   * revoked; records tombstoned
+   *
+   * @generated from enum value: IMPORT_STATE_REVOKED = 6;
+   */
+  REVOKED = 6,
+}
+
+/**
+ * Describes the enum gitsaas.codereview.v1.ImportState.
+ */
+export const ImportStateSchema: GenEnum<ImportState> = /*@__PURE__*/
+  enumDesc(file_proto_codereview_v1_codereview, 2);
+
+/**
  * @generated from service gitsaas.codereview.v1.MergeRequestService
  */
 export const MergeRequestService: GenService<{
@@ -554,4 +1046,65 @@ export const MergeRequestService: GenService<{
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_codereview_v1_codereview, 0);
+
+/**
+ * ---------------------------------------------------------------------------
+ * Repository & review-history import (SPEC-0011, ADR-0029, T-0018).
+ *
+ * Import is a one-shot, resumable operation: git data (all refs, tags, LFS
+ * objects) through the ordinary write path, and pull/merge-request history as
+ * ATTESTED_IMPORT records in this context's own schema. Imported history never
+ * enters the audit log, never satisfies a merge policy, and is never rendered
+ * as a platform approval. The import operation itself emits exactly one
+ * first-party HistoryImported audit event; revocation emits HistoryImportRevoked
+ * and tombstones the records (the original chain entry stays unaltered).
+ *
+ * @generated from service gitsaas.codereview.v1.ImportService
+ */
+export const ImportService: GenService<{
+  /**
+   * CreateImport starts (or resumes) an import of one source repository.
+   * Idempotent per (tenant, repository, source_ref).
+   *
+   * @generated from rpc gitsaas.codereview.v1.ImportService.CreateImport
+   */
+  createImport: {
+    methodKind: "unary";
+    input: typeof CreateImportRequestSchema;
+    output: typeof CreateImportResponseSchema;
+  },
+  /**
+   * GetImport returns one import's state and provenance summary.
+   *
+   * @generated from rpc gitsaas.codereview.v1.ImportService.GetImport
+   */
+  getImport: {
+    methodKind: "unary";
+    input: typeof GetImportRequestSchema;
+    output: typeof GetImportResponseSchema;
+  },
+  /**
+   * ListImports lists the imports for a repository, newest first.
+   *
+   * @generated from rpc gitsaas.codereview.v1.ImportService.ListImports
+   */
+  listImports: {
+    methodKind: "unary";
+    input: typeof ListImportsRequestSchema;
+    output: typeof ListImportsResponseSchema;
+  },
+  /**
+   * RevokeImport tombstones every record of an import and emits
+   * HistoryImportRevoked. The original HistoryImported chain entry is
+   * unaltered.
+   *
+   * @generated from rpc gitsaas.codereview.v1.ImportService.RevokeImport
+   */
+  revokeImport: {
+    methodKind: "unary";
+    input: typeof RevokeImportRequestSchema;
+    output: typeof RevokeImportResponseSchema;
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_proto_codereview_v1_codereview, 1);
 
