@@ -28,7 +28,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file events/audit/v1/events.proto.
  */
 export const file_events_audit_v1_events: GenFile = /*@__PURE__*/
-  fileDesc("ChxldmVudHMvYXVkaXQvdjEvZXZlbnRzLnByb3RvEhdnaXRzYWFzLmV2ZW50cy5hdWRpdC52MSK5AgoKQXVkaXRFdmVudBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSDgoGYWN0aW9uGAMgASgJEhAKCGFjdG9yX2lkGAQgASgJEhAKCHJlc291cmNlGAUgASgJEjEKB291dGNvbWUYBiABKA4yIC5naXRzYWFzLmV2ZW50cy5hdWRpdC52MS5PdXRjb21lEj8KBmRldGFpbBgHIAMoCzIvLmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkF1ZGl0RXZlbnQuRGV0YWlsRW50cnkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGi0KC0RldGFpbEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEi9AIKD0hpc3RvcnlJbXBvcnRlZBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSEAoIYWN0b3JfaWQYAyABKAkSFQoNcmVwb3NpdG9yeV9pZBgEIAEoCRIRCglpbXBvcnRfaWQYBSABKAkSFQoNc291cmNlX3N5c3RlbRgGIAEoCRIXCg9zb3VyY2VfaW5zdGFuY2UYByABKAkSUQoNcmVjb3JkX2NvdW50cxgIIAMoCzI6LmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkhpc3RvcnlJbXBvcnRlZC5SZWNvcmRDb3VudHNFbnRyeRIXCg9tYW5pZmVzdF9kaWdlc3QYCSABKAkSLwoLb2NjdXJyZWRfYXQYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGjMKEVJlY29yZENvdW50c0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAzoCOAEiqAEKFEhpc3RvcnlJbXBvcnRSZXZva2VkEhAKCGV2ZW50X2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhEKCWltcG9ydF9pZBgFIAEoCRIvCgtvY2N1cnJlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAqSwoHT3V0Y29tZRIXChNPVVRDT01FX1VOU1BFQ0lGSUVEEAASEwoPT1VUQ09NRV9BTExPV0VEEAESEgoOT1VUQ09NRV9ERU5JRUQQAkI+WjxnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vZXZlbnRzL2F1ZGl0L3YxO2F1ZGl0ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
+  fileDesc("ChxldmVudHMvYXVkaXQvdjEvZXZlbnRzLnByb3RvEhdnaXRzYWFzLmV2ZW50cy5hdWRpdC52MSK5AgoKQXVkaXRFdmVudBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSDgoGYWN0aW9uGAMgASgJEhAKCGFjdG9yX2lkGAQgASgJEhAKCHJlc291cmNlGAUgASgJEjEKB291dGNvbWUYBiABKA4yIC5naXRzYWFzLmV2ZW50cy5hdWRpdC52MS5PdXRjb21lEj8KBmRldGFpbBgHIAMoCzIvLmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkF1ZGl0RXZlbnQuRGV0YWlsRW50cnkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGi0KC0RldGFpbEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEi9AIKD0hpc3RvcnlJbXBvcnRlZBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSEAoIYWN0b3JfaWQYAyABKAkSFQoNcmVwb3NpdG9yeV9pZBgEIAEoCRIRCglpbXBvcnRfaWQYBSABKAkSFQoNc291cmNlX3N5c3RlbRgGIAEoCRIXCg9zb3VyY2VfaW5zdGFuY2UYByABKAkSUQoNcmVjb3JkX2NvdW50cxgIIAMoCzI6LmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkhpc3RvcnlJbXBvcnRlZC5SZWNvcmRDb3VudHNFbnRyeRIXCg9tYW5pZmVzdF9kaWdlc3QYCSABKAkSLwoLb2NjdXJyZWRfYXQYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGjMKEVJlY29yZENvdW50c0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAzoCOAEiqAEKFEhpc3RvcnlJbXBvcnRSZXZva2VkEhAKCGV2ZW50X2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhEKCWltcG9ydF9pZBgFIAEoCRIvCgtvY2N1cnJlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAi2gEKE0RlY2xhcmVkQWN0b3JNYXBwZWQSEAoIZXZlbnRfaWQYASABKAkSEQoJdGVuYW50X2lkGAIgASgJEhAKCGFjdG9yX2lkGAMgASgJEhEKCWltcG9ydF9pZBgEIAEoCRIWCg5kZWNsYXJlZF9hY3RvchgFIAEoCRIXCg9zb3VyY2VfaW5zdGFuY2UYBiABKAkSFwoPbWFwcGVkX2FjdG9yX2lkGAcgASgJEi8KC29jY3VycmVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCpLCgdPdXRjb21lEhcKE09VVENPTUVfVU5TUEVDSUZJRUQQABITCg9PVVRDT01FX0FMTE9XRUQQARISCg5PVVRDT01FX0RFTklFRBACQj5aPGdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9ldmVudHMvYXVkaXQvdjE7YXVkaXRldmVudHN2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
 
 /**
  * AuditEvent records one sensitive action for compliance and investigation.
@@ -233,6 +233,78 @@ export type HistoryImportRevoked = Message<"gitsaas.events.audit.v1.HistoryImpor
  */
 export const HistoryImportRevokedSchema: GenMessage<HistoryImportRevoked> = /*@__PURE__*/
   messageDesc(file_events_audit_v1_events, 2);
+
+/**
+ * DeclaredActorMapped records a tenant admin asserting that a foreign handle
+ * from an import belongs to a platform identity (SPEC-0011 AC10, ADR-0029 §4).
+ *
+ * It is FIRST_PARTY, and it must be: the assertion is ours, made by an
+ * authenticated admin our PDP authorized, timestamped by our clock. The imported
+ * record it refers to stays ATTESTED_IMPORT and stays out of the log.
+ *
+ * The event names the asserting admin because that is the whole accountability
+ * story. An identity mapping is how imported history could be made to look like
+ * platform history, so who claimed it has to be recoverable years later — email
+ * equality, a heuristic, or a bulk guess must never be able to produce one of
+ * these without a name attached.
+ *
+ * @generated from message gitsaas.events.audit.v1.DeclaredActorMapped
+ */
+export type DeclaredActorMapped = Message<"gitsaas.events.audit.v1.DeclaredActorMapped"> & {
+  /**
+   * @generated from field: string event_id = 1;
+   */
+  eventId: string;
+
+  /**
+   * @generated from field: string tenant_id = 2;
+   */
+  tenantId: string;
+
+  /**
+   * The tenant admin who asserted the mapping, authenticated and PDP-authorized.
+   *
+   * @generated from field: string actor_id = 3;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: string import_id = 4;
+   */
+  importId: string;
+
+  /**
+   * The foreign handle and the instance it came from. A handle is only meaningful
+   * within its instance.
+   *
+   * @generated from field: string declared_actor = 5;
+   */
+  declaredActor: string;
+
+  /**
+   * @generated from field: string source_instance = 6;
+   */
+  sourceInstance: string;
+
+  /**
+   * The platform identity the admin asserted the handle belongs to.
+   *
+   * @generated from field: string mapped_actor_id = 7;
+   */
+  mappedActorId: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp occurred_at = 8;
+   */
+  occurredAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.events.audit.v1.DeclaredActorMapped.
+ * Use `create(DeclaredActorMappedSchema)` to create a new message.
+ */
+export const DeclaredActorMappedSchema: GenMessage<DeclaredActorMapped> = /*@__PURE__*/
+  messageDesc(file_events_audit_v1_events, 3);
 
 /**
  * Outcome distinguishes a completed action from a refused one. Refusals are the more interesting

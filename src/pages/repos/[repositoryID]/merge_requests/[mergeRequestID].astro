@@ -3,9 +3,15 @@
 // is sufficient"). Served via SSR from the BFF only (invariant 22). It renders
 // the review state and links to the diff between the source and target refs;
 // it never renders a policy outcome, approval count, or authorization result.
-import { mergeRequest } from '../../../../lib/bff';
+// When an import_id is present it also renders that import's declared history in
+// its own labelled section (SPEC-0011 AC23): imported review never mixes into
+// the first-party review above it, and an imported approval never reads as a
+// platform approval.
+import { mergeRequest, importedHistory } from '../../../../lib/bff';
 import Layout from '../../../../layouts/Layout.astro';
 import CommandPalette from '../../../../components/CommandPalette';
+import ImportedHistory from '../../../../components/ImportedHistory.astro';
+import type { ImportedMergeRequestView } from '../../../../lib/provenance';
 
 const { repositoryID, mergeRequestID } = Astro.params;
 let mr: Awaited<ReturnType<typeof mergeRequest>> | null = null;
@@ -15,6 +21,20 @@ try {
   mr = await mergeRequest(Astro.request, repositoryID!, mergeRequestID!);
 } catch {
   loadError = true;
+}
+
+// The import to show, if any. A failed history read is reported rather than
+// rendered as an empty section: "this import declared nothing" and "we could not
+// read what it declared" are different facts, and only one of them is true.
+const importID = Astro.url.searchParams.get('import_id') ?? '';
+let imported: ImportedMergeRequestView[] = [];
+let importedError = false;
+if (importID) {
+  try {
+    imported = (await importedHistory(Astro.request, repositoryID!, importID)).merge_requests;
+  } catch {
+    importedError = true;
+  }
 }
 
 const diffHref = mr
@@ -51,5 +71,13 @@ const diffHref = mr
         </p>
       </>
     )}
+
+    {importedError && (
+      <p style={{ color: '#cf222e' }}>
+        This import's declared history could not be read. It is not shown, and this is not a
+        statement that the import declared none.
+      </p>
+    )}
+    <ImportedHistory records={imported} />
   </main>
 </Layout>

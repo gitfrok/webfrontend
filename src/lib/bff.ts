@@ -5,6 +5,7 @@
 // address, a gRPC client, a storage client, or a credential: identity travels
 // in the browser's session cookie, which the SSR fetch forwards unchanged.
 import type { BrowserTreeEntry, TreeView, FileViewMetadata } from '../gen/proto/bff/v1/browser_pb.js';
+import type { ImportedHistoryView } from './provenance.js';
 
 // bffOrigin is the sole per-environment upstream. In a cluster it is the BFF
 // Service; in local dev it is the host the SSR server runs on. Astro exposes
@@ -100,4 +101,30 @@ export async function mergeRequest(request: Request, repositoryID: string, merge
     throw new Error('merge request unavailable');
   }
   return (await response.json()) as MergeRequestView;
+}
+
+// importedHistory fetches one page of an import's imported review history
+// (SPEC-0011 AC20, the read the AC23 rendering depends on).
+//
+// The response is passed through unchanged. Provenance is decided by the
+// backend and shaped by the BFF; this layer classifies nothing, so it cannot
+// misclassify anything.
+export async function importedHistory(
+  request: Request,
+  repositoryID: string,
+  importID: string,
+  pageToken = '',
+): Promise<ImportedHistoryView> {
+  const params = new URLSearchParams();
+  if (pageToken) params.set('page_token', pageToken);
+  const query = params.toString();
+  const response = await bffFetch(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/imports/${encodeURIComponent(importID)}/history${query ? `?${query}` : ''}`,
+  );
+  if (!response.ok) {
+    throw new Error('imported history unavailable');
+  }
+  const view = (await response.json()) as ImportedHistoryView;
+  return { merge_requests: view.merge_requests ?? [], next_page_token: view.next_page_token ?? '' };
 }

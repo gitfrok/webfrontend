@@ -1,0 +1,90 @@
+---
+// Imported review history, rendered so it can never be mistaken for history
+// this platform witnessed (SPEC-0011 AC23, ADR-0029, ADR-0015).
+//
+// Every rendering decision here comes from src/lib/provenance.ts, which is unit
+// tested on its own. This file only draws what those rules return: an imported
+// section that is visually and textually separated from first-party review, an
+// imported approval that states it satisfies no merge policy, a foreign handle
+// that is never a link to a platform user, and an approximate anchor that says
+// it is approximate.
+import {
+  anchorNote,
+  approvalPresentation,
+  declaredActorLabel,
+  declaredAtLabel,
+  originLabel,
+  type ImportedMergeRequestView,
+} from '../lib/provenance';
+
+interface Props {
+  records: ImportedMergeRequestView[];
+}
+
+const { records } = Astro.props;
+
+// The unverified treatment. It is one set of tokens rather than per-element
+// styling so an imported record cannot accidentally inherit the first-party look.
+const unverified = {
+  border: '1px dashed #bf8700',
+  background: '#fff8c5',
+  color: '#7d4e00',
+};
+---
+
+{records.length > 0 && (
+  <section
+    aria-labelledby="imported-history-heading"
+    style={{ margin: '24px 0', padding: 16, ...unverified, borderRadius: 6 }}
+  >
+    <h2 id="imported-history-heading" style={{ fontSize: 16, margin: 0 }}>
+      Imported history — not verified by this platform
+    </h2>
+    <p style={{ margin: '8px 0 0', fontSize: 13 }}>
+      These records were declared by the source system during a repository import. This platform did
+      not witness them: the names, dates and approvals below are as the source declared them, they
+      are not platform identities, and no approval here satisfies a merge policy.
+    </p>
+
+    {records.map((record) => (
+      <article style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid #d4a72c' }}>
+        <h3 style={{ fontSize: 14, margin: 0 }}>
+          <span style={{ fontWeight: 400, fontSize: 12, marginRight: 8, padding: '1px 6px', border: '1px solid #bf8700', borderRadius: 10 }}>
+            {originLabel(record.provenance)}
+          </span>
+          {record.title}
+        </h3>
+        <p style={{ margin: '6px 0 0', fontSize: 13 }}>
+          {record.state} · {record.source_ref} → {record.target_ref} · declared by{' '}
+          {declaredActorLabel(record.provenance, record.declared_creator)}
+        </p>
+
+        {record.threads?.map((thread) => (
+          <div style={{ marginTop: 12 }}>
+            <p style={{ margin: 0, fontSize: 12 }}>{thread.path || 'merge request'}</p>
+            {anchorNote(thread) && (
+              <p style={{ margin: '4px 0 0', fontSize: 12, fontStyle: 'italic' }}>{anchorNote(thread)}</p>
+            )}
+            {thread.comments?.map((comment) => (
+              <blockquote style={{ margin: '8px 0 0', paddingLeft: 12, borderLeft: '3px solid #d4a72c' }}>
+                <p style={{ margin: 0, fontSize: 12 }}>
+                  {declaredActorLabel(comment.provenance, comment.declared_actor)} ·{' '}
+                  {declaredAtLabel(comment.declared_at ?? comment.provenance?.declared_at)}
+                </p>
+                <p style={{ margin: '4px 0 0', fontSize: 13 }}>{comment.body}</p>
+              </blockquote>
+            ))}
+          </div>
+        ))}
+
+        {record.approvals?.length > 0 && (
+          <ul style={{ margin: '12px 0 0', padding: 0, listStyle: 'none' }}>
+            {record.approvals.map((approval) => (
+              <li style={{ fontSize: 12, marginTop: 4 }}>{approvalPresentation(approval).label}</li>
+            ))}
+          </ul>
+        )}
+      </article>
+    ))}
+  </section>
+)}
