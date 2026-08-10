@@ -16,7 +16,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file events/repository/v1/events.proto.
  */
 export const file_events_repository_v1_events: GenFile = /*@__PURE__*/
-  fileDesc("CiFldmVudHMvcmVwb3NpdG9yeS92MS9ldmVudHMucHJvdG8SHGdpdHNhYXMuZXZlbnRzLnJlcG9zaXRvcnkudjEitAEKClJlZlVwZGF0ZWQSEAoIZXZlbnRfaWQYASABKAkSEQoJdGVuYW50X2lkGAIgASgJEg8KB3JlcG9faWQYAyABKAkSCwoDcmVmGAQgASgJEg8KB29sZF9zaGEYBSABKAkSDwoHbmV3X3NoYRgGIAEoCRIQCghhY3Rvcl9pZBgHIAEoCRIvCgtvY2N1cnJlZF9hdBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAijgEKEVJlcG9zaXRvcnlDcmVhdGVkEhAKCGV2ZW50X2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIPCgdyZXBvX2lkGAMgASgJEhIKCmNyZWF0ZWRfYnkYBCABKAkSLwoLb2NjdXJyZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQkhaRmdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9ldmVudHMvcmVwb3NpdG9yeS92MTtyZXBvc2l0b3J5ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
+  fileDesc("CiFldmVudHMvcmVwb3NpdG9yeS92MS9ldmVudHMucHJvdG8SHGdpdHNhYXMuZXZlbnRzLnJlcG9zaXRvcnkudjEiyQEKClJlZlVwZGF0ZWQSEAoIZXZlbnRfaWQYASABKAkSEQoJdGVuYW50X2lkGAIgASgJEg8KB3JlcG9faWQYAyABKAkSCwoDcmVmGAQgASgJEg8KB29sZF9zaGEYBSABKAkSDwoHbmV3X3NoYRgGIAEoCRIQCghhY3Rvcl9pZBgHIAEoCRIvCgtvY2N1cnJlZF9hdBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEwoLYWN0b3Jfcm9sZXMYCSADKAkijgEKEVJlcG9zaXRvcnlDcmVhdGVkEhAKCGV2ZW50X2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIPCgdyZXBvX2lkGAMgASgJEhIKCmNyZWF0ZWRfYnkYBCABKAkSLwoLb2NjdXJyZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQkhaRmdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9ldmVudHMvcmVwb3NpdG9yeS92MTtyZXBvc2l0b3J5ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * @generated from message gitsaas.events.repository.v1.RefUpdated
@@ -65,6 +65,14 @@ export type RefUpdated = Message<"gitsaas.events.repository.v1.RefUpdated"> & {
    * @generated from field: google.protobuf.Timestamp occurred_at = 8;
    */
   occurredAt?: Timestamp | undefined;
+
+  /**
+   * Verified actor roles at the time Repository/Git admitted the ref update.
+   * CI/CD retains them only as PDP input; this is never an allow assertion.
+   *
+   * @generated from field: repeated string actor_roles = 9;
+   */
+  actorRoles: string[];
 };
 
 /**

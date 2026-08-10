@@ -8,20 +8,21 @@
 // authenticate callers and translate the Git protocol into these streams (T-0011); git-storaged
 // independently resolves the tenant-scoped handle and asks the PDP before it starts Git.
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file proto/git/v1/git.proto.
  */
 export const file_proto_git_v1_git: GenFile = /*@__PURE__*/
-  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSJiChBPcGVyYXRpb25Db250ZXh0EhEKCXRlbmFudF9pZBgBIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAIgASgJEhAKCGFjdG9yX2lkGAMgASgJEhIKCnJlcXVlc3RfaWQYBCABKAkidAoRVXBsb2FkUGFja1JlcXVlc3QSMwoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLk9wZXJhdGlvbkNvbnRleHRIABIOCgRkYXRhGAIgASgMSAASDwoFY2xvc2UYAyABKAhIAEIJCgdwYXlsb2FkIiIKElVwbG9hZFBhY2tSZXNwb25zZRIMCgRkYXRhGAEgASgMInUKElJlY2VpdmVQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIwoTUmVjZWl2ZVBhY2tSZXNwb25zZRIMCgRkYXRhGAEgASgMMsEBCgpHaXRTdG9yYWdlElcKClVwbG9hZFBhY2sSIS5naXRzYWFzLmdpdC52MS5VcGxvYWRQYWNrUmVxdWVzdBoiLmdpdHNhYXMuZ2l0LnYxLlVwbG9hZFBhY2tSZXNwb25zZSgBMAESWgoLUmVjZWl2ZVBhY2sSIi5naXRzYWFzLmdpdC52MS5SZWNlaXZlUGFja1JlcXVlc3QaIy5naXRzYWFzLmdpdC52MS5SZWNlaXZlUGFja1Jlc3BvbnNlKAEwAUIzWjFnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vcHJvdG8vZ2l0L3YxO2dpdHYxYgZwcm90bzM");
+  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSKoAQoQT3BlcmF0aW9uQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJEi8KCXRyYW5zcG9ydBgGIAEoDjIcLmdpdHNhYXMuZ2l0LnYxLkdpdFRyYW5zcG9ydCJ0ChFVcGxvYWRQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIgoSVXBsb2FkUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidQoSUmVjZWl2ZVBhY2tSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5PcGVyYXRpb25Db250ZXh0SAASDgoEZGF0YRgCIAEoDEgAEg8KBWNsb3NlGAMgASgISABCCQoHcGF5bG9hZCIjChNSZWNlaXZlUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidwoQUmVmVXBkYXRlQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIo0BCg9NZXJnZVJlZlJlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZUNvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIQCghyZXZpc2lvbhgDIAEoCRIhChlleHBlY3RlZF9jdXJyZW50X3JldmlzaW9uGAQgASgJIjgKEE1lcmdlUmVmUmVzcG9uc2USEgoKdGFyZ2V0X3JlZhgBIAEoCRIQCghyZXZpc2lvbhgCIAEoCSqOAQoMR2l0VHJhbnNwb3J0Eh0KGUdJVF9UUkFOU1BPUlRfVU5TUEVDSUZJRUQQABIVChFHSVRfVFJBTlNQT1JUX1NTSBABEiYKIkdJVF9UUkFOU1BPUlRfU01BUlRfSFRUUF9ESVNDT1ZFUlkQAhIgChxHSVRfVFJBTlNQT1JUX1NNQVJUX0hUVFBfUlBDEAMykAIKCkdpdFN0b3JhZ2USVwoKVXBsb2FkUGFjaxIhLmdpdHNhYXMuZ2l0LnYxLlVwbG9hZFBhY2tSZXF1ZXN0GiIuZ2l0c2Fhcy5naXQudjEuVXBsb2FkUGFja1Jlc3BvbnNlKAEwARJaCgtSZWNlaXZlUGFjaxIiLmdpdHNhYXMuZ2l0LnYxLlJlY2VpdmVQYWNrUmVxdWVzdBojLmdpdHNhYXMuZ2l0LnYxLlJlY2VpdmVQYWNrUmVzcG9uc2UoATABEk0KCE1lcmdlUmVmEh8uZ2l0c2Fhcy5naXQudjEuTWVyZ2VSZWZSZXF1ZXN0GiAuZ2l0c2Fhcy5naXQudjEuTWVyZ2VSZWZSZXNwb25zZUIzWjFnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vcHJvdG8vZ2l0L3YxO2dpdHYxYgZwcm90bzM");
 
 /**
  * OperationContext identifies one Git operation. It is sent as the first client-stream message;
  * later messages contain only protocol bytes or close. No path, credential, or authorization result
- * crosses this boundary: those would let a caller choose storage or bypass the PDP.
+ * crosses this boundary: those would let a caller choose storage or bypass the PDP. Roles are a
+ * verified principal attribute for the storage PDP input, never an `allowed` assertion.
  *
  * @generated from message gitsaas.git.v1.OperationContext
  */
@@ -45,6 +46,20 @@ export type OperationContext = Message<"gitsaas.git.v1.OperationContext"> & {
    * @generated from field: string request_id = 4;
    */
   requestId: string;
+
+  /**
+   * @generated from field: repeated string actor_roles = 5;
+   */
+  actorRoles: string[];
+
+  /**
+   * Declares the already-authenticated client protocol framing. It is selected
+   * by a trusted front door, never by an external Git payload; unspecified is
+   * denied so storage cannot accidentally choose the wrong Git subprocess mode.
+   *
+   * @generated from field: gitsaas.git.v1.GitTransport transport = 6;
+   */
+  transport: GitTransport;
 };
 
 /**
@@ -159,6 +174,156 @@ export const ReceivePackResponseSchema: GenMessage<ReceivePackResponse> = /*@__P
   messageDesc(file_proto_git_v1_git, 4);
 
 /**
+ * RefUpdateContext identifies one authorized ref move. It is the OperationContext
+ * fields that still mean something without a Git protocol exchange: there is no
+ * transport, because no client framing is involved. Like OperationContext it
+ * carries no path, credential, or authorization result, and its roles are a
+ * verified principal attribute the storage PDP evaluates, never an assertion.
+ *
+ * @generated from message gitsaas.git.v1.RefUpdateContext
+ */
+export type RefUpdateContext = Message<"gitsaas.git.v1.RefUpdateContext"> & {
+  /**
+   * @generated from field: string tenant_id = 1;
+   */
+  tenantId: string;
+
+  /**
+   * @generated from field: string repository_id = 2;
+   */
+  repositoryId: string;
+
+  /**
+   * @generated from field: string actor_id = 3;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: string request_id = 4;
+   */
+  requestId: string;
+
+  /**
+   * @generated from field: repeated string actor_roles = 5;
+   */
+  actorRoles: string[];
+};
+
+/**
+ * Describes the message gitsaas.git.v1.RefUpdateContext.
+ * Use `create(RefUpdateContextSchema)` to create a new message.
+ */
+export const RefUpdateContextSchema: GenMessage<RefUpdateContext> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 5);
+
+/**
+ * MergeRefRequest moves target_ref to revision.
+ *
+ * expected_current_revision makes the move a compare-and-swap: storage applies it
+ * only if the ref is still where the caller last saw it, so a merge decided
+ * against one state cannot land on a different one. An empty value means the ref
+ * is expected not to exist yet.
+ *
+ * Deliberately absent: a force flag, a delete, a pattern, an approval count, a
+ * protection result, and an allow flag. None of them can be expressed here, which
+ * is what keeps this narrower than a ref-write API.
+ *
+ * @generated from message gitsaas.git.v1.MergeRefRequest
+ */
+export type MergeRefRequest = Message<"gitsaas.git.v1.MergeRefRequest"> & {
+  /**
+   * @generated from field: gitsaas.git.v1.RefUpdateContext context = 1;
+   */
+  context?: RefUpdateContext | undefined;
+
+  /**
+   * An exact refs/heads/... name. Pattern syntax is not accepted.
+   *
+   * @generated from field: string target_ref = 2;
+   */
+  targetRef: string;
+
+  /**
+   * An existing revision in this repository; storage refuses an unknown one.
+   *
+   * @generated from field: string revision = 3;
+   */
+  revision: string;
+
+  /**
+   * @generated from field: string expected_current_revision = 4;
+   */
+  expectedCurrentRevision: string;
+};
+
+/**
+ * Describes the message gitsaas.git.v1.MergeRefRequest.
+ * Use `create(MergeRefRequestSchema)` to create a new message.
+ */
+export const MergeRefRequestSchema: GenMessage<MergeRefRequest> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 6);
+
+/**
+ * MergeRefResponse reports the ref's new revision. A refused move returns a coarse
+ * error and no partial state, in the same shape as any other storage refusal.
+ *
+ * @generated from message gitsaas.git.v1.MergeRefResponse
+ */
+export type MergeRefResponse = Message<"gitsaas.git.v1.MergeRefResponse"> & {
+  /**
+   * @generated from field: string target_ref = 1;
+   */
+  targetRef: string;
+
+  /**
+   * @generated from field: string revision = 2;
+   */
+  revision: string;
+};
+
+/**
+ * Describes the message gitsaas.git.v1.MergeRefResponse.
+ * Use `create(MergeRefResponseSchema)` to create a new message.
+ */
+export const MergeRefResponseSchema: GenMessage<MergeRefResponse> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 7);
+
+/**
+ * GitTransport distinguishes SSH's stateful exchange from Smart-HTTP's
+ * stateless discovery and RPC framing. All modes retain the same verified
+ * principal, opaque repository handle, and GitStorage PDP enforcement.
+ *
+ * @generated from enum gitsaas.git.v1.GitTransport
+ */
+export enum GitTransport {
+  /**
+   * @generated from enum value: GIT_TRANSPORT_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: GIT_TRANSPORT_SSH = 1;
+   */
+  SSH = 1,
+
+  /**
+   * @generated from enum value: GIT_TRANSPORT_SMART_HTTP_DISCOVERY = 2;
+   */
+  SMART_HTTP_DISCOVERY = 2,
+
+  /**
+   * @generated from enum value: GIT_TRANSPORT_SMART_HTTP_RPC = 3;
+   */
+  SMART_HTTP_RPC = 3,
+}
+
+/**
+ * Describes the enum gitsaas.git.v1.GitTransport.
+ */
+export const GitTransportSchema: GenEnum<GitTransport> = /*@__PURE__*/
+  enumDesc(file_proto_git_v1_git, 0);
+
+/**
  * @generated from service gitsaas.git.v1.GitStorage
  */
 export const GitStorage: GenService<{
@@ -181,6 +346,25 @@ export const GitStorage: GenService<{
     methodKind: "bidi_streaming";
     input: typeof ReceivePackRequestSchema;
     output: typeof ReceivePackResponseSchema;
+  },
+  /**
+   * MergeRef moves one exact branch ref to an existing revision on behalf of an
+   * authorized merge (SPEC-0019). It is the only route by which a ref changes
+   * without a Git protocol exchange, and it exists so Code Review can complete a
+   * merge through a contract boundary instead of against Git storage.
+   *
+   * It is not a general ref-write API: it moves one ref, it names no source
+   * repository or path, it carries no pack bytes, and it cannot create or delete
+   * a repository. git-storaged asks the PDP itself before applying it, exactly as
+   * it does for a push — a caller that has already been allowed by its own PEP is
+   * still not trusted to assert that here.
+   *
+   * @generated from rpc gitsaas.git.v1.GitStorage.MergeRef
+   */
+  mergeRef: {
+    methodKind: "unary";
+    input: typeof MergeRefRequestSchema;
+    output: typeof MergeRefResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_git_v1_git, 0);
