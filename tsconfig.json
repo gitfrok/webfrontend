@@ -5,6 +5,7 @@
     "jsxImportSource": "react",
     "verbatimModuleSyntax": true
   },
-  "include": ["src", "tests", "astro.config.mjs"],
+  "//": "\".astro/types.d.ts\" is what teaches tsc about .astro modules (astro sync writes it). Without it a test that imports a component cannot typecheck.",
+  "include": [".astro/types.d.ts", "src", "tests", "astro.config.mjs", "vitest.config.ts"],
   "exclude": ["dist", "node_modules"]
 }
