@@ -77,3 +77,27 @@ export async function diff(request: Request, repositoryID: string, baseRevision:
   }
   return response.text();
 }
+
+// mergeRequestView is the minimal MR shape the web page consumes (SPEC-0009).
+export interface MergeRequestView {
+  merge_request_id: string;
+  repository_id: string;
+  source_ref: string;
+  target_ref: string;
+  title: string;
+  description: string;
+  creator_id: string;
+  state: string;
+  head_revision: string;
+  version: number;
+  created_at: string;
+}
+
+// mergeRequest fetches one MR from the BFF (minimal T-0016 web bar).
+export async function mergeRequest(request: Request, repositoryID: string, mergeRequestID: string): Promise<MergeRequestView> {
+  const response = await bffFetch(request, `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}`);
+  if (!response.ok) {
+    throw new Error('merge request unavailable');
+  }
+  return (await response.json()) as MergeRequestView;
+}
