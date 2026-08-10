@@ -28,7 +28,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file events/audit/v1/events.proto.
  */
 export const file_events_audit_v1_events: GenFile = /*@__PURE__*/
-  fileDesc("ChxldmVudHMvYXVkaXQvdjEvZXZlbnRzLnByb3RvEhdnaXRzYWFzLmV2ZW50cy5hdWRpdC52MSK5AgoKQXVkaXRFdmVudBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSDgoGYWN0aW9uGAMgASgJEhAKCGFjdG9yX2lkGAQgASgJEhAKCHJlc291cmNlGAUgASgJEjEKB291dGNvbWUYBiABKA4yIC5naXRzYWFzLmV2ZW50cy5hdWRpdC52MS5PdXRjb21lEj8KBmRldGFpbBgHIAMoCzIvLmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkF1ZGl0RXZlbnQuRGV0YWlsRW50cnkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGi0KC0RldGFpbEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEqSwoHT3V0Y29tZRIXChNPVVRDT01FX1VOU1BFQ0lGSUVEEAASEwoPT1VUQ09NRV9BTExPV0VEEAESEgoOT1VUQ09NRV9ERU5JRUQQAkI+WjxnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vZXZlbnRzL2F1ZGl0L3YxO2F1ZGl0ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
+  fileDesc("ChxldmVudHMvYXVkaXQvdjEvZXZlbnRzLnByb3RvEhdnaXRzYWFzLmV2ZW50cy5hdWRpdC52MSK5AgoKQXVkaXRFdmVudBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSDgoGYWN0aW9uGAMgASgJEhAKCGFjdG9yX2lkGAQgASgJEhAKCHJlc291cmNlGAUgASgJEjEKB291dGNvbWUYBiABKA4yIC5naXRzYWFzLmV2ZW50cy5hdWRpdC52MS5PdXRjb21lEj8KBmRldGFpbBgHIAMoCzIvLmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkF1ZGl0RXZlbnQuRGV0YWlsRW50cnkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGi0KC0RldGFpbEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEi9AIKD0hpc3RvcnlJbXBvcnRlZBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSEAoIYWN0b3JfaWQYAyABKAkSFQoNcmVwb3NpdG9yeV9pZBgEIAEoCRIRCglpbXBvcnRfaWQYBSABKAkSFQoNc291cmNlX3N5c3RlbRgGIAEoCRIXCg9zb3VyY2VfaW5zdGFuY2UYByABKAkSUQoNcmVjb3JkX2NvdW50cxgIIAMoCzI6LmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkhpc3RvcnlJbXBvcnRlZC5SZWNvcmRDb3VudHNFbnRyeRIXCg9tYW5pZmVzdF9kaWdlc3QYCSABKAkSLwoLb2NjdXJyZWRfYXQYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGjMKEVJlY29yZENvdW50c0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAzoCOAEiqAEKFEhpc3RvcnlJbXBvcnRSZXZva2VkEhAKCGV2ZW50X2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhEKCWltcG9ydF9pZBgFIAEoCRIvCgtvY2N1cnJlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAqSwoHT3V0Y29tZRIXChNPVVRDT01FX1VOU1BFQ0lGSUVEEAASEwoPT1VUQ09NRV9BTExPV0VEEAESEgoOT1VUQ09NRV9ERU5JRUQQAkI+WjxnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vZXZlbnRzL2F1ZGl0L3YxO2F1ZGl0ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * AuditEvent records one sensitive action for compliance and investigation.
@@ -103,6 +103,136 @@ export type AuditEvent = Message<"gitsaas.events.audit.v1.AuditEvent"> & {
  */
 export const AuditEventSchema: GenMessage<AuditEvent> = /*@__PURE__*/
   messageDesc(file_events_audit_v1_events, 0);
+
+/**
+ * HistoryImported is the one first-party audit event an import produces
+ * (ADR-0029 §3, SPEC-0011 AC10).
+ *
+ * It records the auditable fact — "this authenticated operator imported this
+ * attested set from there at this time" — and the manifest digest over the
+ * imported payload set, so the set is reproducible after the fact without
+ * claiming it is true. It is chained normally and is the ONLY record of the
+ * import in the audit trail: the imported content itself is ATTESTED_IMPORT
+ * and never enters the log.
+ *
+ * @generated from message gitsaas.events.audit.v1.HistoryImported
+ */
+export type HistoryImported = Message<"gitsaas.events.audit.v1.HistoryImported"> & {
+  /**
+   * @generated from field: string event_id = 1;
+   */
+  eventId: string;
+
+  /**
+   * @generated from field: string tenant_id = 2;
+   */
+  tenantId: string;
+
+  /**
+   * The operator who ran the import, authenticated and PDP-authorized.
+   *
+   * @generated from field: string actor_id = 3;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: string repository_id = 4;
+   */
+  repositoryId: string;
+
+  /**
+   * @generated from field: string import_id = 5;
+   */
+  importId: string;
+
+  /**
+   * e.g. "github", "github.com".
+   *
+   * @generated from field: string source_system = 6;
+   */
+  sourceSystem: string;
+
+  /**
+   * @generated from field: string source_instance = 7;
+   */
+  sourceInstance: string;
+
+  /**
+   * Record counts per type: MRs, threads, comments, approvals.
+   *
+   * @generated from field: map<string, int64> record_counts = 8;
+   */
+  recordCounts: { [key: string]: bigint };
+
+  /**
+   * Digest over the imported payload set; mutating any imported record
+   * afterwards makes verification fail (SPEC-0011 AC16).
+   *
+   * @generated from field: string manifest_digest = 9;
+   */
+  manifestDigest: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp occurred_at = 10;
+   */
+  occurredAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.events.audit.v1.HistoryImported.
+ * Use `create(HistoryImportedSchema)` to create a new message.
+ */
+export const HistoryImportedSchema: GenMessage<HistoryImported> = /*@__PURE__*/
+  messageDesc(file_events_audit_v1_events, 1);
+
+/**
+ * HistoryImportRevoked records the revocation of a prior import (ADR-0029 §5,
+ * SPEC-0011 AC17). It references the original import_id; the original
+ * HistoryImported chain entry stays unaltered (invariant 5). Revocation is a
+ * forward-only act — the records are tombstoned, never edited or deleted.
+ *
+ * @generated from message gitsaas.events.audit.v1.HistoryImportRevoked
+ */
+export type HistoryImportRevoked = Message<"gitsaas.events.audit.v1.HistoryImportRevoked"> & {
+  /**
+   * @generated from field: string event_id = 1;
+   */
+  eventId: string;
+
+  /**
+   * @generated from field: string tenant_id = 2;
+   */
+  tenantId: string;
+
+  /**
+   * The operator who revoked the import, authenticated and PDP-authorized.
+   *
+   * @generated from field: string actor_id = 3;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: string repository_id = 4;
+   */
+  repositoryId: string;
+
+  /**
+   * @generated from field: string import_id = 5;
+   */
+  importId: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp occurred_at = 6;
+   */
+  occurredAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.events.audit.v1.HistoryImportRevoked.
+ * Use `create(HistoryImportRevokedSchema)` to create a new message.
+ */
+export const HistoryImportRevokedSchema: GenMessage<HistoryImportRevoked> = /*@__PURE__*/
+  messageDesc(file_events_audit_v1_events, 2);
 
 /**
  * Outcome distinguishes a completed action from a refused one. Refusals are the more interesting
