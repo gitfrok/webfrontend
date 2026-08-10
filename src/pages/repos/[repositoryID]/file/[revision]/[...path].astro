@@ -1,0 +1,50 @@
+---
+// File view (T-0015, SPEC-0008 AC1): stream one file's bytes at a revision,
+// served via SSR from the BFF only. The file is rendered inline as UTF-8 text;
+// a raw link points at the same BFF surface for the browser's own download.
+import { file } from '../../../../../lib/bff';
+import Layout from '../../../../../layouts/Layout.astro';
+import CommandPalette from '../../../../../components/CommandPalette';
+
+const { repositoryID, revision } = Astro.params;
+const pathParts = Astro.params.path ?? [];
+const filePath = Array.isArray(pathParts) ? pathParts.join('/') : pathParts;
+let content = '';
+let sizeBytes = 0n;
+let loadError = false;
+
+if (revision) {
+  try {
+    const result = await file(Astro.request, repositoryID!, revision, filePath);
+    content = new TextDecoder().decode(result.body);
+    sizeBytes = result.metadata?.sizeBytes ?? 0n;
+  } catch {
+    loadError = true;
+  }
+}
+
+const rawHref = `/repos/${repositoryID}/raw/${encodeURIComponent(revision!)}/${filePath.split('/').map(encodeURIComponent).join('/')}`;
+---
+
+<Layout title={`${filePath} @ ${revision}`}>
+  <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
+  <main style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
+    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
+      <h1 style={{ fontSize: 20, margin: 0 }}>{filePath}</h1>
+      <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
+        <code style={{ color: '#57606a' }}>{revision}</code>
+        <a href={rawHref} style={{ color: '#0969da', textDecoration: 'none', fontSize: 14 }}>raw</a>
+      </div>
+    </header>
+
+    {loadError && (
+      <p style={{ color: '#cf222e' }}>This file is unavailable. Check your session, the revision, or the path.</p>
+    )}
+
+    {!loadError && (
+      <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', background: '#f6f8fa', padding: 16, borderRadius: 8, overflowX: 'auto', fontSize: 13, lineHeight: 1.5 }}>
+        {content}
+      </pre>
+    )}
+  </main>
+</Layout>

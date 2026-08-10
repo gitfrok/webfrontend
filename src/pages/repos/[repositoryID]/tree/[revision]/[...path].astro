@@ -1,0 +1,80 @@
+---
+// Repo tree view (T-0015, SPEC-0008 AC1): browse a revision's tree, served via
+// SSR from the BFF only (SPEC-0021). Directory entries link to their child tree
+// route; file entries link to the file view. The identity comes from the
+// browser's session cookie, which AstroServerRequest forwards to the BFF.
+import { tree } from '../../../../../lib/bff';
+import type { BrowserTreeEntry, BrowserEntryKind } from '../../../../../gen/proto/bff/v1/browser_pb';
+import Layout from '../../../../../layouts/Layout.astro';
+import CommandPalette from '../../../../../components/CommandPalette';
+
+const { repositoryID, revision } = Astro.params;
+const entries: BrowserTreeEntry[] = [];
+let nextPageToken = '';
+let loadError = false;
+
+if (revision) {
+  try {
+    const result = await tree(Astro.request, repositoryID!, revision);
+    entries.push(...result.entries);
+    nextPageToken = result.nextPageToken;
+  } catch {
+    loadError = true;
+  }
+}
+
+const isDirectory = (kind: BrowserEntryKind) =>
+  kind === 2 || kind === 0; // BROWSER_ENTRY_KIND_DIRECTORY; UNSPECIFIED renders as a directory child
+const isFile = (kind: BrowserEntryKind) => kind === 1;
+---
+
+<Layout title={`${repositoryID} @ ${revision}`}>
+  <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
+  <main style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
+    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
+      <h1 style={{ fontSize: 20, margin: 0 }}>{repositoryID}</h1>
+      <code style={{ color: '#57606a' }}>{revision}</code>
+    </header>
+
+    {loadError && (
+      <p style={{ color: '#cf222e' }}>This view is unavailable. Check your session or the revision.</p>
+    )}
+
+    {!loadError && (
+      <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+        {entries.map((entry) => (
+          <li key={entry.path} style={{ borderBottom: '1px solid #eaeef2' }}>
+            {isDirectory(entry.kind) ? (
+              <a
+                href={`/repos/${repositoryID}/tree/${encodeURIComponent(revision!)}/${entry.path.split('/').map(encodeURIComponent).join('/')}`}
+                style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 4px', textDecoration: 'none', color: '#0969da' }}
+              >
+                <span>{entry.path}/</span>
+                <span style={{ color: '#6e7781', fontSize: 12 }}>dir</span>
+              </a>
+            ) : isFile(entry.kind) ? (
+              <a
+                href={`/repos/${repositoryID}/file/${encodeURIComponent(revision!)}/${entry.path.split('/').map(encodeURIComponent).join('/')}`}
+                style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 4px', textDecoration: 'none', color: '#0969da' }}
+              >
+                <span>{entry.path}</span>
+                <span style={{ color: '#6e7781', fontSize: 12 }}>{entry.sizeBytes.toString()} B</span>
+              </a>
+            ) : (
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 4px', color: '#6e7781' }}>
+                <span>{entry.path}</span>
+                <span style={{ fontSize: 12 }}>symlink</span>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {nextPageToken && (
+      <p style={{ color: '#6e7781', fontSize: 13, padding: '8px 0' }}>
+        More entries exist; page through with a page token.
+      </p>
+    )}
+  </main>
+</Layout>

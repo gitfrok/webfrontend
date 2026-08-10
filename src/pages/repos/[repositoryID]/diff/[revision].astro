@@ -1,0 +1,43 @@
+---
+// Diff view (T-0015, SPEC-0008 AC1): stream the Git patch between a revision
+// and its base, served via SSR from the BFF only. The base revision is the
+// parent when omitted; the page reads base_revision from the query if given.
+import { diff } from '../../../../lib/bff';
+import Layout from '../../../../layouts/Layout.astro';
+import CommandPalette from '../../../../components/CommandPalette';
+
+const { repositoryID, revision } = Astro.params;
+const baseRevision = Astro.url.searchParams.get('base_revision') ?? `${revision}^`;
+let patch = '';
+let loadError = false;
+
+if (revision) {
+  try {
+    patch = await diff(Astro.request, repositoryID!, baseRevision, revision);
+  } catch {
+    loadError = true;
+  }
+}
+---
+
+<Layout title={`diff ${baseRevision}..${revision}`}>
+  <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
+  <main style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
+    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
+      <h1 style={{ fontSize: 20, margin: 0 }}>{repositoryID}</h1>
+      <code style={{ color: '#57606a' }}>{baseRevision}..{revision}</code>
+    </header>
+
+    {loadError && (
+      <p style={{ color: '#cf222e' }}>This diff is unavailable. Check your session or the revisions.</p>
+    )}
+
+    {!loadError && patch === '' && <p style={{ color: '#6e7781' }}>No differences.</p>}
+
+    {!loadError && patch !== '' && (
+      <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', background: '#f6f8fa', padding: 16, borderRadius: 8, overflowX: 'auto', fontSize: 13, lineHeight: 1.5 }}>
+        {patch}
+      </pre>
+    )}
+  </main>
+</Layout>
