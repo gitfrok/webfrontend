@@ -10,13 +10,15 @@
 
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
+import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file proto/git/v1/git.proto.
  */
 export const file_proto_git_v1_git: GenFile = /*@__PURE__*/
-  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSKoAQoQT3BlcmF0aW9uQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJEi8KCXRyYW5zcG9ydBgGIAEoDjIcLmdpdHNhYXMuZ2l0LnYxLkdpdFRyYW5zcG9ydCJ0ChFVcGxvYWRQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIgoSVXBsb2FkUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidQoSUmVjZWl2ZVBhY2tSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5PcGVyYXRpb25Db250ZXh0SAASDgoEZGF0YRgCIAEoDEgAEg8KBWNsb3NlGAMgASgISABCCQoHcGF5bG9hZCIjChNSZWNlaXZlUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidwoQUmVmVXBkYXRlQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIo0BCg9NZXJnZVJlZlJlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZUNvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIQCghyZXZpc2lvbhgDIAEoCRIhChlleHBlY3RlZF9jdXJyZW50X3JldmlzaW9uGAQgASgJIjgKEE1lcmdlUmVmUmVzcG9uc2USEgoKdGFyZ2V0X3JlZhgBIAEoCRIQCghyZXZpc2lvbhgCIAEoCSJwChFJbXBvcnRSZWZzUmVxdWVzdBIxCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dBISCgpzb3VyY2VfdXJsGAIgASgJEhQKDHNvdXJjZV90b2tlbhgDIAEoCSJVChJJbXBvcnRSZWZzUmVzcG9uc2USJwoEcmVmcxgBIAMoCzIZLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZRIWCg5pbXBvcnRlZF9ieXRlcxgCIAEoAyIqCglSZWZVcGRhdGUSCwoDcmVmGAEgASgJEhAKCHJldmlzaW9uGAIgASgJInkKFFNldFByb3RlY3Rpb25SZXF1ZXN0EjEKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5SZWZVcGRhdGVDb250ZXh0EhIKCnRhcmdldF9yZWYYAiABKAkSGgoScmVxdWlyZWRfYXBwcm92YWxzGAMgASgFIhcKFVNldFByb3RlY3Rpb25SZXNwb25zZSqOAQoMR2l0VHJhbnNwb3J0Eh0KGUdJVF9UUkFOU1BPUlRfVU5TUEVDSUZJRUQQABIVChFHSVRfVFJBTlNQT1JUX1NTSBABEiYKIkdJVF9UUkFOU1BPUlRfU01BUlRfSFRUUF9ESVNDT1ZFUlkQAhIgChxHSVRfVFJBTlNQT1JUX1NNQVJUX0hUVFBfUlBDEAMywwMKCkdpdFN0b3JhZ2USVwoKVXBsb2FkUGFjaxIhLmdpdHNhYXMuZ2l0LnYxLlVwbG9hZFBhY2tSZXF1ZXN0GiIuZ2l0c2Fhcy5naXQudjEuVXBsb2FkUGFja1Jlc3BvbnNlKAEwARJaCgtSZWNlaXZlUGFjaxIiLmdpdHNhYXMuZ2l0LnYxLlJlY2VpdmVQYWNrUmVxdWVzdBojLmdpdHNhYXMuZ2l0LnYxLlJlY2VpdmVQYWNrUmVzcG9uc2UoATABEk0KCE1lcmdlUmVmEh8uZ2l0c2Fhcy5naXQudjEuTWVyZ2VSZWZSZXF1ZXN0GiAuZ2l0c2Fhcy5naXQudjEuTWVyZ2VSZWZSZXNwb25zZRJTCgpJbXBvcnRSZWZzEiEuZ2l0c2Fhcy5naXQudjEuSW1wb3J0UmVmc1JlcXVlc3QaIi5naXRzYWFzLmdpdC52MS5JbXBvcnRSZWZzUmVzcG9uc2USXAoNU2V0UHJvdGVjdGlvbhIkLmdpdHNhYXMuZ2l0LnYxLlNldFByb3RlY3Rpb25SZXF1ZXN0GiUuZ2l0c2Fhcy5naXQudjEuU2V0UHJvdGVjdGlvblJlc3BvbnNlQjNaMWdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9wcm90by9naXQvdjE7Z2l0djFiBnByb3RvMw");
+  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSKoAQoQT3BlcmF0aW9uQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJEi8KCXRyYW5zcG9ydBgGIAEoDjIcLmdpdHNhYXMuZ2l0LnYxLkdpdFRyYW5zcG9ydCJ0ChFVcGxvYWRQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIgoSVXBsb2FkUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidQoSUmVjZWl2ZVBhY2tSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5PcGVyYXRpb25Db250ZXh0SAASDgoEZGF0YRgCIAEoDEgAEg8KBWNsb3NlGAMgASgISABCCQoHcGF5bG9hZCIjChNSZWNlaXZlUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidwoQUmVmVXBkYXRlQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIo0BCg9NZXJnZVJlZlJlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZUNvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIQCghyZXZpc2lvbhgDIAEoCRIhChlleHBlY3RlZF9jdXJyZW50X3JldmlzaW9uGAQgASgJIjgKEE1lcmdlUmVmUmVzcG9uc2USEgoKdGFyZ2V0X3JlZhgBIAEoCRIQCghyZXZpc2lvbhgCIAEoCSJwChFJbXBvcnRSZWZzUmVxdWVzdBIxCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dBISCgpzb3VyY2VfdXJsGAIgASgJEhQKDHNvdXJjZV90b2tlbhgDIAEoCSJVChJJbXBvcnRSZWZzUmVzcG9uc2USJwoEcmVmcxgBIAMoCzIZLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZRIWCg5pbXBvcnRlZF9ieXRlcxgCIAEoAyIqCglSZWZVcGRhdGUSCwoDcmVmGAEgASgJEhAKCHJldmlzaW9uGAIgASgJInkKFFNldFByb3RlY3Rpb25SZXF1ZXN0EjEKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5SZWZVcGRhdGVDb250ZXh0EhIKCnRhcmdldF9yZWYYAiABKAkSGgoScmVxdWlyZWRfYXBwcm92YWxzGAMgASgFIhcKFVNldFByb3RlY3Rpb25SZXNwb25zZSJGChpTdWJzY3JpYmVSZWZVcGRhdGVzUmVxdWVzdBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCSLaAQoVUmVmVXBkYXRlTm90aWZpY2F0aW9uEhAKCGV2ZW50X2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAMgASgJEgsKA3JlZhgEIAEoCRIPCgdvbGRfc2hhGAUgASgJEg8KB25ld19zaGEYBiABKAkSEAoIYWN0b3JfaWQYByABKAkSEwoLYWN0b3Jfcm9sZXMYCCADKAkSLwoLb2NjdXJyZWRfYXQYCSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wKo4BCgxHaXRUcmFuc3BvcnQSHQoZR0lUX1RSQU5TUE9SVF9VTlNQRUNJRklFRBAAEhUKEUdJVF9UUkFOU1BPUlRfU1NIEAESJgoiR0lUX1RSQU5TUE9SVF9TTUFSVF9IVFRQX0RJU0NPVkVSWRACEiAKHEdJVF9UUkFOU1BPUlRfU01BUlRfSFRUUF9SUEMQAzKvBAoKR2l0U3RvcmFnZRJXCgpVcGxvYWRQYWNrEiEuZ2l0c2Fhcy5naXQudjEuVXBsb2FkUGFja1JlcXVlc3QaIi5naXRzYWFzLmdpdC52MS5VcGxvYWRQYWNrUmVzcG9uc2UoATABEloKC1JlY2VpdmVQYWNrEiIuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXF1ZXN0GiMuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXNwb25zZSgBMAESTQoITWVyZ2VSZWYSHy5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlcXVlc3QaIC5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlc3BvbnNlElMKCkltcG9ydFJlZnMSIS5naXRzYWFzLmdpdC52MS5JbXBvcnRSZWZzUmVxdWVzdBoiLmdpdHNhYXMuZ2l0LnYxLkltcG9ydFJlZnNSZXNwb25zZRJcCg1TZXRQcm90ZWN0aW9uEiQuZ2l0c2Fhcy5naXQudjEuU2V0UHJvdGVjdGlvblJlcXVlc3QaJS5naXRzYWFzLmdpdC52MS5TZXRQcm90ZWN0aW9uUmVzcG9uc2USagoTU3Vic2NyaWJlUmVmVXBkYXRlcxIqLmdpdHNhYXMuZ2l0LnYxLlN1YnNjcmliZVJlZlVwZGF0ZXNSZXF1ZXN0GiUuZ2l0c2Fhcy5naXQudjEuUmVmVXBkYXRlTm90aWZpY2F0aW9uMAFCM1oxZ2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL2dpdC92MTtnaXR2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
 
 /**
  * OperationContext identifies one Git operation. It is sent as the first client-stream message;
@@ -431,6 +433,93 @@ export const SetProtectionResponseSchema: GenMessage<SetProtectionResponse> = /*
   messageDesc(file_proto_git_v1_git, 12);
 
 /**
+ * SubscribeRefUpdatesRequest scopes a ref-update subscription. An empty
+ * tenant_id or repository_id is the wildcard for that dimension; both empty
+ * subscribes to every update this node applies.
+ *
+ * @generated from message gitsaas.git.v1.SubscribeRefUpdatesRequest
+ */
+export type SubscribeRefUpdatesRequest = Message<"gitsaas.git.v1.SubscribeRefUpdatesRequest"> & {
+  /**
+   * @generated from field: string tenant_id = 1;
+   */
+  tenantId: string;
+
+  /**
+   * @generated from field: string repository_id = 2;
+   */
+  repositoryId: string;
+};
+
+/**
+ * Describes the message gitsaas.git.v1.SubscribeRefUpdatesRequest.
+ * Use `create(SubscribeRefUpdatesRequestSchema)` to create a new message.
+ */
+export const SubscribeRefUpdatesRequestSchema: GenMessage<SubscribeRefUpdatesRequest> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 13);
+
+/**
+ * RefUpdateNotification is the wire form of the repository RefUpdated event: it
+ * announces one ref that moved from old_sha to new_sha, with the verified actor
+ * and roles that moved it. A new_sha of all zeros is a ref deletion.
+ *
+ * @generated from message gitsaas.git.v1.RefUpdateNotification
+ */
+export type RefUpdateNotification = Message<"gitsaas.git.v1.RefUpdateNotification"> & {
+  /**
+   * @generated from field: string event_id = 1;
+   */
+  eventId: string;
+
+  /**
+   * @generated from field: string tenant_id = 2;
+   */
+  tenantId: string;
+
+  /**
+   * @generated from field: string repository_id = 3;
+   */
+  repositoryId: string;
+
+  /**
+   * @generated from field: string ref = 4;
+   */
+  ref: string;
+
+  /**
+   * @generated from field: string old_sha = 5;
+   */
+  oldSha: string;
+
+  /**
+   * @generated from field: string new_sha = 6;
+   */
+  newSha: string;
+
+  /**
+   * @generated from field: string actor_id = 7;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: repeated string actor_roles = 8;
+   */
+  actorRoles: string[];
+
+  /**
+   * @generated from field: google.protobuf.Timestamp occurred_at = 9;
+   */
+  occurredAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.git.v1.RefUpdateNotification.
+ * Use `create(RefUpdateNotificationSchema)` to create a new message.
+ */
+export const RefUpdateNotificationSchema: GenMessage<RefUpdateNotification> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 14);
+
+/**
  * GitTransport distinguishes SSH's stateful exchange from Smart-HTTP's
  * stateless discovery and RPC framing. All modes retain the same verified
  * principal, opaque repository handle, and GitStorage PDP enforcement.
@@ -550,6 +639,20 @@ export const GitStorage: GenService<{
     methodKind: "unary";
     input: typeof SetProtectionRequestSchema;
     output: typeof SetProtectionResponseSchema;
+  },
+  /**
+   * SubscribeRefUpdates streams every ref update this node applies, so a
+   * separate-process consumer (the dataplane today) can project what the
+   * receive-pack and merge paths changed without reading this node's storage
+   * tables or bus (invariant 15, ADR-0022). It is a wire event channel, not a
+   * command: the node keeps applying updates whether or not anyone subscribes.
+   *
+   * @generated from rpc gitsaas.git.v1.GitStorage.SubscribeRefUpdates
+   */
+  subscribeRefUpdates: {
+    methodKind: "server_streaming";
+    input: typeof SubscribeRefUpdatesRequestSchema;
+    output: typeof RefUpdateNotificationSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_git_v1_git, 0);
