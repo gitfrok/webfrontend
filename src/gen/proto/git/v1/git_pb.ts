@@ -16,7 +16,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/git/v1/git.proto.
  */
 export const file_proto_git_v1_git: GenFile = /*@__PURE__*/
-  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSKoAQoQT3BlcmF0aW9uQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJEi8KCXRyYW5zcG9ydBgGIAEoDjIcLmdpdHNhYXMuZ2l0LnYxLkdpdFRyYW5zcG9ydCJ0ChFVcGxvYWRQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIgoSVXBsb2FkUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidQoSUmVjZWl2ZVBhY2tSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5PcGVyYXRpb25Db250ZXh0SAASDgoEZGF0YRgCIAEoDEgAEg8KBWNsb3NlGAMgASgISABCCQoHcGF5bG9hZCIjChNSZWNlaXZlUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidwoQUmVmVXBkYXRlQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIo0BCg9NZXJnZVJlZlJlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZUNvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIQCghyZXZpc2lvbhgDIAEoCRIhChlleHBlY3RlZF9jdXJyZW50X3JldmlzaW9uGAQgASgJIjgKEE1lcmdlUmVmUmVzcG9uc2USEgoKdGFyZ2V0X3JlZhgBIAEoCRIQCghyZXZpc2lvbhgCIAEoCSJwChFJbXBvcnRSZWZzUmVxdWVzdBIxCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dBISCgpzb3VyY2VfdXJsGAIgASgJEhQKDHNvdXJjZV90b2tlbhgDIAEoCSJVChJJbXBvcnRSZWZzUmVzcG9uc2USJwoEcmVmcxgBIAMoCzIZLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZRIWCg5pbXBvcnRlZF9ieXRlcxgCIAEoAyIqCglSZWZVcGRhdGUSCwoDcmVmGAEgASgJEhAKCHJldmlzaW9uGAIgASgJKo4BCgxHaXRUcmFuc3BvcnQSHQoZR0lUX1RSQU5TUE9SVF9VTlNQRUNJRklFRBAAEhUKEUdJVF9UUkFOU1BPUlRfU1NIEAESJgoiR0lUX1RSQU5TUE9SVF9TTUFSVF9IVFRQX0RJU0NPVkVSWRACEiAKHEdJVF9UUkFOU1BPUlRfU01BUlRfSFRUUF9SUEMQAzLlAgoKR2l0U3RvcmFnZRJXCgpVcGxvYWRQYWNrEiEuZ2l0c2Fhcy5naXQudjEuVXBsb2FkUGFja1JlcXVlc3QaIi5naXRzYWFzLmdpdC52MS5VcGxvYWRQYWNrUmVzcG9uc2UoATABEloKC1JlY2VpdmVQYWNrEiIuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXF1ZXN0GiMuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXNwb25zZSgBMAESTQoITWVyZ2VSZWYSHy5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlcXVlc3QaIC5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlc3BvbnNlElMKCkltcG9ydFJlZnMSIS5naXRzYWFzLmdpdC52MS5JbXBvcnRSZWZzUmVxdWVzdBoiLmdpdHNhYXMuZ2l0LnYxLkltcG9ydFJlZnNSZXNwb25zZUIzWjFnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vcHJvdG8vZ2l0L3YxO2dpdHYxYgZwcm90bzM");
+  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSKoAQoQT3BlcmF0aW9uQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJEi8KCXRyYW5zcG9ydBgGIAEoDjIcLmdpdHNhYXMuZ2l0LnYxLkdpdFRyYW5zcG9ydCJ0ChFVcGxvYWRQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIgoSVXBsb2FkUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidQoSUmVjZWl2ZVBhY2tSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5PcGVyYXRpb25Db250ZXh0SAASDgoEZGF0YRgCIAEoDEgAEg8KBWNsb3NlGAMgASgISABCCQoHcGF5bG9hZCIjChNSZWNlaXZlUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidwoQUmVmVXBkYXRlQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIo0BCg9NZXJnZVJlZlJlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZUNvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIQCghyZXZpc2lvbhgDIAEoCRIhChlleHBlY3RlZF9jdXJyZW50X3JldmlzaW9uGAQgASgJIjgKEE1lcmdlUmVmUmVzcG9uc2USEgoKdGFyZ2V0X3JlZhgBIAEoCRIQCghyZXZpc2lvbhgCIAEoCSJwChFJbXBvcnRSZWZzUmVxdWVzdBIxCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dBISCgpzb3VyY2VfdXJsGAIgASgJEhQKDHNvdXJjZV90b2tlbhgDIAEoCSJVChJJbXBvcnRSZWZzUmVzcG9uc2USJwoEcmVmcxgBIAMoCzIZLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZRIWCg5pbXBvcnRlZF9ieXRlcxgCIAEoAyIqCglSZWZVcGRhdGUSCwoDcmVmGAEgASgJEhAKCHJldmlzaW9uGAIgASgJInkKFFNldFByb3RlY3Rpb25SZXF1ZXN0EjEKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5SZWZVcGRhdGVDb250ZXh0EhIKCnRhcmdldF9yZWYYAiABKAkSGgoScmVxdWlyZWRfYXBwcm92YWxzGAMgASgFIhcKFVNldFByb3RlY3Rpb25SZXNwb25zZSqOAQoMR2l0VHJhbnNwb3J0Eh0KGUdJVF9UUkFOU1BPUlRfVU5TUEVDSUZJRUQQABIVChFHSVRfVFJBTlNQT1JUX1NTSBABEiYKIkdJVF9UUkFOU1BPUlRfU01BUlRfSFRUUF9ESVNDT1ZFUlkQAhIgChxHSVRfVFJBTlNQT1JUX1NNQVJUX0hUVFBfUlBDEAMywwMKCkdpdFN0b3JhZ2USVwoKVXBsb2FkUGFjaxIhLmdpdHNhYXMuZ2l0LnYxLlVwbG9hZFBhY2tSZXF1ZXN0GiIuZ2l0c2Fhcy5naXQudjEuVXBsb2FkUGFja1Jlc3BvbnNlKAEwARJaCgtSZWNlaXZlUGFjaxIiLmdpdHNhYXMuZ2l0LnYxLlJlY2VpdmVQYWNrUmVxdWVzdBojLmdpdHNhYXMuZ2l0LnYxLlJlY2VpdmVQYWNrUmVzcG9uc2UoATABEk0KCE1lcmdlUmVmEh8uZ2l0c2Fhcy5naXQudjEuTWVyZ2VSZWZSZXF1ZXN0GiAuZ2l0c2Fhcy5naXQudjEuTWVyZ2VSZWZSZXNwb25zZRJTCgpJbXBvcnRSZWZzEiEuZ2l0c2Fhcy5naXQudjEuSW1wb3J0UmVmc1JlcXVlc3QaIi5naXRzYWFzLmdpdC52MS5JbXBvcnRSZWZzUmVzcG9uc2USXAoNU2V0UHJvdGVjdGlvbhIkLmdpdHNhYXMuZ2l0LnYxLlNldFByb3RlY3Rpb25SZXF1ZXN0GiUuZ2l0c2Fhcy5naXQudjEuU2V0UHJvdGVjdGlvblJlc3BvbnNlQjNaMWdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9wcm90by9naXQvdjE7Z2l0djFiBnByb3RvMw");
 
 /**
  * OperationContext identifies one Git operation. It is sent as the first client-stream message;
@@ -379,6 +379,58 @@ export const RefUpdateSchema: GenMessage<RefUpdate> = /*@__PURE__*/
   messageDesc(file_proto_git_v1_git, 10);
 
 /**
+ * SetProtectionRequest delivers one exact-ref branch-protection rule.
+ *
+ * target_ref is an exact refs/heads/... name — pattern syntax is not accepted.
+ * required_approvals accompanies it so the stored fact matches the rule Code
+ * Review holds, though only the ref's protection affects the receive-pack path.
+ *
+ * Deliberately absent: an allow flag, a decision id, and any protection outcome.
+ * None of those are server-derived facts storage can accept as input.
+ *
+ * @generated from message gitsaas.git.v1.SetProtectionRequest
+ */
+export type SetProtectionRequest = Message<"gitsaas.git.v1.SetProtectionRequest"> & {
+  /**
+   * @generated from field: gitsaas.git.v1.RefUpdateContext context = 1;
+   */
+  context?: RefUpdateContext | undefined;
+
+  /**
+   * @generated from field: string target_ref = 2;
+   */
+  targetRef: string;
+
+  /**
+   * @generated from field: int32 required_approvals = 3;
+   */
+  requiredApprovals: number;
+};
+
+/**
+ * Describes the message gitsaas.git.v1.SetProtectionRequest.
+ * Use `create(SetProtectionRequestSchema)` to create a new message.
+ */
+export const SetProtectionRequestSchema: GenMessage<SetProtectionRequest> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 11);
+
+/**
+ * SetProtectionResponse is empty by design: the rule is in effect, or the call
+ * failed, and there is no new state a caller needs read back.
+ *
+ * @generated from message gitsaas.git.v1.SetProtectionResponse
+ */
+export type SetProtectionResponse = Message<"gitsaas.git.v1.SetProtectionResponse"> & {
+};
+
+/**
+ * Describes the message gitsaas.git.v1.SetProtectionResponse.
+ * Use `create(SetProtectionResponseSchema)` to create a new message.
+ */
+export const SetProtectionResponseSchema: GenMessage<SetProtectionResponse> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 12);
+
+/**
  * GitTransport distinguishes SSH's stateful exchange from Smart-HTTP's
  * stateless discovery and RPC framing. All modes retain the same verified
  * principal, opaque repository handle, and GitStorage PDP enforcement.
@@ -476,6 +528,28 @@ export const GitStorage: GenService<{
     methodKind: "unary";
     input: typeof ImportRefsRequestSchema;
     output: typeof ImportRefsResponseSchema;
+  },
+  /**
+   * SetProtection delivers one exact-ref branch-protection rule from Code Review
+   * to this storage node (SPEC-0019 AC7).
+   *
+   * Code Review owns the rules and has already PDP-authorized the change; the
+   * rule arrives here so the receive-pack path can derive server-side context
+   * for the PDP before it accepts a direct ref update. It is the cross-process
+   * counterpart of BranchProtectionChanged: when Code Review and git-storaged
+   * share a process the event is enough, and when they do not, this RPC is the
+   * route by which the rule reaches the node that enforces direct pushes.
+   *
+   * Storage asks the PDP itself, exactly as for every other ref-affecting
+   * operation — a caller that has already been allowed by its own PEP is still
+   * not trusted to assert the rule into effect.
+   *
+   * @generated from rpc gitsaas.git.v1.GitStorage.SetProtection
+   */
+  setProtection: {
+    methodKind: "unary";
+    input: typeof SetProtectionRequestSchema;
+    output: typeof SetProtectionResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_git_v1_git, 0);
