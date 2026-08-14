@@ -16,6 +16,11 @@ export default function CommandPalette({ repositoryID, revision }: { repositoryI
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [path, setPath] = useState('');
+  // active is the highlighted command's index within the filtered list — the
+  // selection arrow keys move and Enter executes (SPEC-0021 AC6). The palette
+  // opens with the first command active, so Enter alone is always a complete
+  // interaction.
+  const [active, setActive] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -25,6 +30,7 @@ export default function CommandPalette({ repositoryID, revision }: { repositoryI
         setOpen((was) => !was);
         setQuery('');
         setPath('');
+        setActive(0);
       }
     };
     window.addEventListener('keydown', onKeyDown);
@@ -34,13 +40,6 @@ export default function CommandPalette({ repositoryID, revision }: { repositoryI
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
-
-  // Focus trap: Tab cycles inside the palette; Escape closes.
-  const onPanelKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      setOpen(false);
-    }
-  };
 
   if (!open) return null;
 
@@ -66,6 +65,41 @@ export default function CommandPalette({ repositoryID, revision }: { repositoryI
   ];
 
   const filtered = commands.filter((command) => command.label.toLowerCase().includes(query.toLowerCase()));
+  // The active index is clamped rather than stored clamped: filtering shrinks
+  // the list under a selection that was valid a keystroke ago.
+  const activeIndex = filtered.length === 0 ? -1 : Math.min(active, filtered.length - 1);
+
+  // The palette is operable from the keyboard alone (SPEC-0021 AC6): arrows
+  // move the selection and wrap, Enter executes the active command, Escape
+  // closes. Navigation is a route change, so executing means following the
+  // command's own href — the same target the mouse would open.
+  const onPanelKeyDown = (event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case 'Escape':
+        setOpen(false);
+        return;
+      case 'ArrowDown':
+        if (filtered.length === 0) return;
+        event.preventDefault();
+        setActive((was) => (Math.min(was, filtered.length - 1) + 1) % filtered.length);
+        return;
+      case 'ArrowUp':
+        if (filtered.length === 0) return;
+        event.preventDefault();
+        setActive((was) => (Math.min(was, filtered.length - 1) + filtered.length - 1) % filtered.length);
+        return;
+      case 'Enter': {
+        const command = filtered[activeIndex];
+        if (!command) return;
+        event.preventDefault();
+        setOpen(false);
+        window.location.assign(command.run());
+        return;
+      }
+      default:
+        return;
+    }
+  };
 
   return (
     <div
@@ -88,14 +122,13 @@ export default function CommandPalette({ repositoryID, revision }: { repositoryI
             For "Open file", type the path in the input after selecting it.
           </div>
         )}
-        <ul style={{ listStyle: 'none', margin: 0, padding: 8, maxHeight: 280, overflowY: 'auto' }}>
-          {filtered.map((command) => (
-            <li key={command.id}>
+        <ul role="listbox" aria-label="Commands" style={{ listStyle: 'none', margin: 0, padding: 8, maxHeight: 280, overflowY: 'auto' }}>
+          {filtered.map((command, index) => (
+            <li key={command.id} role="option" aria-selected={index === activeIndex}>
               <a
                 href={command.run()}
-                style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 6, textDecoration: 'none', color: '#1f2328' }}
-                onMouseEnter={(event) => (event.currentTarget.style.background = '#f6f8fa')}
-                onMouseLeave={(event) => (event.currentTarget.style.background = 'transparent')}
+                style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 6, textDecoration: 'none', color: '#1f2328', background: index === activeIndex ? '#f6f8fa' : 'transparent' }}
+                onMouseEnter={() => setActive(index)}
                 onClick={() => setOpen(false)}
               >
                 <span>{command.label}</span>
