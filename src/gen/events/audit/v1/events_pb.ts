@@ -28,7 +28,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file events/audit/v1/events.proto.
  */
 export const file_events_audit_v1_events: GenFile = /*@__PURE__*/
-  fileDesc("ChxldmVudHMvYXVkaXQvdjEvZXZlbnRzLnByb3RvEhdnaXRzYWFzLmV2ZW50cy5hdWRpdC52MSK5AgoKQXVkaXRFdmVudBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSDgoGYWN0aW9uGAMgASgJEhAKCGFjdG9yX2lkGAQgASgJEhAKCHJlc291cmNlGAUgASgJEjEKB291dGNvbWUYBiABKA4yIC5naXRzYWFzLmV2ZW50cy5hdWRpdC52MS5PdXRjb21lEj8KBmRldGFpbBgHIAMoCzIvLmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkF1ZGl0RXZlbnQuRGV0YWlsRW50cnkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGi0KC0RldGFpbEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEi9AIKD0hpc3RvcnlJbXBvcnRlZBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSEAoIYWN0b3JfaWQYAyABKAkSFQoNcmVwb3NpdG9yeV9pZBgEIAEoCRIRCglpbXBvcnRfaWQYBSABKAkSFQoNc291cmNlX3N5c3RlbRgGIAEoCRIXCg9zb3VyY2VfaW5zdGFuY2UYByABKAkSUQoNcmVjb3JkX2NvdW50cxgIIAMoCzI6LmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkhpc3RvcnlJbXBvcnRlZC5SZWNvcmRDb3VudHNFbnRyeRIXCg9tYW5pZmVzdF9kaWdlc3QYCSABKAkSLwoLb2NjdXJyZWRfYXQYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wGjMKEVJlY29yZENvdW50c0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAzoCOAEiqAEKFEhpc3RvcnlJbXBvcnRSZXZva2VkEhAKCGV2ZW50X2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhEKCWltcG9ydF9pZBgFIAEoCRIvCgtvY2N1cnJlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAi2gEKE0RlY2xhcmVkQWN0b3JNYXBwZWQSEAoIZXZlbnRfaWQYASABKAkSEQoJdGVuYW50X2lkGAIgASgJEhAKCGFjdG9yX2lkGAMgASgJEhEKCWltcG9ydF9pZBgEIAEoCRIWCg5kZWNsYXJlZF9hY3RvchgFIAEoCRIXCg9zb3VyY2VfaW5zdGFuY2UYBiABKAkSFwoPbWFwcGVkX2FjdG9yX2lkGAcgASgJEi8KC29jY3VycmVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCpLCgdPdXRjb21lEhcKE09VVENPTUVfVU5TUEVDSUZJRUQQABITCg9PVVRDT01FX0FMTE9XRUQQARISCg5PVVRDT01FX0RFTklFRBACQj5aPGdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9ldmVudHMvYXVkaXQvdjE7YXVkaXRldmVudHN2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
+  fileDesc("ChxldmVudHMvYXVkaXQvdjEvZXZlbnRzLnByb3RvEhdnaXRzYWFzLmV2ZW50cy5hdWRpdC52MSKSAwoKQXVkaXRFdmVudBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSDgoGYWN0aW9uGAMgASgJEhAKCGFjdG9yX2lkGAQgASgJEhAKCHJlc291cmNlGAUgASgJEjEKB291dGNvbWUYBiABKA4yIC5naXRzYWFzLmV2ZW50cy5hdWRpdC52MS5PdXRjb21lEj8KBmRldGFpbBgHIAMoCzIvLmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkF1ZGl0RXZlbnQuRGV0YWlsRW50cnkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhMKC2RlY2lzaW9uX2lkGAkgASgJEhcKD2J1bmRsZV9yZXZpc2lvbhgKIAEoCRIUCgxpbnB1dF9kaWdlc3QYCyABKAkSEwoLcG9saWN5X21vZGUYDCABKAkaLQoLRGV0YWlsRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASL0AgoPSGlzdG9yeUltcG9ydGVkEhAKCGV2ZW50X2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhEKCWltcG9ydF9pZBgFIAEoCRIVCg1zb3VyY2Vfc3lzdGVtGAYgASgJEhcKD3NvdXJjZV9pbnN0YW5jZRgHIAEoCRJRCg1yZWNvcmRfY291bnRzGAggAygLMjouZ2l0c2Fhcy5ldmVudHMuYXVkaXQudjEuSGlzdG9yeUltcG9ydGVkLlJlY29yZENvdW50c0VudHJ5EhcKD21hbmlmZXN0X2RpZ2VzdBgJIAEoCRIvCgtvY2N1cnJlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAaMwoRUmVjb3JkQ291bnRzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgDOgI4ASKoAQoUSGlzdG9yeUltcG9ydFJldm9rZWQSEAoIZXZlbnRfaWQYASABKAkSEQoJdGVuYW50X2lkGAIgASgJEhAKCGFjdG9yX2lkGAMgASgJEhUKDXJlcG9zaXRvcnlfaWQYBCABKAkSEQoJaW1wb3J0X2lkGAUgASgJEi8KC29jY3VycmVkX2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCLaAQoTRGVjbGFyZWRBY3Rvck1hcHBlZBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSEAoIYWN0b3JfaWQYAyABKAkSEQoJaW1wb3J0X2lkGAQgASgJEhYKDmRlY2xhcmVkX2FjdG9yGAUgASgJEhcKD3NvdXJjZV9pbnN0YW5jZRgGIAEoCRIXCg9tYXBwZWRfYWN0b3JfaWQYByABKAkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIq4CChVFdmlkZW5jZVBhY2tSZXF1ZXN0ZWQSEAoIZXZlbnRfaWQYASABKAkSEQoJdGVuYW50X2lkGAIgASgJEhAKCGFjdG9yX2lkGAMgASgJEg8KB3BhY2tfaWQYBCABKAkSEgoKcmVxdWVzdF9pZBgFIAEoCRITCgtkZWNpc2lvbl9pZBgGIAEoCRIuCgpyYW5nZV9mcm9tGAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIsCghyYW5nZV90bxgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFQoNcmVwb3NpdG9yeV9pZBgJIAEoCRIvCgtvY2N1cnJlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAirQMKFUV2aWRlbmNlUGFja0NvbXBsZXRlZBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSEAoIYWN0b3JfaWQYAyABKAkSDwoHcGFja19pZBgEIAEoCRINCgVzdGF0ZRgFIAEoCRJZCg5zZWN0aW9uX2NvdW50cxgGIAMoCzJBLmdpdHNhYXMuZXZlbnRzLmF1ZGl0LnYxLkV2aWRlbmNlUGFja0NvbXBsZXRlZC5TZWN0aW9uQ291bnRzRW50cnkSHQoVYXBwZW5kaXhfcmVjb3JkX2NvdW50GAcgASgDEi4KCnJhbmdlX2Zyb20YCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEiwKCHJhbmdlX3RvGAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIvCgtvY2N1cnJlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAaNAoSU2VjdGlvbkNvdW50c0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAzoCOAEqSwoHT3V0Y29tZRIXChNPVVRDT01FX1VOU1BFQ0lGSUVEEAASEwoPT1VUQ09NRV9BTExPV0VEEAESEgoOT1VUQ09NRV9ERU5JRUQQAkI+WjxnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vZXZlbnRzL2F1ZGl0L3YxO2F1ZGl0ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * AuditEvent records one sensitive action for compliance and investigation.
@@ -95,6 +95,41 @@ export type AuditEvent = Message<"gitsaas.events.audit.v1.AuditEvent"> & {
    * @generated from field: google.protobuf.Timestamp occurred_at = 8;
    */
   occurredAt?: Timestamp | undefined;
+
+  /**
+   * Policy decision provenance (SPEC-0029 AC8, SPEC-0030). Set when the audited
+   * action was gated by a PDP decision; empty otherwise. All four are
+   * server-produced by the Policy context from the decision it recorded — none
+   * is a caller claim, and a DRY_RUN decision is labelled by policy_mode and is
+   * never written as an enforced control record (SPEC-0029 AC2).
+   *
+   * decision_id correlates the audit record with the decision the PDP assigned
+   * (policy.v1.DecideResponse.decision_id). bundle_revision is the deciding
+   * policy version (DecideResponse.policy_revision). input_digest is the digest
+   * over the canonicalized input the decision was made over. policy_mode is the
+   * string rendering of policy.v1.EvaluationMode — "ENFORCED" or "DRY_RUN". A
+   * string rather than an import of the policy enum, for the same reason
+   * `action` is a string: the audit event keeps no dependency on the policy wire
+   * shape, and a new mode is additive by construction.
+   *
+   * @generated from field: string decision_id = 9;
+   */
+  decisionId: string;
+
+  /**
+   * @generated from field: string bundle_revision = 10;
+   */
+  bundleRevision: string;
+
+  /**
+   * @generated from field: string input_digest = 11;
+   */
+  inputDigest: string;
+
+  /**
+   * @generated from field: string policy_mode = 12;
+   */
+  policyMode: string;
 };
 
 /**
@@ -305,6 +340,174 @@ export type DeclaredActorMapped = Message<"gitsaas.events.audit.v1.DeclaredActor
  */
 export const DeclaredActorMappedSchema: GenMessage<DeclaredActorMapped> = /*@__PURE__*/
   messageDesc(file_events_audit_v1_events, 3);
+
+/**
+ * EvidencePackRequested records that a compliance owner requested a
+ * date-ranged evidence pack (SPEC-0031, SPEC-0032, T-0026).
+ *
+ * Like every audit event it carries opaque identifiers, tenant scope and
+ * counts — never record contents, source, or provenance bytes (SPEC-0032 G9):
+ * a pack's control records travel in the pack, not in the event that
+ * announces it. The generation decision is a PDP decision
+ * (evidence.pack.generate) and this record correlates to it via decision_id
+ * (SPEC-0032 AC6). Replaying a request ID produces no second pack and no
+ * second event (SPEC-0032 AC1).
+ *
+ * @generated from message gitsaas.events.audit.v1.EvidencePackRequested
+ */
+export type EvidencePackRequested = Message<"gitsaas.events.audit.v1.EvidencePackRequested"> & {
+  /**
+   * @generated from field: string event_id = 1;
+   */
+  eventId: string;
+
+  /**
+   * @generated from field: string tenant_id = 2;
+   */
+  tenantId: string;
+
+  /**
+   * The compliance owner who requested the pack, authenticated and
+   * PDP-authorized (SPEC-0031 AC5: no engineer involvement).
+   *
+   * @generated from field: string actor_id = 3;
+   */
+  actorId: string;
+
+  /**
+   * The opaque, server-assigned pack identity.
+   *
+   * @generated from field: string pack_id = 4;
+   */
+  packId: string;
+
+  /**
+   * The request ID the pack is idempotent under.
+   *
+   * @generated from field: string request_id = 5;
+   */
+  requestId: string;
+
+  /**
+   * The PDP decision that authorized generation.
+   *
+   * @generated from field: string decision_id = 6;
+   */
+  decisionId: string;
+
+  /**
+   * The closed range the pack covers.
+   *
+   * @generated from field: google.protobuf.Timestamp range_from = 7;
+   */
+  rangeFrom?: Timestamp | undefined;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp range_to = 8;
+   */
+  rangeTo?: Timestamp | undefined;
+
+  /**
+   * The optional repository scope; empty covers the tenant's repositories.
+   *
+   * @generated from field: string repository_id = 9;
+   */
+  repositoryId: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp occurred_at = 10;
+   */
+  occurredAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.events.audit.v1.EvidencePackRequested.
+ * Use `create(EvidencePackRequestedSchema)` to create a new message.
+ */
+export const EvidencePackRequestedSchema: GenMessage<EvidencePackRequested> = /*@__PURE__*/
+  messageDesc(file_events_audit_v1_events, 4);
+
+/**
+ * EvidencePackCompleted records that a requested pack finished assembling —
+ * ready, or failed (SPEC-0031 non-functional: generation is asynchronous and
+ * observable). It carries section counts, never record contents, source, or
+ * provenance bytes (SPEC-0032 G9).
+ *
+ * @generated from message gitsaas.events.audit.v1.EvidencePackCompleted
+ */
+export type EvidencePackCompleted = Message<"gitsaas.events.audit.v1.EvidencePackCompleted"> & {
+  /**
+   * @generated from field: string event_id = 1;
+   */
+  eventId: string;
+
+  /**
+   * @generated from field: string tenant_id = 2;
+   */
+  tenantId: string;
+
+  /**
+   * The actor whose request produced the pack.
+   *
+   * @generated from field: string actor_id = 3;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: string pack_id = 4;
+   */
+  packId: string;
+
+  /**
+   * READY or FAILED, as the string rendering of audit.v1.PackState. A string
+   * rather than an import of the RPC enum, for the same reason `action` is a
+   * string: the event keeps no dependency on the audit RPC wire shape, and a
+   * new state is additive by construction.
+   *
+   * @generated from field: string state = 5;
+   */
+  state: string;
+
+  /**
+   * Control records assembled per section, keyed by the section name:
+   * "approvals", "policy_decisions", "scan_gates", "access_changes".
+   *
+   * @generated from field: map<string, int64> section_counts = 6;
+   */
+  sectionCounts: { [key: string]: bigint };
+
+  /**
+   * Attested records assembled into the labelled appendix. A statistic only:
+   * attested content itself travels in the pack, never in this event.
+   *
+   * @generated from field: int64 appendix_record_count = 7;
+   */
+  appendixRecordCount: bigint;
+
+  /**
+   * The closed range the pack covers.
+   *
+   * @generated from field: google.protobuf.Timestamp range_from = 8;
+   */
+  rangeFrom?: Timestamp | undefined;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp range_to = 9;
+   */
+  rangeTo?: Timestamp | undefined;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp occurred_at = 10;
+   */
+  occurredAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.events.audit.v1.EvidencePackCompleted.
+ * Use `create(EvidencePackCompletedSchema)` to create a new message.
+ */
+export const EvidencePackCompletedSchema: GenMessage<EvidencePackCompleted> = /*@__PURE__*/
+  messageDesc(file_events_audit_v1_events, 5);
 
 /**
  * Outcome distinguishes a completed action from a refused one. Refusals are the more interesting

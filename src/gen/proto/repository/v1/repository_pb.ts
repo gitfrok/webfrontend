@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/repository/v1/repository.proto.
  */
 export const file_proto_repository_v1_repository: GenFile = /*@__PURE__*/
-  fileDesc("CiRwcm90by9yZXBvc2l0b3J5L3YxL3JlcG9zaXRvcnkucHJvdG8SFWdpdHNhYXMucmVwb3NpdG9yeS52MSJyCgtSZWFkQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIn4KDkdldFRyZWVSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSEAoIcmV2aXNpb24YAiABKAkSEgoKcGFnZV90b2tlbhgDIAEoCRIRCglwYWdlX3NpemUYBCABKAUiXQoPR2V0VHJlZVJlc3BvbnNlEjEKB2VudHJpZXMYASADKAsyIC5naXRzYWFzLnJlcG9zaXRvcnkudjEuVHJlZUVudHJ5EhcKD25leHRfcGFnZV90b2tlbhgCIAEoCSJ+CglUcmVlRW50cnkSDAoEcGF0aBgBIAEoCRIuCgRraW5kGAIgASgOMiAuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkVudHJ5S2luZBIRCglvYmplY3RfaWQYAyABKAkSDAoEbW9kZRgEIAEoDRISCgpzaXplX2J5dGVzGAUgASgDImUKDkdldEZpbGVSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSEAoIcmV2aXNpb24YAiABKAkSDAoEcGF0aBgDIAEoCSJdCglGaWxlQ2h1bmsSNQoIbWV0YWRhdGEYASABKAsyIy5naXRzYWFzLnJlcG9zaXRvcnkudjEuRmlsZU1ldGFkYXRhEgwKBGRhdGEYAiABKAwSCwoDZW9mGAMgASgIIlEKDEZpbGVNZXRhZGF0YRIMCgRwYXRoGAEgASgJEhEKCW9iamVjdF9pZBgCIAEoCRIMCgRtb2RlGAMgASgNEhIKCnNpemVfYnl0ZXMYBCABKAMigQEKDkdldERpZmZSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSFQoNYmFzZV9yZXZpc2lvbhgCIAEoCRIVCg1oZWFkX3JldmlzaW9uGAMgASgJEgwKBHBhdGgYBCABKAkiJgoJRGlmZkNodW5rEgwKBGRhdGEYASABKAwSCwoDZW9mGAIgASgIKm4KCUVudHJ5S2luZBIaChZFTlRSWV9LSU5EX1VOU1BFQ0lGSUVEEAASEwoPRU5UUllfS0lORF9GSUxFEAESGAoURU5UUllfS0lORF9ESVJFQ1RPUlkQAhIWChJFTlRSWV9LSU5EX1NZTUxJTksQAzKYAgoQUmVwb3NpdG9yeVJlYWRlchJYCgdHZXRUcmVlEiUuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldFRyZWVSZXF1ZXN0GiYuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldFRyZWVSZXNwb25zZRJUCgdHZXRGaWxlEiUuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldEZpbGVSZXF1ZXN0GiAuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkZpbGVDaHVuazABElQKB0dldERpZmYSJS5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0RGlmZlJlcXVlc3QaIC5naXRzYWFzLnJlcG9zaXRvcnkudjEuRGlmZkNodW5rMAFCQVo/Z2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL3JlcG9zaXRvcnkvdjE7cmVwb3NpdG9yeXYxYgZwcm90bzM");
+  fileDesc("CiRwcm90by9yZXBvc2l0b3J5L3YxL3JlcG9zaXRvcnkucHJvdG8SFWdpdHNhYXMucmVwb3NpdG9yeS52MSJyCgtSZWFkQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIn4KDkdldFRyZWVSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSEAoIcmV2aXNpb24YAiABKAkSEgoKcGFnZV90b2tlbhgDIAEoCRIRCglwYWdlX3NpemUYBCABKAUiXQoPR2V0VHJlZVJlc3BvbnNlEjEKB2VudHJpZXMYASADKAsyIC5naXRzYWFzLnJlcG9zaXRvcnkudjEuVHJlZUVudHJ5EhcKD25leHRfcGFnZV90b2tlbhgCIAEoCSJ+CglUcmVlRW50cnkSDAoEcGF0aBgBIAEoCRIuCgRraW5kGAIgASgOMiAuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkVudHJ5S2luZBIRCglvYmplY3RfaWQYAyABKAkSDAoEbW9kZRgEIAEoDRISCgpzaXplX2J5dGVzGAUgASgDImUKDkdldEZpbGVSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSEAoIcmV2aXNpb24YAiABKAkSDAoEcGF0aBgDIAEoCSJdCglGaWxlQ2h1bmsSNQoIbWV0YWRhdGEYASABKAsyIy5naXRzYWFzLnJlcG9zaXRvcnkudjEuRmlsZU1ldGFkYXRhEgwKBGRhdGEYAiABKAwSCwoDZW9mGAMgASgIIlEKDEZpbGVNZXRhZGF0YRIMCgRwYXRoGAEgASgJEhEKCW9iamVjdF9pZBgCIAEoCRIMCgRtb2RlGAMgASgNEhIKCnNpemVfYnl0ZXMYBCABKAMigQEKDkdldERpZmZSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSFQoNYmFzZV9yZXZpc2lvbhgCIAEoCRIVCg1oZWFkX3JldmlzaW9uGAMgASgJEgwKBHBhdGgYBCABKAkiJgoJRGlmZkNodW5rEgwKBGRhdGEYASABKAwSCwoDZW9mGAIgASgIImgKE0dldE1lcmdlQmFzZVJlcXVlc3QSMwoHY29udGV4dBgBIAEoCzIiLmdpdHNhYXMucmVwb3NpdG9yeS52MS5SZWFkQ29udGV4dBINCgVyZWZfYRgCIAEoCRINCgVyZWZfYhgDIAEoCSI5ChRHZXRNZXJnZUJhc2VSZXNwb25zZRINCgVmb3VuZBgBIAEoCBISCgptZXJnZV9iYXNlGAIgASgJKm4KCUVudHJ5S2luZBIaChZFTlRSWV9LSU5EX1VOU1BFQ0lGSUVEEAASEwoPRU5UUllfS0lORF9GSUxFEAESGAoURU5UUllfS0lORF9ESVJFQ1RPUlkQAhIWChJFTlRSWV9LSU5EX1NZTUxJTksQAzKBAwoQUmVwb3NpdG9yeVJlYWRlchJYCgdHZXRUcmVlEiUuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldFRyZWVSZXF1ZXN0GiYuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldFRyZWVSZXNwb25zZRJUCgdHZXRGaWxlEiUuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldEZpbGVSZXF1ZXN0GiAuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkZpbGVDaHVuazABElQKB0dldERpZmYSJS5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0RGlmZlJlcXVlc3QaIC5naXRzYWFzLnJlcG9zaXRvcnkudjEuRGlmZkNodW5rMAESZwoMR2V0TWVyZ2VCYXNlEiouZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldE1lcmdlQmFzZVJlcXVlc3QaKy5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0TWVyZ2VCYXNlUmVzcG9uc2VCQVo/Z2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL3JlcG9zaXRvcnkvdjE7cmVwb3NpdG9yeXYxYgZwcm90bzM");
 
 /**
  * Roles are verified principal attributes supplied to the Repository/Git PDP
@@ -284,6 +284,64 @@ export const DiffChunkSchema: GenMessage<DiffChunk> = /*@__PURE__*/
   messageDesc(file_proto_repository_v1_repository, 8);
 
 /**
+ * GetMergeBaseRequest names the two sides of the comparison as refs or
+ * commit identifiers — a merge request's source ref and target ref are the
+ * SPEC-0028 shape. An empty side is rejected; resolution is server-side.
+ *
+ * @generated from message gitsaas.repository.v1.GetMergeBaseRequest
+ */
+export type GetMergeBaseRequest = Message<"gitsaas.repository.v1.GetMergeBaseRequest"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.ReadContext context = 1;
+   */
+  context?: ReadContext | undefined;
+
+  /**
+   * @generated from field: string ref_a = 2;
+   */
+  refA: string;
+
+  /**
+   * @generated from field: string ref_b = 3;
+   */
+  refB: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.GetMergeBaseRequest.
+ * Use `create(GetMergeBaseRequestSchema)` to create a new message.
+ */
+export const GetMergeBaseRequestSchema: GenMessage<GetMergeBaseRequest> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 9);
+
+/**
+ * GetMergeBaseResponse names the merge base. A pair with no common ancestor
+ * (unrelated histories) is not an error: found is false and merge_base stays
+ * empty, so the caller — Security/Findings, per SPEC-0028 — reports
+ * attribution UNAVAILABLE rather than attributing everything.
+ *
+ * @generated from message gitsaas.repository.v1.GetMergeBaseResponse
+ */
+export type GetMergeBaseResponse = Message<"gitsaas.repository.v1.GetMergeBaseResponse"> & {
+  /**
+   * @generated from field: bool found = 1;
+   */
+  found: boolean;
+
+  /**
+   * @generated from field: string merge_base = 2;
+   */
+  mergeBase: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.GetMergeBaseResponse.
+ * Use `create(GetMergeBaseResponseSchema)` to create a new message.
+ */
+export const GetMergeBaseResponseSchema: GenMessage<GetMergeBaseResponse> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 10);
+
+/**
  * @generated from enum gitsaas.repository.v1.EntryKind
  */
 export enum EntryKind {
@@ -343,6 +401,20 @@ export const RepositoryReader: GenService<{
     methodKind: "server_streaming";
     input: typeof GetDiffRequestSchema;
     output: typeof DiffChunkSchema;
+  },
+  /**
+   * GetMergeBase computes the merge base of two refs or commits. Additive for
+   * SPEC-0028: introduction attribution is the set difference between the
+   * scan at an MR's head revision and the scan at the merge base of its
+   * target branch, and nothing on this surface computed a merge base before.
+   * Authorization stays server-side exactly as for the other reads.
+   *
+   * @generated from rpc gitsaas.repository.v1.RepositoryReader.GetMergeBase
+   */
+  getMergeBase: {
+    methodKind: "unary";
+    input: typeof GetMergeBaseRequestSchema;
+    output: typeof GetMergeBaseResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_repository_v1_repository, 0);

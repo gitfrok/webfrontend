@@ -18,15 +18,17 @@
 // that could push rules over the wire would be a way to change policy without review, which is
 // precisely what ADR-0006 exists to prevent. Policy *authoring* is out of scope for SPEC-0002.
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
+import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file proto/policy/v1/policy.proto.
  */
 export const file_proto_policy_v1_policy: GenFile = /*@__PURE__*/
-  fileDesc("Chxwcm90by9wb2xpY3kvdjEvcG9saWN5LnByb3RvEhFnaXRzYWFzLnBvbGljeS52MSI3CgdTdWJqZWN0EgoKAmlkGAEgASgJEg0KBXJvbGVzGAIgAygJEhEKCXRlbmFudF9pZBgDIAEoCSIkCghSZXNvdXJjZRIMCgR0eXBlGAEgASgJEgoKAmlkGAIgASgJIv4BCg1EZWNpZGVSZXF1ZXN0EhEKCXRlbmFudF9pZBgBIAEoCRIrCgdzdWJqZWN0GAIgASgLMhouZ2l0c2Fhcy5wb2xpY3kudjEuU3ViamVjdBIOCgZhY3Rpb24YAyABKAkSLQoIcmVzb3VyY2UYBCABKAsyGy5naXRzYWFzLnBvbGljeS52MS5SZXNvdXJjZRI+Cgdjb250ZXh0GAUgAygLMi0uZ2l0c2Fhcy5wb2xpY3kudjEuRGVjaWRlUmVxdWVzdC5Db250ZXh0RW50cnkaLgoMQ29udGV4dEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEiXwoORGVjaWRlUmVzcG9uc2USDwoHYWxsb3dlZBgBIAEoCBIOCgZyZWFzb24YAiABKAkSFwoPcG9saWN5X3JldmlzaW9uGAMgASgJEhMKC2RlY2lzaW9uX2lkGAQgASgJMmQKE1BvbGljeURlY2lzaW9uUG9pbnQSTQoGRGVjaWRlEiAuZ2l0c2Fhcy5wb2xpY3kudjEuRGVjaWRlUmVxdWVzdBohLmdpdHNhYXMucG9saWN5LnYxLkRlY2lkZVJlc3BvbnNlQjlaN2dpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9wcm90by9wb2xpY3kvdjE7cG9saWN5djFiBnByb3RvMw");
+  fileDesc("Chxwcm90by9wb2xpY3kvdjEvcG9saWN5LnByb3RvEhFnaXRzYWFzLnBvbGljeS52MSI3CgdTdWJqZWN0EgoKAmlkGAEgASgJEg0KBXJvbGVzGAIgAygJEhEKCXRlbmFudF9pZBgDIAEoCSIkCghSZXNvdXJjZRIMCgR0eXBlGAEgASgJEgoKAmlkGAIgASgJIv4BCg1EZWNpZGVSZXF1ZXN0EhEKCXRlbmFudF9pZBgBIAEoCRIrCgdzdWJqZWN0GAIgASgLMhouZ2l0c2Fhcy5wb2xpY3kudjEuU3ViamVjdBIOCgZhY3Rpb24YAyABKAkSLQoIcmVzb3VyY2UYBCABKAsyGy5naXRzYWFzLnBvbGljeS52MS5SZXNvdXJjZRI+Cgdjb250ZXh0GAUgAygLMi0uZ2l0c2Fhcy5wb2xpY3kudjEuRGVjaWRlUmVxdWVzdC5Db250ZXh0RW50cnkaLgoMQ29udGV4dEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEipgEKDkRlY2lkZVJlc3BvbnNlEg8KB2FsbG93ZWQYASABKAgSDgoGcmVhc29uGAIgASgJEhcKD3BvbGljeV9yZXZpc2lvbhgDIAEoCRITCgtkZWNpc2lvbl9pZBgEIAEoCRIUCgxpbnB1dF9kaWdlc3QYBSABKAkSLwoEbW9kZRgGIAEoDjIhLmdpdHNhYXMucG9saWN5LnYxLkV2YWx1YXRpb25Nb2RlIpABChVFdmFsdWF0ZURyeVJ1blJlcXVlc3QSEQoJdGVuYW50X2lkGAEgASgJEhwKFGNhbmRpZGF0ZV9idW5kbGVfcmVmGAIgASgJEjEKBXJhbmdlGAMgASgLMiIuZ2l0c2Fhcy5wb2xpY3kudjEuSGlzdG9yaWNhbFJhbmdlEhMKC21heF9yZXN1bHRzGAQgASgFIqIBCg9IaXN0b3JpY2FsUmFuZ2USDgoGYWN0aW9uGAEgASgJEi0KCHJlc291cmNlGAIgASgLMhsuZ2l0c2Fhcy5wb2xpY3kudjEuUmVzb3VyY2USKAoEZnJvbRgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASJgoCdG8YBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIk4KFkV2YWx1YXRlRHJ5UnVuUmVzcG9uc2USNAoJZGVjaXNpb25zGAEgAygLMiEuZ2l0c2Fhcy5wb2xpY3kudjEuRGVjaWRlUmVzcG9uc2UiPAoSR2V0RGVjaXNpb25SZXF1ZXN0EhEKCXRlbmFudF9pZBgBIAEoCRITCgtkZWNpc2lvbl9pZBgCIAEoCSKqAgoORGVjaXNpb25SZWNvcmQSEwoLZGVjaXNpb25faWQYASABKAkSFwoPcG9saWN5X3JldmlzaW9uGAIgASgJEhQKDGlucHV0X2RpZ2VzdBgDIAEoCRIvCgRtb2RlGAQgASgOMiEuZ2l0c2Fhcy5wb2xpY3kudjEuRXZhbHVhdGlvbk1vZGUSEQoJdGVuYW50X2lkGAUgASgJEhAKCGFjdG9yX2lkGAYgASgJEg4KBmFjdGlvbhgHIAEoCRItCghyZXNvdXJjZRgIIAEoCzIbLmdpdHNhYXMucG9saWN5LnYxLlJlc291cmNlEg8KB2FsbG93ZWQYCSABKAgSLgoKZGVjaWRlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiSAoTR2V0RGVjaXNpb25SZXNwb25zZRIxCgZyZWNvcmQYASABKAsyIS5naXRzYWFzLnBvbGljeS52MS5EZWNpc2lvblJlY29yZCpsCg5FdmFsdWF0aW9uTW9kZRIfChtFVkFMVUFUSU9OX01PREVfVU5TUEVDSUZJRUQQABIcChhFVkFMVUFUSU9OX01PREVfRU5GT1JDRUQQARIbChdFVkFMVUFUSU9OX01PREVfRFJZX1JVThACMqkCChNQb2xpY3lEZWNpc2lvblBvaW50Ek0KBkRlY2lkZRIgLmdpdHNhYXMucG9saWN5LnYxLkRlY2lkZVJlcXVlc3QaIS5naXRzYWFzLnBvbGljeS52MS5EZWNpZGVSZXNwb25zZRJlCg5FdmFsdWF0ZURyeVJ1bhIoLmdpdHNhYXMucG9saWN5LnYxLkV2YWx1YXRlRHJ5UnVuUmVxdWVzdBopLmdpdHNhYXMucG9saWN5LnYxLkV2YWx1YXRlRHJ5UnVuUmVzcG9uc2USXAoLR2V0RGVjaXNpb24SJS5naXRzYWFzLnBvbGljeS52MS5HZXREZWNpc2lvblJlcXVlc3QaJi5naXRzYWFzLnBvbGljeS52MS5HZXREZWNpc2lvblJlc3BvbnNlQjlaN2dpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9wcm90by9wb2xpY3kvdjE7cG9saWN5djFiBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * Subject is the principal an action is attributed to.
@@ -201,6 +203,25 @@ export type DecideResponse = Message<"gitsaas.policy.v1.DecideResponse"> & {
    * @generated from field: string decision_id = 4;
    */
   decisionId: string;
+
+  /**
+   * Digest over the canonicalized decision input (SPEC-0030). Server-produced:
+   * an auditor re-derives it from the input the decision was made over, and a
+   * caller has no request field to supply it in. It is what lets an evidence
+   * pack state not only that a decision was made but over exactly what input.
+   *
+   * @generated from field: string input_digest = 5;
+   */
+  inputDigest: string;
+
+  /**
+   * The evaluation mode of this decision (SPEC-0029 AC2, SPEC-0030). Decide
+   * always returns EVALUATION_MODE_ENFORCED; only EvaluateDryRun produces
+   * EVALUATION_MODE_DRY_RUN. Server-produced — no request carries a mode.
+   *
+   * @generated from field: gitsaas.policy.v1.EvaluationMode mode = 6;
+   */
+  mode: EvaluationMode;
 };
 
 /**
@@ -209,6 +230,315 @@ export type DecideResponse = Message<"gitsaas.policy.v1.DecideResponse"> & {
  */
 export const DecideResponseSchema: GenMessage<DecideResponse> = /*@__PURE__*/
   messageDesc(file_proto_policy_v1_policy, 3);
+
+/**
+ * EvaluateDryRunRequest asks the PDP to replay a bounded range of historical
+ * decision inputs through a candidate bundle (SPEC-0029 AC2, SPEC-0030).
+ *
+ * The caller names WHICH bundle to evaluate and WHICH history to replay; it
+ * supplies no provenance and no outcome. There is no decision_id, no mode, no
+ * input_digest, no bundle revision and no allowed flag here — every one of
+ * those is produced by the server for each would-be decision, so a caller
+ * cannot assert a dry-run result any more than it can assert a live one
+ * (SPEC-0030 AC2).
+ *
+ * @generated from message gitsaas.policy.v1.EvaluateDryRunRequest
+ */
+export type EvaluateDryRunRequest = Message<"gitsaas.policy.v1.EvaluateDryRunRequest"> & {
+  /**
+   * The tenant the dry-run runs under. Every dry-run is tenant-scoped
+   * (invariant 1); a cross-tenant range is a coarse denial that does not
+   * distinguish nonexistent from unauthorized (SPEC-0030 AC6).
+   *
+   * @generated from field: string tenant_id = 1;
+   */
+  tenantId: string;
+
+  /**
+   * The candidate bundle to evaluate, as a reference to reviewed policy code
+   * in governance/ (SPEC-0029 reading A). A reference names reviewed,
+   * immutable code — never inline content and never a tenant-authored record —
+   * so a dry-run cannot become a way to evaluate policy that skipped review.
+   *
+   * @generated from field: string candidate_bundle_ref = 2;
+   */
+  candidateBundleRef: string;
+
+  /**
+   * The bounded range of historical decision inputs to replay. The inputs are
+   * read from the server's own decision history, never supplied by the caller.
+   *
+   * @generated from field: gitsaas.policy.v1.HistoricalRange range = 3;
+   */
+  range?: HistoricalRange | undefined;
+
+  /**
+   * Upper bound on the number of would-be decisions a single dry-run may
+   * produce. A range that would exceed it is rejected rather than silently
+   * truncated (SPEC-0030 open question): the caller narrows the range instead
+   * of receiving a partial result that looks complete.
+   *
+   * @generated from field: int32 max_results = 4;
+   */
+  maxResults: number;
+};
+
+/**
+ * Describes the message gitsaas.policy.v1.EvaluateDryRunRequest.
+ * Use `create(EvaluateDryRunRequestSchema)` to create a new message.
+ */
+export const EvaluateDryRunRequestSchema: GenMessage<EvaluateDryRunRequest> = /*@__PURE__*/
+  messageDesc(file_proto_policy_v1_policy, 4);
+
+/**
+ * HistoricalRange delimits the historical decision inputs a dry-run replays.
+ * Empty/absent on a bound leaves that dimension unbounded; the server enforces
+ * the overall cap from EvaluateDryRunRequest.max_results.
+ *
+ * @generated from message gitsaas.policy.v1.HistoricalRange
+ */
+export type HistoricalRange = Message<"gitsaas.policy.v1.HistoricalRange"> & {
+  /**
+   * Restrict to one action, e.g. "merge_request.merge". Empty replays every
+   * action.
+   *
+   * @generated from field: string action = 1;
+   */
+  action: string;
+
+  /**
+   * Restrict to one resource. Absent replays every resource.
+   *
+   * @generated from field: gitsaas.policy.v1.Resource resource = 2;
+   */
+  resource?: Resource | undefined;
+
+  /**
+   * Inclusive lower bound on when the replayed decisions were recorded. Absent
+   * is unbounded below.
+   *
+   * @generated from field: google.protobuf.Timestamp from = 3;
+   */
+  from?: Timestamp | undefined;
+
+  /**
+   * Inclusive upper bound. Absent is unbounded above.
+   *
+   * @generated from field: google.protobuf.Timestamp to = 4;
+   */
+  to?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.policy.v1.HistoricalRange.
+ * Use `create(HistoricalRangeSchema)` to create a new message.
+ */
+export const HistoricalRangeSchema: GenMessage<HistoricalRange> = /*@__PURE__*/
+  messageDesc(file_proto_policy_v1_policy, 5);
+
+/**
+ * EvaluateDryRunResponse is the set of would-be decisions a dry-run produced.
+ *
+ * @generated from message gitsaas.policy.v1.EvaluateDryRunResponse
+ */
+export type EvaluateDryRunResponse = Message<"gitsaas.policy.v1.EvaluateDryRunResponse"> & {
+  /**
+   * One would-be decision per replayed input. Every entry carries
+   * mode = EVALUATION_MODE_DRY_RUN and the candidate bundle's revision as its
+   * policy_revision, so a dry-run record is distinguishable from an enforced
+   * one everywhere it appears — including any later evidence section
+   * (SPEC-0029 AC2).
+   *
+   * @generated from field: repeated gitsaas.policy.v1.DecideResponse decisions = 1;
+   */
+  decisions: DecideResponse[];
+};
+
+/**
+ * Describes the message gitsaas.policy.v1.EvaluateDryRunResponse.
+ * Use `create(EvaluateDryRunResponseSchema)` to create a new message.
+ */
+export const EvaluateDryRunResponseSchema: GenMessage<EvaluateDryRunResponse> = /*@__PURE__*/
+  messageDesc(file_proto_policy_v1_policy, 6);
+
+/**
+ * GetDecisionRequest retrieves one decision record by the ID the PDP assigned.
+ *
+ * The decision_id here is a SELECTOR, not an assertion: the caller can only
+ * name a decision the server already produced and returned. It supplies no
+ * outcome, no mode, no revision and no input digest — the record that comes
+ * back carries those as server-produced facts (SPEC-0030 AC2).
+ *
+ * @generated from message gitsaas.policy.v1.GetDecisionRequest
+ */
+export type GetDecisionRequest = Message<"gitsaas.policy.v1.GetDecisionRequest"> & {
+  /**
+   * The tenant the read runs under. A decision is only ever retrievable within
+   * the tenant that made it; a cross-tenant or nonexistent ID yields the same
+   * coarse denial (invariant 1, SPEC-0030 AC6).
+   *
+   * @generated from field: string tenant_id = 1;
+   */
+  tenantId: string;
+
+  /**
+   * The decision to retrieve, as assigned by the PDP in a prior response.
+   *
+   * @generated from field: string decision_id = 2;
+   */
+  decisionId: string;
+};
+
+/**
+ * Describes the message gitsaas.policy.v1.GetDecisionRequest.
+ * Use `create(GetDecisionRequestSchema)` to create a new message.
+ */
+export const GetDecisionRequestSchema: GenMessage<GetDecisionRequest> = /*@__PURE__*/
+  messageDesc(file_proto_policy_v1_policy, 7);
+
+/**
+ * DecisionRecord is one stored decision, retrievable after the fact
+ * (SPEC-0029 AC1, SPEC-0030). It carries the provenance the decision was made
+ * under and the outcome, but never the rule source text: exposing the rules on
+ * this surface would be a way to read policy that skipped the governance review
+ * the bundle went through (G9).
+ *
+ * @generated from message gitsaas.policy.v1.DecisionRecord
+ */
+export type DecisionRecord = Message<"gitsaas.policy.v1.DecisionRecord"> & {
+  /**
+   * The decision's identity and provenance — all server-produced.
+   *
+   * @generated from field: string decision_id = 1;
+   */
+  decisionId: string;
+
+  /**
+   * The bundle revision that decided it: the deciding policy version, which is
+   * what makes the record useful as evidence (SPEC-0029 AC1).
+   *
+   * @generated from field: string policy_revision = 2;
+   */
+  policyRevision: string;
+
+  /**
+   * Digest over the canonicalized input the decision was made over.
+   *
+   * @generated from field: string input_digest = 3;
+   */
+  inputDigest: string;
+
+  /**
+   * ENFORCED or DRY_RUN. A dry-run record stays labelled here exactly as it
+   * does in the audit chain (SPEC-0029 AC2).
+   *
+   * @generated from field: gitsaas.policy.v1.EvaluationMode mode = 4;
+   */
+  mode: EvaluationMode;
+
+  /**
+   * The question that was asked.
+   *
+   * @generated from field: string tenant_id = 5;
+   */
+  tenantId: string;
+
+  /**
+   * The actor the action was attributed to.
+   *
+   * @generated from field: string actor_id = 6;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: string action = 7;
+   */
+  action: string;
+
+  /**
+   * @generated from field: gitsaas.policy.v1.Resource resource = 8;
+   */
+  resource?: Resource | undefined;
+
+  /**
+   * The answer and when it was given.
+   *
+   * @generated from field: bool allowed = 9;
+   */
+  allowed: boolean;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp decided_at = 10;
+   */
+  decidedAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.policy.v1.DecisionRecord.
+ * Use `create(DecisionRecordSchema)` to create a new message.
+ */
+export const DecisionRecordSchema: GenMessage<DecisionRecord> = /*@__PURE__*/
+  messageDesc(file_proto_policy_v1_policy, 8);
+
+/**
+ * GetDecisionResponse returns the retrieved decision record.
+ *
+ * @generated from message gitsaas.policy.v1.GetDecisionResponse
+ */
+export type GetDecisionResponse = Message<"gitsaas.policy.v1.GetDecisionResponse"> & {
+  /**
+   * Absent when no such decision exists in this tenant; absence and denial are
+   * the same coarse shape (SPEC-0001, SPEC-0030 AC6).
+   *
+   * @generated from field: gitsaas.policy.v1.DecisionRecord record = 1;
+   */
+  record?: DecisionRecord | undefined;
+};
+
+/**
+ * Describes the message gitsaas.policy.v1.GetDecisionResponse.
+ * Use `create(GetDecisionResponseSchema)` to create a new message.
+ */
+export const GetDecisionResponseSchema: GenMessage<GetDecisionResponse> = /*@__PURE__*/
+  messageDesc(file_proto_policy_v1_policy, 9);
+
+/**
+ * EvaluationMode distinguishes an enforced decision from a dry-run one
+ * (SPEC-0029 AC2, SPEC-0030). A dry-run decision is never an authorization
+ * outcome and is labelled wherever it appears, so a consumer can never mistake
+ * it for an enforced control — and a caller has no way to assert either value.
+ *
+ * @generated from enum gitsaas.policy.v1.EvaluationMode
+ */
+export enum EvaluationMode {
+  /**
+   * @generated from enum value: EVALUATION_MODE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * The decision was enforced: it gated a real action and was recorded as a
+   * control in the audit trail.
+   *
+   * @generated from enum value: EVALUATION_MODE_ENFORCED = 1;
+   */
+  ENFORCED = 1,
+
+  /**
+   * The decision is a dry-run: what a candidate bundle would have decided. It
+   * writes no enforcement, mutates no state, and is never consumed as an
+   * authorization outcome.
+   *
+   * @generated from enum value: EVALUATION_MODE_DRY_RUN = 2;
+   */
+  DRY_RUN = 2,
+}
+
+/**
+ * Describes the enum gitsaas.policy.v1.EvaluationMode.
+ */
+export const EvaluationModeSchema: GenEnum<EvaluationMode> = /*@__PURE__*/
+  enumDesc(file_proto_policy_v1_policy, 0);
 
 /**
  * PolicyDecisionPoint answers "may this subject do this to that?" and nothing else.
@@ -229,6 +559,40 @@ export const PolicyDecisionPoint: GenService<{
     methodKind: "unary";
     input: typeof DecideRequestSchema;
     output: typeof DecideResponseSchema;
+  },
+  /**
+   * EvaluateDryRun evaluates a candidate bundle over a bounded range of
+   * historical decision inputs and reports what it *would* have decided,
+   * without enforcing anything (SPEC-0029 AC2, SPEC-0030).
+   *
+   * Unary rather than streaming for the same reason Decide is: each would-be
+   * decision must be independently attributable in the audit trail, and a
+   * partial failure over a range must not be vague about which inputs it
+   * covered. A dry-run that enforces nothing and changes no state is still an
+   * auditable operation, because it is how a rule's effect becomes knowable
+   * before it binds.
+   *
+   * @generated from rpc gitsaas.policy.v1.PolicyDecisionPoint.EvaluateDryRun
+   */
+  evaluateDryRun: {
+    methodKind: "unary";
+    input: typeof EvaluateDryRunRequestSchema;
+    output: typeof EvaluateDryRunResponseSchema;
+  },
+  /**
+   * GetDecision retrieves a decision record by the ID the PDP assigned it,
+   * with the provenance it was made under (SPEC-0029 AC1, SPEC-0030).
+   *
+   * Retrieval is the other half of "every decision records the version that
+   * decided it": a decision is only useful as evidence if it can be read back,
+   * by ID, with its deciding bundle revision, input digest and mode.
+   *
+   * @generated from rpc gitsaas.policy.v1.PolicyDecisionPoint.GetDecision
+   */
+  getDecision: {
+    methodKind: "unary";
+    input: typeof GetDecisionRequestSchema;
+    output: typeof GetDecisionResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_policy_v1_policy, 0);

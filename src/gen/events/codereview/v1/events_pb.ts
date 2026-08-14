@@ -2,10 +2,13 @@
 // @generated from file events/codereview/v1/events.proto (package gitsaas.events.codereview.v1, syntax proto3)
 /* eslint-disable */
 
-// Code Review domain events (SPEC-0019). Events carry opaque IDs and
-// tenant/repository scope; they never carry review text, credentials, Git
-// objects, or a policy allow flag. Repository/Git consumes only
-// BranchProtectionChanged, into a tenant-scoped local projection.
+// Code Review domain events (SPEC-0019, SPEC-0028). Events carry opaque IDs
+// and tenant/repository scope; they never carry review text, credentials,
+// Git objects, or a policy allow flag. Repository/Git consumes only
+// BranchProtectionChanged, into a tenant-scoped local projection;
+// Security/Findings consumes MergeRequestOpened and MergeRequestUpdated
+// into its own projection to learn an MR's head and target without calling
+// Code Review on a read path (SPEC-0028).
 
 import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
@@ -17,7 +20,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file events/codereview/v1/events.proto.
  */
 export const file_events_codereview_v1_events: GenFile = /*@__PURE__*/
-  fileDesc("CiFldmVudHMvY29kZXJldmlldy92MS9ldmVudHMucHJvdG8SHGdpdHNhYXMuZXZlbnRzLmNvZGVyZXZpZXcudjEi1wEKEk1lcmdlUmVxdWVzdE9wZW5lZBIQCghldmVudF9pZBgBIAEoCRIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEhEKCXRlbmFudF9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhIKCnNvdXJjZV9yZWYYBSABKAkSEgoKdGFyZ2V0X3JlZhgGIAEoCRISCgpjcmVhdG9yX2lkGAcgASgJEi8KC29jY3VycmVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCKQAgoPUmV2aWV3U3VibWl0dGVkEhAKCGV2ZW50X2lkGAEgASgJEhgKEG1lcmdlX3JlcXVlc3RfaWQYAiABKAkSEQoJdGVuYW50X2lkGAMgASgJEhUKDXJlcG9zaXRvcnlfaWQYBCABKAkSEAoIYWN0b3JfaWQYBSABKAkSTQoLZGlzcG9zaXRpb24YBiABKA4yOC5naXRzYWFzLmV2ZW50cy5jb2RlcmV2aWV3LnYxLlJldmlld1N1Ym1pdHRlZERpc3Bvc2l0aW9uEhUKDWhlYWRfcmV2aXNpb24YByABKAkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wItgBChJNZXJnZVJlcXVlc3RNZXJnZWQSEAoIZXZlbnRfaWQYASABKAkSGAoQbWVyZ2VfcmVxdWVzdF9pZBgCIAEoCRIRCgl0ZW5hbnRfaWQYAyABKAkSFQoNcmVwb3NpdG9yeV9pZBgEIAEoCRIQCghhY3Rvcl9pZBgFIAEoCRISCgp0YXJnZXRfcmVmGAYgASgJEhUKDWhlYWRfcmV2aXNpb24YByABKAkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIt0BChdCcmFuY2hQcm90ZWN0aW9uQ2hhbmdlZBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSFQoNcmVwb3NpdG9yeV9pZBgDIAEoCRISCgp0YXJnZXRfcmVmGAQgASgJEhoKEnJlcXVpcmVkX2FwcHJvdmFscxgFIAEoBRIvCgtvY2N1cnJlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEAoIYWN0b3JfaWQYByABKAkSEwoLYWN0b3Jfcm9sZXMYCCADKAkq0AEKGlJldmlld1N1Ym1pdHRlZERpc3Bvc2l0aW9uEiwKKFJFVklFV19TVUJNSVRURURfRElTUE9TSVRJT05fVU5TUEVDSUZJRUQQABIoCiRSRVZJRVdfU1VCTUlUVEVEX0RJU1BPU0lUSU9OX0FQUFJPVkUQARIwCixSRVZJRVdfU1VCTUlUVEVEX0RJU1BPU0lUSU9OX1JFUVVFU1RfQ0hBTkdFUxACEigKJFJFVklFV19TVUJNSVRURURfRElTUE9TSVRJT05fQ09NTUVOVBADQkhaRmdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9ldmVudHMvY29kZXJldmlldy92MTtjb2RlcmV2aWV3ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
+  fileDesc("CiFldmVudHMvY29kZXJldmlldy92MS9ldmVudHMucHJvdG8SHGdpdHNhYXMuZXZlbnRzLmNvZGVyZXZpZXcudjEi1wEKEk1lcmdlUmVxdWVzdE9wZW5lZBIQCghldmVudF9pZBgBIAEoCRIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEhEKCXRlbmFudF9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhIKCnNvdXJjZV9yZWYYBSABKAkSEgoKdGFyZ2V0X3JlZhgGIAEoCRISCgpjcmVhdG9yX2lkGAcgASgJEi8KC29jY3VycmVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCKQAgoPUmV2aWV3U3VibWl0dGVkEhAKCGV2ZW50X2lkGAEgASgJEhgKEG1lcmdlX3JlcXVlc3RfaWQYAiABKAkSEQoJdGVuYW50X2lkGAMgASgJEhUKDXJlcG9zaXRvcnlfaWQYBCABKAkSEAoIYWN0b3JfaWQYBSABKAkSTQoLZGlzcG9zaXRpb24YBiABKA4yOC5naXRzYWFzLmV2ZW50cy5jb2RlcmV2aWV3LnYxLlJldmlld1N1Ym1pdHRlZERpc3Bvc2l0aW9uEhUKDWhlYWRfcmV2aXNpb24YByABKAkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wItgBChJNZXJnZVJlcXVlc3RNZXJnZWQSEAoIZXZlbnRfaWQYASABKAkSGAoQbWVyZ2VfcmVxdWVzdF9pZBgCIAEoCRIRCgl0ZW5hbnRfaWQYAyABKAkSFQoNcmVwb3NpdG9yeV9pZBgEIAEoCRIQCghhY3Rvcl9pZBgFIAEoCRISCgp0YXJnZXRfcmVmGAYgASgJEhUKDWhlYWRfcmV2aXNpb24YByABKAkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIu0BChNNZXJnZVJlcXVlc3RVcGRhdGVkEhAKCGV2ZW50X2lkGAEgASgJEhgKEG1lcmdlX3JlcXVlc3RfaWQYAiABKAkSEQoJdGVuYW50X2lkGAMgASgJEhUKDXJlcG9zaXRvcnlfaWQYBCABKAkSEAoIYWN0b3JfaWQYBSABKAkSFQoNaGVhZF9yZXZpc2lvbhgGIAEoCRISCgpzb3VyY2VfcmVmGAcgASgJEhIKCnRhcmdldF9yZWYYCCABKAkSLwoLb2NjdXJyZWRfYXQYCSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIt0BChdCcmFuY2hQcm90ZWN0aW9uQ2hhbmdlZBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSFQoNcmVwb3NpdG9yeV9pZBgDIAEoCRISCgp0YXJnZXRfcmVmGAQgASgJEhoKEnJlcXVpcmVkX2FwcHJvdmFscxgFIAEoBRIvCgtvY2N1cnJlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEAoIYWN0b3JfaWQYByABKAkSEwoLYWN0b3Jfcm9sZXMYCCADKAkq0AEKGlJldmlld1N1Ym1pdHRlZERpc3Bvc2l0aW9uEiwKKFJFVklFV19TVUJNSVRURURfRElTUE9TSVRJT05fVU5TUEVDSUZJRUQQABIoCiRSRVZJRVdfU1VCTUlUVEVEX0RJU1BPU0lUSU9OX0FQUFJPVkUQARIwCixSRVZJRVdfU1VCTUlUVEVEX0RJU1BPU0lUSU9OX1JFUVVFU1RfQ0hBTkdFUxACEigKJFJFVklFV19TVUJNSVRURURfRElTUE9TSVRJT05fQ09NTUVOVBADQkhaRmdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9ldmVudHMvY29kZXJldmlldy92MTtjb2RlcmV2aWV3ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * @generated from message gitsaas.events.codereview.v1.MergeRequestOpened
@@ -176,6 +179,81 @@ export const MergeRequestMergedSchema: GenMessage<MergeRequestMerged> = /*@__PUR
   messageDesc(file_events_codereview_v1_events, 2);
 
 /**
+ * MergeRequestUpdated records that an open merge request moved: a push to
+ * its source ref (new head revision) or a retarget to a different target
+ * ref (SPEC-0028). Neither movement is observable from the existing events —
+ * MergeRequestOpened carries no head revision and fires once,
+ * ReviewSubmitted names a head only when a review lands, and the
+ * repository's RefUpdated carries no merge-request association — and a
+ * retarget changes no ref at all. Additive for SPEC-0028, whose consumers
+ * (Security/Findings) must recompute introduction attribution whenever the
+ * head or the merge base moves: the event names both sides of what can
+ * move, so a projection needs no second read to learn the new pair.
+ *
+ * @generated from message gitsaas.events.codereview.v1.MergeRequestUpdated
+ */
+export type MergeRequestUpdated = Message<"gitsaas.events.codereview.v1.MergeRequestUpdated"> & {
+  /**
+   * @generated from field: string event_id = 1;
+   */
+  eventId: string;
+
+  /**
+   * @generated from field: string merge_request_id = 2;
+   */
+  mergeRequestId: string;
+
+  /**
+   * @generated from field: string tenant_id = 3;
+   */
+  tenantId: string;
+
+  /**
+   * @generated from field: string repository_id = 4;
+   */
+  repositoryId: string;
+
+  /**
+   * The verified actor whose push or retarget moved the merge request.
+   *
+   * @generated from field: string actor_id = 5;
+   */
+  actorId: string;
+
+  /**
+   * The MR's head revision after the move. Always the current head; a
+   * retarget-only move repeats the head it already had.
+   *
+   * @generated from field: string head_revision = 6;
+   */
+  headRevision: string;
+
+  /**
+   * @generated from field: string source_ref = 7;
+   */
+  sourceRef: string;
+
+  /**
+   * The target ref after the move; unchanged for a head-only push.
+   *
+   * @generated from field: string target_ref = 8;
+   */
+  targetRef: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp occurred_at = 9;
+   */
+  occurredAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.events.codereview.v1.MergeRequestUpdated.
+ * Use `create(MergeRequestUpdatedSchema)` to create a new message.
+ */
+export const MergeRequestUpdatedSchema: GenMessage<MergeRequestUpdated> = /*@__PURE__*/
+  messageDesc(file_events_codereview_v1_events, 3);
+
+/**
  * @generated from message gitsaas.events.codereview.v1.BranchProtectionChanged
  */
 export type BranchProtectionChanged = Message<"gitsaas.events.codereview.v1.BranchProtectionChanged"> & {
@@ -234,7 +312,7 @@ export type BranchProtectionChanged = Message<"gitsaas.events.codereview.v1.Bran
  * Use `create(BranchProtectionChangedSchema)` to create a new message.
  */
 export const BranchProtectionChangedSchema: GenMessage<BranchProtectionChanged> = /*@__PURE__*/
-  messageDesc(file_events_codereview_v1_events, 3);
+  messageDesc(file_events_codereview_v1_events, 4);
 
 /**
  * @generated from enum gitsaas.events.codereview.v1.ReviewSubmittedDisposition
