@@ -67,6 +67,18 @@ jobs:
       - name: build
         run: npm run build
 
+      # SPEC-0021 AC6: the browse → file → diff journey, plus the palette driven
+      # from the keyboard alone, against a stub BFF (e2e/stub-bff.mjs). The stub
+      # is what keeps this hermetic — no cluster, no backend — while still
+      # proving the browser reaches this origin and nothing else (invariant 22).
+      # Only Chromium is installed: the journey under test is the app's, not the
+      # browsers' rendering differences.
+      - name: install chromium for e2e
+        run: npx playwright install --with-deps chromium
+
+      - name: e2e (browse → file → diff)
+        run: npm run e2e
+
       # T-0021 / ADR-0035: build the SSR image and assert non-root, no-shell, read-only-root
       # runtime posture. Node needs a non-scratch base, so the final stage removes BusyBox and apk.
       - name: container image
@@ -74,7 +86,6 @@ jobs:
 
       # Not wired yet, and deliberately not faked with a passing no-op step:
       #  - lint/format: no ESLint/Prettier in this repo yet.
-      #  - E2E: no Playwright yet (AGENTS.md wants a few on critical paths).
       #  - contract codegen freshness (`npm run gen` + `git diff --exit-code src/gen`): buf.gen.yaml
       #    reads ../governance/contracts, a sibling checkout that does not exist in a standalone CI
       #    run. Needs the generated-type publishing follow-up in ADR-0027/0028 first.
