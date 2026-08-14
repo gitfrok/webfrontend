@@ -1,0 +1,257 @@
+---
+// MRDiffFindings renders one merge request's findings inline in its diff
+// (T-0024, SPEC-0028 AC4): the patch is split per file, and each finding is
+// annotated directly under the file its head-revision location resolves to,
+// anchored by the finding's identity so a later push that shifts the line
+// re-resolves the placement without breaking the anchor (SPEC-0024 identity
+// stability). A finding whose head path matches no file in the diff stays
+// reachable in a trailing section — never dropped.
+//
+// Presentational only: attribution and triage arrive from the backend and
+// are rendered verbatim. A failed, timed-out, missing or not-yet-run scan
+// renders as UNAVAILABLE with its reason — never as "no findings"
+// (SPEC-0028 AC7).
+import type { AttributionSummary, MRFindingView } from '../lib/bff';
+
+interface Props {
+  patch: string;
+  findings: MRFindingView[];
+  summary: AttributionSummary;
+}
+
+const { patch, findings, summary } = Astro.props;
+
+// FileDiff is one file's slice of the patch with the path the diff writes it
+// at — the +++ side when there is one, the --- side for a deletion.
+interface FileDiff {
+  path: string;
+  body: string;
+}
+
+function splitPatch(patchText: string): FileDiff[] {
+  const files: FileDiff[] = [];
+  let current: FileDiff | null = null;
+  for (const line of patchText.split('\n')) {
+    if (line.startsWith('diff --git ')) {
+      if (current) files.push(current);
+      current = { path: '', body: `${line}\n` };
+      continue;
+    }
+    if (!current) continue; // a preamble before the first file belongs to no file
+    current.body += `${line}\n`;
+    if (line.startsWith('+++ ')) {
+      const target = line.slice(4).trim();
+      if (target !== '/dev/null') current.path = target.startsWith('b/') ? target.slice(2) : target;
+    } else if (line.startsWith('--- ') && current.path === '') {
+      const source = line.slice(4).trim();
+      if (source !== '/dev/null') current.path = source.startsWith('a/') ? source.slice(2) : source;
+    }
+  }
+  if (current) files.push(current);
+  return files;
+}
+
+const fileDiffs = splitPatch(patch);
+
+// Placement is by the finding's identity through its head-revision location:
+// a file shows the findings resolved to its path, and anything that resolves
+// nowhere in this diff is still listed, so no attributed finding is dropped
+// by a rename or a hunk the page does not carry.
+const placed = new Set<string>();
+function findingsFor(path: string): MRFindingView[] {
+  return findings.filter((view) => {
+    if (view.head_location.artifact_path !== path) return false;
+    placed.add(view.finding.finding_id);
+    return true;
+  });
+}
+// Compute placement for every file before collecting the remainder.
+const perFile = fileDiffs.map((file) => ({ file, annotations: findingsFor(file.path) }));
+const unplaced = findings.filter((view) => !placed.has(view.finding.finding_id));
+
+const unavailable = summary.status === 'UNAVAILABLE';
+const computedEmpty = !unavailable && findings.length === 0;
+
+const unavailableReasons: Record<string, string> = {
+  BASE_NOT_SCANNED: 'the target branch has not been scanned at the merge base',
+  HEAD_SCAN_FAILED: 'the scan of this merge request’s head revision failed',
+  HEAD_SCAN_TIMED_OUT: 'the scan of this merge request’s head revision timed out',
+  HEAD_SCAN_NOT_RUN: 'no scan of this merge request’s head revision has run yet',
+  NO_MERGE_BASE: 'the source and target revisions share no merge base',
+};
+
+const severityStyles: Record<string, { color: string; background: string }> = {
+  CRITICAL: { color: '#82071e', background: '#ffebe9' },
+  HIGH: { color: '#953800', background: '#fff1e5' },
+  MEDIUM: { color: '#7d4e00', background: '#fff8c5' },
+  LOW: { color: '#116329', background: '#dafbe1' },
+};
+
+const triageLabels: Record<string, string> = {
+  ACCEPT: 'Accepted',
+  FALSE_POSITIVE: 'False positive',
+  FIX: 'Fix',
+  DEFER: 'Deferred',
+};
+
+const attributionLabels: Record<string, string> = {
+  ATTRIBUTED: 'Introduced by this MR',
+  PRE_EXISTING: 'Pre-existing',
+  UNAVAILABLE: 'Attribution unavailable',
+};
+---
+
+{unavailable && (
+  <div
+    role="status"
+    style={{ margin: '16px 0', padding: '12px 16px', border: '1px solid #d4a72c66', borderRadius: 8, background: '#fff8c5' }}
+  >
+    <p style={{ margin: 0, fontWeight: 600, fontSize: 14 }}>
+      Attribution unavailable
+      <code style={{ marginLeft: 8, fontSize: 11, fontWeight: 400, color: '#57606a', background: '#ffffffaa', padding: '1px 6px', borderRadius: 4 }}>
+        UNAVAILABLE
+      </code>
+    </p>
+    <p style={{ margin: '6px 0 0', fontSize: 13, color: '#4a3b00' }}>
+      {summary.unavailable_reason
+        ? unavailableReasons[summary.unavailable_reason] ?? 'the comparison cannot be computed'
+        : 'the comparison cannot be computed'}
+      {summary.unavailable_reason && (
+        <code style={{ marginLeft: 6, fontSize: 11, color: '#57606a', background: '#ffffffaa', padding: '1px 6px', borderRadius: 4 }}>
+          {summary.unavailable_reason}
+        </code>
+      )}
+    </p>
+  </div>
+)}
+
+{computedEmpty && (
+  <p style={{ margin: '16px 0', fontSize: 13, color: '#57606a' }}>No findings introduced by this merge request.</p>
+)}
+
+{perFile.map(({ file, annotations }) => (
+  <div style={{ margin: '16px 0' }}>
+    <pre
+      style={{
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-all',
+        background: '#f6f8fa',
+        padding: 16,
+        borderRadius: 8,
+        overflowX: 'auto',
+        fontSize: 13,
+        lineHeight: 1.5,
+        margin: 0,
+      }}
+    >
+      {file.body}
+    </pre>
+    {annotations.map((view) => {
+      const severityStyle = severityStyles[view.finding.severity] ?? { color: '#24292f', background: '#eaeef2' };
+      const triageLabel = view.triage ? triageLabels[view.triage.state] ?? view.triage.state : '';
+      return (
+        <div
+          id={`finding-${view.finding.finding_id}`}
+          style={{
+            margin: '8px 0 0 24px',
+            padding: '10px 14px',
+            borderLeft: '3px solid #cf222e',
+            background: '#fff5f5',
+            borderRadius: '0 6px 6px 0',
+            fontSize: 13,
+          }}
+        >
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
+            <span
+              style={{
+                fontWeight: 600,
+                fontSize: 12,
+                padding: '1px 8px',
+                borderRadius: 999,
+                color: severityStyle.color,
+                background: severityStyle.background,
+              }}
+            >
+              {view.finding.severity}
+            </span>
+            <span style={{ fontWeight: 600 }}>{view.finding.rule_id}</span>
+            <span style={{ color: '#57606a' }}>{view.finding.scanner_class}</span>
+            <span style={{ color: '#57606a', fontSize: 12 }}>
+              {attributionLabels[view.attribution] ?? 'Attribution unavailable'}
+            </span>
+            <span
+              style={{
+                marginLeft: 'auto',
+                fontSize: 12,
+                fontWeight: view.triage ? 600 : 400,
+                color: view.triage ? '#116329' : '#57606a',
+              }}
+            >
+              {triageLabel || 'Awaiting triage'}
+            </span>
+          </div>
+          {view.head_location.enclosing_content && (
+            <p style={{ margin: '6px 0 0', color: '#57606a' }}>
+              in <code style={{ fontSize: 12 }}>{view.head_location.enclosing_content}</code>
+            </p>
+          )}
+          {view.triage && view.triage.justification && (
+            <p style={{ margin: '4px 0 0', fontSize: 12, color: '#57606a', fontStyle: 'italic' }}>
+              Triage ({triageLabel}): “{view.triage.justification}”
+            </p>
+          )}
+        </div>
+      );
+    })}
+  </div>
+))}
+
+{unplaced.length > 0 && (
+  <section aria-label="Findings elsewhere in this merge request" style={{ margin: '24px 0' }}>
+    <h2 style={{ fontSize: 14, margin: '0 0 8px' }}>Findings elsewhere in this merge request</h2>
+    {unplaced.map((view) => {
+      const severityStyle = severityStyles[view.finding.severity] ?? { color: '#24292f', background: '#eaeef2' };
+      const triageLabel = view.triage ? triageLabels[view.triage.state] ?? view.triage.state : '';
+      return (
+        <div
+          id={`finding-${view.finding.finding_id}`}
+          style={{
+            margin: '8px 0',
+            padding: '10px 14px',
+            borderLeft: '3px solid #cf222e',
+            background: '#fff5f5',
+            borderRadius: '0 6px 6px 0',
+            fontSize: 13,
+          }}
+        >
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
+            <span
+              style={{
+                fontWeight: 600,
+                fontSize: 12,
+                padding: '1px 8px',
+                borderRadius: 999,
+                color: severityStyle.color,
+                background: severityStyle.background,
+              }}
+            >
+              {view.finding.severity}
+            </span>
+            <span style={{ fontWeight: 600 }}>{view.finding.rule_id}</span>
+            <code style={{ fontSize: 12, color: '#57606a' }}>{view.head_location.artifact_path}</code>
+            <span
+              style={{
+                marginLeft: 'auto',
+                fontSize: 12,
+                fontWeight: view.triage ? 600 : 400,
+                color: view.triage ? '#116329' : '#57606a',
+              }}
+            >
+              {triageLabel || 'Awaiting triage'}
+            </span>
+          </div>
+        </div>
+      );
+    })}
+  </section>
+)}

@@ -297,3 +297,123 @@ export async function setSecurityTriage(
   }
   return (await response.json()) as SecurityTriageView;
 }
+
+// --- Findings inline on the merge request (T-0024, SPEC-0028) ---------------
+//
+// Findings render on the merge request that introduced them: the backend
+// computes attribution as the set difference between the scan at the MR's
+// head revision and the scan at the merge base, under server-derived
+// authorization, and the BFF shapes the authorized page field for field.
+// This layer forwards the session cookie and passes the page through
+// untouched: it attributes, filters and authorizes nothing, so a refusal is
+// one coarse failure and an empty list is only ever served with the summary
+// that says what was compared (SPEC-0028 AC7).
+
+// MRFindingsFilters mirrors the MR-findings filter set with the contract's
+// UNSPECIFIED/empty/zero semantics: an absent value is no filter, and which
+// findings survive is the backend's decision alone (SPEC-0028 AC8).
+export interface MRFindingsFilters {
+  scanner_class?: string;
+  severity?: string;
+  attribution?: string;
+}
+
+// The filter vocabularies the contract names. A value outside these sets is
+// refused here with the same coarse failure the BFF would return — a filter
+// the contract does not name is not a request this surface can send.
+export const mrScannerClasses = ['SAST', 'DEPENDENCY', 'SECRETS', 'CONTAINER', 'DAST'] as const;
+export const mrSeverities = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'] as const;
+export const mrAttributions = ['ATTRIBUTED', 'PRE_EXISTING', 'UNAVAILABLE'] as const;
+
+// MRFindingLocationView is a finding's location as resolved at the MR's
+// current head revision. Identity is revision-invariant (SPEC-0024), so a
+// later push that shifts the line re-resolves this location without changing
+// the finding it belongs to (SPEC-0028 AC4).
+export interface MRFindingLocationView {
+  artifact_path: string;
+  enclosing_content: string;
+  component: string;
+  component_version: string;
+}
+
+// MRFindingView is one finding as the merge request renders it: the finding,
+// the triage state attached to its identity, its head-revision location, and
+// its attribution status. Triage is absent exactly when no triage decision
+// has been recorded — the only meaning of absence here (SPEC-0027).
+export interface MRFindingView {
+  finding: SecurityFindingView;
+  triage?: SecurityTriageView;
+  head_location: MRFindingLocationView;
+  attribution: string;
+  // Set only when attribution is UNAVAILABLE: the honest reason the
+  // comparison cannot be computed (SPEC-0028 AC7).
+  unavailable_reason?: string;
+}
+
+// AttributionSummary is the response-level statement of what was compared
+// and what the comparison produced. It is always present: the shape has no
+// way to say "no findings" without also saying what was compared.
+export interface AttributionSummary {
+  status: string;
+  // Set only when status is UNAVAILABLE.
+  unavailable_reason?: string;
+  head_revision: string;
+  merge_base_revision: string;
+  stale: boolean;
+  attributed_low: number;
+  attributed_medium: number;
+  attributed_high: number;
+  attributed_critical: number;
+}
+
+// MRFindingsPage is one authorized MR-findings page. An empty findings list
+// is a legitimate answer only when the summary says attribution was computed
+// and found nothing; an UNAVAILABLE summary with an empty list is still
+// UNAVAILABLE, never "no findings" (SPEC-0028 AC7).
+export interface MRFindingsPage {
+  findings: MRFindingView[];
+  next_page_token: string;
+  summary: AttributionSummary;
+}
+
+// mergeRequestFindings pages the findings a merge request introduced under
+// the session's identity. The merge request travels as its opaque identity
+// only — the route carries no repository segment, because the contract's
+// request has no repository field to carry one. Membership, order,
+// attribution and counts come from the backend untouched.
+export async function mergeRequestFindings(
+  request: Request,
+  mergeRequestID: string,
+  filters: MRFindingsFilters,
+  pageSize: number,
+  pageToken = '',
+): Promise<MRFindingsPage> {
+  if (
+    mergeRequestID === '' ||
+    (filters.scanner_class !== undefined && !mrScannerClasses.includes(filters.scanner_class as (typeof mrScannerClasses)[number])) ||
+    (filters.severity !== undefined && !mrSeverities.includes(filters.severity as (typeof mrSeverities)[number])) ||
+    (filters.attribution !== undefined && !mrAttributions.includes(filters.attribution as (typeof mrAttributions)[number]))
+  ) {
+    throw new Error('merge request findings unavailable');
+  }
+  const params = new URLSearchParams();
+  if (filters.scanner_class) params.set('scanner_class', filters.scanner_class);
+  if (filters.severity) params.set('severity', filters.severity);
+  if (filters.attribution) params.set('attribution', filters.attribution);
+  if (pageSize > 0) params.set('page_size', String(pageSize));
+  if (pageToken) params.set('page_token', pageToken);
+  const query = params.toString();
+  const response = await bffFetch(
+    request,
+    `/api/v1/security/merge-requests/${encodeURIComponent(mergeRequestID)}/findings${query ? `?${query}` : ''}`,
+  );
+  if (!response.ok) {
+    throw new Error('merge request findings unavailable');
+  }
+  const view = (await response.json()) as MRFindingsPage;
+  return {
+    findings: view.findings ?? [],
+    next_page_token: view.next_page_token ?? '',
+    summary: view.summary,
+  };
+}

@@ -2,12 +2,23 @@
 // Diff view (T-0015, SPEC-0008 AC1): stream the Git patch between a revision
 // and its base, served via SSR from the BFF only. The base revision is the
 // parent when omitted; the page reads base_revision from the query if given.
-import { diff } from '../../../../lib/bff';
+//
+// When the diff is reviewed under a merge request (merge_request_id query
+// parameter, linked from the MR page), the findings that MR introduced render
+// inline at their locations in the patch (T-0024, SPEC-0028 AC4). The MR
+// travels as its opaque identity only; a failed findings read is one coarse
+// note — missing and unauthorized render identically (SPEC-0001) — and a
+// failed, timed-out or missing scan is UNAVAILABLE with its reason, never
+// "no findings" (SPEC-0028 AC7).
+import { diff, mergeRequestFindings } from '../../../../lib/bff';
+import type { MRFindingsPage } from '../../../../lib/bff';
 import Layout from '../../../../layouts/Layout.astro';
 import CommandPalette from '../../../../components/CommandPalette';
+import MRDiffFindings from '../../../../components/MRDiffFindings.astro';
 
 const { repositoryID, revision } = Astro.params;
 const baseRevision = Astro.url.searchParams.get('base_revision') ?? `${revision}^`;
+const mergeRequestID = Astro.url.searchParams.get('merge_request_id') ?? '';
 let patch = '';
 let loadError = false;
 
@@ -16,6 +27,19 @@ if (revision) {
     patch = await diff(Astro.request, repositoryID!, baseRevision, revision);
   } catch {
     loadError = true;
+  }
+}
+
+// The MR's findings, keyed by the opaque MR identity alone. Any refusal —
+// missing, malformed or unauthorized — is one coarse note below; the page
+// distinguishes nothing about why the read failed.
+let mrFindingsPage: MRFindingsPage | null = null;
+let findingsError = false;
+if (mergeRequestID) {
+  try {
+    mrFindingsPage = await mergeRequestFindings(Astro.request, mergeRequestID, {}, 0);
+  } catch {
+    findingsError = true;
   }
 }
 ---
@@ -32,12 +56,22 @@ if (revision) {
       <p style={{ color: '#cf222e' }}>This diff is unavailable. Check your session or the revisions.</p>
     )}
 
-    {!loadError && patch === '' && <p style={{ color: '#6e7781' }}>No differences.</p>}
+    {!loadError && patch === '' && mergeRequestID === '' && <p style={{ color: '#6e7781' }}>No differences.</p>}
 
-    {!loadError && patch !== '' && (
+    {!loadError && patch !== '' && mergeRequestID === '' && (
       <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', background: '#f6f8fa', padding: 16, borderRadius: 8, overflowX: 'auto', fontSize: 13, lineHeight: 1.5 }}>
         {patch}
       </pre>
+    )}
+
+    {!loadError && mergeRequestID !== '' && findingsError && (
+      <p style={{ color: '#cf222e', margin: '16px 0' }}>
+        The findings for this merge request are unavailable.
+      </p>
+    )}
+
+    {!loadError && mrFindingsPage && (
+      <MRDiffFindings patch={patch} findings={mrFindingsPage.findings} summary={mrFindingsPage.summary} />
     )}
   </main>
 </Layout>

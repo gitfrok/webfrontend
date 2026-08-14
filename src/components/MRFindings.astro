@@ -1,0 +1,229 @@
+---
+// MRFindings renders the findings a merge request introduced (T-0024,
+// SPEC-0028): one section on the merge request page with the attribution
+// summary, and one row per finding showing its severity, its location at the
+// MR's head revision, its attribution status and its triage state.
+//
+// Presentational only. Attribution, triage, membership, order and counts
+// arrive from the backend under the caller's authorization and are rendered
+// verbatim; this component infers nothing about permissions. A triaged
+// finding renders in its triaged state rather than as new (SPEC-0028 AC5),
+// and a failed, timed-out, missing or not-yet-run scan renders as
+// UNAVAILABLE with its reason — never as "no findings" (SPEC-0028 AC7).
+import type { AttributionSummary, MRFindingView } from '../lib/bff';
+
+interface Props {
+  findings: MRFindingView[];
+  summary: AttributionSummary;
+  // The link to this MR's diff, already carrying merge_request_id: rows deep
+  // link into their inline placement there with the finding's identity as
+  // the anchor, so a later push that shifts the line re-resolves the
+  // placement without breaking the link (SPEC-0024 identity stability).
+  diffHref: string;
+  nextPageToken: string;
+}
+
+const { findings, summary, diffHref, nextPageToken } = Astro.props;
+
+const unavailable = summary.status === 'UNAVAILABLE';
+// "No findings" is a statement only the computed summary may make: an
+// UNAVAILABLE summary with an empty list is still UNAVAILABLE (AC7).
+const computedEmpty = !unavailable && findings.length === 0;
+
+// The honest reasons the contract names for an unavailable comparison, as a
+// reviewer reads them. The raw token travels beside it as the machine fact.
+const unavailableReasons: Record<string, string> = {
+  BASE_NOT_SCANNED: 'the target branch has not been scanned at the merge base',
+  HEAD_SCAN_FAILED: 'the scan of this merge request’s head revision failed',
+  HEAD_SCAN_TIMED_OUT: 'the scan of this merge request’s head revision timed out',
+  HEAD_SCAN_NOT_RUN: 'no scan of this merge request’s head revision has run yet',
+  NO_MERGE_BASE: 'the source and target revisions share no merge base',
+};
+
+const severityStyles: Record<string, { color: string; background: string }> = {
+  CRITICAL: { color: '#82071e', background: '#ffebe9' },
+  HIGH: { color: '#953800', background: '#fff1e5' },
+  MEDIUM: { color: '#7d4e00', background: '#fff8c5' },
+  LOW: { color: '#116329', background: '#dafbe1' },
+};
+
+function severityBadge(severity: string): { color: string; background: string } {
+  return severityStyles[severity] ?? { color: '#24292f', background: '#eaeef2' };
+}
+
+// Triage state as the reviewer reads it. Absence of a triage record is the
+// only thing that renders as awaiting triage — a recorded decision, whatever
+// it is, renders as that decision (SPEC-0028 AC5).
+const triageLabels: Record<string, string> = {
+  ACCEPT: 'Accepted',
+  FALSE_POSITIVE: 'False positive',
+  FIX: 'Fix',
+  DEFER: 'Deferred',
+};
+
+const attributionLabels: Record<string, { label: string; color: string; background: string }> = {
+  ATTRIBUTED: { label: 'Introduced by this MR', color: '#82071e', background: '#ffebe9' },
+  PRE_EXISTING: { label: 'Pre-existing', color: '#57606a', background: '#eaeef2' },
+  UNAVAILABLE: { label: 'Attribution unavailable', color: '#7d4e00', background: '#fff8c5' },
+};
+
+const severityCounts = [
+  { label: 'critical', count: summary.attributed_critical, style: severityBadge('CRITICAL') },
+  { label: 'high', count: summary.attributed_high, style: severityBadge('HIGH') },
+  { label: 'medium', count: summary.attributed_medium, style: severityBadge('MEDIUM') },
+  { label: 'low', count: summary.attributed_low, style: severityBadge('LOW') },
+].filter((entry) => entry.count > 0);
+
+function deepLink(findingID: string): string {
+  const separator = diffHref.includes('#') ? '&' : '#';
+  return `${diffHref}${separator}finding-${encodeURIComponent(findingID)}`;
+}
+---
+
+<section
+  aria-label="Security findings introduced by this merge request"
+  style={{ margin: '24px 0', border: '1px solid #d0d7de', borderRadius: 8, overflow: 'hidden' }}
+>
+  <header
+    style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, padding: '10px 16px', background: '#f6f8fa', borderBottom: '1px solid #d0d7de' }}
+  >
+    <h2 style={{ fontSize: 14, margin: 0, marginRight: 'auto' }}>Security findings</h2>
+    {severityCounts.map((entry) => (
+      <span
+        style={{
+          fontSize: 12,
+          fontWeight: 600,
+          padding: '1px 8px',
+          borderRadius: 999,
+          color: entry.style.color,
+          background: entry.style.background,
+        }}
+      >
+        {entry.count} {entry.label}
+      </span>
+    ))}
+    {summary.stale && (
+      <span style={{ fontSize: 12, color: '#7d4e00', fontStyle: 'italic' }}>
+        attribution stale — being recomputed
+      </span>
+    )}
+  </header>
+
+  {unavailable && (
+    <div
+      role="status"
+      style={{ margin: 16, padding: '12px 16px', border: '1px solid #d4a72c66', borderRadius: 8, background: '#fff8c5' }}
+    >
+      <p style={{ margin: 0, fontWeight: 600, fontSize: 14 }}>
+        Attribution unavailable
+        <code style={{ marginLeft: 8, fontSize: 11, fontWeight: 400, color: '#57606a', background: '#ffffffaa', padding: '1px 6px', borderRadius: 4 }}>
+          UNAVAILABLE
+        </code>
+      </p>
+      <p style={{ margin: '6px 0 0', fontSize: 13, color: '#4a3b00' }}>
+        {summary.unavailable_reason
+          ? unavailableReasons[summary.unavailable_reason] ?? 'the comparison cannot be computed'
+          : 'the comparison cannot be computed'}
+        {summary.unavailable_reason && (
+          <code style={{ marginLeft: 6, fontSize: 11, color: '#57606a', background: '#ffffffaa', padding: '1px 6px', borderRadius: 4 }}>
+            {summary.unavailable_reason}
+          </code>
+        )}
+        {' '}The findings this merge request introduces cannot be stated until the comparison can be
+        computed; this is not a statement that it introduces none.
+      </p>
+    </div>
+  )}
+
+  {!unavailable && (
+    <p style={{ margin: '12px 16px 0', fontSize: 12, color: '#57606a' }}>
+      Compared head <code>{summary.head_revision.slice(0, 8)}</code> against merge base{' '}
+      <code>{summary.merge_base_revision.slice(0, 8)}</code>.
+    </p>
+  )}
+
+  {computedEmpty && (
+    <p style={{ margin: 16, fontSize: 14, color: '#57606a' }}>No findings introduced by this merge request.</p>
+  )}
+
+  {findings.length > 0 && (
+    <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+      {findings.map((view) => {
+        const severityStyle = severityBadge(view.finding.severity);
+        const attribution = attributionLabels[view.attribution] ?? attributionLabels.UNAVAILABLE;
+        const triageLabel = view.triage ? triageLabels[view.triage.state] ?? view.triage.state : '';
+        return (
+          <li
+            id={`finding-${view.finding.finding_id}`}
+            style={{ padding: '12px 16px', borderBottom: '1px solid #eaeef2', fontSize: 13 }}
+          >
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
+              <span
+                style={{
+                  fontWeight: 600,
+                  fontSize: 12,
+                  padding: '1px 8px',
+                  borderRadius: 999,
+                  color: severityStyle.color,
+                  background: severityStyle.background,
+                }}
+              >
+                {view.finding.severity}
+              </span>
+              <span style={{ fontWeight: 600 }}>{view.finding.rule_id}</span>
+              <span style={{ color: '#57606a' }}>{view.finding.scanner_class}</span>
+              <span
+                style={{
+                  fontSize: 12,
+                  padding: '1px 8px',
+                  borderRadius: 999,
+                  color: attribution.color,
+                  background: attribution.background,
+                }}
+              >
+                {attribution.label}
+              </span>
+              <span
+                style={{
+                  marginLeft: 'auto',
+                  fontSize: 12,
+                  fontWeight: view.triage ? 600 : 400,
+                  color: view.triage ? '#116329' : '#57606a',
+                }}
+              >
+                {triageLabel || 'Awaiting triage'}
+              </span>
+            </div>
+            <p style={{ margin: '6px 0 0', color: '#57606a' }}>
+              <code style={{ fontSize: 12 }}>{view.head_location.artifact_path}</code>
+              {view.head_location.enclosing_content && (
+                <>
+                  {' '}· <code style={{ fontSize: 12 }}>{view.head_location.enclosing_content}</code>
+                </>
+              )}
+            </p>
+            {view.triage && view.triage.justification && (
+              <p style={{ margin: '4px 0 0', fontSize: 12, color: '#57606a', fontStyle: 'italic' }}>
+                Triage ({triageLabel}): “{view.triage.justification}”
+              </p>
+            )}
+            <a href={deepLink(view.finding.finding_id)} style={{ color: '#0969da', textDecoration: 'none', fontSize: 12 }}>
+              View in diff →
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  )}
+
+  {nextPageToken && (
+    <p style={{ margin: 0, padding: '12px 16px', borderTop: '1px solid #eaeef2', fontSize: 13 }}>
+      <a
+        href={`?mr_findings_page_token=${encodeURIComponent(nextPageToken)}`}
+        style={{ color: '#0969da', textDecoration: 'none' }}
+      >
+        Next page of findings
+      </a>
+    </p>
+  )}
+</section>

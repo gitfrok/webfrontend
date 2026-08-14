@@ -7,10 +7,18 @@
 // its own labelled section (SPEC-0011 AC23): imported review never mixes into
 // the first-party review above it, and an imported approval never reads as a
 // platform approval.
-import { mergeRequest, importedHistory } from '../../../../lib/bff';
+//
+// Findings inline on the merge request (T-0024, SPEC-0028): the findings this
+// MR introduced render below, keyed by the MR's opaque identity. A failed
+// findings read is one coarse note — empty and unauthorized render
+// identically (SPEC-0001); which state the page shows is decided by the
+// summary the backend sends, never inferred here (SPEC-0028 AC7).
+import { mergeRequest, importedHistory, mergeRequestFindings } from '../../../../lib/bff';
+import type { MRFindingsPage } from '../../../../lib/bff';
 import Layout from '../../../../layouts/Layout.astro';
 import CommandPalette from '../../../../components/CommandPalette';
 import ImportedHistory from '../../../../components/ImportedHistory.astro';
+import MRFindings from '../../../../components/MRFindings.astro';
 import type { ImportedMergeRequestView } from '../../../../lib/provenance';
 
 const { repositoryID, mergeRequestID } = Astro.params;
@@ -38,8 +46,21 @@ if (importID) {
 }
 
 const diffHref = mr
-  ? `/repos/${repositoryID}/diff/${encodeURIComponent(mr.head_revision)}?base_revision=${encodeURIComponent(mr.source_ref)}`
+  ? `/repos/${repositoryID}/diff/${encodeURIComponent(mr.head_revision)}?base_revision=${encodeURIComponent(mr.source_ref)}&merge_request_id=${encodeURIComponent(mergeRequestID!)}`
   : '#';
+
+// The findings this merge request introduced (SPEC-0028). The read is keyed
+// by the MR's opaque identity only; any refusal is one coarse note below.
+const findingsPageToken = Astro.url.searchParams.get('mr_findings_page_token') ?? '';
+let mrFindingsPage: MRFindingsPage | null = null;
+let findingsError = false;
+if (mr) {
+  try {
+    mrFindingsPage = await mergeRequestFindings(Astro.request, mergeRequestID!, {}, 0, findingsPageToken);
+  } catch {
+    findingsError = true;
+  }
+}
 ---
 
 <Layout title={mr ? `${mr.title} · ${repositoryID}` : `${repositoryID} MR`}>
@@ -69,6 +90,19 @@ const diffHref = mr
         <p style={{ color: '#6e7781', fontSize: 13 }}>
           Head revision {mr.head_revision.slice(0, 8)} · opened by {mr.creator_id} · version {mr.version}
         </p>
+
+        {findingsError && (
+          <p style={{ color: '#cf222e' }}>The findings for this merge request are unavailable.</p>
+        )}
+
+        {mrFindingsPage && (
+          <MRFindings
+            findings={mrFindingsPage.findings}
+            summary={mrFindingsPage.summary}
+            diffHref={diffHref}
+            nextPageToken={mrFindingsPage.next_page_token}
+          />
+        )}
       </>
     )}
 
