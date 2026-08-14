@@ -1,0 +1,79 @@
+---
+// Unified security dashboard (T-0023, SPEC-0026, SPEC-0027): one consolidated
+// view of every finding the caller may read — for one repository or the whole
+// org — with the SPEC-0026 AC2 filters, authorization-computed counts and
+// facets, and triage as a control action. SSR from the BFF only (invariant
+// 22); the backend is the PDP and this page decides nothing.
+//
+// Empty and unauthorized render the same: the backend answers both with the
+// identical empty page, and this page presents exactly what it receives — no
+// client-side permission inference, no distinction a caller could probe
+// (SPEC-0026 AC6). A failed read is one coarse "unavailable" message.
+import { securityDashboard, securityFindingsSummary, type SecurityFilters } from '../../lib/bff';
+import Layout from '../../layouts/Layout.astro';
+import SecurityFindings from '../../components/SecurityFindings.astro';
+
+const pageSize = 25;
+// The dimensions the contract names; the backend computes each under the
+// caller's authorization.
+const facetDimensions = ['severity', 'scanner_class', 'lifecycle', 'owning_team'];
+
+const query = Astro.url.searchParams;
+const nonNegativeInt = (raw: string | null): number | undefined => {
+  if (raw === null || raw === '') return undefined;
+  const value = Number(raw);
+  return Number.isInteger(value) && value > 0 ? value : undefined;
+};
+const filters: SecurityFilters = {
+  repository: query.get('repository') ?? undefined,
+  scanner_class: query.get('scanner_class') ?? undefined,
+  severity: query.get('severity') ?? undefined,
+  lifecycle: query.get('lifecycle') ?? undefined,
+  min_age_days: nonNegativeInt(query.get('min_age_days')),
+  max_age_days: nonNegativeInt(query.get('max_age_days')),
+  owning_team: query.get('owning_team') ?? undefined,
+};
+
+let loadError = false;
+let findings: Awaited<ReturnType<typeof securityDashboard>>['findings'] = [];
+let nextPageToken = '';
+let summary: Awaited<ReturnType<typeof securityFindingsSummary>> = { total_count: 0, facets: [] };
+try {
+  const pageToken = query.get('page_token') ?? '';
+  const [page, counts] = await Promise.all([
+    securityDashboard(Astro.request, filters, pageSize, pageToken),
+    securityFindingsSummary(Astro.request, filters, facetDimensions),
+  ]);
+  findings = page.findings;
+  nextPageToken = page.next_page_token;
+  summary = counts;
+} catch {
+  loadError = true;
+}
+
+const scopedTitle = filters.repository ? `Security · ${filters.repository}` : 'Security';
+---
+
+<Layout title={scopedTitle}>
+  <main style={{ maxWidth: 1080, margin: '0 auto', padding: '0 16px' }}>
+    <header style={{ padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
+      <h1 style={{ fontSize: 20, margin: 0 }}>Security dashboard</h1>
+      <p style={{ color: '#57606a', margin: '4px 0 0', fontSize: 14 }}>
+        {filters.repository
+          ? `Findings for ${filters.repository}`
+          : 'Findings across the organization'}
+        — one view for every scanner class.
+      </p>
+    </header>
+
+    {loadError && (
+      <p style={{ color: '#cf222e', padding: '16px 0' }}>
+        The security dashboard is unavailable. Check your session.
+      </p>
+    )}
+
+    {!loadError && (
+      <SecurityFindings findings={findings} summary={summary} filters={filters} nextPageToken={nextPageToken} />
+    )}
+  </main>
+</Layout>

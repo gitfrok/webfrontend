@@ -1,0 +1,289 @@
+---
+// SecurityFindings renders the unified security dashboard's result surface
+// (T-0023, SPEC-0026): one consolidated view across every scanner class with
+// progressive disclosure — a compact row per finding, expanded detail on
+// demand — instead of a per-scanner tab set (ADR-0015, SPEC-0026 AC9).
+//
+// Presentational only. Counts, facets, membership and order arrive from the
+// backend under the caller's authorization; this component renders them
+// verbatim and infers nothing about permissions. The empty state is one
+// shape for "no matches" and "nothing you may read" alike, because that is
+// what the backend sends (SPEC-0026 AC6).
+import type { SecurityFilters, SecurityFindingView, SecuritySummary } from '../lib/bff';
+import SecurityTriage from './SecurityTriage';
+
+interface Props {
+  findings: SecurityFindingView[];
+  summary: SecuritySummary;
+  filters: SecurityFilters;
+  nextPageToken: string;
+}
+
+const { findings, summary, filters, nextPageToken } = Astro.props;
+
+// Facet dimensions the contract names as filters; a dimension outside this
+// set renders as text only, never as a guessed link.
+const facetFilterKeys: Record<string, keyof SecurityFilters> = {
+  severity: 'severity',
+  scanner_class: 'scanner_class',
+  lifecycle: 'lifecycle',
+  owning_team: 'owning_team',
+};
+
+const facetTitles: Record<string, string> = {
+  severity: 'Severity',
+  scanner_class: 'Scanner class',
+  lifecycle: 'Lifecycle',
+  owning_team: 'Owning team',
+};
+
+// queryOf renders the current filters as a query string, optionally with one
+// filter replaced or cleared — how a facet value or a select toggles a filter.
+function queryOf(override?: { key: keyof SecurityFilters; value: string }): string {
+  const params = new URLSearchParams();
+  const merged: SecurityFilters = { ...filters };
+  if (override) {
+    if (override.value === '' || merged[override.key] === override.value) {
+      delete merged[override.key];
+    } else {
+      merged[override.key] = override.value;
+    }
+  }
+  if (merged.repository) params.set('repository', merged.repository);
+  if (merged.scanner_class) params.set('scanner_class', merged.scanner_class);
+  if (merged.severity) params.set('severity', merged.severity);
+  if (merged.lifecycle) params.set('lifecycle', merged.lifecycle);
+  if (merged.min_age_days) params.set('min_age_days', String(merged.min_age_days));
+  if (merged.max_age_days) params.set('max_age_days', String(merged.max_age_days));
+  if (merged.owning_team) params.set('owning_team', merged.owning_team);
+  const query = params.toString();
+  return query ? `/security?${query}` : '/security';
+}
+
+const hasFilters = Boolean(
+  filters.repository ||
+    filters.scanner_class ||
+    filters.severity ||
+    filters.lifecycle ||
+    filters.min_age_days ||
+    filters.max_age_days ||
+    filters.owning_team,
+);
+
+const severityStyles: Record<string, { color: string; background: string }> = {
+  CRITICAL: { color: '#82071e', background: '#ffebe9' },
+  HIGH: { color: '#953800', background: '#fff1e5' },
+  MEDIUM: { color: '#7d4e00', background: '#fff8c5' },
+  LOW: { color: '#116329', background: '#dafbe1' },
+};
+
+function severityBadge(severity: string): { color: string; background: string } {
+  return severityStyles[severity] ?? { color: '#57606a', background: '#f6f8fa' };
+}
+
+const scannerClasses = ['SAST', 'DEPENDENCY', 'SECRETS', 'CONTAINER', 'DAST'];
+const severities = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+const lifecycles = ['OPEN', 'RESOLVED'];
+
+// nextHref carries the active filters onto the next cursor page; the cursor
+// itself is opaque and tenant-bound, so it travels as given.
+function nextHref(token: string): string {
+  const params = new URLSearchParams();
+  if (filters.repository) params.set('repository', filters.repository);
+  if (filters.scanner_class) params.set('scanner_class', filters.scanner_class);
+  if (filters.severity) params.set('severity', filters.severity);
+  if (filters.lifecycle) params.set('lifecycle', filters.lifecycle);
+  if (filters.min_age_days) params.set('min_age_days', String(filters.min_age_days));
+  if (filters.max_age_days) params.set('max_age_days', String(filters.max_age_days));
+  if (filters.owning_team) params.set('owning_team', filters.owning_team);
+  params.set('page_token', token);
+  return `/security?${params.toString()}`;
+}
+---
+
+<section aria-label="Security dashboard">
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'flex-start', margin: '16px 0' }}>
+    <div
+      style={{
+        padding: '10px 16px',
+        border: '1px solid #d0d7de',
+        borderRadius: 6,
+        background: '#f6f8fa',
+        minWidth: 120,
+      }}
+    >
+      <div style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.2 }}>{summary.total_count}</div>
+      <div style={{ fontSize: 12, color: '#57606a' }}>findings</div>
+    </div>
+
+    {summary.facets.map((facet) => (
+      <div style={{ minWidth: 160 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: '#57606a', textTransform: 'uppercase', letterSpacing: 0.4 }}>
+          {facetTitles[facet.dimension] ?? facet.dimension}
+        </div>
+        <ul style={{ listStyle: 'none', margin: '4px 0 0', padding: 0 }}>
+          {facet.values.map((value) => {
+            const filterKey = facetFilterKeys[facet.dimension];
+            const active = filterKey !== undefined && filters[filterKey] === value.value;
+            return (
+              <li style={{ fontSize: 13, padding: '1px 0' }}>
+                {filterKey !== undefined ? (
+                  <a
+                    href={queryOf({ key: filterKey, value: value.value })}
+                    aria-pressed={active ? 'true' : 'false'}
+                    style={{
+                      color: active ? '#1f2328' : '#0969da',
+                      textDecoration: 'none',
+                      fontWeight: active ? 600 : 400,
+                    }}
+                  >
+                    {value.value} <span style={{ color: '#57606a' }}>({value.count})</span>
+                  </a>
+                ) : (
+                  <span>
+                    {value.value} <span style={{ color: '#57606a' }}>({value.count})</span>
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <form method="get" action="/security" aria-label="Filter findings" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'flex-end', padding: '12px 0', borderTop: '1px solid #d0d7de', borderBottom: '1px solid #d0d7de' }}>
+    <label style={{ fontSize: 12, color: '#57606a', display: 'flex', flexDirection: 'column', gap: 4 }}>
+      Repository
+      <input name="repository" value={filters.repository ?? ''} style={{ padding: '4px 8px', fontSize: 13, border: '1px solid #d0d7de', borderRadius: 6, minWidth: 160 }} />
+    </label>
+    <label style={{ fontSize: 12, color: '#57606a', display: 'flex', flexDirection: 'column', gap: 4 }}>
+      Scanner class
+      <select name="scanner_class" style={{ padding: '4px 8px', fontSize: 13, border: '1px solid #d0d7de', borderRadius: 6 }}>
+        <option value="">Any</option>
+        {scannerClasses.map((option) => (
+          <option value={option} selected={filters.scanner_class === option}>{option}</option>
+        ))}
+      </select>
+    </label>
+    <label style={{ fontSize: 12, color: '#57606a', display: 'flex', flexDirection: 'column', gap: 4 }}>
+      Severity
+      <select name="severity" style={{ padding: '4px 8px', fontSize: 13, border: '1px solid #d0d7de', borderRadius: 6 }}>
+        <option value="">Any</option>
+        {severities.map((option) => (
+          <option value={option} selected={filters.severity === option}>{option}</option>
+        ))}
+      </select>
+    </label>
+    <label style={{ fontSize: 12, color: '#57606a', display: 'flex', flexDirection: 'column', gap: 4 }}>
+      Lifecycle
+      <select name="lifecycle" style={{ padding: '4px 8px', fontSize: 13, border: '1px solid #d0d7de', borderRadius: 6 }}>
+        <option value="">Any</option>
+        {lifecycles.map((option) => (
+          <option value={option} selected={filters.lifecycle === option}>{option}</option>
+        ))}
+      </select>
+    </label>
+    <label style={{ fontSize: 12, color: '#57606a', display: 'flex', flexDirection: 'column', gap: 4 }}>
+      Min age (days)
+      <input name="min_age_days" type="number" min="0" value={filters.min_age_days ? String(filters.min_age_days) : ''} style={{ padding: '4px 8px', fontSize: 13, border: '1px solid #d0d7de', borderRadius: 6, width: 90 }} />
+    </label>
+    <label style={{ fontSize: 12, color: '#57606a', display: 'flex', flexDirection: 'column', gap: 4 }}>
+      Max age (days)
+      <input name="max_age_days" type="number" min="0" value={filters.max_age_days ? String(filters.max_age_days) : ''} style={{ padding: '4px 8px', fontSize: 13, border: '1px solid #d0d7de', borderRadius: 6, width: 90 }} />
+    </label>
+    <label style={{ fontSize: 12, color: '#57606a', display: 'flex', flexDirection: 'column', gap: 4 }}>
+      Owning team
+      <input name="owning_team" value={filters.owning_team ?? ''} style={{ padding: '4px 8px', fontSize: 13, border: '1px solid #d0d7de', borderRadius: 6, minWidth: 120 }} />
+    </label>
+    <button type="submit" style={{ padding: '5px 16px', fontSize: 13, border: '1px solid #d0d7de', borderRadius: 6, background: '#2da44e', color: '#fff', cursor: 'pointer' }}>
+      Apply filters
+    </button>
+    {hasFilters && (
+      <a href="/security" style={{ fontSize: 13, color: '#0969da', textDecoration: 'none', padding: '5px 0' }}>
+        Clear filters
+      </a>
+    )}
+  </form>
+
+  {findings.length === 0 ? (
+    <p style={{ padding: '24px 0', color: '#57606a', fontSize: 14 }}>
+      No findings to show.
+    </p>
+  ) : (
+    <>
+      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16 }}>
+        <thead>
+          <tr style={{ textAlign: 'left', borderBottom: '1px solid #d0d7de' }}>
+            <th style={{ padding: '8px 12px', fontSize: 12, color: '#57606a' }}>Finding</th>
+            <th style={{ padding: '8px 12px', fontSize: 12, color: '#57606a' }}>Repository</th>
+            <th style={{ padding: '8px 12px', fontSize: 12, color: '#57606a' }}>Class</th>
+            <th style={{ padding: '8px 12px', fontSize: 12, color: '#57606a' }}>Severity</th>
+            <th style={{ padding: '8px 12px', fontSize: 12, color: '#57606a' }}>Lifecycle</th>
+          </tr>
+        </thead>
+        <tbody>
+          {findings.map((finding) => {
+            const badge = severityBadge(finding.severity);
+            return (
+              <tr>
+                <td colspan="5" style={{ padding: 0, borderBottom: '1px solid #d0d7de' }}>
+                  <details>
+                    <summary style={{ cursor: 'pointer', padding: '10px 12px', listStyle: 'none', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: 8, alignItems: 'center' }}>
+                      <span style={{ fontSize: 13 }}>
+                        <strong style={{ fontWeight: 600 }}>{finding.rule_id || finding.finding_id}</strong>
+                        {finding.artifact_path && (
+                          <span style={{ color: '#57606a' }}> · {finding.artifact_path}</span>
+                        )}
+                      </span>
+                      <span style={{ fontSize: 13, color: '#57606a' }}>{finding.repository_id}</span>
+                      <span style={{ fontSize: 13, color: '#57606a' }}>{finding.scanner_class}</span>
+                      <span>
+                        <span style={{ display: 'inline-block', padding: '1px 8px', borderRadius: 12, fontSize: 12, fontWeight: 500, color: badge.color, background: badge.background }}>
+                          {finding.severity}
+                        </span>
+                      </span>
+                      <span style={{ fontSize: 13, color: finding.lifecycle === 'RESOLVED' ? '#1a7f37' : '#57606a' }}>{finding.lifecycle}</span>
+                    </summary>
+                    <div style={{ padding: '0 12px 12px 28px' }}>
+                      <dl style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: '2px 12px', margin: 0, fontSize: 13 }}>
+                        <dt style={{ color: '#57606a' }}>Finding ID</dt>
+                        <dd style={{ margin: 0 }}>{finding.finding_id}</dd>
+                        {finding.component && (
+                          <>
+                            <dt style={{ color: '#57606a' }}>Component</dt>
+                            <dd style={{ margin: 0 }}>{finding.component}{finding.component_version ? `@${finding.component_version}` : ''}</dd>
+                          </>
+                        )}
+                        {finding.enclosing_content && (
+                          <>
+                            <dt style={{ color: '#57606a' }}>Enclosing content</dt>
+                            <dd style={{ margin: 0 }}>{finding.enclosing_content}</dd>
+                          </>
+                        )}
+                        <dt style={{ color: '#57606a' }}>Tool</dt>
+                        <dd style={{ margin: 0 }}>{finding.tool_name}{finding.tool_version ? ` ${finding.tool_version}` : ''}</dd>
+                        <dt style={{ color: '#57606a' }}>First seen</dt>
+                        <dd style={{ margin: 0 }}>scan {finding.first_seen_scan_id}</dd>
+                        <dt style={{ color: '#57606a' }}>Last seen</dt>
+                        <dd style={{ margin: 0 }}>scan {finding.last_seen_scan_id}</dd>
+                      </dl>
+                      <SecurityTriage client:load findingID={finding.finding_id} repositoryID={finding.repository_id} />
+                    </div>
+                  </details>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div style={{ padding: '12px 0' }}>
+        {nextPageToken && (
+          <a href={nextHref(nextPageToken)} style={{ fontSize: 13, color: '#0969da', textDecoration: 'none' }}>
+            Next page →
+          </a>
+        )}
+      </div>
+    </>
+  )}
+</section>

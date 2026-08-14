@@ -128,3 +128,172 @@ export async function importedHistory(
   const view = (await response.json()) as ImportedHistoryView;
   return { merge_requests: view.merge_requests ?? [], next_page_token: view.next_page_token ?? '' };
 }
+
+// --- Unified security dashboard (T-0023, SPEC-0026, SPEC-0027) --------------
+//
+// The backend is the PDP for findings.read, findings.summary.read and
+// findings.triage; the BFF aggregates and shapes only. This layer forwards
+// the session cookie and passes results through untouched: it filters,
+// counts and authorizes nothing, so an empty page and a refusal are the
+// only shapes an unauthorized caller can ever observe here.
+
+// SecurityFilters mirrors the dashboard filter set with the contract's
+// UNSPECIFIED/empty/zero semantics: an absent value is no filter, and which
+// findings survive is the backend's decision alone (SPEC-0026 AC2).
+export interface SecurityFilters {
+  repository?: string;
+  scanner_class?: string;
+  severity?: string;
+  lifecycle?: string;
+  min_age_days?: number;
+  max_age_days?: number;
+  owning_team?: string;
+}
+
+// SecurityFindingView is one authorized finding as the BFF shapes it. It
+// carries no triage field — triage is a resource keyed by finding identity,
+// never a field of the finding (SPEC-0027).
+export interface SecurityFindingView {
+  finding_id: string;
+  repository_id: string;
+  scanner_class: string;
+  tool_name: string;
+  tool_version: string;
+  rule_id: string;
+  severity: string;
+  lifecycle: string;
+  artifact_path: string;
+  enclosing_content: string;
+  component: string;
+  component_version: string;
+  first_seen_scan_id: string;
+  last_seen_scan_id: string;
+  provenance?: string;
+  provenance_media_type?: string;
+}
+
+export interface SecurityFindingPage {
+  findings: SecurityFindingView[];
+  next_page_token: string;
+}
+
+export interface SecurityFacetValue {
+  value: string;
+  count: number;
+}
+
+export interface SecurityFacet {
+  dimension: string;
+  values: SecurityFacetValue[];
+}
+
+export interface SecuritySummary {
+  total_count: number;
+  facets: SecurityFacet[];
+}
+
+// SecurityTriageView is the triage record now in force, as the BFF returns
+// it after SetTriage.
+export interface SecurityTriageView {
+  triage_id: string;
+  finding_id: string;
+  repository_id: string;
+  state: string;
+  justification: string;
+  version: number;
+  actor_id: string;
+  occurred_at: string;
+}
+
+// securityFilterParams renders only the filters the caller actually set: the
+// empty/zero values carry their no-filter meaning and must not travel.
+function securityFilterParams(filters: SecurityFilters, params: URLSearchParams): void {
+  if (filters.repository) params.set('repository', filters.repository);
+  if (filters.scanner_class) params.set('scanner_class', filters.scanner_class);
+  if (filters.severity) params.set('severity', filters.severity);
+  if (filters.lifecycle) params.set('lifecycle', filters.lifecycle);
+  if (filters.min_age_days) params.set('min_age_days', String(filters.min_age_days));
+  if (filters.max_age_days) params.set('max_age_days', String(filters.max_age_days));
+  if (filters.owning_team) params.set('owning_team', filters.owning_team);
+}
+
+// securityDashboard pages the caller's authorized findings under the filter
+// set (SPEC-0026 AC1/AC2). Membership, order and the cursor all come from
+// the backend untouched.
+export async function securityDashboard(
+  request: Request,
+  filters: SecurityFilters,
+  pageSize: number,
+  pageToken = '',
+): Promise<SecurityFindingPage> {
+  const params = new URLSearchParams();
+  securityFilterParams(filters, params);
+  if (pageSize > 0) params.set('page_size', String(pageSize));
+  if (pageToken) params.set('page_token', pageToken);
+  const response = await bffFetch(request, `/api/v1/security/dashboard?${params}`);
+  if (!response.ok) {
+    throw new Error('security dashboard unavailable');
+  }
+  const view = (await response.json()) as SecurityFindingPage;
+  return { findings: view.findings ?? [], next_page_token: view.next_page_token ?? '' };
+}
+
+// securityFindingsSummary reads counts and facets computed under the
+// caller's authorization (SPEC-0027 AC4). The dimensions are the ones the
+// contract names; which values exist is the backend's answer alone.
+export async function securityFindingsSummary(
+  request: Request,
+  filters: SecurityFilters,
+  facetDimensions: string[],
+): Promise<SecuritySummary> {
+  const params = new URLSearchParams();
+  securityFilterParams(filters, params);
+  for (const dimension of facetDimensions) params.append('facet', dimension);
+  const response = await bffFetch(request, `/api/v1/security/findings/summary?${params}`);
+  if (!response.ok) {
+    throw new Error('security dashboard unavailable');
+  }
+  const view = (await response.json()) as SecuritySummary;
+  return { total_count: view.total_count ?? 0, facets: view.facets ?? [] };
+}
+
+// triageStates is the decision vocabulary a triage record may carry
+// (SPEC-0026). Anything else is not a decision this surface can record.
+export const triageStates = ['ACCEPT', 'FALSE_POSITIVE', 'FIX', 'DEFER'] as const;
+
+// setSecurityTriage forwards one triage decision to the BFF under the
+// session's identity (SPEC-0026 AC4). The shape is validated here only so a
+// malformed browser request is refused with the same coarse denial the BFF
+// would return — this layer still decides nothing about the outcome.
+export async function setSecurityTriage(
+  request: Request,
+  input: { finding_id: string; state: string; justification: string; expected_version: number },
+): Promise<SecurityTriageView> {
+  if (
+    typeof input.finding_id !== 'string' || input.finding_id === '' ||
+    !triageStates.includes(input.state as (typeof triageStates)[number]) ||
+    typeof input.justification !== 'string' ||
+    typeof input.expected_version !== 'number' || !Number.isInteger(input.expected_version) || input.expected_version < 0
+  ) {
+    throw new Error('security dashboard unavailable');
+  }
+  const url = new URL('/api/v1/security/triage', bffOrigin);
+  const headers = new Headers({ 'content-type': 'application/json' });
+  const cookie = request.headers.get('cookie');
+  if (cookie) headers.set('cookie', cookie);
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      finding_id: input.finding_id,
+      state: input.state,
+      justification: input.justification,
+      expected_version: input.expected_version,
+    }),
+    redirect: 'manual',
+  });
+  if (!response.ok) {
+    throw new Error('security dashboard unavailable');
+  }
+  return (await response.json()) as SecurityTriageView;
+}
