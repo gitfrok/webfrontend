@@ -6,10 +6,17 @@
 // Realizes ADR-0011 (outbound-only agent) and ADR-0017 (gRPC bidi streaming over mTLS).
 //
 // Transport : a SINGLE long-lived gRPC bidirectional stream, dialed OUTBOUND by the agent.
-// AuthN     : mTLS. The trusted cluster identity is the SPIFFE ID from the verified client
-//             cert, so NO credentials are carried in-band.
+// AuthN     : mTLS. The agent's identity comes from a client certificate ISSUED BY THE
+//             CONTROL PLANE (ADR-0060): a one-time enrolment token bootstraps the first
+//             Connect (see Enrol/EnrolmentAck below), the control plane then issues and
+//             rotates short-lived client certificates ON this channel, and the certificate
+//             names the tenant and the data plane. Nothing the agent asserts in a payload
+//             field overrides the certificate's identity (invariant 2 on the agent wire).
 // Invariant : source code and secrets NEVER traverse this stream. Only control, telemetry,
-//             usage metering, and SIGNED release references.
+//             usage metering, and SIGNED release references. (The enrolment handshake below
+//             is the one deliberate exception for credentials: the issued client certificate
+//             traverses the channel it authenticates. The token and certificates are never
+//             logged, echoed into errors, or used as metric labels — SPEC-0038 AC2.)
 
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
@@ -21,7 +28,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/agent/v1/agent.proto.
  */
 export const file_proto_agent_v1_agent: GenFile = /*@__PURE__*/
-  fileDesc("Chpwcm90by9hZ2VudC92MS9hZ2VudC5wcm90bxIQZ2l0c2Fhcy5hZ2VudC52MSKfBAoMQWdlbnRNZXNzYWdlEhIKCm1lc3NhZ2VfaWQYASABKAkSCwoDc2VxGAIgASgDEisKB3NlbnRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCHJlZ2lzdGVyGAogASgLMhouZ2l0c2Fhcy5hZ2VudC52MS5SZWdpc3RlckgAEjAKCWhlYXJ0YmVhdBgLIAEoCzIbLmdpdHNhYXMuYWdlbnQudjEuSGVhcnRiZWF0SAASOwoMYWN0dWFsX3N0YXRlGAwgASgLMiMuZ2l0c2Fhcy5hZ2VudC52MS5BY3R1YWxTdGF0ZVJlcG9ydEgAEjYKCXRlbGVtZXRyeRgNIAEoCzIhLmdpdHNhYXMuYWdlbnQudjEuVGVsZW1ldHJ5U2FtcGxlSAASLgoFdXNhZ2UYDiABKAsyHS5naXRzYWFzLmFnZW50LnYxLlVzYWdlU2FtcGxlSAASPgoRZGVzaXJlZF9zdGF0ZV9hY2sYDyABKAsyIS5naXRzYWFzLmFnZW50LnYxLkRlc2lyZWRTdGF0ZUFja0gAEjkKDmNvbW1hbmRfcmVzdWx0GBAgASgLMh8uZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kUmVzdWx0SAASNAoLZGlhZ25vc3RpY3MYESABKAsyHS5naXRzYWFzLmFnZW50LnYxLkRpYWdub3N0aWNzSABCCQoHcGF5bG9hZCL3AgoTQ29udHJvbFBsYW5lTWVzc2FnZRISCgptZXNzYWdlX2lkGAEgASgJEgsKA3NlcRgCIAEoAxIrCgdzZW50X2F0GAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgdhY2tfc2VxGAQgASgDEjUKDHJlZ2lzdGVyX2FjaxgKIAEoCzIdLmdpdHNhYXMuYWdlbnQudjEuUmVnaXN0ZXJBY2tIABI3Cg1kZXNpcmVkX3N0YXRlGAsgASgLMh4uZ2l0c2Fhcy5hZ2VudC52MS5EZXNpcmVkU3RhdGVIABIsCgdjb21tYW5kGAwgASgLMhkuZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kSAASMAoGY29uZmlnGA0gASgLMh4uZ2l0c2Fhcy5hZ2VudC52MS5Db25maWdVcGRhdGVIABImCgRwaW5nGA4gASgLMhYuZ2l0c2Fhcy5hZ2VudC52MS5QaW5nSABCCQoHcGF5bG9hZCKxAQoIUmVnaXN0ZXISEgoKY2x1c3Rlcl9pZBgBIAEoCRImCgVjbG91ZBgCIAEoDjIXLmdpdHNhYXMuYWdlbnQudjEuQ2xvdWQSDgoGcmVnaW9uGAMgASgJEhUKDWFnZW50X3ZlcnNpb24YBCABKAkSEwoLazhzX3ZlcnNpb24YBSABKAkSFAoMY2FwYWJpbGl0aWVzGAYgAygJEhcKD3Jlc3VtZV9mcm9tX3NlcRgHIAEoAyJ/CgtSZWdpc3RlckFjaxIQCghhY2NlcHRlZBgBIAEoCBIOCgZyZWFzb24YAiABKAkSFwoPcmVzdW1lX2Zyb21fc2VxGAMgASgDEjUKEmhlYXJ0YmVhdF9pbnRlcnZhbBgEIAEoCzIZLmdvb2dsZS5wcm90b2J1Zi5EdXJhdGlvbiJyCglIZWFydGJlYXQSLgoHb3ZlcmFsbBgBIAEoDjIdLmdpdHNhYXMuYWdlbnQudjEuSGVhbHRoU3RhdGUSNQoKY29tcG9uZW50cxgCIAMoCzIhLmdpdHNhYXMuYWdlbnQudjEuQ29tcG9uZW50SGVhbHRoIm4KD0NvbXBvbmVudEhlYWx0aBIMCgRuYW1lGAEgASgJEiwKBXN0YXRlGAIgASgOMh0uZ2l0c2Fhcy5hZ2VudC52MS5IZWFsdGhTdGF0ZRIPCgd2ZXJzaW9uGAMgASgJEg4KBmRldGFpbBgEIAEoCSLVAgoPVGVsZW1ldHJ5U2FtcGxlEjAKDHdpbmRvd19zdGFydBgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKd2luZG93X2VuZBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASPQoGZ2F1Z2VzGAMgAygLMi0uZ2l0c2Fhcy5hZ2VudC52MS5UZWxlbWV0cnlTYW1wbGUuR2F1Z2VzRW50cnkSQQoIY291bnRlcnMYBCADKAsyLy5naXRzYWFzLmFnZW50LnYxLlRlbGVtZXRyeVNhbXBsZS5Db3VudGVyc0VudHJ5Gi0KC0dhdWdlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAToCOAEaLwoNQ291bnRlcnNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAE6AjgBIsQBCgtVc2FnZVNhbXBsZRIwCgx3aW5kb3dfc3RhcnQYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCndpbmRvd19lbmQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhIKCmNpX21pbnV0ZXMYAyABKAESFQoNc3RvcmFnZV9ieXRlcxgEIAEoARIUCgxlZ3Jlc3NfYnl0ZXMYBSABKAESEgoKc2VhdF9jb3VudBgGIAEoAyJTCgxEZXNpcmVkU3RhdGUSEgoKZ2VuZXJhdGlvbhgBIAEoAxIvCgpjb21wb25lbnRzGAIgAygLMhsuZ2l0c2Fhcy5hZ2VudC52MS5Db21wb25lbnQibwoJQ29tcG9uZW50EgwKBG5hbWUYASABKAkSDgoGYWN0aW9uGAIgASgJEjAKB3JlbGVhc2UYAyABKAsyHy5naXRzYWFzLmFnZW50LnYxLlNpZ25lZFJlbGVhc2USEgoKY29uZmlnX3JlZhgEIAEoCSJDCg1TaWduZWRSZWxlYXNlEg8KB29jaV9yZWYYASABKAkSDgoGZGlnZXN0GAIgASgJEhEKCXNpZ25hdHVyZRgDIAEoCSJFCg9EZXNpcmVkU3RhdGVBY2sSEgoKZ2VuZXJhdGlvbhgBIAEoAxIPCgdhcHBsaWVkGAIgASgIEg0KBWVycm9yGAMgASgJImYKEUFjdHVhbFN0YXRlUmVwb3J0EhoKEmFwcGxpZWRfZ2VuZXJhdGlvbhgBIAEoAxI1Cgpjb21wb25lbnRzGAIgAygLMiEuZ2l0c2Fhcy5hZ2VudC52MS5Db21wb25lbnRIZWFsdGgiqgEKB0NvbW1hbmQSEgoKY29tbWFuZF9pZBgBIAEoCRIrCgR0eXBlGAIgASgOMh0uZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kVHlwZRIxCgRhcmdzGAMgAygLMiMuZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kLkFyZ3NFbnRyeRorCglBcmdzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASI/Cg1Db21tYW5kUmVzdWx0EhIKCmNvbW1hbmRfaWQYASABKAkSCgoCb2sYAiABKAgSDgoGZGV0YWlsGAMgASgJInkKDENvbmZpZ1VwZGF0ZRI6CgZ2YWx1ZXMYASADKAsyKi5naXRzYWFzLmFnZW50LnYxLkNvbmZpZ1VwZGF0ZS5WYWx1ZXNFbnRyeRotCgtWYWx1ZXNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBIi8KC0RpYWdub3N0aWNzEhIKCmJ1bmRsZV9yZWYYASABKAkSDAoEbm90ZRgCIAEoCSIuCgRQaW5nEiYKAmF0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCpcCgVDbG91ZBIVChFDTE9VRF9VTlNQRUNJRklFRBAAEg0KCUNMT1VEX0dLRRABEg0KCUNMT1VEX0VLUxACEg0KCUNMT1VEX0FLUxADEg8KC0NMT1VEX09USEVSEAkqfAoLSGVhbHRoU3RhdGUSHAoYSEVBTFRIX1NUQVRFX1VOU1BFQ0lGSUVEEAASGAoUSEVBTFRIX1NUQVRFX0hFQUxUSFkQARIZChVIRUFMVEhfU1RBVEVfREVHUkFERUQQAhIaChZIRUFMVEhfU1RBVEVfVU5IRUFMVEhZEAMqugEKC0NvbW1hbmRUeXBlEhwKGENPTU1BTkRfVFlQRV9VTlNQRUNJRklFRBAAEiIKHkNPTU1BTkRfVFlQRV9UUklHR0VSX1JFQ09OQ0lMRRABEiMKH0NPTU1BTkRfVFlQRV9ST1RBVEVfQ0xJRU5UX0NFUlQQAhIeChpDT01NQU5EX1RZUEVfRFJBSU5fUlVOTkVSUxADEiQKIENPTU1BTkRfVFlQRV9DT0xMRUNUX0RJQUdOT1NUSUNTEAQyZAoMQWdlbnRHYXRld2F5ElQKB0Nvbm5lY3QSHi5naXRzYWFzLmFnZW50LnYxLkFnZW50TWVzc2FnZRolLmdpdHNhYXMuYWdlbnQudjEuQ29udHJvbFBsYW5lTWVzc2FnZSgBMAFCMVovZ2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL2FnZW50L3YxO2FnZW50djFiBnByb3RvMw", [file_google_protobuf_timestamp, file_google_protobuf_duration]);
+  fileDesc("Chpwcm90by9hZ2VudC92MS9hZ2VudC5wcm90bxIQZ2l0c2Fhcy5hZ2VudC52MSLZBQoMQWdlbnRNZXNzYWdlEhIKCm1lc3NhZ2VfaWQYASABKAkSCwoDc2VxGAIgASgDEisKB3NlbnRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCHJlZ2lzdGVyGAogASgLMhouZ2l0c2Fhcy5hZ2VudC52MS5SZWdpc3RlckgAEjAKCWhlYXJ0YmVhdBgLIAEoCzIbLmdpdHNhYXMuYWdlbnQudjEuSGVhcnRiZWF0SAASOwoMYWN0dWFsX3N0YXRlGAwgASgLMiMuZ2l0c2Fhcy5hZ2VudC52MS5BY3R1YWxTdGF0ZVJlcG9ydEgAEjYKCXRlbGVtZXRyeRgNIAEoCzIhLmdpdHNhYXMuYWdlbnQudjEuVGVsZW1ldHJ5U2FtcGxlSAASLgoFdXNhZ2UYDiABKAsyHS5naXRzYWFzLmFnZW50LnYxLlVzYWdlU2FtcGxlSAASPgoRZGVzaXJlZF9zdGF0ZV9hY2sYDyABKAsyIS5naXRzYWFzLmFnZW50LnYxLkRlc2lyZWRTdGF0ZUFja0gAEjkKDmNvbW1hbmRfcmVzdWx0GBAgASgLMh8uZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kUmVzdWx0SAASNAoLZGlhZ25vc3RpY3MYESABKAsyHS5naXRzYWFzLmFnZW50LnYxLkRpYWdub3N0aWNzSAASKAoFZW5yb2wYEiABKAsyFy5naXRzYWFzLmFnZW50LnYxLkVucm9sSAASTAoYY2VydGlmaWNhdGVfcm90YXRpb25fYWNrGBMgASgLMiguZ2l0c2Fhcy5hZ2VudC52MS5DZXJ0aWZpY2F0ZVJvdGF0aW9uQWNrSAASQAoSZW52ZWxvcGVfc3RhdGVfYWNrGBQgASgLMiIuZ2l0c2Fhcy5hZ2VudC52MS5FbnZlbG9wZVN0YXRlQWNrSABCCQoHcGF5bG9hZCK4BAoTQ29udHJvbFBsYW5lTWVzc2FnZRISCgptZXNzYWdlX2lkGAEgASgJEgsKA3NlcRgCIAEoAxIrCgdzZW50X2F0GAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgdhY2tfc2VxGAQgASgDEjUKDHJlZ2lzdGVyX2FjaxgKIAEoCzIdLmdpdHNhYXMuYWdlbnQudjEuUmVnaXN0ZXJBY2tIABI3Cg1kZXNpcmVkX3N0YXRlGAsgASgLMh4uZ2l0c2Fhcy5hZ2VudC52MS5EZXNpcmVkU3RhdGVIABIsCgdjb21tYW5kGAwgASgLMhkuZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kSAASMAoGY29uZmlnGA0gASgLMh4uZ2l0c2Fhcy5hZ2VudC52MS5Db25maWdVcGRhdGVIABImCgRwaW5nGA4gASgLMhYuZ2l0c2Fhcy5hZ2VudC52MS5QaW5nSAASNwoNZW5yb2xtZW50X2FjaxgPIAEoCzIeLmdpdHNhYXMuYWdlbnQudjEuRW5yb2xtZW50QWNrSAASRQoUY2VydGlmaWNhdGVfcm90YXRpb24YECABKAsyJS5naXRzYWFzLmFnZW50LnYxLkNlcnRpZmljYXRlUm90YXRpb25IABI/Cg5lbnZlbG9wZV9zdGF0ZRgRIAEoCzIlLmdpdHNhYXMuYWdlbnQudjEuRW52ZWxvcGVTdGF0ZVVwZGF0ZUgAQgkKB3BheWxvYWQisQEKCFJlZ2lzdGVyEhIKCmNsdXN0ZXJfaWQYASABKAkSJgoFY2xvdWQYAiABKA4yFy5naXRzYWFzLmFnZW50LnYxLkNsb3VkEg4KBnJlZ2lvbhgDIAEoCRIVCg1hZ2VudF92ZXJzaW9uGAQgASgJEhMKC2s4c192ZXJzaW9uGAUgASgJEhQKDGNhcGFiaWxpdGllcxgGIAMoCRIXCg9yZXN1bWVfZnJvbV9zZXEYByABKAMifwoLUmVnaXN0ZXJBY2sSEAoIYWNjZXB0ZWQYASABKAgSDgoGcmVhc29uGAIgASgJEhcKD3Jlc3VtZV9mcm9tX3NlcRgDIAEoAxI1ChJoZWFydGJlYXRfaW50ZXJ2YWwYBCABKAsyGS5nb29nbGUucHJvdG9idWYuRHVyYXRpb24imQEKBUVucm9sEhYKDm9uZV90aW1lX3Rva2VuGAEgASgJEiYKBWNsb3VkGAIgASgOMhcuZ2l0c2Fhcy5hZ2VudC52MS5DbG91ZBIOCgZyZWdpb24YAyABKAkSFQoNYWdlbnRfdmVyc2lvbhgEIAEoCRITCgtrOHNfdmVyc2lvbhgFIAEoCRIUCgxjYXBhYmlsaXRpZXMYBiADKAkidAoRQ2xpZW50Q2VydGlmaWNhdGUSFgoOY2VydGlmaWNhdGVfaWQYASABKAkSFwoPY2VydGlmaWNhdGVfcGVtGAIgASgMEi4KCmV4cGlyZXNfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIpQCCgxFbnJvbG1lbnRBY2sSEAoIYWNjZXB0ZWQYASABKAgSQAoOcmVmdXNhbF9yZWFzb24YAiABKA4yKC5naXRzYWFzLmFnZW50LnYxLkVucm9sbWVudFJlZnVzYWxSZWFzb24SDgoGZGV0YWlsGAMgASgJEj8KEmlzc3VlZF9jZXJ0aWZpY2F0ZRgEIAEoCzIjLmdpdHNhYXMuYWdlbnQudjEuQ2xpZW50Q2VydGlmaWNhdGUSEQoJdGVuYW50X2lkGAUgASgJEhUKDWRhdGFfcGxhbmVfaWQYBiABKAkSNQoSaGVhcnRiZWF0X2ludGVydmFsGAcgASgLMhkuZ29vZ2xlLnByb3RvYnVmLkR1cmF0aW9uIk8KE0NlcnRpZmljYXRlUm90YXRpb24SOAoLY2VydGlmaWNhdGUYASABKAsyIy5naXRzYWFzLmFnZW50LnYxLkNsaWVudENlcnRpZmljYXRlIp0BChZDZXJ0aWZpY2F0ZVJvdGF0aW9uQWNrEhYKDmNlcnRpZmljYXRlX2lkGAEgASgJEg8KB2FwcGxpZWQYAiABKAgSSgoOZmFpbHVyZV9yZWFzb24YAyABKA4yMi5naXRzYWFzLmFnZW50LnYxLkNlcnRpZmljYXRlUm90YXRpb25GYWlsdXJlUmVhc29uEg4KBmRldGFpbBgEIAEoCSJyCglIZWFydGJlYXQSLgoHb3ZlcmFsbBgBIAEoDjIdLmdpdHNhYXMuYWdlbnQudjEuSGVhbHRoU3RhdGUSNQoKY29tcG9uZW50cxgCIAMoCzIhLmdpdHNhYXMuYWdlbnQudjEuQ29tcG9uZW50SGVhbHRoIm4KD0NvbXBvbmVudEhlYWx0aBIMCgRuYW1lGAEgASgJEiwKBXN0YXRlGAIgASgOMh0uZ2l0c2Fhcy5hZ2VudC52MS5IZWFsdGhTdGF0ZRIPCgd2ZXJzaW9uGAMgASgJEg4KBmRldGFpbBgEIAEoCSLVAgoPVGVsZW1ldHJ5U2FtcGxlEjAKDHdpbmRvd19zdGFydBgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKd2luZG93X2VuZBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASPQoGZ2F1Z2VzGAMgAygLMi0uZ2l0c2Fhcy5hZ2VudC52MS5UZWxlbWV0cnlTYW1wbGUuR2F1Z2VzRW50cnkSQQoIY291bnRlcnMYBCADKAsyLy5naXRzYWFzLmFnZW50LnYxLlRlbGVtZXRyeVNhbXBsZS5Db3VudGVyc0VudHJ5Gi0KC0dhdWdlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAToCOAEaLwoNQ291bnRlcnNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAE6AjgBIqQCCgtVc2FnZVNhbXBsZRIwCgx3aW5kb3dfc3RhcnQYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCndpbmRvd19lbmQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhIKCmNpX21pbnV0ZXMYAyABKAESFQoNc3RvcmFnZV9ieXRlcxgEIAEoARIUCgxlZ3Jlc3NfYnl0ZXMYBSABKAESEgoKc2VhdF9jb3VudBgGIAEoAxIbChNjaV9jb25jdXJyZW5jeV9wZWFrGAcgASgBEhIKCnNjYW5fYnl0ZXMYCCABKAESGAoQcmVwb3NpdG9yeV9jb3VudBgJIAEoAxITCgtpbmRleF9ieXRlcxgKIAEoASLGAgoRRGltZW5zaW9uRW52ZWxvcGUSNQoJZGltZW5zaW9uGAEgASgOMiIuZ2l0c2Fhcy5hZ2VudC52MS5GYWlyVXNlRGltZW5zaW9uEi4KBXN0YXRlGAIgASgOMh8uZ2l0c2Fhcy5hZ2VudC52MS5FbnZlbG9wZVN0YXRlEhUKDWN1cnJlbnRfdmFsdWUYAyABKAESFgoOZW52ZWxvcGVfdmFsdWUYBCABKAESGgoSbm90aWZpY2F0aW9uX3ZhbHVlGAUgASgBEgwKBHVuaXQYBiABKAkSMAoMd2luZG93X3N0YXJ0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgdtZXNzYWdlGAkgASgJIpcBChNFbnZlbG9wZVN0YXRlVXBkYXRlEhIKCmdlbmVyYXRpb24YASABKAMSNwoKZGltZW5zaW9ucxgCIAMoCzIjLmdpdHNhYXMuYWdlbnQudjEuRGltZW5zaW9uRW52ZWxvcGUSGgoSbWF4X2NpX2NvbmN1cnJlbmN5GAMgASgFEhcKD3F1ZXVlX2RlcHRoX2NhcBgEIAEoAyJGChBFbnZlbG9wZVN0YXRlQWNrEhIKCmdlbmVyYXRpb24YASABKAMSDwoHYXBwbGllZBgCIAEoCBINCgVlcnJvchgDIAEoCSJTCgxEZXNpcmVkU3RhdGUSEgoKZ2VuZXJhdGlvbhgBIAEoAxIvCgpjb21wb25lbnRzGAIgAygLMhsuZ2l0c2Fhcy5hZ2VudC52MS5Db21wb25lbnQibwoJQ29tcG9uZW50EgwKBG5hbWUYASABKAkSDgoGYWN0aW9uGAIgASgJEjAKB3JlbGVhc2UYAyABKAsyHy5naXRzYWFzLmFnZW50LnYxLlNpZ25lZFJlbGVhc2USEgoKY29uZmlnX3JlZhgEIAEoCSJDCg1TaWduZWRSZWxlYXNlEg8KB29jaV9yZWYYASABKAkSDgoGZGlnZXN0GAIgASgJEhEKCXNpZ25hdHVyZRgDIAEoCSJFCg9EZXNpcmVkU3RhdGVBY2sSEgoKZ2VuZXJhdGlvbhgBIAEoAxIPCgdhcHBsaWVkGAIgASgIEg0KBWVycm9yGAMgASgJIrYBChFBY3R1YWxTdGF0ZVJlcG9ydBIaChJhcHBsaWVkX2dlbmVyYXRpb24YASABKAMSNQoKY29tcG9uZW50cxgCIAMoCzIhLmdpdHNhYXMuYWdlbnQudjEuQ29tcG9uZW50SGVhbHRoEjUKDXJvbGxvdXRfcGhhc2UYAyABKA4yHi5naXRzYWFzLmFnZW50LnYxLlJvbGxvdXRQaGFzZRIXCg9yb2xsb3V0X21lc3NhZ2UYBCABKAkiqgEKB0NvbW1hbmQSEgoKY29tbWFuZF9pZBgBIAEoCRIrCgR0eXBlGAIgASgOMh0uZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kVHlwZRIxCgRhcmdzGAMgAygLMiMuZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kLkFyZ3NFbnRyeRorCglBcmdzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASI/Cg1Db21tYW5kUmVzdWx0EhIKCmNvbW1hbmRfaWQYASABKAkSCgoCb2sYAiABKAgSDgoGZGV0YWlsGAMgASgJInkKDENvbmZpZ1VwZGF0ZRI6CgZ2YWx1ZXMYASADKAsyKi5naXRzYWFzLmFnZW50LnYxLkNvbmZpZ1VwZGF0ZS5WYWx1ZXNFbnRyeRotCgtWYWx1ZXNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBIi8KC0RpYWdub3N0aWNzEhIKCmJ1bmRsZV9yZWYYASABKAkSDAoEbm90ZRgCIAEoCSIuCgRQaW5nEiYKAmF0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCpcCgVDbG91ZBIVChFDTE9VRF9VTlNQRUNJRklFRBAAEg0KCUNMT1VEX0dLRRABEg0KCUNMT1VEX0VLUxACEg0KCUNMT1VEX0FLUxADEg8KC0NMT1VEX09USEVSEAkqlQIKFkVucm9sbWVudFJlZnVzYWxSZWFzb24SKAokRU5ST0xNRU5UX1JFRlVTQUxfUkVBU09OX1VOU1BFQ0lGSUVEEAASKgomRU5ST0xNRU5UX1JFRlVTQUxfUkVBU09OX1RPS0VOX0lOVkFMSUQQARIoCiRFTlJPTE1FTlRfUkVGVVNBTF9SRUFTT05fVE9LRU5fU1BFTlQQAhIqCiZFTlJPTE1FTlRfUkVGVVNBTF9SRUFTT05fVE9LRU5fRVhQSVJFRBADEioKJkVOUk9MTUVOVF9SRUZVU0FMX1JFQVNPTl9UT0tFTl9SRVZPS0VEEAQSIwofRU5ST0xNRU5UX1JFRlVTQUxfUkVBU09OX0RFTklFRBAFKqoCCiBDZXJ0aWZpY2F0ZVJvdGF0aW9uRmFpbHVyZVJlYXNvbhIzCi9DRVJUSUZJQ0FURV9ST1RBVElPTl9GQUlMVVJFX1JFQVNPTl9VTlNQRUNJRklFRBAAEjIKLkNFUlRJRklDQVRFX1JPVEFUSU9OX0ZBSUxVUkVfUkVBU09OX1VOUEFSU0FCTEUQARIxCi1DRVJUSUZJQ0FURV9ST1RBVElPTl9GQUlMVVJFX1JFQVNPTl9VTlRSVVNURUQQAhI2CjJDRVJUSUZJQ0FURV9ST1RBVElPTl9GQUlMVVJFX1JFQVNPTl9QRVJTSVNUX0ZBSUxFRBADEjIKLkNFUlRJRklDQVRFX1JPVEFUSU9OX0ZBSUxVUkVfUkVBU09OX0NMT0NLX1NLRVcQBCp8CgtIZWFsdGhTdGF0ZRIcChhIRUFMVEhfU1RBVEVfVU5TUEVDSUZJRUQQABIYChRIRUFMVEhfU1RBVEVfSEVBTFRIWRABEhkKFUhFQUxUSF9TVEFURV9ERUdSQURFRBACEhoKFkhFQUxUSF9TVEFURV9VTkhFQUxUSFkQAyrYAgoQRmFpclVzZURpbWVuc2lvbhIiCh5GQUlSX1VTRV9ESU1FTlNJT05fVU5TUEVDSUZJRUQQABIcChhGQUlSX1VTRV9ESU1FTlNJT05fU0VBVFMQARInCiNGQUlSX1VTRV9ESU1FTlNJT05fUkVQT1NJVE9SWV9DT1VOVBACEikKJUZBSVJfVVNFX0RJTUVOU0lPTl9SRVBPU0lUT1JZX1NUT1JBR0UQAxIhCh1GQUlSX1VTRV9ESU1FTlNJT05fQ0lfTUlOVVRFUxAEEiUKIUZBSVJfVVNFX0RJTUVOU0lPTl9DSV9DT05DVVJSRU5DWRAFEiIKHkZBSVJfVVNFX0RJTUVOU0lPTl9TQ0FOX1ZPTFVNRRAGEiEKHUZBSVJfVVNFX0RJTUVOU0lPTl9JTkRFWF9TSVpFEAcSHQoZRkFJUl9VU0VfRElNRU5TSU9OX0VHUkVTUxAIKoABCg1FbnZlbG9wZVN0YXRlEh4KGkVOVkVMT1BFX1NUQVRFX1VOU1BFQ0lGSUVEEAASGQoVRU5WRUxPUEVfU1RBVEVfV0lUSElOEAESFwoTRU5WRUxPUEVfU1RBVEVfTkVBUhACEhsKF0VOVkVMT1BFX1NUQVRFX0VYQ0VFREVEEAMqoAEKDFJvbGxvdXRQaGFzZRIdChlST0xMT1VUX1BIQVNFX1VOU1BFQ0lGSUVEEAASHQoZUk9MTE9VVF9QSEFTRV9JTl9QUk9HUkVTUxABEhkKFVJPTExPVVRfUEhBU0VfQVBQTElFRBACEhgKFFJPTExPVVRfUEhBU0VfRkFJTEVEEAMSHQoZUk9MTE9VVF9QSEFTRV9ST0xMRURfQkFDSxAEKroBCgtDb21tYW5kVHlwZRIcChhDT01NQU5EX1RZUEVfVU5TUEVDSUZJRUQQABIiCh5DT01NQU5EX1RZUEVfVFJJR0dFUl9SRUNPTkNJTEUQARIjCh9DT01NQU5EX1RZUEVfUk9UQVRFX0NMSUVOVF9DRVJUEAISHgoaQ09NTUFORF9UWVBFX0RSQUlOX1JVTk5FUlMQAxIkCiBDT01NQU5EX1RZUEVfQ09MTEVDVF9ESUFHTk9TVElDUxAEMmQKDEFnZW50R2F0ZXdheRJUCgdDb25uZWN0Eh4uZ2l0c2Fhcy5hZ2VudC52MS5BZ2VudE1lc3NhZ2UaJS5naXRzYWFzLmFnZW50LnYxLkNvbnRyb2xQbGFuZU1lc3NhZ2UoATABQjFaL2dpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9hZ2VudC92MTthZ2VudHYxYgZwcm90bzM", [file_google_protobuf_timestamp, file_google_protobuf_duration]);
 
 /**
  * ---------------------------------------------------------------------------
@@ -109,6 +116,28 @@ export type AgentMessage = Message<"gitsaas.agent.v1.AgentMessage"> & {
      */
     value: Diagnostics;
     case: "diagnostics";
+  } | {
+    /**
+     * first Connect only (ADR-0060)
+     *
+     * @generated from field: gitsaas.agent.v1.Enrol enrol = 18;
+     */
+    value: Enrol;
+    case: "enrol";
+  } | {
+    /**
+     * @generated from field: gitsaas.agent.v1.CertificateRotationAck certificate_rotation_ack = 19;
+     */
+    value: CertificateRotationAck;
+    case: "certificateRotationAck";
+  } | {
+    /**
+     * answers EnvelopeStateUpdate (SPEC-0041 AC9)
+     *
+     * @generated from field: gitsaas.agent.v1.EnvelopeStateAck envelope_state_ack = 20;
+     */
+    value: EnvelopeStateAck;
+    case: "envelopeStateAck";
   } | { case: undefined; value?: undefined };
 };
 
@@ -182,6 +211,28 @@ export type ControlPlaneMessage = Message<"gitsaas.agent.v1.ControlPlaneMessage"
      */
     value: Ping;
     case: "ping";
+  } | {
+    /**
+     * answers Enrol (ADR-0060)
+     *
+     * @generated from field: gitsaas.agent.v1.EnrolmentAck enrolment_ack = 15;
+     */
+    value: EnrolmentAck;
+    case: "enrolmentAck";
+  } | {
+    /**
+     * @generated from field: gitsaas.agent.v1.CertificateRotation certificate_rotation = 16;
+     */
+    value: CertificateRotation;
+    case: "certificateRotation";
+  } | {
+    /**
+     * fair-use desired state (SPEC-0041 AC9)
+     *
+     * @generated from field: gitsaas.agent.v1.EnvelopeStateUpdate envelope_state = 17;
+     */
+    value: EnvelopeStateUpdate;
+    case: "envelopeState";
   } | { case: undefined; value?: undefined };
 };
 
@@ -197,13 +248,15 @@ export const ControlPlaneMessageSchema: GenMessage<ControlPlaneMessage> = /*@__P
  */
 export type Register = Message<"gitsaas.agent.v1.Register"> & {
   /**
-   * informational; identity comes from mTLS SPIFFE ID
+   * informational; identity comes from the control-plane-issued
    *
    * @generated from field: string cluster_id = 1;
    */
   clusterId: string;
 
   /**
+   * client certificate, which names tenant + data plane (ADR-0060)
+   *
    * @generated from field: gitsaas.agent.v1.Cloud cloud = 2;
    */
   cloud: Cloud;
@@ -282,6 +335,210 @@ export const RegisterAckSchema: GenMessage<RegisterAck> = /*@__PURE__*/
   messageDesc(file_proto_agent_v1_agent, 3);
 
 /**
+ * agent -> CP; first Connect ONLY, before any cert exists
+ *
+ * @generated from message gitsaas.agent.v1.Enrol
+ */
+export type Enrol = Message<"gitsaas.agent.v1.Enrol"> & {
+  /**
+   * tenant-scoped, single-use, time-bounded credential
+   *
+   * @generated from field: string one_time_token = 1;
+   */
+  oneTimeToken: string;
+
+  /**
+   * @generated from field: gitsaas.agent.v1.Cloud cloud = 2;
+   */
+  cloud: Cloud;
+
+  /**
+   * @generated from field: string region = 3;
+   */
+  region: string;
+
+  /**
+   * @generated from field: string agent_version = 4;
+   */
+  agentVersion: string;
+
+  /**
+   * @generated from field: string k8s_version = 5;
+   */
+  k8sVersion: string;
+
+  /**
+   * mirrors Register; feeds the data-plane registry record
+   *
+   * @generated from field: repeated string capabilities = 6;
+   */
+  capabilities: string[];
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.Enrol.
+ * Use `create(EnrolSchema)` to create a new message.
+ */
+export const EnrolSchema: GenMessage<Enrol> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 4);
+
+/**
+ * A client certificate issued by the control plane. The certificate names the tenant and
+ * the data plane; nothing the agent asserts in a payload overrides that identity (AC3).
+ *
+ * @generated from message gitsaas.agent.v1.ClientCertificate
+ */
+export type ClientCertificate = Message<"gitsaas.agent.v1.ClientCertificate"> & {
+  /**
+   * CP-assigned ID; correlation key for rotation acks
+   *
+   * @generated from field: string certificate_id = 1;
+   */
+  certificateId: string;
+
+  /**
+   * PEM chain incl. private key, issued by the control plane
+   *
+   * @generated from field: bytes certificate_pem = 2;
+   */
+  certificatePem: Uint8Array;
+
+  /**
+   * rotation MUST complete before this instant (AC4)
+   *
+   * @generated from field: google.protobuf.Timestamp expires_at = 3;
+   */
+  expiresAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.ClientCertificate.
+ * Use `create(ClientCertificateSchema)` to create a new message.
+ */
+export const ClientCertificateSchema: GenMessage<ClientCertificate> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 5);
+
+/**
+ * CP -> agent; answers Enrol
+ *
+ * @generated from message gitsaas.agent.v1.EnrolmentAck
+ */
+export type EnrolmentAck = Message<"gitsaas.agent.v1.EnrolmentAck"> & {
+  /**
+   * @generated from field: bool accepted = 1;
+   */
+  accepted: boolean;
+
+  /**
+   * set when !accepted
+   *
+   * @generated from field: gitsaas.agent.v1.EnrolmentRefusalReason refusal_reason = 2;
+   */
+  refusalReason: EnrolmentRefusalReason;
+
+  /**
+   * coarse prose only; NEVER echoes the token (AC2)
+   *
+   * @generated from field: string detail = 3;
+   */
+  detail: string;
+
+  /**
+   * set when accepted
+   *
+   * @generated from field: gitsaas.agent.v1.ClientCertificate issued_certificate = 4;
+   */
+  issuedCertificate?: ClientCertificate | undefined;
+
+  /**
+   * assigned identity, from the token's tenant scope
+   *
+   * @generated from field: string tenant_id = 5;
+   */
+  tenantId: string;
+
+  /**
+   * assigned identity, minted into the registry record
+   *
+   * @generated from field: string data_plane_id = 6;
+   */
+  dataPlaneId: string;
+
+  /**
+   * @generated from field: google.protobuf.Duration heartbeat_interval = 7;
+   */
+  heartbeatInterval?: Duration | undefined;
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.EnrolmentAck.
+ * Use `create(EnrolmentAckSchema)` to create a new message.
+ */
+export const EnrolmentAckSchema: GenMessage<EnrolmentAck> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 6);
+
+/**
+ * CP -> agent; delivered ON the established stream,
+ *
+ * @generated from message gitsaas.agent.v1.CertificateRotation
+ */
+export type CertificateRotation = Message<"gitsaas.agent.v1.CertificateRotation"> & {
+  /**
+   * before the current certificate expires (AC4)
+   *
+   * @generated from field: gitsaas.agent.v1.ClientCertificate certificate = 1;
+   */
+  certificate?: ClientCertificate | undefined;
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.CertificateRotation.
+ * Use `create(CertificateRotationSchema)` to create a new message.
+ */
+export const CertificateRotationSchema: GenMessage<CertificateRotation> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 7);
+
+/**
+ * agent -> CP; answers CertificateRotation
+ *
+ * @generated from message gitsaas.agent.v1.CertificateRotationAck
+ */
+export type CertificateRotationAck = Message<"gitsaas.agent.v1.CertificateRotationAck"> & {
+  /**
+   * echoes ClientCertificate.certificate_id
+   *
+   * @generated from field: string certificate_id = 1;
+   */
+  certificateId: string;
+
+  /**
+   * @generated from field: bool applied = 2;
+   */
+  applied: boolean;
+
+  /**
+   * set when !applied
+   *
+   * @generated from field: gitsaas.agent.v1.CertificateRotationFailureReason failure_reason = 3;
+   */
+  failureReason: CertificateRotationFailureReason;
+
+  /**
+   * coarse prose only; NEVER includes the credential (AC2)
+   *
+   * @generated from field: string detail = 4;
+   */
+  detail: string;
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.CertificateRotationAck.
+ * Use `create(CertificateRotationAckSchema)` to create a new message.
+ */
+export const CertificateRotationAckSchema: GenMessage<CertificateRotationAck> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 8);
+
+/**
  * @generated from message gitsaas.agent.v1.Heartbeat
  */
 export type Heartbeat = Message<"gitsaas.agent.v1.Heartbeat"> & {
@@ -301,7 +558,7 @@ export type Heartbeat = Message<"gitsaas.agent.v1.Heartbeat"> & {
  * Use `create(HeartbeatSchema)` to create a new message.
  */
 export const HeartbeatSchema: GenMessage<Heartbeat> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 4);
+  messageDesc(file_proto_agent_v1_agent, 9);
 
 /**
  * @generated from message gitsaas.agent.v1.ComponentHealth
@@ -335,7 +592,7 @@ export type ComponentHealth = Message<"gitsaas.agent.v1.ComponentHealth"> & {
  * Use `create(ComponentHealthSchema)` to create a new message.
  */
 export const ComponentHealthSchema: GenMessage<ComponentHealth> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 5);
+  messageDesc(file_proto_agent_v1_agent, 10);
 
 /**
  * @generated from message gitsaas.agent.v1.TelemetrySample
@@ -371,10 +628,17 @@ export type TelemetrySample = Message<"gitsaas.agent.v1.TelemetrySample"> & {
  * Use `create(TelemetrySampleSchema)` to create a new message.
  */
 export const TelemetrySampleSchema: GenMessage<TelemetrySample> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 6);
+  messageDesc(file_proto_agent_v1_agent, 11);
 
 /**
  * Fair-use metering for flat-rate cost governance (ADR-0008).
+ *
+ * The control plane is the metering authority (ADR-0061): it counts from the
+ * TelemetrySample events it RECEIVES on this channel. This message is the data
+ * plane's OWN view of its totals — operational input, never the billing
+ * number. Where the two diverge, the divergence is a health finding with both
+ * numbers shown, not an adjustment to the control plane's counters
+ * (SPEC-0041 AC1).
  *
  * @generated from message gitsaas.agent.v1.UsageSample
  */
@@ -408,6 +672,38 @@ export type UsageSample = Message<"gitsaas.agent.v1.UsageSample"> & {
    * @generated from field: int64 seat_count = 6;
    */
   seatCount: bigint;
+
+  /**
+   * Additive operational signals (T-0034, SPEC-0041): sizes and peaks the
+   * control plane cannot yet derive from received telemetry events. Reporting
+   * them never changes a control-plane counter (ADR-0061 §2).
+   *
+   * peak concurrent CI jobs in the window
+   *
+   * @generated from field: double ci_concurrency_peak = 7;
+   */
+  ciConcurrencyPeak: number;
+
+  /**
+   * bytes scanned in the window
+   *
+   * @generated from field: double scan_bytes = 8;
+   */
+  scanBytes: number;
+
+  /**
+   * repositories hosted at window end
+   *
+   * @generated from field: int64 repository_count = 9;
+   */
+  repositoryCount: bigint;
+
+  /**
+   * code-search index size at window end
+   *
+   * @generated from field: double index_bytes = 10;
+   */
+  indexBytes: number;
 };
 
 /**
@@ -415,7 +711,159 @@ export type UsageSample = Message<"gitsaas.agent.v1.UsageSample"> & {
  * Use `create(UsageSampleSchema)` to create a new message.
  */
 export const UsageSampleSchema: GenMessage<UsageSample> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 7);
+  messageDesc(file_proto_agent_v1_agent, 12);
+
+/**
+ * One dimension's envelope condition with the counters the decision was made
+ * from: the customer and the control plane read the same numbers (SPEC-0041
+ * AC10), and the interval is recorded, not inferred (G6 evidence).
+ *
+ * @generated from message gitsaas.agent.v1.DimensionEnvelope
+ */
+export type DimensionEnvelope = Message<"gitsaas.agent.v1.DimensionEnvelope"> & {
+  /**
+   * @generated from field: gitsaas.agent.v1.FairUseDimension dimension = 1;
+   */
+  dimension: FairUseDimension;
+
+  /**
+   * @generated from field: gitsaas.agent.v1.EnvelopeState state = 2;
+   */
+  state: EnvelopeState;
+
+  /**
+   * the control plane's authoritative counter
+   *
+   * @generated from field: double current_value = 3;
+   */
+  currentValue: number;
+
+  /**
+   * per-tenant configuration, never compiled in
+   *
+   * @generated from field: double envelope_value = 4;
+   */
+  envelopeValue: number;
+
+  /**
+   * the AC4 threshold, below envelope_value
+   *
+   * @generated from field: double notification_value = 5;
+   */
+  notificationValue: number;
+
+  /**
+   * coarse unit prose, e.g. "minutes", "bytes"
+   *
+   * @generated from field: string unit = 6;
+   */
+  unit: string;
+
+  /**
+   * the interval the counter was derived from
+   *
+   * @generated from field: google.protobuf.Timestamp window_start = 7;
+   */
+  windowStart?: Timestamp | undefined;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp window_end = 8;
+   */
+  windowEnd?: Timestamp | undefined;
+
+  /**
+   * coarse prose; never carries a secret
+   *
+   * @generated from field: string message = 9;
+   */
+  message: string;
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.DimensionEnvelope.
+ * Use `create(DimensionEnvelopeSchema)` to create a new message.
+ */
+export const DimensionEnvelopeSchema: GenMessage<DimensionEnvelope> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 13);
+
+/**
+ * Envelope state reaches the data plane as DESIRED STATE on this channel; the
+ * control plane never reaches into the cluster to enforce it (SPEC-0041 AC9).
+ * Enforcement is throttle-and-notify only: reduced CI concurrency and a queue
+ * depth cap whose delays are visible on the job (AC5). No field here can make
+ * a repository read-only or block a git operation (AC7, AC8).
+ *
+ * CP -> agent
+ *
+ * @generated from message gitsaas.agent.v1.EnvelopeStateUpdate
+ */
+export type EnvelopeStateUpdate = Message<"gitsaas.agent.v1.EnvelopeStateUpdate"> & {
+  /**
+   * monotonic; the agent applies the newest
+   *
+   * @generated from field: int64 generation = 1;
+   */
+  generation: bigint;
+
+  /**
+   * @generated from field: repeated gitsaas.agent.v1.DimensionEnvelope dimensions = 2;
+   */
+  dimensions: DimensionEnvelope[];
+
+  /**
+   * set on a CI-dimension breach; 0 = unchanged
+   *
+   * @generated from field: int32 max_ci_concurrency = 3;
+   */
+  maxCiConcurrency: number;
+
+  /**
+   * queued jobs are delayed, never dropped (AC5)
+   *
+   * @generated from field: int64 queue_depth_cap = 4;
+   */
+  queueDepthCap: bigint;
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.EnvelopeStateUpdate.
+ * Use `create(EnvelopeStateUpdateSchema)` to create a new message.
+ */
+export const EnvelopeStateUpdateSchema: GenMessage<EnvelopeStateUpdate> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 14);
+
+/**
+ * agent -> CP; answers EnvelopeStateUpdate
+ *
+ * @generated from message gitsaas.agent.v1.EnvelopeStateAck
+ */
+export type EnvelopeStateAck = Message<"gitsaas.agent.v1.EnvelopeStateAck"> & {
+  /**
+   * echoes EnvelopeStateUpdate.generation
+   *
+   * @generated from field: int64 generation = 1;
+   */
+  generation: bigint;
+
+  /**
+   * @generated from field: bool applied = 2;
+   */
+  applied: boolean;
+
+  /**
+   * coarse prose only
+   *
+   * @generated from field: string error = 3;
+   */
+  error: string;
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.EnvelopeStateAck.
+ * Use `create(EnvelopeStateAckSchema)` to create a new message.
+ */
+export const EnvelopeStateAckSchema: GenMessage<EnvelopeStateAck> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 15);
 
 /**
  * ---------------------------------------------------------------------------
@@ -443,7 +891,7 @@ export type DesiredState = Message<"gitsaas.agent.v1.DesiredState"> & {
  * Use `create(DesiredStateSchema)` to create a new message.
  */
 export const DesiredStateSchema: GenMessage<DesiredState> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 8);
+  messageDesc(file_proto_agent_v1_agent, 16);
 
 /**
  * @generated from message gitsaas.agent.v1.Component
@@ -481,7 +929,7 @@ export type Component = Message<"gitsaas.agent.v1.Component"> & {
  * Use `create(ComponentSchema)` to create a new message.
  */
 export const ComponentSchema: GenMessage<Component> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 9);
+  messageDesc(file_proto_agent_v1_agent, 17);
 
 /**
  * @generated from message gitsaas.agent.v1.SignedRelease
@@ -514,7 +962,7 @@ export type SignedRelease = Message<"gitsaas.agent.v1.SignedRelease"> & {
  * Use `create(SignedReleaseSchema)` to create a new message.
  */
 export const SignedReleaseSchema: GenMessage<SignedRelease> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 10);
+  messageDesc(file_proto_agent_v1_agent, 18);
 
 /**
  * @generated from message gitsaas.agent.v1.DesiredStateAck
@@ -541,7 +989,7 @@ export type DesiredStateAck = Message<"gitsaas.agent.v1.DesiredStateAck"> & {
  * Use `create(DesiredStateAckSchema)` to create a new message.
  */
 export const DesiredStateAckSchema: GenMessage<DesiredStateAck> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 11);
+  messageDesc(file_proto_agent_v1_agent, 19);
 
 /**
  * observed reality, drives convergence
@@ -558,6 +1006,23 @@ export type ActualStateReport = Message<"gitsaas.agent.v1.ActualStateReport"> & 
    * @generated from field: repeated gitsaas.agent.v1.ComponentHealth components = 2;
    */
   components: ComponentHealth[];
+
+  /**
+   * Rollout observability (SPEC-0039 AC6): the phase of the rollout that produced
+   * applied_generation. A data plane that has not reported since a rollout began sends no
+   * report at all — the control plane marks it stale, never "upgraded".
+   *
+   * @generated from field: gitsaas.agent.v1.RolloutPhase rollout_phase = 3;
+   */
+  rolloutPhase: RolloutPhase;
+
+  /**
+   * Coarse prose for the phase, set on FAILED and ROLLED_BACK to carry the reason (AC5).
+   * Never carries a secret or a credential; never echoes a signing key.
+   *
+   * @generated from field: string rollout_message = 4;
+   */
+  rolloutMessage: string;
 };
 
 /**
@@ -565,7 +1030,7 @@ export type ActualStateReport = Message<"gitsaas.agent.v1.ActualStateReport"> & 
  * Use `create(ActualStateReportSchema)` to create a new message.
  */
 export const ActualStateReportSchema: GenMessage<ActualStateReport> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 12);
+  messageDesc(file_proto_agent_v1_agent, 20);
 
 /**
  * @generated from message gitsaas.agent.v1.Command
@@ -592,7 +1057,7 @@ export type Command = Message<"gitsaas.agent.v1.Command"> & {
  * Use `create(CommandSchema)` to create a new message.
  */
 export const CommandSchema: GenMessage<Command> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 13);
+  messageDesc(file_proto_agent_v1_agent, 21);
 
 /**
  * @generated from message gitsaas.agent.v1.CommandResult
@@ -619,7 +1084,7 @@ export type CommandResult = Message<"gitsaas.agent.v1.CommandResult"> & {
  * Use `create(CommandResultSchema)` to create a new message.
  */
 export const CommandResultSchema: GenMessage<CommandResult> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 14);
+  messageDesc(file_proto_agent_v1_agent, 22);
 
 /**
  * @generated from message gitsaas.agent.v1.ConfigUpdate
@@ -636,7 +1101,7 @@ export type ConfigUpdate = Message<"gitsaas.agent.v1.ConfigUpdate"> & {
  * Use `create(ConfigUpdateSchema)` to create a new message.
  */
 export const ConfigUpdateSchema: GenMessage<ConfigUpdate> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 15);
+  messageDesc(file_proto_agent_v1_agent, 23);
 
 /**
  * @generated from message gitsaas.agent.v1.Diagnostics
@@ -658,7 +1123,7 @@ export type Diagnostics = Message<"gitsaas.agent.v1.Diagnostics"> & {
  * Use `create(DiagnosticsSchema)` to create a new message.
  */
 export const DiagnosticsSchema: GenMessage<Diagnostics> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 16);
+  messageDesc(file_proto_agent_v1_agent, 24);
 
 /**
  * @generated from message gitsaas.agent.v1.Ping
@@ -675,7 +1140,7 @@ export type Ping = Message<"gitsaas.agent.v1.Ping"> & {
  * Use `create(PingSchema)` to create a new message.
  */
 export const PingSchema: GenMessage<Ping> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 17);
+  messageDesc(file_proto_agent_v1_agent, 25);
 
 /**
  * ---------------------------------------------------------------------------
@@ -718,6 +1183,103 @@ export const CloudSchema: GenEnum<Cloud> = /*@__PURE__*/
   enumDesc(file_proto_agent_v1_agent, 0);
 
 /**
+ * Why an enrolment is refused. Deliberately coarse: an invalid token, an unknown token and
+ * a token of another tenant are indistinguishable to the presenter (SPEC-0038 AC9/SPEC-0001).
+ *
+ * @generated from enum gitsaas.agent.v1.EnrolmentRefusalReason
+ */
+export enum EnrolmentRefusalReason {
+  /**
+   * @generated from enum value: ENROLMENT_REFUSAL_REASON_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * malformed, unknown, or of another tenant
+   *
+   * @generated from enum value: ENROLMENT_REFUSAL_REASON_TOKEN_INVALID = 1;
+   */
+  TOKEN_INVALID = 1,
+
+  /**
+   * single-use; includes re-use after a failed first attempt
+   *
+   * @generated from enum value: ENROLMENT_REFUSAL_REASON_TOKEN_SPENT = 2;
+   */
+  TOKEN_SPENT = 2,
+
+  /**
+   * @generated from enum value: ENROLMENT_REFUSAL_REASON_TOKEN_EXPIRED = 3;
+   */
+  TOKEN_EXPIRED = 3,
+
+  /**
+   * @generated from enum value: ENROLMENT_REFUSAL_REASON_TOKEN_REVOKED = 4;
+   */
+  TOKEN_REVOKED = 4,
+
+  /**
+   * control-plane admission decision (e.g. quota)
+   *
+   * @generated from enum value: ENROLMENT_REFUSAL_REASON_DENIED = 5;
+   */
+  DENIED = 5,
+}
+
+/**
+ * Describes the enum gitsaas.agent.v1.EnrolmentRefusalReason.
+ */
+export const EnrolmentRefusalReasonSchema: GenEnum<EnrolmentRefusalReason> = /*@__PURE__*/
+  enumDesc(file_proto_agent_v1_agent, 1);
+
+/**
+ * Why the agent could not apply a rotated certificate. Surfaces failures so the control
+ * plane retries and escalates rather than letting the certificate lapse silently (AC4).
+ *
+ * @generated from enum gitsaas.agent.v1.CertificateRotationFailureReason
+ */
+export enum CertificateRotationFailureReason {
+  /**
+   * @generated from enum value: CERTIFICATE_ROTATION_FAILURE_REASON_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * PEM does not decode / is malformed
+   *
+   * @generated from enum value: CERTIFICATE_ROTATION_FAILURE_REASON_UNPARSABLE = 1;
+   */
+  UNPARSABLE = 1,
+
+  /**
+   * chain does not verify against the pinned CA
+   *
+   * @generated from enum value: CERTIFICATE_ROTATION_FAILURE_REASON_UNTRUSTED = 2;
+   */
+  UNTRUSTED = 2,
+
+  /**
+   * could not durably store the credential
+   *
+   * @generated from enum value: CERTIFICATE_ROTATION_FAILURE_REASON_PERSIST_FAILED = 3;
+   */
+  PERSIST_FAILED = 3,
+
+  /**
+   * validity window inconsistent with local clock
+   *
+   * @generated from enum value: CERTIFICATE_ROTATION_FAILURE_REASON_CLOCK_SKEW = 4;
+   */
+  CLOCK_SKEW = 4,
+}
+
+/**
+ * Describes the enum gitsaas.agent.v1.CertificateRotationFailureReason.
+ */
+export const CertificateRotationFailureReasonSchema: GenEnum<CertificateRotationFailureReason> = /*@__PURE__*/
+  enumDesc(file_proto_agent_v1_agent, 2);
+
+/**
  * ---------------------------------------------------------------------------
  * Health / telemetry  (no source code, no secrets)
  * ---------------------------------------------------------------------------
@@ -750,7 +1312,158 @@ export enum HealthState {
  * Describes the enum gitsaas.agent.v1.HealthState.
  */
 export const HealthStateSchema: GenEnum<HealthState> = /*@__PURE__*/
-  enumDesc(file_proto_agent_v1_agent, 1);
+  enumDesc(file_proto_agent_v1_agent, 3);
+
+/**
+ * ---------------------------------------------------------------------------
+ * Fair-use envelopes  (SPEC-0041, ADR-0061: throttle and notify, never git)
+ * ---------------------------------------------------------------------------
+ * The PRD §6 fair-use dimensions. Coverage is explicit per phase (SPEC-0041
+ * AC2): a dimension the control plane cannot derive from received telemetry is
+ * DEFERRED and renders as "not metered" — never as zero or within-envelope.
+ *
+ * @generated from enum gitsaas.agent.v1.FairUseDimension
+ */
+export enum FairUseDimension {
+  /**
+   * @generated from enum value: FAIR_USE_DIMENSION_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: FAIR_USE_DIMENSION_SEATS = 1;
+   */
+  SEATS = 1,
+
+  /**
+   * @generated from enum value: FAIR_USE_DIMENSION_REPOSITORY_COUNT = 2;
+   */
+  REPOSITORY_COUNT = 2,
+
+  /**
+   * @generated from enum value: FAIR_USE_DIMENSION_REPOSITORY_STORAGE = 3;
+   */
+  REPOSITORY_STORAGE = 3,
+
+  /**
+   * @generated from enum value: FAIR_USE_DIMENSION_CI_MINUTES = 4;
+   */
+  CI_MINUTES = 4,
+
+  /**
+   * @generated from enum value: FAIR_USE_DIMENSION_CI_CONCURRENCY = 5;
+   */
+  CI_CONCURRENCY = 5,
+
+  /**
+   * @generated from enum value: FAIR_USE_DIMENSION_SCAN_VOLUME = 6;
+   */
+  SCAN_VOLUME = 6,
+
+  /**
+   * @generated from enum value: FAIR_USE_DIMENSION_INDEX_SIZE = 7;
+   */
+  INDEX_SIZE = 7,
+
+  /**
+   * @generated from enum value: FAIR_USE_DIMENSION_EGRESS = 8;
+   */
+  EGRESS = 8,
+}
+
+/**
+ * Describes the enum gitsaas.agent.v1.FairUseDimension.
+ */
+export const FairUseDimensionSchema: GenEnum<FairUseDimension> = /*@__PURE__*/
+  enumDesc(file_proto_agent_v1_agent, 4);
+
+/**
+ * The envelope condition of one dimension, computed in the control plane.
+ * NEAR is the notification threshold BEFORE breach (SPEC-0041 AC4); EXCEEDED
+ * throttles and notifies, and git push, fetch, clone and all reads stay fully
+ * available in every state (SPEC-0041 AC7, ADR-0061 §4).
+ *
+ * @generated from enum gitsaas.agent.v1.EnvelopeState
+ */
+export enum EnvelopeState {
+  /**
+   * @generated from enum value: ENVELOPE_STATE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: ENVELOPE_STATE_WITHIN = 1;
+   */
+  WITHIN = 1,
+
+  /**
+   * notification threshold reached, pre-breach
+   *
+   * @generated from enum value: ENVELOPE_STATE_NEAR = 2;
+   */
+  NEAR = 2,
+
+  /**
+   * @generated from enum value: ENVELOPE_STATE_EXCEEDED = 3;
+   */
+  EXCEEDED = 3,
+}
+
+/**
+ * Describes the enum gitsaas.agent.v1.EnvelopeState.
+ */
+export const EnvelopeStateSchema: GenEnum<EnvelopeState> = /*@__PURE__*/
+  enumDesc(file_proto_agent_v1_agent, 5);
+
+/**
+ * The lifecycle of one reconcile-based rollout as the agent reports it (SPEC-0039 AC5/AC6).
+ * Deliberately coarse: the control plane distinguishes a healthy convergence from a failure
+ * that rolled back, and nothing finer is needed on the wire.
+ *
+ * @generated from enum gitsaas.agent.v1.RolloutPhase
+ */
+export enum RolloutPhase {
+  /**
+   * no rollout in flight for applied_generation
+   *
+   * @generated from enum value: ROLLOUT_PHASE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * desired state being reconciled toward
+   *
+   * @generated from enum value: ROLLOUT_PHASE_IN_PROGRESS = 1;
+   */
+  IN_PROGRESS = 1,
+
+  /**
+   * desired state converged and verified healthy
+   *
+   * @generated from enum value: ROLLOUT_PHASE_APPLIED = 2;
+   */
+  APPLIED = 2,
+
+  /**
+   * convergence failed; rollout_message says why
+   *
+   * @generated from enum value: ROLLOUT_PHASE_FAILED = 3;
+   */
+  FAILED = 3,
+
+  /**
+   * failed upgrade reverted to the prior release
+   *
+   * @generated from enum value: ROLLOUT_PHASE_ROLLED_BACK = 4;
+   */
+  ROLLED_BACK = 4,
+}
+
+/**
+ * Describes the enum gitsaas.agent.v1.RolloutPhase.
+ */
+export const RolloutPhaseSchema: GenEnum<RolloutPhase> = /*@__PURE__*/
+  enumDesc(file_proto_agent_v1_agent, 6);
 
 /**
  * ---------------------------------------------------------------------------
@@ -790,7 +1503,7 @@ export enum CommandType {
  * Describes the enum gitsaas.agent.v1.CommandType.
  */
 export const CommandTypeSchema: GenEnum<CommandType> = /*@__PURE__*/
-  enumDesc(file_proto_agent_v1_agent, 2);
+  enumDesc(file_proto_agent_v1_agent, 7);
 
 /**
  * ---------------------------------------------------------------------------

@@ -1,0 +1,44 @@
+---
+// Fair-use usage view (T-0034, SPEC-0041): one page stating, per PRD §6
+// dimension, whether this phase meters it and — where it does — the control
+// plane's own counter, its envelope condition, and the interval the number
+// was derived from (AC10). SSR from the BFF only (invariant 22); the control
+// plane is the metering authority and this page decides nothing (ADR-0061).
+//
+// Missing coverage renders as a visible gap, never as zero: a DEFERRED
+// dimension and a telemetry gap carry no number in the response, and this
+// page presents exactly what it receives (AC2, AC3). A failed read is one
+// coarse "unavailable" message — empty and unauthorized are the same shape
+// the BFF sends, and this page renders no view of its own (SPEC-0001).
+import { usageView, type UsageViewResponse } from '../../lib/bff';
+import Layout from '../../layouts/Layout.astro';
+import UsageViewComponent from '../../components/UsageView.astro';
+
+let loadError = false;
+let view: UsageViewResponse = { dimensions: [], divergences: [], generated_at: '' };
+try {
+  view = await usageView(Astro.request);
+} catch {
+  loadError = true;
+}
+---
+
+<Layout title="Usage">
+  <main style={{ maxWidth: 1080, margin: '0 auto', padding: '0 16px' }}>
+    <header style={{ padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
+      <h1 style={{ fontSize: 20, margin: 0 }}>Usage</h1>
+      <p style={{ color: '#57606a', margin: '4px 0 0', fontSize: 14 }}>
+        Fair-use consumption per dimension — counted by the control plane
+        from the telemetry it received.
+      </p>
+    </header>
+
+    {loadError && (
+      <p style={{ color: '#cf222e', padding: '16px 0' }}>
+        The usage view is unavailable. Check your session.
+      </p>
+    )}
+
+    {!loadError && <UsageViewComponent view={view} />}
+  </main>
+</Layout>

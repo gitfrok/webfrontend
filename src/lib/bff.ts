@@ -417,3 +417,76 @@ export async function mergeRequestFindings(
     summary: view.summary,
   };
 }
+
+// --- Fair-use usage view (T-0034, SPEC-0041) --------------------------------
+//
+// The control plane is the metering authority (ADR-0061): the numbers this
+// surface presents are the same counters every envelope decision is made
+// from. This layer forwards the session cookie and passes the view through
+// untouched — it computes, adjusts and invents nothing. Two rendering rules
+// bind the page: a DEFERRED dimension and a telemetry gap have NO value
+// field at all, so unmeasured usage can never be shown as zero (SPEC-0041
+// AC2, AC3), and a divergence is presented as a health finding carrying
+// both numbers, never as a corrected total (SPEC-0041 AC1).
+
+// UsageGapView is one telemetry-less interval (SPEC-0041 AC3).
+export interface UsageGapView {
+  window_start: string;
+  window_end: string;
+  reason: string;
+}
+
+// UsageDimensionView is one PRD §6 dimension's row. The numeric fields are
+// optional by construction: the BFF omits them for DEFERRED rows and
+// telemetry gaps, so a row without a value is unmeasured — never zero.
+export interface UsageDimensionView {
+  dimension: string;
+  coverage: 'METERED' | 'DEFERRED' | string;
+  state?: string;
+  value?: number;
+  envelope?: number;
+  notification?: number;
+  unit?: string;
+  window_start?: string;
+  window_end?: string;
+  telemetry_gap?: boolean;
+  gaps: UsageGapView[];
+  deferred_reason?: string;
+}
+
+// UsageDivergenceView is one health finding: the data plane's self-report
+// and the control plane's counter disagree over one interval (SPEC-0041
+// AC1, ADR-0061 §2).
+export interface UsageDivergenceView {
+  dimension: string;
+  data_plane_id: string;
+  control_plane_value: number;
+  data_plane_reported_value: number;
+  window_start: string;
+  window_end: string;
+}
+
+// UsageViewResponse is the tenant's fair-use usage view. The dimensions
+// list itself is the coverage statement: every PRD §6 dimension appears
+// exactly once, metered or deferred with its reason (SPEC-0041 AC2).
+export interface UsageViewResponse {
+  dimensions: UsageDimensionView[];
+  divergences: UsageDivergenceView[];
+  generated_at: string;
+}
+
+// usageView fetches the usage view from the BFF under the session's
+// identity. Any refusal is one coarse failure — the page never invents an
+// empty or zeroed view (SPEC-0001).
+export async function usageView(request: Request): Promise<UsageViewResponse> {
+  const response = await bffFetch(request, '/api/v1/usage/view');
+  if (!response.ok) {
+    throw new Error('usage view unavailable');
+  }
+  const view = (await response.json()) as UsageViewResponse;
+  return {
+    dimensions: view.dimensions ?? [],
+    divergences: view.divergences ?? [],
+    generated_at: view.generated_at,
+  };
+}

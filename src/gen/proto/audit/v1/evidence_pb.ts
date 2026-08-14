@@ -9,10 +9,13 @@
 // resolved package-creation question).
 //
 // A pack is the compliance-owner's answer to "assemble the audit evidence by
-// hand" (PRD PR-17): one closed date range, four control sections —
-// approvals, policy decisions, scan gates, access changes — and one labelled
-// appendix for attested imported history. Enough for a SOC 2 Type II control
-// walkthrough without engineer involvement (SPEC-0031).
+// hand" (PRD PR-17): one closed date range, five control sections —
+// approvals, policy decisions, scan gates, access changes and residency — and
+// one labelled appendix for attested imported history. Enough for a SOC 2
+// Type II control walkthrough without engineer involvement (SPEC-0031). The
+// residency section is the additive T-0033 / SPEC-0040 addition: it answers
+// "where was this tenant's work during the range" with control-plane-observed
+// facts only.
 //
 // The two structural commitments this schema encodes:
 //
@@ -51,7 +54,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/audit/v1/evidence.proto.
  */
 export const file_proto_audit_v1_evidence: GenFile = /*@__PURE__*/
-  fileDesc("Ch1wcm90by9hdWRpdC92MS9ldmlkZW5jZS5wcm90bxIQZ2l0c2Fhcy5hdWRpdC52MSJfCg9FdmlkZW5jZUNvbnRleHQSEQoJdGVuYW50X2lkGAEgASgJEhAKCGFjdG9yX2lkGAIgASgJEhMKC2FjdG9yX3JvbGVzGAMgAygJEhIKCnJlcXVlc3RfaWQYBCABKAkiiwEKClNlY3Rpb25HYXASKAoEZnJvbRgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASJgoCdG8YAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEisKBnJlYXNvbhgDIAEoDjIbLmdpdHNhYXMuYXVkaXQudjEuR2FwUmVhc29uIoEBCgtDaGFpbkFuY2hvchIRCglmaXJzdF9zZXEYASABKAMSEAoIbGFzdF9zZXEYAiABKAMSGQoRZmlyc3RfcmVjb3JkX2hhc2gYAyABKAkSGAoQbGFzdF9yZWNvcmRfaGFzaBgEIAEoCRIYChBwcmV2X3JlY29yZF9oYXNoGAUgASgJIkYKDkFwcHJvdmFsUmVjb3JkEhgKEG1lcmdlX3JlcXVlc3RfaWQYASABKAkSGgoScHJvdGVjdGlvbl9ydWxlX2lkGAIgASgJIo8BChRQb2xpY3lEZWNpc2lvblJlY29yZBITCgtkZWNpc2lvbl9pZBgBIAEoCRIXCg9idW5kbGVfcmV2aXNpb24YAiABKAkSFAoMaW5wdXRfZGlnZXN0GAMgASgJEjMKBG1vZGUYBCABKA4yJS5naXRzYWFzLmF1ZGl0LnYxLkNvbnRyb2xEZWNpc2lvbk1vZGUiWwoOU2NhbkdhdGVSZWNvcmQSGAoQbWVyZ2VfcmVxdWVzdF9pZBgBIAEoCRIPCgdzY2FuX2lkGAIgASgJEh4KFnJlbGllZF91cG9uX3RyaWFnZV9pZHMYAyADKAkiWAoSQWNjZXNzQ2hhbmdlUmVjb3JkEhMKC2FjY2Vzc19raW5kGAEgASgJEhsKE3RhcmdldF9wcmluY2lwYWxfaWQYAiABKAkSEAoIZ3JhbnRfaWQYAyABKAkirQMKFENvbnRyb2xTZWN0aW9uUmVjb3JkEhEKCWNoYWluX3NlcRgBIAEoAxITCgtyZWNvcmRfaGFzaBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRIQCghyZXNvdXJjZRgEIAEoCRIOCgZhY3Rpb24YBSABKAkSDwoHYWxsb3dlZBgGIAEoCBIvCgtvY2N1cnJlZF9hdBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASNAoIYXBwcm92YWwYCCABKAsyIC5naXRzYWFzLmF1ZGl0LnYxLkFwcHJvdmFsUmVjb3JkSAASQQoPcG9saWN5X2RlY2lzaW9uGAkgASgLMiYuZ2l0c2Fhcy5hdWRpdC52MS5Qb2xpY3lEZWNpc2lvblJlY29yZEgAEjUKCXNjYW5fZ2F0ZRgKIAEoCzIgLmdpdHNhYXMuYXVkaXQudjEuU2NhbkdhdGVSZWNvcmRIABI9Cg1hY2Nlc3NfY2hhbmdlGAsgASgLMiQuZ2l0c2Fhcy5hdWRpdC52MS5BY2Nlc3NDaGFuZ2VSZWNvcmRIAEIICgZkZXRhaWwi/AEKDkNvbnRyb2xTZWN0aW9uEisKBHR5cGUYASABKA4yHS5naXRzYWFzLmF1ZGl0LnYxLlNlY3Rpb25UeXBlEi4KB2FuY2hvcnMYAiABKAsyHS5naXRzYWFzLmF1ZGl0LnYxLkNoYWluQW5jaG9yEhAKCGNvbXBsZXRlGAMgASgIEioKBGdhcHMYBCADKAsyHC5naXRzYWFzLmF1ZGl0LnYxLlNlY3Rpb25HYXASNwoHcmVjb3JkcxgFIAMoCzImLmdpdHNhYXMuYXVkaXQudjEuQ29udHJvbFNlY3Rpb25SZWNvcmQSFgoOcmVjb3Jkc19kaWdlc3QYBiABKAki7AIKGEhpc3RvcnlJbXBvcnRlZFJlZmVyZW5jZRIQCghldmVudF9pZBgBIAEoCRIQCghhY3Rvcl9pZBgCIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAMgASgJEhEKCWltcG9ydF9pZBgEIAEoCRIVCg1zb3VyY2Vfc3lzdGVtGAUgASgJEhcKD3NvdXJjZV9pbnN0YW5jZRgGIAEoCRJTCg1yZWNvcmRfY291bnRzGAcgAygLMjwuZ2l0c2Fhcy5hdWRpdC52MS5IaXN0b3J5SW1wb3J0ZWRSZWZlcmVuY2UuUmVjb3JkQ291bnRzRW50cnkSFwoPbWFuaWZlc3RfZGlnZXN0GAggASgJEi8KC29jY3VycmVkX2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBozChFSZWNvcmRDb3VudHNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAM6AjgBIqQBChZBdHRlc3RlZEFwcGVuZGl4UmVjb3JkEhMKC3JlY29yZF9raW5kGAEgASgJEhIKCnNvdXJjZV9yZWYYAiABKAkSDwoHcGF5bG9hZBgDIAEoDBIaChJwYXlsb2FkX21lZGlhX3R5cGUYBCABKAkSNAoKcHJvdmVuYW5jZRgFIAEoCzIgLmdpdHNhYXMuY29udHJhY3RzLnYxLlByb3ZlbmFuY2UiWAoQQXR0ZXN0ZWRBcHBlbmRpeBINCgVsYWJlbBgBIAEoCRI1CgZncm91cHMYAiADKAsyJS5naXRzYWFzLmF1ZGl0LnYxLkF0dGVzdGVkSW1wb3J0R3JvdXAilgEKE0F0dGVzdGVkSW1wb3J0R3JvdXASRAoQaGlzdG9yeV9pbXBvcnRlZBgBIAEoCzIqLmdpdHNhYXMuYXVkaXQudjEuSGlzdG9yeUltcG9ydGVkUmVmZXJlbmNlEjkKB3JlY29yZHMYAiADKAsyKC5naXRzYWFzLmF1ZGl0LnYxLkF0dGVzdGVkQXBwZW5kaXhSZWNvcmQi7gIKDEV2aWRlbmNlUGFjaxIPCgdwYWNrX2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIuCgpyYW5nZV9mcm9tGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIsCghyYW5nZV90bxgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFQoNcmVwb3NpdG9yeV9pZBgFIAEoCRIUCgxyZXF1ZXN0ZWRfYnkYBiABKAkSEwoLZGVjaXNpb25faWQYByABKAkSMAoMZ2VuZXJhdGVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIyCghzZWN0aW9ucxgJIAMoCzIgLmdpdHNhYXMuYXVkaXQudjEuQ29udHJvbFNlY3Rpb24SNAoIYXBwZW5kaXgYCiABKAsyIi5naXRzYWFzLmF1ZGl0LnYxLkF0dGVzdGVkQXBwZW5kaXgixQEKGlJlcXVlc3RFdmlkZW5jZVBhY2tSZXF1ZXN0EjIKB2NvbnRleHQYASABKAsyIS5naXRzYWFzLmF1ZGl0LnYxLkV2aWRlbmNlQ29udGV4dBIuCgpyYW5nZV9mcm9tGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIsCghyYW5nZV90bxgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFQoNcmVwb3NpdG9yeV9pZBgEIAEoCSJaChtSZXF1ZXN0RXZpZGVuY2VQYWNrUmVzcG9uc2USDwoHcGFja19pZBgBIAEoCRIqCgVzdGF0ZRgCIAEoDjIbLmdpdHNhYXMuYXVkaXQudjEuUGFja1N0YXRlImMKHEdldEV2aWRlbmNlUGFja1N0YXR1c1JlcXVlc3QSMgoHY29udGV4dBgBIAEoCzIhLmdpdHNhYXMuYXVkaXQudjEuRXZpZGVuY2VDb250ZXh0Eg8KB3BhY2tfaWQYAiABKAkifgoNU2VjdGlvblN0YXR1cxIrCgR0eXBlGAEgASgOMh0uZ2l0c2Fhcy5hdWRpdC52MS5TZWN0aW9uVHlwZRIUCgxyZWNvcmRfY291bnQYAiABKAMSKgoEZ2FwcxgDIAMoCzIcLmdpdHNhYXMuYXVkaXQudjEuU2VjdGlvbkdhcCKqAgodR2V0RXZpZGVuY2VQYWNrU3RhdHVzUmVzcG9uc2USKgoFc3RhdGUYASABKA4yGy5naXRzYWFzLmF1ZGl0LnYxLlBhY2tTdGF0ZRIWCg5mYWlsdXJlX3JlYXNvbhgCIAEoCRIxCghzZWN0aW9ucxgDIAMoCzIfLmdpdHNhYXMuYXVkaXQudjEuU2VjdGlvblN0YXR1cxIdChVhcHBlbmRpeF9yZWNvcmRfY291bnQYBCABKAMSLgoKcmFuZ2VfZnJvbRgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLAoIcmFuZ2VfdG8YBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhUKDXJlcG9zaXRvcnlfaWQYByABKAkiXQoWR2V0RXZpZGVuY2VQYWNrUmVxdWVzdBIyCgdjb250ZXh0GAEgASgLMiEuZ2l0c2Fhcy5hdWRpdC52MS5FdmlkZW5jZUNvbnRleHQSDwoHcGFja19pZBgCIAEoCSLtAQoXR2V0RXZpZGVuY2VQYWNrUmVzcG9uc2USEwoLY2h1bmtfaW5kZXgYASABKAMSEwoLZmluYWxfY2h1bmsYAiABKAgSMAoGaGVhZGVyGAMgASgLMh4uZ2l0c2Fhcy5hdWRpdC52MS5FdmlkZW5jZVBhY2tIABIzCgdzZWN0aW9uGAQgASgLMiAuZ2l0c2Fhcy5hdWRpdC52MS5Db250cm9sU2VjdGlvbkgAEjYKCGFwcGVuZGl4GAUgASgLMiIuZ2l0c2Fhcy5hdWRpdC52MS5BdHRlc3RlZEFwcGVuZGl4SABCCQoHY29udGVudCqoAQoLU2VjdGlvblR5cGUSHAoYU0VDVElPTl9UWVBFX1VOU1BFQ0lGSUVEEAASGgoWU0VDVElPTl9UWVBFX0FQUFJPVkFMUxABEiEKHVNFQ1RJT05fVFlQRV9QT0xJQ1lfREVDSVNJT05TEAISGwoXU0VDVElPTl9UWVBFX1NDQU5fR0FURVMQAxIfChtTRUNUSU9OX1RZUEVfQUNDRVNTX0NIQU5HRVMQBCqHAQoJUGFja1N0YXRlEhoKFlBBQ0tfU1RBVEVfVU5TUEVDSUZJRUQQABIWChJQQUNLX1NUQVRFX1BFTkRJTkcQARIZChVQQUNLX1NUQVRFX0FTU0VNQkxJTkcQAhIUChBQQUNLX1NUQVRFX1JFQURZEAMSFQoRUEFDS19TVEFURV9GQUlMRUQQBCqMAQoJR2FwUmVhc29uEhoKFkdBUF9SRUFTT05fVU5TUEVDSUZJRUQQABIhCh1HQVBfUkVBU09OX1NPVVJDRV9VTkFWQUlMQUJMRRABEiAKHEdBUF9SRUFTT05fUFJPSkVDVElPTl9MQUdHRUQQAhIeChpHQVBfUkVBU09OX0FTU0VNQkxZX0ZBSUxFRBADKmAKE0NvbnRyb2xEZWNpc2lvbk1vZGUSJQohQ09OVFJPTF9ERUNJU0lPTl9NT0RFX1VOU1BFQ0lGSUVEEAASIgoeQ09OVFJPTF9ERUNJU0lPTl9NT0RFX0VORk9SQ0VEEAEy6QIKD0V2aWRlbmNlU2VydmljZRJyChNSZXF1ZXN0RXZpZGVuY2VQYWNrEiwuZ2l0c2Fhcy5hdWRpdC52MS5SZXF1ZXN0RXZpZGVuY2VQYWNrUmVxdWVzdBotLmdpdHNhYXMuYXVkaXQudjEuUmVxdWVzdEV2aWRlbmNlUGFja1Jlc3BvbnNlEngKFUdldEV2aWRlbmNlUGFja1N0YXR1cxIuLmdpdHNhYXMuYXVkaXQudjEuR2V0RXZpZGVuY2VQYWNrU3RhdHVzUmVxdWVzdBovLmdpdHNhYXMuYXVkaXQudjEuR2V0RXZpZGVuY2VQYWNrU3RhdHVzUmVzcG9uc2USaAoPR2V0RXZpZGVuY2VQYWNrEiguZ2l0c2Fhcy5hdWRpdC52MS5HZXRFdmlkZW5jZVBhY2tSZXF1ZXN0GikuZ2l0c2Fhcy5hdWRpdC52MS5HZXRFdmlkZW5jZVBhY2tSZXNwb25zZTABQjdaNWdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9wcm90by9hdWRpdC92MTthdWRpdHYxYgZwcm90bzM", [file_google_protobuf_timestamp, file_proto_contracts_v1_provenance]);
+  fileDesc("Ch1wcm90by9hdWRpdC92MS9ldmlkZW5jZS5wcm90bxIQZ2l0c2Fhcy5hdWRpdC52MSJfCg9FdmlkZW5jZUNvbnRleHQSEQoJdGVuYW50X2lkGAEgASgJEhAKCGFjdG9yX2lkGAIgASgJEhMKC2FjdG9yX3JvbGVzGAMgAygJEhIKCnJlcXVlc3RfaWQYBCABKAkiiwEKClNlY3Rpb25HYXASKAoEZnJvbRgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASJgoCdG8YAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEisKBnJlYXNvbhgDIAEoDjIbLmdpdHNhYXMuYXVkaXQudjEuR2FwUmVhc29uIoEBCgtDaGFpbkFuY2hvchIRCglmaXJzdF9zZXEYASABKAMSEAoIbGFzdF9zZXEYAiABKAMSGQoRZmlyc3RfcmVjb3JkX2hhc2gYAyABKAkSGAoQbGFzdF9yZWNvcmRfaGFzaBgEIAEoCRIYChBwcmV2X3JlY29yZF9oYXNoGAUgASgJIkYKDkFwcHJvdmFsUmVjb3JkEhgKEG1lcmdlX3JlcXVlc3RfaWQYASABKAkSGgoScHJvdGVjdGlvbl9ydWxlX2lkGAIgASgJIo8BChRQb2xpY3lEZWNpc2lvblJlY29yZBITCgtkZWNpc2lvbl9pZBgBIAEoCRIXCg9idW5kbGVfcmV2aXNpb24YAiABKAkSFAoMaW5wdXRfZGlnZXN0GAMgASgJEjMKBG1vZGUYBCABKA4yJS5naXRzYWFzLmF1ZGl0LnYxLkNvbnRyb2xEZWNpc2lvbk1vZGUiWwoOU2NhbkdhdGVSZWNvcmQSGAoQbWVyZ2VfcmVxdWVzdF9pZBgBIAEoCRIPCgdzY2FuX2lkGAIgASgJEh4KFnJlbGllZF91cG9uX3RyaWFnZV9pZHMYAyADKAkiWAoSQWNjZXNzQ2hhbmdlUmVjb3JkEhMKC2FjY2Vzc19raW5kGAEgASgJEhsKE3RhcmdldF9wcmluY2lwYWxfaWQYAiABKAkSEAoIZ3JhbnRfaWQYAyABKAkivgEKD1Jlc2lkZW5jeVJlY29yZBI2CglmYWN0X2tpbmQYASABKA4yIy5naXRzYWFzLmF1ZGl0LnYxLlJlc2lkZW5jeUZhY3RLaW5kEhUKDWRhdGFfcGxhbmVfaWQYAiABKAkSFAoMcGlubmVkX2Nsb3VkGAMgASgJEhUKDXBpbm5lZF9yZWdpb24YBCABKAkSFgoOb2JzZXJ2ZWRfY2xvdWQYBSABKAkSFwoPb2JzZXJ2ZWRfcmVnaW9uGAYgASgJIuUDChRDb250cm9sU2VjdGlvblJlY29yZBIRCgljaGFpbl9zZXEYASABKAMSEwoLcmVjb3JkX2hhc2gYAiABKAkSEAoIYWN0b3JfaWQYAyABKAkSEAoIcmVzb3VyY2UYBCABKAkSDgoGYWN0aW9uGAUgASgJEg8KB2FsbG93ZWQYBiABKAgSLwoLb2NjdXJyZWRfYXQYByABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEjQKCGFwcHJvdmFsGAggASgLMiAuZ2l0c2Fhcy5hdWRpdC52MS5BcHByb3ZhbFJlY29yZEgAEkEKD3BvbGljeV9kZWNpc2lvbhgJIAEoCzImLmdpdHNhYXMuYXVkaXQudjEuUG9saWN5RGVjaXNpb25SZWNvcmRIABI1CglzY2FuX2dhdGUYCiABKAsyIC5naXRzYWFzLmF1ZGl0LnYxLlNjYW5HYXRlUmVjb3JkSAASPQoNYWNjZXNzX2NoYW5nZRgLIAEoCzIkLmdpdHNhYXMuYXVkaXQudjEuQWNjZXNzQ2hhbmdlUmVjb3JkSAASNgoJcmVzaWRlbmN5GAwgASgLMiEuZ2l0c2Fhcy5hdWRpdC52MS5SZXNpZGVuY3lSZWNvcmRIAEIICgZkZXRhaWwi/AEKDkNvbnRyb2xTZWN0aW9uEisKBHR5cGUYASABKA4yHS5naXRzYWFzLmF1ZGl0LnYxLlNlY3Rpb25UeXBlEi4KB2FuY2hvcnMYAiABKAsyHS5naXRzYWFzLmF1ZGl0LnYxLkNoYWluQW5jaG9yEhAKCGNvbXBsZXRlGAMgASgIEioKBGdhcHMYBCADKAsyHC5naXRzYWFzLmF1ZGl0LnYxLlNlY3Rpb25HYXASNwoHcmVjb3JkcxgFIAMoCzImLmdpdHNhYXMuYXVkaXQudjEuQ29udHJvbFNlY3Rpb25SZWNvcmQSFgoOcmVjb3Jkc19kaWdlc3QYBiABKAki7AIKGEhpc3RvcnlJbXBvcnRlZFJlZmVyZW5jZRIQCghldmVudF9pZBgBIAEoCRIQCghhY3Rvcl9pZBgCIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAMgASgJEhEKCWltcG9ydF9pZBgEIAEoCRIVCg1zb3VyY2Vfc3lzdGVtGAUgASgJEhcKD3NvdXJjZV9pbnN0YW5jZRgGIAEoCRJTCg1yZWNvcmRfY291bnRzGAcgAygLMjwuZ2l0c2Fhcy5hdWRpdC52MS5IaXN0b3J5SW1wb3J0ZWRSZWZlcmVuY2UuUmVjb3JkQ291bnRzRW50cnkSFwoPbWFuaWZlc3RfZGlnZXN0GAggASgJEi8KC29jY3VycmVkX2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBozChFSZWNvcmRDb3VudHNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAM6AjgBIqQBChZBdHRlc3RlZEFwcGVuZGl4UmVjb3JkEhMKC3JlY29yZF9raW5kGAEgASgJEhIKCnNvdXJjZV9yZWYYAiABKAkSDwoHcGF5bG9hZBgDIAEoDBIaChJwYXlsb2FkX21lZGlhX3R5cGUYBCABKAkSNAoKcHJvdmVuYW5jZRgFIAEoCzIgLmdpdHNhYXMuY29udHJhY3RzLnYxLlByb3ZlbmFuY2UiWAoQQXR0ZXN0ZWRBcHBlbmRpeBINCgVsYWJlbBgBIAEoCRI1CgZncm91cHMYAiADKAsyJS5naXRzYWFzLmF1ZGl0LnYxLkF0dGVzdGVkSW1wb3J0R3JvdXAilgEKE0F0dGVzdGVkSW1wb3J0R3JvdXASRAoQaGlzdG9yeV9pbXBvcnRlZBgBIAEoCzIqLmdpdHNhYXMuYXVkaXQudjEuSGlzdG9yeUltcG9ydGVkUmVmZXJlbmNlEjkKB3JlY29yZHMYAiADKAsyKC5naXRzYWFzLmF1ZGl0LnYxLkF0dGVzdGVkQXBwZW5kaXhSZWNvcmQi7gIKDEV2aWRlbmNlUGFjaxIPCgdwYWNrX2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIuCgpyYW5nZV9mcm9tGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIsCghyYW5nZV90bxgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFQoNcmVwb3NpdG9yeV9pZBgFIAEoCRIUCgxyZXF1ZXN0ZWRfYnkYBiABKAkSEwoLZGVjaXNpb25faWQYByABKAkSMAoMZ2VuZXJhdGVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIyCghzZWN0aW9ucxgJIAMoCzIgLmdpdHNhYXMuYXVkaXQudjEuQ29udHJvbFNlY3Rpb24SNAoIYXBwZW5kaXgYCiABKAsyIi5naXRzYWFzLmF1ZGl0LnYxLkF0dGVzdGVkQXBwZW5kaXgixQEKGlJlcXVlc3RFdmlkZW5jZVBhY2tSZXF1ZXN0EjIKB2NvbnRleHQYASABKAsyIS5naXRzYWFzLmF1ZGl0LnYxLkV2aWRlbmNlQ29udGV4dBIuCgpyYW5nZV9mcm9tGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIsCghyYW5nZV90bxgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFQoNcmVwb3NpdG9yeV9pZBgEIAEoCSJaChtSZXF1ZXN0RXZpZGVuY2VQYWNrUmVzcG9uc2USDwoHcGFja19pZBgBIAEoCRIqCgVzdGF0ZRgCIAEoDjIbLmdpdHNhYXMuYXVkaXQudjEuUGFja1N0YXRlImMKHEdldEV2aWRlbmNlUGFja1N0YXR1c1JlcXVlc3QSMgoHY29udGV4dBgBIAEoCzIhLmdpdHNhYXMuYXVkaXQudjEuRXZpZGVuY2VDb250ZXh0Eg8KB3BhY2tfaWQYAiABKAkifgoNU2VjdGlvblN0YXR1cxIrCgR0eXBlGAEgASgOMh0uZ2l0c2Fhcy5hdWRpdC52MS5TZWN0aW9uVHlwZRIUCgxyZWNvcmRfY291bnQYAiABKAMSKgoEZ2FwcxgDIAMoCzIcLmdpdHNhYXMuYXVkaXQudjEuU2VjdGlvbkdhcCKqAgodR2V0RXZpZGVuY2VQYWNrU3RhdHVzUmVzcG9uc2USKgoFc3RhdGUYASABKA4yGy5naXRzYWFzLmF1ZGl0LnYxLlBhY2tTdGF0ZRIWCg5mYWlsdXJlX3JlYXNvbhgCIAEoCRIxCghzZWN0aW9ucxgDIAMoCzIfLmdpdHNhYXMuYXVkaXQudjEuU2VjdGlvblN0YXR1cxIdChVhcHBlbmRpeF9yZWNvcmRfY291bnQYBCABKAMSLgoKcmFuZ2VfZnJvbRgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLAoIcmFuZ2VfdG8YBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhUKDXJlcG9zaXRvcnlfaWQYByABKAkiXQoWR2V0RXZpZGVuY2VQYWNrUmVxdWVzdBIyCgdjb250ZXh0GAEgASgLMiEuZ2l0c2Fhcy5hdWRpdC52MS5FdmlkZW5jZUNvbnRleHQSDwoHcGFja19pZBgCIAEoCSLtAQoXR2V0RXZpZGVuY2VQYWNrUmVzcG9uc2USEwoLY2h1bmtfaW5kZXgYASABKAMSEwoLZmluYWxfY2h1bmsYAiABKAgSMAoGaGVhZGVyGAMgASgLMh4uZ2l0c2Fhcy5hdWRpdC52MS5FdmlkZW5jZVBhY2tIABIzCgdzZWN0aW9uGAQgASgLMiAuZ2l0c2Fhcy5hdWRpdC52MS5Db250cm9sU2VjdGlvbkgAEjYKCGFwcGVuZGl4GAUgASgLMiIuZ2l0c2Fhcy5hdWRpdC52MS5BdHRlc3RlZEFwcGVuZGl4SABCCQoHY29udGVudCrEAQoLU2VjdGlvblR5cGUSHAoYU0VDVElPTl9UWVBFX1VOU1BFQ0lGSUVEEAASGgoWU0VDVElPTl9UWVBFX0FQUFJPVkFMUxABEiEKHVNFQ1RJT05fVFlQRV9QT0xJQ1lfREVDSVNJT05TEAISGwoXU0VDVElPTl9UWVBFX1NDQU5fR0FURVMQAxIfChtTRUNUSU9OX1RZUEVfQUNDRVNTX0NIQU5HRVMQBBIaChZTRUNUSU9OX1RZUEVfUkVTSURFTkNZEAUqhwEKCVBhY2tTdGF0ZRIaChZQQUNLX1NUQVRFX1VOU1BFQ0lGSUVEEAASFgoSUEFDS19TVEFURV9QRU5ESU5HEAESGQoVUEFDS19TVEFURV9BU1NFTUJMSU5HEAISFAoQUEFDS19TVEFURV9SRUFEWRADEhUKEVBBQ0tfU1RBVEVfRkFJTEVEEAQqrQEKCUdhcFJlYXNvbhIaChZHQVBfUkVBU09OX1VOU1BFQ0lGSUVEEAASIQodR0FQX1JFQVNPTl9TT1VSQ0VfVU5BVkFJTEFCTEUQARIgChxHQVBfUkVBU09OX1BST0pFQ1RJT05fTEFHR0VEEAISHgoaR0FQX1JFQVNPTl9BU1NFTUJMWV9GQUlMRUQQAxIfChtHQVBfUkVBU09OX1BMQUNFTUVOVF9TSUxFTlQQBCpgChNDb250cm9sRGVjaXNpb25Nb2RlEiUKIUNPTlRST0xfREVDSVNJT05fTU9ERV9VTlNQRUNJRklFRBAAEiIKHkNPTlRST0xfREVDSVNJT05fTU9ERV9FTkZPUkNFRBABKtgBChFSZXNpZGVuY3lGYWN0S2luZBIjCh9SRVNJREVOQ1lfRkFDVF9LSU5EX1VOU1BFQ0lGSUVEEAASHwobUkVTSURFTkNZX0ZBQ1RfS0lORF9QSU5OSU5HEAESIQodUkVTSURFTkNZX0ZBQ1RfS0lORF9QTEFDRU1FTlQQAhIpCiVSRVNJREVOQ1lfRkFDVF9LSU5EX1BMQUNFTUVOVF9SRUZVU0VEEAMSLworUkVTSURFTkNZX0ZBQ1RfS0lORF9QTEFDRU1FTlRfQ09OVFJBRElDVElPThAEMukCCg9FdmlkZW5jZVNlcnZpY2UScgoTUmVxdWVzdEV2aWRlbmNlUGFjaxIsLmdpdHNhYXMuYXVkaXQudjEuUmVxdWVzdEV2aWRlbmNlUGFja1JlcXVlc3QaLS5naXRzYWFzLmF1ZGl0LnYxLlJlcXVlc3RFdmlkZW5jZVBhY2tSZXNwb25zZRJ4ChVHZXRFdmlkZW5jZVBhY2tTdGF0dXMSLi5naXRzYWFzLmF1ZGl0LnYxLkdldEV2aWRlbmNlUGFja1N0YXR1c1JlcXVlc3QaLy5naXRzYWFzLmF1ZGl0LnYxLkdldEV2aWRlbmNlUGFja1N0YXR1c1Jlc3BvbnNlEmgKD0dldEV2aWRlbmNlUGFjaxIoLmdpdHNhYXMuYXVkaXQudjEuR2V0RXZpZGVuY2VQYWNrUmVxdWVzdBopLmdpdHNhYXMuYXVkaXQudjEuR2V0RXZpZGVuY2VQYWNrUmVzcG9uc2UwAUI3WjVnaXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vcHJvdG8vYXVkaXQvdjE7YXVkaXR2MWIGcHJvdG8z", [file_google_protobuf_timestamp, file_proto_contracts_v1_provenance]);
 
 /**
  * EvidenceContext is derived from an authenticated principal by the PEP.
@@ -344,6 +347,82 @@ export const AccessChangeRecordSchema: GenMessage<AccessChangeRecord> = /*@__PUR
   messageDesc(file_proto_audit_v1_evidence, 6);
 
 /**
+ * ResidencyRecord is one residency fact witnessed by the control plane
+ * (SPEC-0040, T-0033). The section it populates answers "where was this
+ * tenant's work during the range" (AC4): the pinning in force, the observed
+ * placement of every data plane that served the tenant, the refusals and the
+ * contradictions. Two invariants shape the message:
+ *
+ * 1. FIRST-PARTY ONLY (SPEC-0040 AC7). Every fact here is one the control
+ *    plane recorded itself — its own pinning act, or a placement it observed
+ *    through the agent channel. A customer-supplied attestation about its
+ *    own cluster is representable only in the labelled appendix, never in
+ *    this section.
+ * 2. ATTESTED EXCLUSION IS A TYPE PROPERTY (SPEC-0032 AC2), as for every
+ *    control-section record message: no provenance block, no foreign handle,
+ *    no source-asserted time, no import reference — scripts/check-contracts.sh
+ *    asserts the absence against the compiled descriptor. occurred_at on the
+ *    carrying ControlSectionRecord is the platform's own witnessed time.
+ *
+ * @generated from message gitsaas.audit.v1.ResidencyRecord
+ */
+export type ResidencyRecord = Message<"gitsaas.audit.v1.ResidencyRecord"> & {
+  /**
+   * Which residency fact this record carries.
+   *
+   * @generated from field: gitsaas.audit.v1.ResidencyFactKind fact_kind = 1;
+   */
+  factKind: ResidencyFactKind;
+
+  /**
+   * The data plane the fact is about. Set for the placement kinds
+   * (PLACEMENT, PLACEMENT_REFUSED, PLACEMENT_CONTRADICTION); empty for a
+   * PINNING record, which is tenant state, not data-plane state.
+   *
+   * @generated from field: string data_plane_id = 2;
+   */
+  dataPlaneId: string;
+
+  /**
+   * The cloud and region the control plane's pinning names for the tenant at
+   * the record's time — the constraint in force (PINNING: the new value
+   * taking effect; the placement kinds: the pinning the fact is evaluated
+   * against). Empty when no pinning was in force yet: a fact before the
+   * first pinning is witnessed as-is, never judged.
+   *
+   * @generated from field: string pinned_cloud = 3;
+   */
+  pinnedCloud: string;
+
+  /**
+   * @generated from field: string pinned_region = 4;
+   */
+  pinnedRegion: string;
+
+  /**
+   * The cloud and region the control plane OBSERVED — the placement a data
+   * plane reported (PLACEMENT), the placement refused (PLACEMENT_REFUSED,
+   * where ControlSectionRecord.allowed is false), or the placement that
+   * contradicted the pinning (PLACEMENT_CONTRADICTION). Empty for PINNING.
+   *
+   * @generated from field: string observed_cloud = 5;
+   */
+  observedCloud: string;
+
+  /**
+   * @generated from field: string observed_region = 6;
+   */
+  observedRegion: string;
+};
+
+/**
+ * Describes the message gitsaas.audit.v1.ResidencyRecord.
+ * Use `create(ResidencyRecordSchema)` to create a new message.
+ */
+export const ResidencyRecordSchema: GenMessage<ResidencyRecord> = /*@__PURE__*/
+  messageDesc(file_proto_audit_v1_evidence, 7);
+
+/**
  * ControlSectionRecord is one cited record of a control section. Every record
  * shares its chain position, actor, resource, action, outcome and timestamp —
  * all first-party facts witnessed by the platform (SPEC-0032) — and carries
@@ -446,6 +525,12 @@ export type ControlSectionRecord = Message<"gitsaas.audit.v1.ControlSectionRecor
      */
     value: AccessChangeRecord;
     case: "accessChange";
+  } | {
+    /**
+     * @generated from field: gitsaas.audit.v1.ResidencyRecord residency = 12;
+     */
+    value: ResidencyRecord;
+    case: "residency";
   } | { case: undefined; value?: undefined };
 };
 
@@ -454,11 +539,11 @@ export type ControlSectionRecord = Message<"gitsaas.audit.v1.ControlSectionRecor
  * Use `create(ControlSectionRecordSchema)` to create a new message.
  */
 export const ControlSectionRecordSchema: GenMessage<ControlSectionRecord> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 7);
+  messageDesc(file_proto_audit_v1_evidence, 8);
 
 /**
- * ControlSection is one of the four sections a pack always carries
- * (SPEC-0031 AC1). It embeds its records — a self-contained snapshot, not a
+ * ControlSection is one of the five sections a pack always carries
+ * (SPEC-0031 AC1, SPEC-0040 AC4). It embeds its records — a self-contained snapshot, not a
  * view (ADR-0055 rule 3) — together with the anchors that tie them to the
  * chain and explicit gap markers where the source was incomplete. A section
  * whose records sit inside a reported gap is absent, never partially
@@ -523,7 +608,7 @@ export type ControlSection = Message<"gitsaas.audit.v1.ControlSection"> & {
  * Use `create(ControlSectionSchema)` to create a new message.
  */
 export const ControlSectionSchema: GenMessage<ControlSection> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 8);
+  messageDesc(file_proto_audit_v1_evidence, 9);
 
 /**
  * HistoryImportedReference is the admitting HistoryImported event, embedded
@@ -594,7 +679,7 @@ export type HistoryImportedReference = Message<"gitsaas.audit.v1.HistoryImported
  * Use `create(HistoryImportedReferenceSchema)` to create a new message.
  */
 export const HistoryImportedReferenceSchema: GenMessage<HistoryImportedReference> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 9);
+  messageDesc(file_proto_audit_v1_evidence, 10);
 
 /**
  * AttestedAppendixRecord is one attested imported record, representable ONLY
@@ -656,7 +741,7 @@ export type AttestedAppendixRecord = Message<"gitsaas.audit.v1.AttestedAppendixR
  * Use `create(AttestedAppendixRecordSchema)` to create a new message.
  */
 export const AttestedAppendixRecordSchema: GenMessage<AttestedAppendixRecord> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 10);
+  messageDesc(file_proto_audit_v1_evidence, 11);
 
 /**
  * AttestedAppendix is the labelled appendix carrying attested imported
@@ -693,7 +778,7 @@ export type AttestedAppendix = Message<"gitsaas.audit.v1.AttestedAppendix"> & {
  * Use `create(AttestedAppendixSchema)` to create a new message.
  */
 export const AttestedAppendixSchema: GenMessage<AttestedAppendix> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 11);
+  messageDesc(file_proto_audit_v1_evidence, 12);
 
 /**
  * AttestedImportGroup is one import's contribution to the appendix: the
@@ -718,7 +803,7 @@ export type AttestedImportGroup = Message<"gitsaas.audit.v1.AttestedImportGroup"
  * Use `create(AttestedImportGroupSchema)` to create a new message.
  */
 export const AttestedImportGroupSchema: GenMessage<AttestedImportGroup> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 12);
+  messageDesc(file_proto_audit_v1_evidence, 13);
 
 /**
  * EvidencePack is the full self-contained snapshot (ADR-0055 rule 3). It is
@@ -778,8 +863,8 @@ export type EvidencePack = Message<"gitsaas.audit.v1.EvidencePack"> & {
   generatedAt?: Timestamp | undefined;
 
   /**
-   * Always four, one per SectionType value: approvals, policy decisions,
-   * scan gates, access changes (SPEC-0031 AC1).
+   * Always five, one per SectionType value: approvals, policy decisions,
+   * scan gates, access changes, residency (SPEC-0031 AC1, SPEC-0040 AC4).
    *
    * @generated from field: repeated gitsaas.audit.v1.ControlSection sections = 9;
    */
@@ -799,7 +884,7 @@ export type EvidencePack = Message<"gitsaas.audit.v1.EvidencePack"> & {
  * Use `create(EvidencePackSchema)` to create a new message.
  */
 export const EvidencePackSchema: GenMessage<EvidencePack> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 13);
+  messageDesc(file_proto_audit_v1_evidence, 14);
 
 /**
  * RequestEvidencePackRequest accepts ONLY a closed date range and an optional
@@ -846,7 +931,7 @@ export type RequestEvidencePackRequest = Message<"gitsaas.audit.v1.RequestEviden
  * Use `create(RequestEvidencePackRequestSchema)` to create a new message.
  */
 export const RequestEvidencePackRequestSchema: GenMessage<RequestEvidencePackRequest> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 14);
+  messageDesc(file_proto_audit_v1_evidence, 15);
 
 /**
  * @generated from message gitsaas.audit.v1.RequestEvidencePackResponse
@@ -871,7 +956,7 @@ export type RequestEvidencePackResponse = Message<"gitsaas.audit.v1.RequestEvide
  * Use `create(RequestEvidencePackResponseSchema)` to create a new message.
  */
 export const RequestEvidencePackResponseSchema: GenMessage<RequestEvidencePackResponse> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 15);
+  messageDesc(file_proto_audit_v1_evidence, 16);
 
 /**
  * GetEvidencePackStatusRequest reads assembly state. The pack_id is a
@@ -898,7 +983,7 @@ export type GetEvidencePackStatusRequest = Message<"gitsaas.audit.v1.GetEvidence
  * Use `create(GetEvidencePackStatusRequestSchema)` to create a new message.
  */
 export const GetEvidencePackStatusRequestSchema: GenMessage<GetEvidencePackStatusRequest> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 16);
+  messageDesc(file_proto_audit_v1_evidence, 17);
 
 /**
  * SectionStatus is one section's live assembly view: its type, its record
@@ -933,7 +1018,7 @@ export type SectionStatus = Message<"gitsaas.audit.v1.SectionStatus"> & {
  * Use `create(SectionStatusSchema)` to create a new message.
  */
 export const SectionStatusSchema: GenMessage<SectionStatus> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 17);
+  messageDesc(file_proto_audit_v1_evidence, 18);
 
 /**
  * @generated from message gitsaas.audit.v1.GetEvidencePackStatusResponse
@@ -992,7 +1077,7 @@ export type GetEvidencePackStatusResponse = Message<"gitsaas.audit.v1.GetEvidenc
  * Use `create(GetEvidencePackStatusResponseSchema)` to create a new message.
  */
 export const GetEvidencePackStatusResponseSchema: GenMessage<GetEvidencePackStatusResponse> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 18);
+  messageDesc(file_proto_audit_v1_evidence, 19);
 
 /**
  * GetEvidencePackRequest retrieves a READY pack. Retrieval is a PDP decision
@@ -1018,7 +1103,7 @@ export type GetEvidencePackRequest = Message<"gitsaas.audit.v1.GetEvidencePackRe
  * Use `create(GetEvidencePackRequestSchema)` to create a new message.
  */
 export const GetEvidencePackRequestSchema: GenMessage<GetEvidencePackRequest> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 19);
+  messageDesc(file_proto_audit_v1_evidence, 20);
 
 /**
  * GetEvidencePackResponse is one bounded chunk of a READY pack. Retrieval is
@@ -1085,13 +1170,14 @@ export type GetEvidencePackResponse = Message<"gitsaas.audit.v1.GetEvidencePackR
  * Use `create(GetEvidencePackResponseSchema)` to create a new message.
  */
 export const GetEvidencePackResponseSchema: GenMessage<GetEvidencePackResponse> = /*@__PURE__*/
-  messageDesc(file_proto_audit_v1_evidence, 20);
+  messageDesc(file_proto_audit_v1_evidence, 21);
 
 /**
- * SectionType names the four control sections a pack always carries
- * (SPEC-0031 AC1). The labelled appendix is not a control section and is
- * deliberately not a member: it is a distinct shape (AttestedAppendix), so a
- * section type can never be widened to render attested history as a control.
+ * SectionType names the five control sections a pack always carries
+ * (SPEC-0031 AC1, extended by SPEC-0040 AC4). The labelled appendix is not a
+ * control section and is deliberately not a member: it is a distinct shape
+ * (AttestedAppendix), so a section type can never be widened to render
+ * attested history as a control.
  *
  * @generated from enum gitsaas.audit.v1.SectionType
  */
@@ -1128,6 +1214,19 @@ export enum SectionType {
    * @generated from enum value: SECTION_TYPE_ACCESS_CHANGES = 4;
    */
   ACCESS_CHANGES = 4,
+
+  /**
+   * Residency facts witnessed by the control plane (SPEC-0040, T-0033): the
+   * pinning in force during the range, the observed placement of every data
+   * plane that served the tenant, the placement refusals and the observed-vs-
+   * pinning contradictions the control plane detected. Every fact is one the
+   * control plane recorded itself; a customer-supplied assertion about its
+   * own cluster is representable only in the labelled appendix, never here
+   * (SPEC-0040 AC7).
+   *
+   * @generated from enum value: SECTION_TYPE_RESIDENCY = 5;
+   */
+  RESIDENCY = 5,
 }
 
 /**
@@ -1224,6 +1323,17 @@ export enum GapReason {
    * @generated from enum value: GAP_REASON_ASSEMBLY_FAILED = 3;
    */
   ASSEMBLY_FAILED = 3,
+
+  /**
+   * No placement reports from a data plane reached the control plane for a
+   * bounded part of the range (SPEC-0040 AC5, T-0033): placement is UNKNOWN
+   * there — a disconnected data plane or a telemetry silence. The interval
+   * renders as a gap, never as compliance: absence of contradiction is not
+   * evidence of pinning (SPEC-0031 AC10 applied to residency).
+   *
+   * @generated from enum value: GAP_REASON_PLACEMENT_SILENT = 4;
+   */
+  PLACEMENT_SILENT = 4,
 }
 
 /**
@@ -1262,6 +1372,65 @@ export enum ControlDecisionMode {
  */
 export const ControlDecisionModeSchema: GenEnum<ControlDecisionMode> = /*@__PURE__*/
   enumDesc(file_proto_audit_v1_evidence, 3);
+
+/**
+ * ResidencyFactKind names which residency fact one ResidencyRecord carries.
+ * It is a CLOSED enum: widening it is a reviewed contracts change, exactly as
+ * ControlDecisionMode's comment says. The kinds mirror the facts SPEC-0040
+ * requires the section to cite (AC2, AC3, AC4, AC6).
+ *
+ * @generated from enum gitsaas.audit.v1.ResidencyFactKind
+ */
+export enum ResidencyFactKind {
+  /**
+   * @generated from enum value: RESIDENCY_FACT_KIND_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * The control plane recording or changing the tenant's residency pinning —
+   * the cloud and region in force from occurred_at onward (SPEC-0040 AC1,
+   * AC6). A change inside the pack's range appears as its own record with
+   * its effective time, never flattened into the current value (AC6).
+   *
+   * @generated from enum value: RESIDENCY_FACT_KIND_PINNING = 1;
+   */
+  PINNING = 1,
+
+  /**
+   * The control plane witnessing a data plane's placement — the cloud and
+   * region the data plane reports itself running in (SPEC-0040 AC4,
+   * "Data owned": the data plane reports observed placement; it never pins
+   * its own residency).
+   *
+   * @generated from enum value: RESIDENCY_FACT_KIND_PLACEMENT = 2;
+   */
+  PLACEMENT = 2,
+
+  /**
+   * The control plane refusing work that would place tenant data or compute
+   * outside the pinning (SPEC-0040 AC2). The record carries the pinning and
+   * the attempted placement, and ControlSectionRecord.allowed is false.
+   *
+   * @generated from enum value: RESIDENCY_FACT_KIND_PLACEMENT_REFUSED = 3;
+   */
+  PLACEMENT_REFUSED = 3,
+
+  /**
+   * The control plane detecting an observed placement that contradicts the
+   * pinning (SPEC-0040 AC1, AC3): a violation, not a redefinition. The
+   * record carries both placements.
+   *
+   * @generated from enum value: RESIDENCY_FACT_KIND_PLACEMENT_CONTRADICTION = 4;
+   */
+  PLACEMENT_CONTRADICTION = 4,
+}
+
+/**
+ * Describes the enum gitsaas.audit.v1.ResidencyFactKind.
+ */
+export const ResidencyFactKindSchema: GenEnum<ResidencyFactKind> = /*@__PURE__*/
+  enumDesc(file_proto_audit_v1_evidence, 4);
 
 /**
  * @generated from service gitsaas.audit.v1.EvidenceService
