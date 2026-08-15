@@ -26,7 +26,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/usage/v1/usage.proto.
  */
 export const file_proto_usage_v1_usage: GenFile = /*@__PURE__*/
-  fileDesc("Chpwcm90by91c2FnZS92MS91c2FnZS5wcm90bxIQZ2l0c2Fhcy51c2FnZS52MSJcCgxVc2FnZUNvbnRleHQSEQoJdGVuYW50X2lkGAEgASgJEhAKCGFjdG9yX2lkGAIgASgJEhMKC2FjdG9yX3JvbGVzGAMgAygJEhIKCnJlcXVlc3RfaWQYBCABKAkifAoIVXNhZ2VHYXASMAoMd2luZG93X3N0YXJ0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIOCgZyZWFzb24YAyABKAkixwMKElVzYWdlRGltZW5zaW9uVmlldxI1CglkaW1lbnNpb24YASABKA4yIi5naXRzYWFzLmFnZW50LnYxLkZhaXJVc2VEaW1lbnNpb24SNQoIY292ZXJhZ2UYAiABKA4yIy5naXRzYWFzLnVzYWdlLnYxLkRpbWVuc2lvbkNvdmVyYWdlEi4KBXN0YXRlGAMgASgOMh8uZ2l0c2Fhcy5hZ2VudC52MS5FbnZlbG9wZVN0YXRlEhUKDWN1cnJlbnRfdmFsdWUYBCABKAESFgoOZW52ZWxvcGVfdmFsdWUYBSABKAESGgoSbm90aWZpY2F0aW9uX3ZhbHVlGAYgASgBEgwKBHVuaXQYByABKAkSMAoMd2luZG93X3N0YXJ0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIVCg10ZWxlbWV0cnlfZ2FwGAogASgIEigKBGdhcHMYCyADKAsyGi5naXRzYWFzLnVzYWdlLnYxLlVzYWdlR2FwEhcKD2RlZmVycmVkX3JlYXNvbhgMIAEoCSKBAgoPVXNhZ2VEaXZlcmdlbmNlEjUKCWRpbWVuc2lvbhgBIAEoDjIiLmdpdHNhYXMuYWdlbnQudjEuRmFpclVzZURpbWVuc2lvbhIVCg1kYXRhX3BsYW5lX2lkGAIgASgJEhsKE2NvbnRyb2xfcGxhbmVfdmFsdWUYAyABKAESIQoZZGF0YV9wbGFuZV9yZXBvcnRlZF92YWx1ZRgEIAEoARIwCgx3aW5kb3dfc3RhcnQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCndpbmRvd19lbmQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIkYKE0dldFVzYWdlVmlld1JlcXVlc3QSLwoHY29udGV4dBgBIAEoCzIeLmdpdHNhYXMudXNhZ2UudjEuVXNhZ2VDb250ZXh0IroBChRHZXRVc2FnZVZpZXdSZXNwb25zZRI4CgpkaW1lbnNpb25zGAEgAygLMiQuZ2l0c2Fhcy51c2FnZS52MS5Vc2FnZURpbWVuc2lvblZpZXcSNgoLZGl2ZXJnZW5jZXMYAiADKAsyIS5naXRzYWFzLnVzYWdlLnYxLlVzYWdlRGl2ZXJnZW5jZRIwCgxnZW5lcmF0ZWRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wKngKEURpbWVuc2lvbkNvdmVyYWdlEiIKHkRJTUVOU0lPTl9DT1ZFUkFHRV9VTlNQRUNJRklFRBAAEh4KGkRJTUVOU0lPTl9DT1ZFUkFHRV9NRVRFUkVEEAESHwobRElNRU5TSU9OX0NPVkVSQUdFX0RFRkVSUkVEEAIybQoMVXNhZ2VTZXJ2aWNlEl0KDEdldFVzYWdlVmlldxIlLmdpdHNhYXMudXNhZ2UudjEuR2V0VXNhZ2VWaWV3UmVxdWVzdBomLmdpdHNhYXMudXNhZ2UudjEuR2V0VXNhZ2VWaWV3UmVzcG9uc2VCN1o1Z2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL3VzYWdlL3YxO3VzYWdldjFiBnByb3RvMw", [file_google_protobuf_timestamp, file_proto_agent_v1_agent]);
+  fileDesc("Chpwcm90by91c2FnZS92MS91c2FnZS5wcm90bxIQZ2l0c2Fhcy51c2FnZS52MSJcCgxVc2FnZUNvbnRleHQSEQoJdGVuYW50X2lkGAEgASgJEhAKCGFjdG9yX2lkGAIgASgJEhMKC2FjdG9yX3JvbGVzGAMgAygJEhIKCnJlcXVlc3RfaWQYBCABKAkifAoIVXNhZ2VHYXASMAoMd2luZG93X3N0YXJ0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIOCgZyZWFzb24YAyABKAki9wMKElVzYWdlRGltZW5zaW9uVmlldxI1CglkaW1lbnNpb24YASABKA4yIi5naXRzYWFzLmFnZW50LnYxLkZhaXJVc2VEaW1lbnNpb24SNQoIY292ZXJhZ2UYAiABKA4yIy5naXRzYWFzLnVzYWdlLnYxLkRpbWVuc2lvbkNvdmVyYWdlEi4KBXN0YXRlGAMgASgOMh8uZ2l0c2Fhcy5hZ2VudC52MS5FbnZlbG9wZVN0YXRlEhUKDWN1cnJlbnRfdmFsdWUYBCABKAESFgoOZW52ZWxvcGVfdmFsdWUYBSABKAESGgoSbm90aWZpY2F0aW9uX3ZhbHVlGAYgASgBEgwKBHVuaXQYByABKAkSMAoMd2luZG93X3N0YXJ0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIVCg10ZWxlbWV0cnlfZ2FwGAogASgIEigKBGdhcHMYCyADKAsyGi5naXRzYWFzLnVzYWdlLnYxLlVzYWdlR2FwEhcKD2RlZmVycmVkX3JlYXNvbhgMIAEoCRIuCgV0cmVuZBgNIAEoDjIfLmdpdHNhYXMudXNhZ2UudjEuRW52ZWxvcGVUcmVuZCKBAgoPVXNhZ2VEaXZlcmdlbmNlEjUKCWRpbWVuc2lvbhgBIAEoDjIiLmdpdHNhYXMuYWdlbnQudjEuRmFpclVzZURpbWVuc2lvbhIVCg1kYXRhX3BsYW5lX2lkGAIgASgJEhsKE2NvbnRyb2xfcGxhbmVfdmFsdWUYAyABKAESIQoZZGF0YV9wbGFuZV9yZXBvcnRlZF92YWx1ZRgEIAEoARIwCgx3aW5kb3dfc3RhcnQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCndpbmRvd19lbmQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIkYKE0dldFVzYWdlVmlld1JlcXVlc3QSLwoHY29udGV4dBgBIAEoCzIeLmdpdHNhYXMudXNhZ2UudjEuVXNhZ2VDb250ZXh0IroBChRHZXRVc2FnZVZpZXdSZXNwb25zZRI4CgpkaW1lbnNpb25zGAEgAygLMiQuZ2l0c2Fhcy51c2FnZS52MS5Vc2FnZURpbWVuc2lvblZpZXcSNgoLZGl2ZXJnZW5jZXMYAiADKAsyIS5naXRzYWFzLnVzYWdlLnYxLlVzYWdlRGl2ZXJnZW5jZRIwCgxnZW5lcmF0ZWRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wKngKEURpbWVuc2lvbkNvdmVyYWdlEiIKHkRJTUVOU0lPTl9DT1ZFUkFHRV9VTlNQRUNJRklFRBAAEh4KGkRJTUVOU0lPTl9DT1ZFUkFHRV9NRVRFUkVEEAESHwobRElNRU5TSU9OX0NPVkVSQUdFX0RFRkVSUkVEEAIqfwoNRW52ZWxvcGVUcmVuZBIeChpFTlZFTE9QRV9UUkVORF9VTlNQRUNJRklFRBAAEhcKE0VOVkVMT1BFX1RSRU5EX0ZMQVQQARIZChVFTlZFTE9QRV9UUkVORF9SSVNJTkcQAhIaChZFTlZFTE9QRV9UUkVORF9GQUxMSU5HEAMybQoMVXNhZ2VTZXJ2aWNlEl0KDEdldFVzYWdlVmlldxIlLmdpdHNhYXMudXNhZ2UudjEuR2V0VXNhZ2VWaWV3UmVxdWVzdBomLmdpdHNhYXMudXNhZ2UudjEuR2V0VXNhZ2VWaWV3UmVzcG9uc2VCN1o1Z2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL3VzYWdlL3YxO3VzYWdldjFiBnByb3RvMw", [file_google_protobuf_timestamp, file_proto_agent_v1_agent]);
 
 /**
  * UsageContext is derived from an authenticated principal by the PEP. The
@@ -188,6 +188,16 @@ export type UsageDimensionView = Message<"gitsaas.usage.v1.UsageDimensionView"> 
    * @generated from field: string deferred_reason = 12;
    */
   deferredReason: string;
+
+  /**
+   * The dimension's trend relative to the previous interval (SPEC-0046 AC2),
+   * sourced from the same derivation the SPEC-0041 AC4 notices cite. Additive
+   * (field 13); meaningful only when coverage is METERED and telemetry_gap is
+   * false.
+   *
+   * @generated from field: gitsaas.usage.v1.EnvelopeTrend trend = 13;
+   */
+  trend: EnvelopeTrend;
 };
 
 /**
@@ -325,6 +335,45 @@ export enum DimensionCoverage {
  */
 export const DimensionCoverageSchema: GenEnum<DimensionCoverage> = /*@__PURE__*/
   enumDesc(file_proto_usage_v1_usage, 0);
+
+/**
+ * The direction one dimension's counter moved relative to the interval before
+ * it, computed in the control plane with the SAME derivation the SPEC-0041
+ * AC4 notices cite (an unknown past is FLAT, never estimated). Meaningful only
+ * when the row's coverage is METERED and telemetry_gap is false. Added
+ * additively for SPEC-0046 AC2: the state visible to the customer names its
+ * dimension, its trend and which envelope behaviour follows, so the AC4
+ * notification is never the customer's first sight of trouble.
+ *
+ * @generated from enum gitsaas.usage.v1.EnvelopeTrend
+ */
+export enum EnvelopeTrend {
+  /**
+   * @generated from enum value: ENVELOPE_TREND_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: ENVELOPE_TREND_FLAT = 1;
+   */
+  FLAT = 1,
+
+  /**
+   * @generated from enum value: ENVELOPE_TREND_RISING = 2;
+   */
+  RISING = 2,
+
+  /**
+   * @generated from enum value: ENVELOPE_TREND_FALLING = 3;
+   */
+  FALLING = 3,
+}
+
+/**
+ * Describes the enum gitsaas.usage.v1.EnvelopeTrend.
+ */
+export const EnvelopeTrendSchema: GenEnum<EnvelopeTrend> = /*@__PURE__*/
+  enumDesc(file_proto_usage_v1_usage, 1);
 
 /**
  * @generated from service gitsaas.usage.v1.UsageService
