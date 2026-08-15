@@ -28,7 +28,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/agent/v1/agent.proto.
  */
 export const file_proto_agent_v1_agent: GenFile = /*@__PURE__*/
-  fileDesc("Chpwcm90by9hZ2VudC92MS9hZ2VudC5wcm90bxIQZ2l0c2Fhcy5hZ2VudC52MSLZBQoMQWdlbnRNZXNzYWdlEhIKCm1lc3NhZ2VfaWQYASABKAkSCwoDc2VxGAIgASgDEisKB3NlbnRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCHJlZ2lzdGVyGAogASgLMhouZ2l0c2Fhcy5hZ2VudC52MS5SZWdpc3RlckgAEjAKCWhlYXJ0YmVhdBgLIAEoCzIbLmdpdHNhYXMuYWdlbnQudjEuSGVhcnRiZWF0SAASOwoMYWN0dWFsX3N0YXRlGAwgASgLMiMuZ2l0c2Fhcy5hZ2VudC52MS5BY3R1YWxTdGF0ZVJlcG9ydEgAEjYKCXRlbGVtZXRyeRgNIAEoCzIhLmdpdHNhYXMuYWdlbnQudjEuVGVsZW1ldHJ5U2FtcGxlSAASLgoFdXNhZ2UYDiABKAsyHS5naXRzYWFzLmFnZW50LnYxLlVzYWdlU2FtcGxlSAASPgoRZGVzaXJlZF9zdGF0ZV9hY2sYDyABKAsyIS5naXRzYWFzLmFnZW50LnYxLkRlc2lyZWRTdGF0ZUFja0gAEjkKDmNvbW1hbmRfcmVzdWx0GBAgASgLMh8uZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kUmVzdWx0SAASNAoLZGlhZ25vc3RpY3MYESABKAsyHS5naXRzYWFzLmFnZW50LnYxLkRpYWdub3N0aWNzSAASKAoFZW5yb2wYEiABKAsyFy5naXRzYWFzLmFnZW50LnYxLkVucm9sSAASTAoYY2VydGlmaWNhdGVfcm90YXRpb25fYWNrGBMgASgLMiguZ2l0c2Fhcy5hZ2VudC52MS5DZXJ0aWZpY2F0ZVJvdGF0aW9uQWNrSAASQAoSZW52ZWxvcGVfc3RhdGVfYWNrGBQgASgLMiIuZ2l0c2Fhcy5hZ2VudC52MS5FbnZlbG9wZVN0YXRlQWNrSABCCQoHcGF5bG9hZCK4BAoTQ29udHJvbFBsYW5lTWVzc2FnZRISCgptZXNzYWdlX2lkGAEgASgJEgsKA3NlcRgCIAEoAxIrCgdzZW50X2F0GAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgdhY2tfc2VxGAQgASgDEjUKDHJlZ2lzdGVyX2FjaxgKIAEoCzIdLmdpdHNhYXMuYWdlbnQudjEuUmVnaXN0ZXJBY2tIABI3Cg1kZXNpcmVkX3N0YXRlGAsgASgLMh4uZ2l0c2Fhcy5hZ2VudC52MS5EZXNpcmVkU3RhdGVIABIsCgdjb21tYW5kGAwgASgLMhkuZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kSAASMAoGY29uZmlnGA0gASgLMh4uZ2l0c2Fhcy5hZ2VudC52MS5Db25maWdVcGRhdGVIABImCgRwaW5nGA4gASgLMhYuZ2l0c2Fhcy5hZ2VudC52MS5QaW5nSAASNwoNZW5yb2xtZW50X2FjaxgPIAEoCzIeLmdpdHNhYXMuYWdlbnQudjEuRW5yb2xtZW50QWNrSAASRQoUY2VydGlmaWNhdGVfcm90YXRpb24YECABKAsyJS5naXRzYWFzLmFnZW50LnYxLkNlcnRpZmljYXRlUm90YXRpb25IABI/Cg5lbnZlbG9wZV9zdGF0ZRgRIAEoCzIlLmdpdHNhYXMuYWdlbnQudjEuRW52ZWxvcGVTdGF0ZVVwZGF0ZUgAQgkKB3BheWxvYWQisQEKCFJlZ2lzdGVyEhIKCmNsdXN0ZXJfaWQYASABKAkSJgoFY2xvdWQYAiABKA4yFy5naXRzYWFzLmFnZW50LnYxLkNsb3VkEg4KBnJlZ2lvbhgDIAEoCRIVCg1hZ2VudF92ZXJzaW9uGAQgASgJEhMKC2s4c192ZXJzaW9uGAUgASgJEhQKDGNhcGFiaWxpdGllcxgGIAMoCRIXCg9yZXN1bWVfZnJvbV9zZXEYByABKAMifwoLUmVnaXN0ZXJBY2sSEAoIYWNjZXB0ZWQYASABKAgSDgoGcmVhc29uGAIgASgJEhcKD3Jlc3VtZV9mcm9tX3NlcRgDIAEoAxI1ChJoZWFydGJlYXRfaW50ZXJ2YWwYBCABKAsyGS5nb29nbGUucHJvdG9idWYuRHVyYXRpb24imQEKBUVucm9sEhYKDm9uZV90aW1lX3Rva2VuGAEgASgJEiYKBWNsb3VkGAIgASgOMhcuZ2l0c2Fhcy5hZ2VudC52MS5DbG91ZBIOCgZyZWdpb24YAyABKAkSFQoNYWdlbnRfdmVyc2lvbhgEIAEoCRITCgtrOHNfdmVyc2lvbhgFIAEoCRIUCgxjYXBhYmlsaXRpZXMYBiADKAkidAoRQ2xpZW50Q2VydGlmaWNhdGUSFgoOY2VydGlmaWNhdGVfaWQYASABKAkSFwoPY2VydGlmaWNhdGVfcGVtGAIgASgMEi4KCmV4cGlyZXNfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIpQCCgxFbnJvbG1lbnRBY2sSEAoIYWNjZXB0ZWQYASABKAgSQAoOcmVmdXNhbF9yZWFzb24YAiABKA4yKC5naXRzYWFzLmFnZW50LnYxLkVucm9sbWVudFJlZnVzYWxSZWFzb24SDgoGZGV0YWlsGAMgASgJEj8KEmlzc3VlZF9jZXJ0aWZpY2F0ZRgEIAEoCzIjLmdpdHNhYXMuYWdlbnQudjEuQ2xpZW50Q2VydGlmaWNhdGUSEQoJdGVuYW50X2lkGAUgASgJEhUKDWRhdGFfcGxhbmVfaWQYBiABKAkSNQoSaGVhcnRiZWF0X2ludGVydmFsGAcgASgLMhkuZ29vZ2xlLnByb3RvYnVmLkR1cmF0aW9uIk8KE0NlcnRpZmljYXRlUm90YXRpb24SOAoLY2VydGlmaWNhdGUYASABKAsyIy5naXRzYWFzLmFnZW50LnYxLkNsaWVudENlcnRpZmljYXRlIp0BChZDZXJ0aWZpY2F0ZVJvdGF0aW9uQWNrEhYKDmNlcnRpZmljYXRlX2lkGAEgASgJEg8KB2FwcGxpZWQYAiABKAgSSgoOZmFpbHVyZV9yZWFzb24YAyABKA4yMi5naXRzYWFzLmFnZW50LnYxLkNlcnRpZmljYXRlUm90YXRpb25GYWlsdXJlUmVhc29uEg4KBmRldGFpbBgEIAEoCSJmCgtDQVRydXN0Um9vdBIPCgdyb290X2lkGAEgASgJEhcKD2NlcnRpZmljYXRlX3BlbRgCIAEoDBItCglub3RfYWZ0ZXIYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wInEKDUNBVHJ1c3RCdW5kbGUSEAoIcmV2aXNpb24YASABKAMSNAoNdHJ1c3RlZF9yb290cxgCIAMoCzIdLmdpdHNhYXMuYWdlbnQudjEuQ0FUcnVzdFJvb3QSGAoQaXNzdWFuY2Vfcm9vdF9pZBgDIAEoCSI5Cg9SZWxlYXNlVHJ1c3RLZXkSDgoGa2V5X2lkGAEgASgJEhYKDnB1YmxpY19rZXlfcGVtGAIgASgMIncKElJlbGVhc2VUcnVzdEJ1bmRsZRIQCghyZXZpc2lvbhgBIAEoAxI3Cgx0cnVzdGVkX2tleXMYAiADKAsyIS5naXRzYWFzLmFnZW50LnYxLlJlbGVhc2VUcnVzdEtleRIWCg5zaWduaW5nX2tleV9pZBgDIAEoCSJyCglIZWFydGJlYXQSLgoHb3ZlcmFsbBgBIAEoDjIdLmdpdHNhYXMuYWdlbnQudjEuSGVhbHRoU3RhdGUSNQoKY29tcG9uZW50cxgCIAMoCzIhLmdpdHNhYXMuYWdlbnQudjEuQ29tcG9uZW50SGVhbHRoIm4KD0NvbXBvbmVudEhlYWx0aBIMCgRuYW1lGAEgASgJEiwKBXN0YXRlGAIgASgOMh0uZ2l0c2Fhcy5hZ2VudC52MS5IZWFsdGhTdGF0ZRIPCgd2ZXJzaW9uGAMgASgJEg4KBmRldGFpbBgEIAEoCSLVAgoPVGVsZW1ldHJ5U2FtcGxlEjAKDHdpbmRvd19zdGFydBgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKd2luZG93X2VuZBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASPQoGZ2F1Z2VzGAMgAygLMi0uZ2l0c2Fhcy5hZ2VudC52MS5UZWxlbWV0cnlTYW1wbGUuR2F1Z2VzRW50cnkSQQoIY291bnRlcnMYBCADKAsyLy5naXRzYWFzLmFnZW50LnYxLlRlbGVtZXRyeVNhbXBsZS5Db3VudGVyc0VudHJ5Gi0KC0dhdWdlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoAToCOAEaLwoNQ291bnRlcnNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAE6AjgBIqQCCgtVc2FnZVNhbXBsZRIwCgx3aW5kb3dfc3RhcnQYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCndpbmRvd19lbmQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhIKCmNpX21pbnV0ZXMYAyABKAESFQoNc3RvcmFnZV9ieXRlcxgEIAEoARIUCgxlZ3Jlc3NfYnl0ZXMYBSABKAESEgoKc2VhdF9jb3VudBgGIAEoAxIbChNjaV9jb25jdXJyZW5jeV9wZWFrGAcgASgBEhIKCnNjYW5fYnl0ZXMYCCABKAESGAoQcmVwb3NpdG9yeV9jb3VudBgJIAEoAxITCgtpbmRleF9ieXRlcxgKIAEoASLGAgoRRGltZW5zaW9uRW52ZWxvcGUSNQoJZGltZW5zaW9uGAEgASgOMiIuZ2l0c2Fhcy5hZ2VudC52MS5GYWlyVXNlRGltZW5zaW9uEi4KBXN0YXRlGAIgASgOMh8uZ2l0c2Fhcy5hZ2VudC52MS5FbnZlbG9wZVN0YXRlEhUKDWN1cnJlbnRfdmFsdWUYAyABKAESFgoOZW52ZWxvcGVfdmFsdWUYBCABKAESGgoSbm90aWZpY2F0aW9uX3ZhbHVlGAUgASgBEgwKBHVuaXQYBiABKAkSMAoMd2luZG93X3N0YXJ0GAcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgdtZXNzYWdlGAkgASgJIpcBChNFbnZlbG9wZVN0YXRlVXBkYXRlEhIKCmdlbmVyYXRpb24YASABKAMSNwoKZGltZW5zaW9ucxgCIAMoCzIjLmdpdHNhYXMuYWdlbnQudjEuRGltZW5zaW9uRW52ZWxvcGUSGgoSbWF4X2NpX2NvbmN1cnJlbmN5GAMgASgFEhcKD3F1ZXVlX2RlcHRoX2NhcBgEIAEoAyJGChBFbnZlbG9wZVN0YXRlQWNrEhIKCmdlbmVyYXRpb24YASABKAMSDwoHYXBwbGllZBgCIAEoCBINCgVlcnJvchgDIAEoCSLRAQoMRGVzaXJlZFN0YXRlEhIKCmdlbmVyYXRpb24YASABKAMSLwoKY29tcG9uZW50cxgCIAMoCzIbLmdpdHNhYXMuYWdlbnQudjEuQ29tcG9uZW50EjgKD2NhX3RydXN0X2J1bmRsZRgDIAEoCzIfLmdpdHNhYXMuYWdlbnQudjEuQ0FUcnVzdEJ1bmRsZRJCChRyZWxlYXNlX3RydXN0X2J1bmRsZRgEIAEoCzIkLmdpdHNhYXMuYWdlbnQudjEuUmVsZWFzZVRydXN0QnVuZGxlIm8KCUNvbXBvbmVudBIMCgRuYW1lGAEgASgJEg4KBmFjdGlvbhgCIAEoCRIwCgdyZWxlYXNlGAMgASgLMh8uZ2l0c2Fhcy5hZ2VudC52MS5TaWduZWRSZWxlYXNlEhIKCmNvbmZpZ19yZWYYBCABKAkiQwoNU2lnbmVkUmVsZWFzZRIPCgdvY2lfcmVmGAEgASgJEg4KBmRpZ2VzdBgCIAEoCRIRCglzaWduYXR1cmUYAyABKAkidwoPRGVzaXJlZFN0YXRlQWNrEhIKCmdlbmVyYXRpb24YASABKAMSDwoHYXBwbGllZBgCIAEoCBINCgVlcnJvchgDIAEoCRIwCgRraW5kGAQgASgOMiIuZ2l0c2Fhcy5hZ2VudC52MS5EZXNpcmVkU3RhdGVLaW5kIrYBChFBY3R1YWxTdGF0ZVJlcG9ydBIaChJhcHBsaWVkX2dlbmVyYXRpb24YASABKAMSNQoKY29tcG9uZW50cxgCIAMoCzIhLmdpdHNhYXMuYWdlbnQudjEuQ29tcG9uZW50SGVhbHRoEjUKDXJvbGxvdXRfcGhhc2UYAyABKA4yHi5naXRzYWFzLmFnZW50LnYxLlJvbGxvdXRQaGFzZRIXCg9yb2xsb3V0X21lc3NhZ2UYBCABKAkiqgEKB0NvbW1hbmQSEgoKY29tbWFuZF9pZBgBIAEoCRIrCgR0eXBlGAIgASgOMh0uZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kVHlwZRIxCgRhcmdzGAMgAygLMiMuZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kLkFyZ3NFbnRyeRorCglBcmdzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASI/Cg1Db21tYW5kUmVzdWx0EhIKCmNvbW1hbmRfaWQYASABKAkSCgoCb2sYAiABKAgSDgoGZGV0YWlsGAMgASgJInkKDENvbmZpZ1VwZGF0ZRI6CgZ2YWx1ZXMYASADKAsyKi5naXRzYWFzLmFnZW50LnYxLkNvbmZpZ1VwZGF0ZS5WYWx1ZXNFbnRyeRotCgtWYWx1ZXNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBIi8KC0RpYWdub3N0aWNzEhIKCmJ1bmRsZV9yZWYYASABKAkSDAoEbm90ZRgCIAEoCSIuCgRQaW5nEiYKAmF0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCpcCgVDbG91ZBIVChFDTE9VRF9VTlNQRUNJRklFRBAAEg0KCUNMT1VEX0dLRRABEg0KCUNMT1VEX0VLUxACEg0KCUNMT1VEX0FLUxADEg8KC0NMT1VEX09USEVSEAkqlQIKFkVucm9sbWVudFJlZnVzYWxSZWFzb24SKAokRU5ST0xNRU5UX1JFRlVTQUxfUkVBU09OX1VOU1BFQ0lGSUVEEAASKgomRU5ST0xNRU5UX1JFRlVTQUxfUkVBU09OX1RPS0VOX0lOVkFMSUQQARIoCiRFTlJPTE1FTlRfUkVGVVNBTF9SRUFTT05fVE9LRU5fU1BFTlQQAhIqCiZFTlJPTE1FTlRfUkVGVVNBTF9SRUFTT05fVE9LRU5fRVhQSVJFRBADEioKJkVOUk9MTUVOVF9SRUZVU0FMX1JFQVNPTl9UT0tFTl9SRVZPS0VEEAQSIwofRU5ST0xNRU5UX1JFRlVTQUxfUkVBU09OX0RFTklFRBAFKqoCCiBDZXJ0aWZpY2F0ZVJvdGF0aW9uRmFpbHVyZVJlYXNvbhIzCi9DRVJUSUZJQ0FURV9ST1RBVElPTl9GQUlMVVJFX1JFQVNPTl9VTlNQRUNJRklFRBAAEjIKLkNFUlRJRklDQVRFX1JPVEFUSU9OX0ZBSUxVUkVfUkVBU09OX1VOUEFSU0FCTEUQARIxCi1DRVJUSUZJQ0FURV9ST1RBVElPTl9GQUlMVVJFX1JFQVNPTl9VTlRSVVNURUQQAhI2CjJDRVJUSUZJQ0FURV9ST1RBVElPTl9GQUlMVVJFX1JFQVNPTl9QRVJTSVNUX0ZBSUxFRBADEjIKLkNFUlRJRklDQVRFX1JPVEFUSU9OX0ZBSUxVUkVfUkVBU09OX0NMT0NLX1NLRVcQBCp8CgtIZWFsdGhTdGF0ZRIcChhIRUFMVEhfU1RBVEVfVU5TUEVDSUZJRUQQABIYChRIRUFMVEhfU1RBVEVfSEVBTFRIWRABEhkKFUhFQUxUSF9TVEFURV9ERUdSQURFRBACEhoKFkhFQUxUSF9TVEFURV9VTkhFQUxUSFkQAyrYAgoQRmFpclVzZURpbWVuc2lvbhIiCh5GQUlSX1VTRV9ESU1FTlNJT05fVU5TUEVDSUZJRUQQABIcChhGQUlSX1VTRV9ESU1FTlNJT05fU0VBVFMQARInCiNGQUlSX1VTRV9ESU1FTlNJT05fUkVQT1NJVE9SWV9DT1VOVBACEikKJUZBSVJfVVNFX0RJTUVOU0lPTl9SRVBPU0lUT1JZX1NUT1JBR0UQAxIhCh1GQUlSX1VTRV9ESU1FTlNJT05fQ0lfTUlOVVRFUxAEEiUKIUZBSVJfVVNFX0RJTUVOU0lPTl9DSV9DT05DVVJSRU5DWRAFEiIKHkZBSVJfVVNFX0RJTUVOU0lPTl9TQ0FOX1ZPTFVNRRAGEiEKHUZBSVJfVVNFX0RJTUVOU0lPTl9JTkRFWF9TSVpFEAcSHQoZRkFJUl9VU0VfRElNRU5TSU9OX0VHUkVTUxAIKoABCg1FbnZlbG9wZVN0YXRlEh4KGkVOVkVMT1BFX1NUQVRFX1VOU1BFQ0lGSUVEEAASGQoVRU5WRUxPUEVfU1RBVEVfV0lUSElOEAESFwoTRU5WRUxPUEVfU1RBVEVfTkVBUhACEhsKF0VOVkVMT1BFX1NUQVRFX0VYQ0VFREVEEAMqiwEKEERlc2lyZWRTdGF0ZUtpbmQSIgoeREVTSVJFRF9TVEFURV9LSU5EX1VOU1BFQ0lGSUVEEAASJgoiREVTSVJFRF9TVEFURV9LSU5EX0NBX1RSVVNUX0JVTkRMRRABEisKJ0RFU0lSRURfU1RBVEVfS0lORF9SRUxFQVNFX1RSVVNUX0JVTkRMRRACKqABCgxSb2xsb3V0UGhhc2USHQoZUk9MTE9VVF9QSEFTRV9VTlNQRUNJRklFRBAAEh0KGVJPTExPVVRfUEhBU0VfSU5fUFJPR1JFU1MQARIZChVST0xMT1VUX1BIQVNFX0FQUExJRUQQAhIYChRST0xMT1VUX1BIQVNFX0ZBSUxFRBADEh0KGVJPTExPVVRfUEhBU0VfUk9MTEVEX0JBQ0sQBCq6AQoLQ29tbWFuZFR5cGUSHAoYQ09NTUFORF9UWVBFX1VOU1BFQ0lGSUVEEAASIgoeQ09NTUFORF9UWVBFX1RSSUdHRVJfUkVDT05DSUxFEAESIwofQ09NTUFORF9UWVBFX1JPVEFURV9DTElFTlRfQ0VSVBACEh4KGkNPTU1BTkRfVFlQRV9EUkFJTl9SVU5ORVJTEAMSJAogQ09NTUFORF9UWVBFX0NPTExFQ1RfRElBR05PU1RJQ1MQBDJkCgxBZ2VudEdhdGV3YXkSVAoHQ29ubmVjdBIeLmdpdHNhYXMuYWdlbnQudjEuQWdlbnRNZXNzYWdlGiUuZ2l0c2Fhcy5hZ2VudC52MS5Db250cm9sUGxhbmVNZXNzYWdlKAEwAUIxWi9naXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vYWdlbnQvdjE7YWdlbnR2MWIGcHJvdG8z", [file_google_protobuf_timestamp, file_google_protobuf_duration]);
+  fileDesc("Chpwcm90by9hZ2VudC92MS9hZ2VudC5wcm90bxIQZ2l0c2Fhcy5hZ2VudC52MSLZBQoMQWdlbnRNZXNzYWdlEhIKCm1lc3NhZ2VfaWQYASABKAkSCwoDc2VxGAIgASgDEisKB3NlbnRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCHJlZ2lzdGVyGAogASgLMhouZ2l0c2Fhcy5hZ2VudC52MS5SZWdpc3RlckgAEjAKCWhlYXJ0YmVhdBgLIAEoCzIbLmdpdHNhYXMuYWdlbnQudjEuSGVhcnRiZWF0SAASOwoMYWN0dWFsX3N0YXRlGAwgASgLMiMuZ2l0c2Fhcy5hZ2VudC52MS5BY3R1YWxTdGF0ZVJlcG9ydEgAEjYKCXRlbGVtZXRyeRgNIAEoCzIhLmdpdHNhYXMuYWdlbnQudjEuVGVsZW1ldHJ5U2FtcGxlSAASLgoFdXNhZ2UYDiABKAsyHS5naXRzYWFzLmFnZW50LnYxLlVzYWdlU2FtcGxlSAASPgoRZGVzaXJlZF9zdGF0ZV9hY2sYDyABKAsyIS5naXRzYWFzLmFnZW50LnYxLkRlc2lyZWRTdGF0ZUFja0gAEjkKDmNvbW1hbmRfcmVzdWx0GBAgASgLMh8uZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kUmVzdWx0SAASNAoLZGlhZ25vc3RpY3MYESABKAsyHS5naXRzYWFzLmFnZW50LnYxLkRpYWdub3N0aWNzSAASKAoFZW5yb2wYEiABKAsyFy5naXRzYWFzLmFnZW50LnYxLkVucm9sSAASTAoYY2VydGlmaWNhdGVfcm90YXRpb25fYWNrGBMgASgLMiguZ2l0c2Fhcy5hZ2VudC52MS5DZXJ0aWZpY2F0ZVJvdGF0aW9uQWNrSAASQAoSZW52ZWxvcGVfc3RhdGVfYWNrGBQgASgLMiIuZ2l0c2Fhcy5hZ2VudC52MS5FbnZlbG9wZVN0YXRlQWNrSABCCQoHcGF5bG9hZCK4BAoTQ29udHJvbFBsYW5lTWVzc2FnZRISCgptZXNzYWdlX2lkGAEgASgJEgsKA3NlcRgCIAEoAxIrCgdzZW50X2F0GAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIPCgdhY2tfc2VxGAQgASgDEjUKDHJlZ2lzdGVyX2FjaxgKIAEoCzIdLmdpdHNhYXMuYWdlbnQudjEuUmVnaXN0ZXJBY2tIABI3Cg1kZXNpcmVkX3N0YXRlGAsgASgLMh4uZ2l0c2Fhcy5hZ2VudC52MS5EZXNpcmVkU3RhdGVIABIsCgdjb21tYW5kGAwgASgLMhkuZ2l0c2Fhcy5hZ2VudC52MS5Db21tYW5kSAASMAoGY29uZmlnGA0gASgLMh4uZ2l0c2Fhcy5hZ2VudC52MS5Db25maWdVcGRhdGVIABImCgRwaW5nGA4gASgLMhYuZ2l0c2Fhcy5hZ2VudC52MS5QaW5nSAASNwoNZW5yb2xtZW50X2FjaxgPIAEoCzIeLmdpdHNhYXMuYWdlbnQudjEuRW5yb2xtZW50QWNrSAASRQoUY2VydGlmaWNhdGVfcm90YXRpb24YECABKAsyJS5naXRzYWFzLmFnZW50LnYxLkNlcnRpZmljYXRlUm90YXRpb25IABI/Cg5lbnZlbG9wZV9zdGF0ZRgRIAEoCzIlLmdpdHNhYXMuYWdlbnQudjEuRW52ZWxvcGVTdGF0ZVVwZGF0ZUgAQgkKB3BheWxvYWQisQEKCFJlZ2lzdGVyEhIKCmNsdXN0ZXJfaWQYASABKAkSJgoFY2xvdWQYAiABKA4yFy5naXRzYWFzLmFnZW50LnYxLkNsb3VkEg4KBnJlZ2lvbhgDIAEoCRIVCg1hZ2VudF92ZXJzaW9uGAQgASgJEhMKC2s4c192ZXJzaW9uGAUgASgJEhQKDGNhcGFiaWxpdGllcxgGIAMoCRIXCg9yZXN1bWVfZnJvbV9zZXEYByABKAMifwoLUmVnaXN0ZXJBY2sSEAoIYWNjZXB0ZWQYASABKAgSDgoGcmVhc29uGAIgASgJEhcKD3Jlc3VtZV9mcm9tX3NlcRgDIAEoAxI1ChJoZWFydGJlYXRfaW50ZXJ2YWwYBCABKAsyGS5nb29nbGUucHJvdG9idWYuRHVyYXRpb24imQEKBUVucm9sEhYKDm9uZV90aW1lX3Rva2VuGAEgASgJEiYKBWNsb3VkGAIgASgOMhcuZ2l0c2Fhcy5hZ2VudC52MS5DbG91ZBIOCgZyZWdpb24YAyABKAkSFQoNYWdlbnRfdmVyc2lvbhgEIAEoCRITCgtrOHNfdmVyc2lvbhgFIAEoCRIUCgxjYXBhYmlsaXRpZXMYBiADKAkidAoRQ2xpZW50Q2VydGlmaWNhdGUSFgoOY2VydGlmaWNhdGVfaWQYASABKAkSFwoPY2VydGlmaWNhdGVfcGVtGAIgASgMEi4KCmV4cGlyZXNfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIpQCCgxFbnJvbG1lbnRBY2sSEAoIYWNjZXB0ZWQYASABKAgSQAoOcmVmdXNhbF9yZWFzb24YAiABKA4yKC5naXRzYWFzLmFnZW50LnYxLkVucm9sbWVudFJlZnVzYWxSZWFzb24SDgoGZGV0YWlsGAMgASgJEj8KEmlzc3VlZF9jZXJ0aWZpY2F0ZRgEIAEoCzIjLmdpdHNhYXMuYWdlbnQudjEuQ2xpZW50Q2VydGlmaWNhdGUSEQoJdGVuYW50X2lkGAUgASgJEhUKDWRhdGFfcGxhbmVfaWQYBiABKAkSNQoSaGVhcnRiZWF0X2ludGVydmFsGAcgASgLMhkuZ29vZ2xlLnByb3RvYnVmLkR1cmF0aW9uIk8KE0NlcnRpZmljYXRlUm90YXRpb24SOAoLY2VydGlmaWNhdGUYASABKAsyIy5naXRzYWFzLmFnZW50LnYxLkNsaWVudENlcnRpZmljYXRlIp0BChZDZXJ0aWZpY2F0ZVJvdGF0aW9uQWNrEhYKDmNlcnRpZmljYXRlX2lkGAEgASgJEg8KB2FwcGxpZWQYAiABKAgSSgoOZmFpbHVyZV9yZWFzb24YAyABKA4yMi5naXRzYWFzLmFnZW50LnYxLkNlcnRpZmljYXRlUm90YXRpb25GYWlsdXJlUmVhc29uEg4KBmRldGFpbBgEIAEoCSJJChpJc3N1ZUVucm9sbWVudFRva2VuUmVxdWVzdBIrCghsaWZldGltZRgBIAEoCzIZLmdvb2dsZS5wcm90b2J1Zi5EdXJhdGlvbiKmAQobSXNzdWVFbnJvbG1lbnRUb2tlblJlc3BvbnNlEhAKCHRva2VuX2lkGAEgASgJEhYKDm9uZV90aW1lX3Rva2VuGAIgASgJEi0KCWlzc3VlZF9hdBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKZXhwaXJlc19hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiZgoLQ0FUcnVzdFJvb3QSDwoHcm9vdF9pZBgBIAEoCRIXCg9jZXJ0aWZpY2F0ZV9wZW0YAiABKAwSLQoJbm90X2FmdGVyGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCJxCg1DQVRydXN0QnVuZGxlEhAKCHJldmlzaW9uGAEgASgDEjQKDXRydXN0ZWRfcm9vdHMYAiADKAsyHS5naXRzYWFzLmFnZW50LnYxLkNBVHJ1c3RSb290EhgKEGlzc3VhbmNlX3Jvb3RfaWQYAyABKAkiOQoPUmVsZWFzZVRydXN0S2V5Eg4KBmtleV9pZBgBIAEoCRIWCg5wdWJsaWNfa2V5X3BlbRgCIAEoDCJ3ChJSZWxlYXNlVHJ1c3RCdW5kbGUSEAoIcmV2aXNpb24YASABKAMSNwoMdHJ1c3RlZF9rZXlzGAIgAygLMiEuZ2l0c2Fhcy5hZ2VudC52MS5SZWxlYXNlVHJ1c3RLZXkSFgoOc2lnbmluZ19rZXlfaWQYAyABKAkicgoJSGVhcnRiZWF0Ei4KB292ZXJhbGwYASABKA4yHS5naXRzYWFzLmFnZW50LnYxLkhlYWx0aFN0YXRlEjUKCmNvbXBvbmVudHMYAiADKAsyIS5naXRzYWFzLmFnZW50LnYxLkNvbXBvbmVudEhlYWx0aCJuCg9Db21wb25lbnRIZWFsdGgSDAoEbmFtZRgBIAEoCRIsCgVzdGF0ZRgCIAEoDjIdLmdpdHNhYXMuYWdlbnQudjEuSGVhbHRoU3RhdGUSDwoHdmVyc2lvbhgDIAEoCRIOCgZkZXRhaWwYBCABKAki1QIKD1RlbGVtZXRyeVNhbXBsZRIwCgx3aW5kb3dfc3RhcnQYASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCndpbmRvd19lbmQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEj0KBmdhdWdlcxgDIAMoCzItLmdpdHNhYXMuYWdlbnQudjEuVGVsZW1ldHJ5U2FtcGxlLkdhdWdlc0VudHJ5EkEKCGNvdW50ZXJzGAQgAygLMi8uZ2l0c2Fhcy5hZ2VudC52MS5UZWxlbWV0cnlTYW1wbGUuQ291bnRlcnNFbnRyeRotCgtHYXVnZXNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAE6AjgBGi8KDUNvdW50ZXJzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgBOgI4ASKkAgoLVXNhZ2VTYW1wbGUSMAoMd2luZG93X3N0YXJ0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBISCgpjaV9taW51dGVzGAMgASgBEhUKDXN0b3JhZ2VfYnl0ZXMYBCABKAESFAoMZWdyZXNzX2J5dGVzGAUgASgBEhIKCnNlYXRfY291bnQYBiABKAMSGwoTY2lfY29uY3VycmVuY3lfcGVhaxgHIAEoARISCgpzY2FuX2J5dGVzGAggASgBEhgKEHJlcG9zaXRvcnlfY291bnQYCSABKAMSEwoLaW5kZXhfYnl0ZXMYCiABKAEixgIKEURpbWVuc2lvbkVudmVsb3BlEjUKCWRpbWVuc2lvbhgBIAEoDjIiLmdpdHNhYXMuYWdlbnQudjEuRmFpclVzZURpbWVuc2lvbhIuCgVzdGF0ZRgCIAEoDjIfLmdpdHNhYXMuYWdlbnQudjEuRW52ZWxvcGVTdGF0ZRIVCg1jdXJyZW50X3ZhbHVlGAMgASgBEhYKDmVudmVsb3BlX3ZhbHVlGAQgASgBEhoKEm5vdGlmaWNhdGlvbl92YWx1ZRgFIAEoARIMCgR1bml0GAYgASgJEjAKDHdpbmRvd19zdGFydBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKd2luZG93X2VuZBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASDwoHbWVzc2FnZRgJIAEoCSKXAQoTRW52ZWxvcGVTdGF0ZVVwZGF0ZRISCgpnZW5lcmF0aW9uGAEgASgDEjcKCmRpbWVuc2lvbnMYAiADKAsyIy5naXRzYWFzLmFnZW50LnYxLkRpbWVuc2lvbkVudmVsb3BlEhoKEm1heF9jaV9jb25jdXJyZW5jeRgDIAEoBRIXCg9xdWV1ZV9kZXB0aF9jYXAYBCABKAMiRgoQRW52ZWxvcGVTdGF0ZUFjaxISCgpnZW5lcmF0aW9uGAEgASgDEg8KB2FwcGxpZWQYAiABKAgSDQoFZXJyb3IYAyABKAki0QEKDERlc2lyZWRTdGF0ZRISCgpnZW5lcmF0aW9uGAEgASgDEi8KCmNvbXBvbmVudHMYAiADKAsyGy5naXRzYWFzLmFnZW50LnYxLkNvbXBvbmVudBI4Cg9jYV90cnVzdF9idW5kbGUYAyABKAsyHy5naXRzYWFzLmFnZW50LnYxLkNBVHJ1c3RCdW5kbGUSQgoUcmVsZWFzZV90cnVzdF9idW5kbGUYBCABKAsyJC5naXRzYWFzLmFnZW50LnYxLlJlbGVhc2VUcnVzdEJ1bmRsZSJvCglDb21wb25lbnQSDAoEbmFtZRgBIAEoCRIOCgZhY3Rpb24YAiABKAkSMAoHcmVsZWFzZRgDIAEoCzIfLmdpdHNhYXMuYWdlbnQudjEuU2lnbmVkUmVsZWFzZRISCgpjb25maWdfcmVmGAQgASgJIkMKDVNpZ25lZFJlbGVhc2USDwoHb2NpX3JlZhgBIAEoCRIOCgZkaWdlc3QYAiABKAkSEQoJc2lnbmF0dXJlGAMgASgJIncKD0Rlc2lyZWRTdGF0ZUFjaxISCgpnZW5lcmF0aW9uGAEgASgDEg8KB2FwcGxpZWQYAiABKAgSDQoFZXJyb3IYAyABKAkSMAoEa2luZBgEIAEoDjIiLmdpdHNhYXMuYWdlbnQudjEuRGVzaXJlZFN0YXRlS2luZCK2AQoRQWN0dWFsU3RhdGVSZXBvcnQSGgoSYXBwbGllZF9nZW5lcmF0aW9uGAEgASgDEjUKCmNvbXBvbmVudHMYAiADKAsyIS5naXRzYWFzLmFnZW50LnYxLkNvbXBvbmVudEhlYWx0aBI1Cg1yb2xsb3V0X3BoYXNlGAMgASgOMh4uZ2l0c2Fhcy5hZ2VudC52MS5Sb2xsb3V0UGhhc2USFwoPcm9sbG91dF9tZXNzYWdlGAQgASgJIqoBCgdDb21tYW5kEhIKCmNvbW1hbmRfaWQYASABKAkSKwoEdHlwZRgCIAEoDjIdLmdpdHNhYXMuYWdlbnQudjEuQ29tbWFuZFR5cGUSMQoEYXJncxgDIAMoCzIjLmdpdHNhYXMuYWdlbnQudjEuQ29tbWFuZC5BcmdzRW50cnkaKwoJQXJnc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEiPwoNQ29tbWFuZFJlc3VsdBISCgpjb21tYW5kX2lkGAEgASgJEgoKAm9rGAIgASgIEg4KBmRldGFpbBgDIAEoCSJ5CgxDb25maWdVcGRhdGUSOgoGdmFsdWVzGAEgAygLMiouZ2l0c2Fhcy5hZ2VudC52MS5Db25maWdVcGRhdGUuVmFsdWVzRW50cnkaLQoLVmFsdWVzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASIvCgtEaWFnbm9zdGljcxISCgpidW5kbGVfcmVmGAEgASgJEgwKBG5vdGUYAiABKAkiLgoEUGluZxImCgJhdBgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAqXAoFQ2xvdWQSFQoRQ0xPVURfVU5TUEVDSUZJRUQQABINCglDTE9VRF9HS0UQARINCglDTE9VRF9FS1MQAhINCglDTE9VRF9BS1MQAxIPCgtDTE9VRF9PVEhFUhAJKpUCChZFbnJvbG1lbnRSZWZ1c2FsUmVhc29uEigKJEVOUk9MTUVOVF9SRUZVU0FMX1JFQVNPTl9VTlNQRUNJRklFRBAAEioKJkVOUk9MTUVOVF9SRUZVU0FMX1JFQVNPTl9UT0tFTl9JTlZBTElEEAESKAokRU5ST0xNRU5UX1JFRlVTQUxfUkVBU09OX1RPS0VOX1NQRU5UEAISKgomRU5ST0xNRU5UX1JFRlVTQUxfUkVBU09OX1RPS0VOX0VYUElSRUQQAxIqCiZFTlJPTE1FTlRfUkVGVVNBTF9SRUFTT05fVE9LRU5fUkVWT0tFRBAEEiMKH0VOUk9MTUVOVF9SRUZVU0FMX1JFQVNPTl9ERU5JRUQQBSqqAgogQ2VydGlmaWNhdGVSb3RhdGlvbkZhaWx1cmVSZWFzb24SMwovQ0VSVElGSUNBVEVfUk9UQVRJT05fRkFJTFVSRV9SRUFTT05fVU5TUEVDSUZJRUQQABIyCi5DRVJUSUZJQ0FURV9ST1RBVElPTl9GQUlMVVJFX1JFQVNPTl9VTlBBUlNBQkxFEAESMQotQ0VSVElGSUNBVEVfUk9UQVRJT05fRkFJTFVSRV9SRUFTT05fVU5UUlVTVEVEEAISNgoyQ0VSVElGSUNBVEVfUk9UQVRJT05fRkFJTFVSRV9SRUFTT05fUEVSU0lTVF9GQUlMRUQQAxIyCi5DRVJUSUZJQ0FURV9ST1RBVElPTl9GQUlMVVJFX1JFQVNPTl9DTE9DS19TS0VXEAQqfAoLSGVhbHRoU3RhdGUSHAoYSEVBTFRIX1NUQVRFX1VOU1BFQ0lGSUVEEAASGAoUSEVBTFRIX1NUQVRFX0hFQUxUSFkQARIZChVIRUFMVEhfU1RBVEVfREVHUkFERUQQAhIaChZIRUFMVEhfU1RBVEVfVU5IRUFMVEhZEAMq2AIKEEZhaXJVc2VEaW1lbnNpb24SIgoeRkFJUl9VU0VfRElNRU5TSU9OX1VOU1BFQ0lGSUVEEAASHAoYRkFJUl9VU0VfRElNRU5TSU9OX1NFQVRTEAESJwojRkFJUl9VU0VfRElNRU5TSU9OX1JFUE9TSVRPUllfQ09VTlQQAhIpCiVGQUlSX1VTRV9ESU1FTlNJT05fUkVQT1NJVE9SWV9TVE9SQUdFEAMSIQodRkFJUl9VU0VfRElNRU5TSU9OX0NJX01JTlVURVMQBBIlCiFGQUlSX1VTRV9ESU1FTlNJT05fQ0lfQ09OQ1VSUkVOQ1kQBRIiCh5GQUlSX1VTRV9ESU1FTlNJT05fU0NBTl9WT0xVTUUQBhIhCh1GQUlSX1VTRV9ESU1FTlNJT05fSU5ERVhfU0laRRAHEh0KGUZBSVJfVVNFX0RJTUVOU0lPTl9FR1JFU1MQCCqAAQoNRW52ZWxvcGVTdGF0ZRIeChpFTlZFTE9QRV9TVEFURV9VTlNQRUNJRklFRBAAEhkKFUVOVkVMT1BFX1NUQVRFX1dJVEhJThABEhcKE0VOVkVMT1BFX1NUQVRFX05FQVIQAhIbChdFTlZFTE9QRV9TVEFURV9FWENFRURFRBADKosBChBEZXNpcmVkU3RhdGVLaW5kEiIKHkRFU0lSRURfU1RBVEVfS0lORF9VTlNQRUNJRklFRBAAEiYKIkRFU0lSRURfU1RBVEVfS0lORF9DQV9UUlVTVF9CVU5ETEUQARIrCidERVNJUkVEX1NUQVRFX0tJTkRfUkVMRUFTRV9UUlVTVF9CVU5ETEUQAiqgAQoMUm9sbG91dFBoYXNlEh0KGVJPTExPVVRfUEhBU0VfVU5TUEVDSUZJRUQQABIdChlST0xMT1VUX1BIQVNFX0lOX1BST0dSRVNTEAESGQoVUk9MTE9VVF9QSEFTRV9BUFBMSUVEEAISGAoUUk9MTE9VVF9QSEFTRV9GQUlMRUQQAxIdChlST0xMT1VUX1BIQVNFX1JPTExFRF9CQUNLEAQqugEKC0NvbW1hbmRUeXBlEhwKGENPTU1BTkRfVFlQRV9VTlNQRUNJRklFRBAAEiIKHkNPTU1BTkRfVFlQRV9UUklHR0VSX1JFQ09OQ0lMRRABEiMKH0NPTU1BTkRfVFlQRV9ST1RBVEVfQ0xJRU5UX0NFUlQQAhIeChpDT01NQU5EX1RZUEVfRFJBSU5fUlVOTkVSUxADEiQKIENPTU1BTkRfVFlQRV9DT0xMRUNUX0RJQUdOT1NUSUNTEAQyZAoMQWdlbnRHYXRld2F5ElQKB0Nvbm5lY3QSHi5naXRzYWFzLmFnZW50LnYxLkFnZW50TWVzc2FnZRolLmdpdHNhYXMuYWdlbnQudjEuQ29udHJvbFBsYW5lTWVzc2FnZSgBMAEyhgEKEEVucm9sbWVudFNlcnZpY2UScgoTSXNzdWVFbnJvbG1lbnRUb2tlbhIsLmdpdHNhYXMuYWdlbnQudjEuSXNzdWVFbnJvbG1lbnRUb2tlblJlcXVlc3QaLS5naXRzYWFzLmFnZW50LnYxLklzc3VlRW5yb2xtZW50VG9rZW5SZXNwb25zZUIxWi9naXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vYWdlbnQvdjE7YWdlbnR2MWIGcHJvdG8z", [file_google_protobuf_timestamp, file_google_protobuf_duration]);
 
 /**
  * ---------------------------------------------------------------------------
@@ -539,6 +539,81 @@ export const CertificateRotationAckSchema: GenMessage<CertificateRotationAck> = 
   messageDesc(file_proto_agent_v1_agent, 8);
 
 /**
+ * IssueEnrolmentTokenRequest carries the issuance input and NOTHING ELSE. There is
+ * deliberately no tenant or actor field: the token is minted for the tenant the
+ * verified caller is scoped to, by the actor the caller verified as — both properties
+ * of the PAT-verified principal on the call, never wire claims (the residency Declare
+ * door's subject rule, SPEC-0043 AC6, applied to this door).
+ *
+ * @generated from message gitsaas.agent.v1.IssueEnrolmentTokenRequest
+ */
+export type IssueEnrolmentTokenRequest = Message<"gitsaas.agent.v1.IssueEnrolmentTokenRequest"> & {
+  /**
+   * The requested token lifetime. The domain clamps it: zero, negative or beyond the
+   * configured maximum all yield the maximum (backend/modules/agent — the same rule
+   * the operator surface applies), so a caller can shorten a token but never lengthen
+   * it past the configured bound.
+   *
+   * @generated from field: google.protobuf.Duration lifetime = 1;
+   */
+  lifetime?: Duration | undefined;
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.IssueEnrolmentTokenRequest.
+ * Use `create(IssueEnrolmentTokenRequestSchema)` to create a new message.
+ */
+export const IssueEnrolmentTokenRequestSchema: GenMessage<IssueEnrolmentTokenRequest> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 9);
+
+/**
+ * IssueEnrolmentTokenResponse is the issued token as the domain records it, plus the
+ * secret itself, which exists in this response exactly once: the control plane stores
+ * only its hash, so a caller that fails to capture it mints another token rather than
+ * retrieving this one (SPEC-0038 AC2). The fields are what an operator needs to store
+ * the token as a Secret for the data plane's install: the token to present as
+ * Enrol.one_time_token, its identity, and its validity window.
+ *
+ * @generated from message gitsaas.agent.v1.IssueEnrolmentTokenResponse
+ */
+export type IssueEnrolmentTokenResponse = Message<"gitsaas.agent.v1.IssueEnrolmentTokenResponse"> & {
+  /**
+   * the token's identity; the only name the audit trail ever uses (AC2)
+   *
+   * @generated from field: string token_id = 1;
+   */
+  tokenId: string;
+
+  /**
+   * the secret, returned exactly once; single-use, tenant-scoped, time-bounded
+   *
+   * @generated from field: string one_time_token = 2;
+   */
+  oneTimeToken: string;
+
+  /**
+   * the server's instant the token was minted
+   *
+   * @generated from field: google.protobuf.Timestamp issued_at = 3;
+   */
+  issuedAt?: Timestamp | undefined;
+
+  /**
+   * the token becomes unusable at this instant (AC1's time bound)
+   *
+   * @generated from field: google.protobuf.Timestamp expires_at = 4;
+   */
+  expiresAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.agent.v1.IssueEnrolmentTokenResponse.
+ * Use `create(IssueEnrolmentTokenResponseSchema)` to create a new message.
+ */
+export const IssueEnrolmentTokenResponseSchema: GenMessage<IssueEnrolmentTokenResponse> = /*@__PURE__*/
+  messageDesc(file_proto_agent_v1_agent, 10);
+
+/**
  * One trusted CA root in the bundle.
  *
  * @generated from message gitsaas.agent.v1.CATrustRoot
@@ -571,7 +646,7 @@ export type CATrustRoot = Message<"gitsaas.agent.v1.CATrustRoot"> & {
  * Use `create(CATrustRootSchema)` to create a new message.
  */
 export const CATrustRootSchema: GenMessage<CATrustRoot> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 9);
+  messageDesc(file_proto_agent_v1_agent, 11);
 
 /**
  * The staged CA trust bundle. revision advances with every staging step — stage,
@@ -608,7 +683,7 @@ export type CATrustBundle = Message<"gitsaas.agent.v1.CATrustBundle"> & {
  * Use `create(CATrustBundleSchema)` to create a new message.
  */
 export const CATrustBundleSchema: GenMessage<CATrustBundle> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 10);
+  messageDesc(file_proto_agent_v1_agent, 12);
 
 /**
  * One trusted release-signing key in the bundle.
@@ -636,7 +711,7 @@ export type ReleaseTrustKey = Message<"gitsaas.agent.v1.ReleaseTrustKey"> & {
  * Use `create(ReleaseTrustKeySchema)` to create a new message.
  */
 export const ReleaseTrustKeySchema: GenMessage<ReleaseTrustKey> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 11);
+  messageDesc(file_proto_agent_v1_agent, 13);
 
 /**
  * The staged release trust bundle. revision advances with every staging step — stage,
@@ -673,7 +748,7 @@ export type ReleaseTrustBundle = Message<"gitsaas.agent.v1.ReleaseTrustBundle"> 
  * Use `create(ReleaseTrustBundleSchema)` to create a new message.
  */
 export const ReleaseTrustBundleSchema: GenMessage<ReleaseTrustBundle> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 12);
+  messageDesc(file_proto_agent_v1_agent, 14);
 
 /**
  * @generated from message gitsaas.agent.v1.Heartbeat
@@ -695,7 +770,7 @@ export type Heartbeat = Message<"gitsaas.agent.v1.Heartbeat"> & {
  * Use `create(HeartbeatSchema)` to create a new message.
  */
 export const HeartbeatSchema: GenMessage<Heartbeat> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 13);
+  messageDesc(file_proto_agent_v1_agent, 15);
 
 /**
  * @generated from message gitsaas.agent.v1.ComponentHealth
@@ -729,7 +804,7 @@ export type ComponentHealth = Message<"gitsaas.agent.v1.ComponentHealth"> & {
  * Use `create(ComponentHealthSchema)` to create a new message.
  */
 export const ComponentHealthSchema: GenMessage<ComponentHealth> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 14);
+  messageDesc(file_proto_agent_v1_agent, 16);
 
 /**
  * @generated from message gitsaas.agent.v1.TelemetrySample
@@ -765,7 +840,7 @@ export type TelemetrySample = Message<"gitsaas.agent.v1.TelemetrySample"> & {
  * Use `create(TelemetrySampleSchema)` to create a new message.
  */
 export const TelemetrySampleSchema: GenMessage<TelemetrySample> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 15);
+  messageDesc(file_proto_agent_v1_agent, 17);
 
 /**
  * Fair-use metering for flat-rate cost governance (ADR-0008).
@@ -848,7 +923,7 @@ export type UsageSample = Message<"gitsaas.agent.v1.UsageSample"> & {
  * Use `create(UsageSampleSchema)` to create a new message.
  */
 export const UsageSampleSchema: GenMessage<UsageSample> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 16);
+  messageDesc(file_proto_agent_v1_agent, 18);
 
 /**
  * One dimension's envelope condition with the counters the decision was made
@@ -921,7 +996,7 @@ export type DimensionEnvelope = Message<"gitsaas.agent.v1.DimensionEnvelope"> & 
  * Use `create(DimensionEnvelopeSchema)` to create a new message.
  */
 export const DimensionEnvelopeSchema: GenMessage<DimensionEnvelope> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 17);
+  messageDesc(file_proto_agent_v1_agent, 19);
 
 /**
  * Envelope state reaches the data plane as DESIRED STATE on this channel; the
@@ -967,7 +1042,7 @@ export type EnvelopeStateUpdate = Message<"gitsaas.agent.v1.EnvelopeStateUpdate"
  * Use `create(EnvelopeStateUpdateSchema)` to create a new message.
  */
 export const EnvelopeStateUpdateSchema: GenMessage<EnvelopeStateUpdate> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 18);
+  messageDesc(file_proto_agent_v1_agent, 20);
 
 /**
  * agent -> CP; answers EnvelopeStateUpdate
@@ -1000,7 +1075,7 @@ export type EnvelopeStateAck = Message<"gitsaas.agent.v1.EnvelopeStateAck"> & {
  * Use `create(EnvelopeStateAckSchema)` to create a new message.
  */
 export const EnvelopeStateAckSchema: GenMessage<EnvelopeStateAck> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 19);
+  messageDesc(file_proto_agent_v1_agent, 21);
 
 /**
  * ---------------------------------------------------------------------------
@@ -1050,7 +1125,7 @@ export type DesiredState = Message<"gitsaas.agent.v1.DesiredState"> & {
  * Use `create(DesiredStateSchema)` to create a new message.
  */
 export const DesiredStateSchema: GenMessage<DesiredState> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 20);
+  messageDesc(file_proto_agent_v1_agent, 22);
 
 /**
  * @generated from message gitsaas.agent.v1.Component
@@ -1088,7 +1163,7 @@ export type Component = Message<"gitsaas.agent.v1.Component"> & {
  * Use `create(ComponentSchema)` to create a new message.
  */
 export const ComponentSchema: GenMessage<Component> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 21);
+  messageDesc(file_proto_agent_v1_agent, 23);
 
 /**
  * @generated from message gitsaas.agent.v1.SignedRelease
@@ -1121,7 +1196,7 @@ export type SignedRelease = Message<"gitsaas.agent.v1.SignedRelease"> & {
  * Use `create(SignedReleaseSchema)` to create a new message.
  */
 export const SignedReleaseSchema: GenMessage<SignedRelease> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 22);
+  messageDesc(file_proto_agent_v1_agent, 24);
 
 /**
  * @generated from message gitsaas.agent.v1.DesiredStateAck
@@ -1157,7 +1232,7 @@ export type DesiredStateAck = Message<"gitsaas.agent.v1.DesiredStateAck"> & {
  * Use `create(DesiredStateAckSchema)` to create a new message.
  */
 export const DesiredStateAckSchema: GenMessage<DesiredStateAck> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 23);
+  messageDesc(file_proto_agent_v1_agent, 25);
 
 /**
  * observed reality, drives convergence
@@ -1198,7 +1273,7 @@ export type ActualStateReport = Message<"gitsaas.agent.v1.ActualStateReport"> & 
  * Use `create(ActualStateReportSchema)` to create a new message.
  */
 export const ActualStateReportSchema: GenMessage<ActualStateReport> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 24);
+  messageDesc(file_proto_agent_v1_agent, 26);
 
 /**
  * @generated from message gitsaas.agent.v1.Command
@@ -1225,7 +1300,7 @@ export type Command = Message<"gitsaas.agent.v1.Command"> & {
  * Use `create(CommandSchema)` to create a new message.
  */
 export const CommandSchema: GenMessage<Command> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 25);
+  messageDesc(file_proto_agent_v1_agent, 27);
 
 /**
  * @generated from message gitsaas.agent.v1.CommandResult
@@ -1252,7 +1327,7 @@ export type CommandResult = Message<"gitsaas.agent.v1.CommandResult"> & {
  * Use `create(CommandResultSchema)` to create a new message.
  */
 export const CommandResultSchema: GenMessage<CommandResult> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 26);
+  messageDesc(file_proto_agent_v1_agent, 28);
 
 /**
  * @generated from message gitsaas.agent.v1.ConfigUpdate
@@ -1269,7 +1344,7 @@ export type ConfigUpdate = Message<"gitsaas.agent.v1.ConfigUpdate"> & {
  * Use `create(ConfigUpdateSchema)` to create a new message.
  */
 export const ConfigUpdateSchema: GenMessage<ConfigUpdate> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 27);
+  messageDesc(file_proto_agent_v1_agent, 29);
 
 /**
  * @generated from message gitsaas.agent.v1.Diagnostics
@@ -1291,7 +1366,7 @@ export type Diagnostics = Message<"gitsaas.agent.v1.Diagnostics"> & {
  * Use `create(DiagnosticsSchema)` to create a new message.
  */
 export const DiagnosticsSchema: GenMessage<Diagnostics> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 28);
+  messageDesc(file_proto_agent_v1_agent, 30);
 
 /**
  * @generated from message gitsaas.agent.v1.Ping
@@ -1308,7 +1383,7 @@ export type Ping = Message<"gitsaas.agent.v1.Ping"> & {
  * Use `create(PingSchema)` to create a new message.
  */
 export const PingSchema: GenMessage<Ping> = /*@__PURE__*/
-  messageDesc(file_proto_agent_v1_agent, 29);
+  messageDesc(file_proto_agent_v1_agent, 31);
 
 /**
  * ---------------------------------------------------------------------------
@@ -1730,4 +1805,44 @@ export const AgentGateway: GenService<{
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_agent_v1_agent, 0);
+
+/**
+ * ---------------------------------------------------------------------------
+ * Operator enrolment-token issuance door  (SPEC-0038 AC1, T-0030 lineage)
+ * ---------------------------------------------------------------------------
+ * The operator-facing door that mints the one-time token Enrol presents on a data
+ * plane's first Connect. Until this surface existed, IssueEnrolmentToken was reachable
+ * only from tests: no shipped binary exposed an operator path to mint a token, and the
+ * north-star journey could not be proven on a cluster. The door mirrors the residency
+ * Declare door (SPEC-0043, ADR-0063): a separately env-gated admin gRPC surface that
+ * verifies its caller — a PAT verified before any policy decision — before it serves
+ * anything. The caller's posture is the PAT-verified platform_operator of ADR-0046:
+ * tenant and actor are properties of the verified principal on the call, never request
+ * fields — a field naming them would be an unauthenticated routing claim (ADR-0045).
+ * The wire vocabulary mirrors the agent module's operator surface (backend/modules/
+ * agent/api): the lifetime input the domain clamps, and the token record the domain
+ * returns — its ID, the secret shown exactly once, and the server-set instants.
+ * The token is a credential: it MUST NOT appear in any log line, error message, metric
+ * label, or audit record — the audit trail names tokens by ID only (SPEC-0038 AC2).
+ *
+ * @generated from service gitsaas.agent.v1.EnrolmentService
+ */
+export const EnrolmentService: GenService<{
+  /**
+   * IssueEnrolmentToken mints one single-use, tenant-scoped, time-bounded enrolment
+   * token (SPEC-0038 AC1). The surface is a PEP: it asks the PDP the domain's token
+   * issue action and refuses coarsely when refused; unverified and unauthorized are the
+   * same coarse refusal (SPEC-0001). Every issuance appends exactly one immutable audit
+   * record naming the tenant, the verified actor and the token's ID and expiry — never
+   * the secret (AC2, AC7).
+   *
+   * @generated from rpc gitsaas.agent.v1.EnrolmentService.IssueEnrolmentToken
+   */
+  issueEnrolmentToken: {
+    methodKind: "unary";
+    input: typeof IssueEnrolmentTokenRequestSchema;
+    output: typeof IssueEnrolmentTokenResponseSchema;
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_proto_agent_v1_agent, 1);
 
