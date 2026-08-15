@@ -26,7 +26,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/usage/v1/usage.proto.
  */
 export const file_proto_usage_v1_usage: GenFile = /*@__PURE__*/
-  fileDesc("Chpwcm90by91c2FnZS92MS91c2FnZS5wcm90bxIQZ2l0c2Fhcy51c2FnZS52MSJcCgxVc2FnZUNvbnRleHQSEQoJdGVuYW50X2lkGAEgASgJEhAKCGFjdG9yX2lkGAIgASgJEhMKC2FjdG9yX3JvbGVzGAMgAygJEhIKCnJlcXVlc3RfaWQYBCABKAkifAoIVXNhZ2VHYXASMAoMd2luZG93X3N0YXJ0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIOCgZyZWFzb24YAyABKAki9wMKElVzYWdlRGltZW5zaW9uVmlldxI1CglkaW1lbnNpb24YASABKA4yIi5naXRzYWFzLmFnZW50LnYxLkZhaXJVc2VEaW1lbnNpb24SNQoIY292ZXJhZ2UYAiABKA4yIy5naXRzYWFzLnVzYWdlLnYxLkRpbWVuc2lvbkNvdmVyYWdlEi4KBXN0YXRlGAMgASgOMh8uZ2l0c2Fhcy5hZ2VudC52MS5FbnZlbG9wZVN0YXRlEhUKDWN1cnJlbnRfdmFsdWUYBCABKAESFgoOZW52ZWxvcGVfdmFsdWUYBSABKAESGgoSbm90aWZpY2F0aW9uX3ZhbHVlGAYgASgBEgwKBHVuaXQYByABKAkSMAoMd2luZG93X3N0YXJ0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIVCg10ZWxlbWV0cnlfZ2FwGAogASgIEigKBGdhcHMYCyADKAsyGi5naXRzYWFzLnVzYWdlLnYxLlVzYWdlR2FwEhcKD2RlZmVycmVkX3JlYXNvbhgMIAEoCRIuCgV0cmVuZBgNIAEoDjIfLmdpdHNhYXMudXNhZ2UudjEuRW52ZWxvcGVUcmVuZCKBAgoPVXNhZ2VEaXZlcmdlbmNlEjUKCWRpbWVuc2lvbhgBIAEoDjIiLmdpdHNhYXMuYWdlbnQudjEuRmFpclVzZURpbWVuc2lvbhIVCg1kYXRhX3BsYW5lX2lkGAIgASgJEhsKE2NvbnRyb2xfcGxhbmVfdmFsdWUYAyABKAESIQoZZGF0YV9wbGFuZV9yZXBvcnRlZF92YWx1ZRgEIAEoARIwCgx3aW5kb3dfc3RhcnQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCndpbmRvd19lbmQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIkYKE0dldFVzYWdlVmlld1JlcXVlc3QSLwoHY29udGV4dBgBIAEoCzIeLmdpdHNhYXMudXNhZ2UudjEuVXNhZ2VDb250ZXh0IroBChRHZXRVc2FnZVZpZXdSZXNwb25zZRI4CgpkaW1lbnNpb25zGAEgAygLMiQuZ2l0c2Fhcy51c2FnZS52MS5Vc2FnZURpbWVuc2lvblZpZXcSNgoLZGl2ZXJnZW5jZXMYAiADKAsyIS5naXRzYWFzLnVzYWdlLnYxLlVzYWdlRGl2ZXJnZW5jZRIwCgxnZW5lcmF0ZWRfYXQYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wKngKEURpbWVuc2lvbkNvdmVyYWdlEiIKHkRJTUVOU0lPTl9DT1ZFUkFHRV9VTlNQRUNJRklFRBAAEh4KGkRJTUVOU0lPTl9DT1ZFUkFHRV9NRVRFUkVEEAESHwobRElNRU5TSU9OX0NPVkVSQUdFX0RFRkVSUkVEEAIqfwoNRW52ZWxvcGVUcmVuZBIeChpFTlZFTE9QRV9UUkVORF9VTlNQRUNJRklFRBAAEhcKE0VOVkVMT1BFX1RSRU5EX0ZMQVQQARIZChVFTlZFTE9QRV9UUkVORF9SSVNJTkcQAhIaChZFTlZFTE9QRV9UUkVORF9GQUxMSU5HEAMybQoMVXNhZ2VTZXJ2aWNlEl0KDEdldFVzYWdlVmlldxIlLmdpdHNhYXMudXNhZ2UudjEuR2V0VXNhZ2VWaWV3UmVxdWVzdBomLmdpdHNhYXMudXNhZ2UudjEuR2V0VXNhZ2VWaWV3UmVzcG9uc2VCN1o1Z2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL3VzYWdlL3YxO3VzYWdldjFiBnByb3RvMw", [file_google_protobuf_timestamp, file_proto_agent_v1_agent]);
+  fileDesc("Chpwcm90by91c2FnZS92MS91c2FnZS5wcm90bxIQZ2l0c2Fhcy51c2FnZS52MSJcCgxVc2FnZUNvbnRleHQSEQoJdGVuYW50X2lkGAEgASgJEhAKCGFjdG9yX2lkGAIgASgJEhMKC2FjdG9yX3JvbGVzGAMgAygJEhIKCnJlcXVlc3RfaWQYBCABKAkifAoIVXNhZ2VHYXASMAoMd2luZG93X3N0YXJ0GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIOCgZyZWFzb24YAyABKAki9wMKElVzYWdlRGltZW5zaW9uVmlldxI1CglkaW1lbnNpb24YASABKA4yIi5naXRzYWFzLmFnZW50LnYxLkZhaXJVc2VEaW1lbnNpb24SNQoIY292ZXJhZ2UYAiABKA4yIy5naXRzYWFzLnVzYWdlLnYxLkRpbWVuc2lvbkNvdmVyYWdlEi4KBXN0YXRlGAMgASgOMh8uZ2l0c2Fhcy5hZ2VudC52MS5FbnZlbG9wZVN0YXRlEhUKDWN1cnJlbnRfdmFsdWUYBCABKAESFgoOZW52ZWxvcGVfdmFsdWUYBSABKAESGgoSbm90aWZpY2F0aW9uX3ZhbHVlGAYgASgBEgwKBHVuaXQYByABKAkSMAoMd2luZG93X3N0YXJ0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgp3aW5kb3dfZW5kGAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIVCg10ZWxlbWV0cnlfZ2FwGAogASgIEigKBGdhcHMYCyADKAsyGi5naXRzYWFzLnVzYWdlLnYxLlVzYWdlR2FwEhcKD2RlZmVycmVkX3JlYXNvbhgMIAEoCRIuCgV0cmVuZBgNIAEoDjIfLmdpdHNhYXMudXNhZ2UudjEuRW52ZWxvcGVUcmVuZCKBAgoPVXNhZ2VEaXZlcmdlbmNlEjUKCWRpbWVuc2lvbhgBIAEoDjIiLmdpdHNhYXMuYWdlbnQudjEuRmFpclVzZURpbWVuc2lvbhIVCg1kYXRhX3BsYW5lX2lkGAIgASgJEhsKE2NvbnRyb2xfcGxhbmVfdmFsdWUYAyABKAESIQoZZGF0YV9wbGFuZV9yZXBvcnRlZF92YWx1ZRgEIAEoARIwCgx3aW5kb3dfc3RhcnQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCndpbmRvd19lbmQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIkYKE0dldFVzYWdlVmlld1JlcXVlc3QSLwoHY29udGV4dBgBIAEoCzIeLmdpdHNhYXMudXNhZ2UudjEuVXNhZ2VDb250ZXh0IokCChtFbnZlbG9wZVRocm90dGxlT2JzZXJ2YXRpb24SGgoSZGVzaXJlZF9nZW5lcmF0aW9uGAEgASgDEiIKGmRlc2lyZWRfbWF4X2NpX2NvbmN1cnJlbmN5GAIgASgFEh8KF2Rlc2lyZWRfcXVldWVfZGVwdGhfY2FwGAMgASgDEhcKD2hhc19hcHBsaWVkX2FjaxgEIAEoCBIaChJhcHBsaWVkX2dlbmVyYXRpb24YBSABKAMSDwoHYXBwbGllZBgGIAEoCBIVCg1hcHBsaWVkX2Vycm9yGAcgASgJEiwKCGFja2VkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCKEAgoUR2V0VXNhZ2VWaWV3UmVzcG9uc2USOAoKZGltZW5zaW9ucxgBIAMoCzIkLmdpdHNhYXMudXNhZ2UudjEuVXNhZ2VEaW1lbnNpb25WaWV3EjYKC2RpdmVyZ2VuY2VzGAIgAygLMiEuZ2l0c2Fhcy51c2FnZS52MS5Vc2FnZURpdmVyZ2VuY2USMAoMZ2VuZXJhdGVkX2F0GAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBJIChFlbnZlbG9wZV90aHJvdHRsZRgEIAEoCzItLmdpdHNhYXMudXNhZ2UudjEuRW52ZWxvcGVUaHJvdHRsZU9ic2VydmF0aW9uKngKEURpbWVuc2lvbkNvdmVyYWdlEiIKHkRJTUVOU0lPTl9DT1ZFUkFHRV9VTlNQRUNJRklFRBAAEh4KGkRJTUVOU0lPTl9DT1ZFUkFHRV9NRVRFUkVEEAESHwobRElNRU5TSU9OX0NPVkVSQUdFX0RFRkVSUkVEEAIqfwoNRW52ZWxvcGVUcmVuZBIeChpFTlZFTE9QRV9UUkVORF9VTlNQRUNJRklFRBAAEhcKE0VOVkVMT1BFX1RSRU5EX0ZMQVQQARIZChVFTlZFTE9QRV9UUkVORF9SSVNJTkcQAhIaChZFTlZFTE9QRV9UUkVORF9GQUxMSU5HEAMybQoMVXNhZ2VTZXJ2aWNlEl0KDEdldFVzYWdlVmlldxIlLmdpdHNhYXMudXNhZ2UudjEuR2V0VXNhZ2VWaWV3UmVxdWVzdBomLmdpdHNhYXMudXNhZ2UudjEuR2V0VXNhZ2VWaWV3UmVzcG9uc2VCN1o1Z2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL3VzYWdlL3YxO3VzYWdldjFiBnByb3RvMw", [file_google_protobuf_timestamp, file_proto_agent_v1_agent]);
 
 /**
  * UsageContext is derived from an authenticated principal by the PEP. The
@@ -277,6 +277,82 @@ export const GetUsageViewRequestSchema: GenMessage<GetUsageViewRequest> = /*@__P
   messageDesc(file_proto_usage_v1_usage, 4);
 
 /**
+ * EnvelopeThrottleObservation is SPEC-0046 AC3's end-to-end observability:
+ * the envelope the control plane METERED and delivered as desired state, and
+ * what the data plane acked as APPLIED, each shown with its own numbers —
+ * never smoothed into one (SPEC-0046 AC1/AC3). A tenant with no evaluation
+ * yet has no observation on the response at all; a tenant with an evaluation
+ * but no recorded ack shows has_applied_ack = false — absence renders as
+ * absence, never as zero or as "applied" (SPEC-0041 AC3's discipline applied
+ * to state, and AC7: nothing here can block git).
+ *
+ * @generated from message gitsaas.usage.v1.EnvelopeThrottleObservation
+ */
+export type EnvelopeThrottleObservation = Message<"gitsaas.usage.v1.EnvelopeThrottleObservation"> & {
+  /**
+   * The newest evaluation's desired state — the METERED side (ADR-0061): the
+   * same counters every envelope decision was made from (SPEC-0041 AC10).
+   *
+   * @generated from field: int64 desired_generation = 1;
+   */
+  desiredGeneration: bigint;
+
+  /**
+   * 0 = the evaluation throttled nothing
+   *
+   * @generated from field: int32 desired_max_ci_concurrency = 2;
+   */
+  desiredMaxCiConcurrency: number;
+
+  /**
+   * queued jobs are delayed, never dropped
+   *
+   * @generated from field: int64 desired_queue_depth_cap = 3;
+   */
+  desiredQueueDepthCap: bigint;
+
+  /**
+   * The newest acknowledgement recorded from the data plane — the APPLIED
+   * side (SPEC-0041 AC9, T-0035): the control plane states, the data plane
+   * applies and says so.
+   *
+   * false = no ack recorded yet: absence, not zero
+   *
+   * @generated from field: bool has_applied_ack = 4;
+   */
+  hasAppliedAck: boolean;
+
+  /**
+   * @generated from field: int64 applied_generation = 5;
+   */
+  appliedGeneration: bigint;
+
+  /**
+   * @generated from field: bool applied = 6;
+   */
+  applied: boolean;
+
+  /**
+   * coarse error prose the data plane reported
+   *
+   * @generated from field: string applied_error = 7;
+   */
+  appliedError: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp acked_at = 8;
+   */
+  ackedAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.usage.v1.EnvelopeThrottleObservation.
+ * Use `create(EnvelopeThrottleObservationSchema)` to create a new message.
+ */
+export const EnvelopeThrottleObservationSchema: GenMessage<EnvelopeThrottleObservation> = /*@__PURE__*/
+  messageDesc(file_proto_usage_v1_usage, 5);
+
+/**
  * @generated from message gitsaas.usage.v1.GetUsageViewResponse
  */
 export type GetUsageViewResponse = Message<"gitsaas.usage.v1.GetUsageViewResponse"> & {
@@ -297,6 +373,14 @@ export type GetUsageViewResponse = Message<"gitsaas.usage.v1.GetUsageViewRespons
    * @generated from field: google.protobuf.Timestamp generated_at = 3;
    */
   generatedAt?: Timestamp | undefined;
+
+  /**
+   * The end-to-end throttle observation (SPEC-0046 AC3): absent until the
+   * tenant has at least one envelope evaluation. Additive (field 4).
+   *
+   * @generated from field: gitsaas.usage.v1.EnvelopeThrottleObservation envelope_throttle = 4;
+   */
+  envelopeThrottle?: EnvelopeThrottleObservation | undefined;
 };
 
 /**
@@ -304,7 +388,7 @@ export type GetUsageViewResponse = Message<"gitsaas.usage.v1.GetUsageViewRespons
  * Use `create(GetUsageViewResponseSchema)` to create a new message.
  */
 export const GetUsageViewResponseSchema: GenMessage<GetUsageViewResponse> = /*@__PURE__*/
-  messageDesc(file_proto_usage_v1_usage, 5);
+  messageDesc(file_proto_usage_v1_usage, 6);
 
 /**
  * Whether the control plane meters a dimension in this phase (SPEC-0041 AC2).
