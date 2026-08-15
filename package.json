@@ -8,6 +8,7 @@
   "scripts": {
     "gen": "buf generate",
     "dev": "astro dev",
+    "prebuild": "vitest run tests/usage-regression-pins.test.ts",
     "build": "astro build",
     "check": "tsc --noEmit",
     "test": "vitest run",

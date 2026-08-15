@@ -443,6 +443,10 @@ export interface UsageDimensionView {
   dimension: string;
   coverage: 'METERED' | 'DEFERRED' | string;
   state?: string;
+  // trend names the direction the control plane's counter moved (SPEC-0046
+  // AC2); the BFF omits it on deferred and gapped rows, so a row without a
+  // trend has no number for one to describe. Rendered, never derived.
+  trend?: 'FLAT' | 'RISING' | 'FALLING' | string;
   value?: number;
   envelope?: number;
   notification?: number;
@@ -466,12 +470,29 @@ export interface UsageDivergenceView {
   window_end: string;
 }
 
+// UsageThrottleObservation is SPEC-0046 AC3's end-to-end throttle view: the
+// METERED desired state the control plane delivered and the APPLIED ack the
+// data plane reported, shown as two halves. The BFF omits the whole object
+// until the tenant has an evaluation, and the applied_* fields until an ack
+// is recorded — absence renders as absence.
+export interface UsageThrottleObservation {
+  desired_generation: number;
+  desired_max_ci_concurrency: number;
+  desired_queue_depth_cap: number;
+  has_applied_ack: boolean;
+  applied_generation?: number;
+  applied?: boolean;
+  applied_error?: string;
+  acked_at?: string;
+}
+
 // UsageViewResponse is the tenant's fair-use usage view. The dimensions
 // list itself is the coverage statement: every PRD §6 dimension appears
 // exactly once, metered or deferred with its reason (SPEC-0041 AC2).
 export interface UsageViewResponse {
   dimensions: UsageDimensionView[];
   divergences: UsageDivergenceView[];
+  throttle?: UsageThrottleObservation;
   generated_at: string;
 }
 
@@ -487,6 +508,7 @@ export async function usageView(request: Request): Promise<UsageViewResponse> {
   return {
     dimensions: view.dimensions ?? [],
     divergences: view.divergences ?? [],
+    throttle: view.throttle,
     generated_at: view.generated_at,
   };
 }
