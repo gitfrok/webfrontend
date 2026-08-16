@@ -1,0 +1,63 @@
+---
+// The CVD-safe diff (T-0046, SPEC-0047 AC5, ADR-0069 decision 4).
+//
+// Four channels carry add-vs-remove, and colour is the weakest of them:
+//   1. a text marker in the gutter — '+' and '−', real DOM text;
+//   2. the line numbers, which stop in the column the change did not touch;
+//   3. an accessible name on the marker, so a screen reader says "added line";
+//   4. the tint, which is blue/orange rather than green/red and is the ONLY
+//      channel a colourblind or grayscale reader loses.
+//
+// Turn the stylesheet off entirely and this still reads as a diff. That is the
+// test in tests/diff-cvd.test.ts, and it is the whole point of the decision.
+import { parsePatch, countChanges } from '../lib/diff';
+
+interface Props {
+  patch: string;
+}
+const { patch } = Astro.props;
+const lines = parsePatch(patch);
+const { added, removed } = countChanges(lines);
+---
+
+{lines.length === 0 ? (
+  <p class="gf-muted">No differences.</p>
+) : (
+  <div class="gf-card" style="padding:0; overflow:hidden;">
+    <div
+      style="display:flex; gap:var(--gf-space-3); align-items:center; padding:var(--gf-space-3) var(--gf-space-4); border-bottom:1px solid var(--gf-line);"
+    >
+      {/* The summary states the counts in words as well as digits: a reader
+          who cannot see the tints still learns the shape of the change. */}
+      <span class="gf-status gf-status-info" style="border-color:var(--gf-line);">
+        {added} added, {removed} removed
+      </span>
+      <span class="gf-muted">Added lines are marked +, removed lines −</span>
+    </div>
+
+    <div role="table" aria-label="File differences" style="overflow-x:auto;">
+      {lines.map((line) => (
+        <div
+          role="row"
+          data-diff-kind={line.kind}
+          class:list={[
+            'gf-diff-line',
+            line.kind === 'add' && 'gf-diff-add',
+            line.kind === 'del' && 'gf-diff-del',
+            line.kind === 'meta' && 'gf-muted',
+          ]}
+          style={line.kind === 'hunk' ? 'background:var(--gf-soft); color:var(--gf-ink-muted);' : undefined}
+        >
+          <span class="gf-diff-marker" role="cell">
+            {line.marker !== '' ? (
+              <span aria-label={line.kind === 'add' ? 'added line' : 'removed line'}>{line.marker}</span>
+            ) : (
+              <span aria-hidden="true">&nbsp;</span>
+            )}
+          </span>
+          <span role="cell" style="white-space:pre-wrap; word-break:break-word;">{line.content}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+)}

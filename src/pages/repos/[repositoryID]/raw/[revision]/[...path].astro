@@ -3,6 +3,7 @@
 // SSR layer stays a thin proxy — it forwards the session cookie and copies the
 // streamed bytes with the BFF's private/uncacheable semantics.
 import { bffOrigin } from '../../../../../lib/bff';
+import '../../../../../styles/tokens.css';
 
 const { repositoryID, revision } = Astro.params;
 const pathParts = Astro.params.path ?? [];
@@ -28,7 +29,9 @@ const metadataHeader = response.headers.get('x-gitfrok-file-metadata');
     <meta charset="utf-8" />
     <title>{filePath}</title>
   </head>
-  <body style="margin:0">
-    <pre style="white-space:pre-wrap; word-break:break-all; background:#f6f8fa; padding:16px; margin:0; font-size:13px; line-height:1.5; min-height:100vh">{new TextDecoder().decode(new Uint8Array(body))}</pre>
+  <body>
+    <pre
+      style="white-space:pre-wrap; overflow-wrap:anywhere; background:var(--gf-code-bg); color:var(--gf-ink); font-family:var(--gf-font-code); padding:var(--gf-space-4); margin:0; min-height:100dvh;"
+    >{new TextDecoder().decode(new Uint8Array(body))}</pre>
   </body>
 </html>

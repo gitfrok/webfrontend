@@ -5,6 +5,7 @@
 import { file } from '../../../../../lib/bff';
 import Layout from '../../../../../layouts/Layout.astro';
 import CommandPalette from '../../../../../components/CommandPalette';
+import RepoHeader from '../../../../../components/RepoHeader.astro';
 
 const { repositoryID, revision } = Astro.params;
 const pathParts = Astro.params.path ?? [];
@@ -28,23 +29,16 @@ const rawHref = `/repos/${repositoryID}/raw/${encodeURIComponent(revision!)}/${f
 
 <Layout title={`${filePath} @ ${revision}`}>
   <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
-  <main style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
-    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
-      <h1 style={{ fontSize: 20, margin: 0 }}>{filePath}</h1>
-      <div style={{ display: 'flex', gap: 16, alignItems: 'baseline' }}>
-        <code style={{ color: '#57606a' }}>{revision}</code>
-        <a href={rawHref} style={{ color: '#0969da', textDecoration: 'none', fontSize: 14 }}>raw</a>
-      </div>
-    </header>
+  <RepoHeader title={filePath} revision={revision} actionHref={rawHref} actionLabel="raw" />
 
-    {loadError && (
-      <p style={{ color: '#cf222e' }}>This file is unavailable. Check your session, the revision, or the path.</p>
-    )}
+  {loadError && (
+    <p class="gf-status gf-status-danger">This file is unavailable. Check your session, the revision, or the path.</p>
+  )}
 
-    {!loadError && (
-      <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', background: '#f6f8fa', padding: 16, borderRadius: 8, overflowX: 'auto', fontSize: 13, lineHeight: 1.5 }}>
-        {content}
-      </pre>
-    )}
-  </main>
+  {!loadError && (
+    <pre
+      class="gf-card"
+      style="font-family:var(--gf-font-code); white-space:pre-wrap; overflow-wrap:anywhere; background:var(--gf-code-bg); overflow-x:auto; margin:0;"
+    >{content}</pre>
+  )}
 </Layout>

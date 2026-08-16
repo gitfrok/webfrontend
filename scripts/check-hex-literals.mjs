@@ -38,11 +38,7 @@ const LEGACY = new Set([
   `components${sep}SecurityTriage.tsx`,
   `components${sep}UsageView.astro`,
   `pages${sep}index.astro`,
-  `pages${sep}repos${sep}[repositoryID]${sep}diff${sep}[revision].astro`,
-  `pages${sep}repos${sep}[repositoryID]${sep}file${sep}[revision]${sep}[...path].astro`,
   `pages${sep}repos${sep}[repositoryID]${sep}merge_requests${sep}[mergeRequestID].astro`,
-  `pages${sep}repos${sep}[repositoryID]${sep}raw${sep}[revision]${sep}[...path].astro`,
-  `pages${sep}repos${sep}[repositoryID]${sep}tree${sep}[revision]${sep}[...path].astro`,
   `pages${sep}security${sep}index.astro`,
   `pages${sep}usage${sep}index.astro`,
 ]);

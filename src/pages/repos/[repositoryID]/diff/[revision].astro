@@ -15,6 +15,8 @@ import type { MRFindingsPage } from '../../../../lib/bff';
 import Layout from '../../../../layouts/Layout.astro';
 import CommandPalette from '../../../../components/CommandPalette';
 import MRDiffFindings from '../../../../components/MRDiffFindings.astro';
+import DiffView from '../../../../components/DiffView.astro';
+import RepoHeader from '../../../../components/RepoHeader.astro';
 
 const { repositoryID, revision } = Astro.params;
 const baseRevision = Astro.url.searchParams.get('base_revision') ?? `${revision}^`;
@@ -46,32 +48,21 @@ if (mergeRequestID) {
 
 <Layout title={`diff ${baseRevision}..${revision}`}>
   <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
-  <main style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
-    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
-      <h1 style={{ fontSize: 20, margin: 0 }}>{repositoryID}</h1>
-      <code style={{ color: '#57606a' }}>{baseRevision}..{revision}</code>
-    </header>
+  <RepoHeader title={repositoryID!} revision={`${baseRevision}..${revision}`} />
 
-    {loadError && (
-      <p style={{ color: '#cf222e' }}>This diff is unavailable. Check your session or the revisions.</p>
-    )}
+  {loadError && (
+    <p class="gf-status gf-status-danger">This diff is unavailable. Check your session or the revisions.</p>
+  )}
 
-    {!loadError && patch === '' && mergeRequestID === '' && <p style={{ color: '#6e7781' }}>No differences.</p>}
+  {!loadError && mergeRequestID === '' && <DiffView patch={patch} />}
 
-    {!loadError && patch !== '' && mergeRequestID === '' && (
-      <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', background: '#f6f8fa', padding: 16, borderRadius: 8, overflowX: 'auto', fontSize: 13, lineHeight: 1.5 }}>
-        {patch}
-      </pre>
-    )}
+  {!loadError && mergeRequestID !== '' && findingsError && (
+    <p class="gf-status gf-status-danger" style="margin:var(--gf-space-4) 0;">
+      The findings for this merge request are unavailable.
+    </p>
+  )}
 
-    {!loadError && mergeRequestID !== '' && findingsError && (
-      <p style={{ color: '#cf222e', margin: '16px 0' }}>
-        The findings for this merge request are unavailable.
-      </p>
-    )}
-
-    {!loadError && mrFindingsPage && (
-      <MRDiffFindings patch={patch} findings={mrFindingsPage.findings} summary={mrFindingsPage.summary} />
-    )}
-  </main>
+  {!loadError && mrFindingsPage && (
+    <MRDiffFindings patch={patch} findings={mrFindingsPage.findings} summary={mrFindingsPage.summary} />
+  )}
 </Layout>

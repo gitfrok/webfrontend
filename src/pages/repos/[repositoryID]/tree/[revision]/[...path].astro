@@ -7,6 +7,7 @@ import { tree } from '../../../../../lib/bff';
 import type { BrowserTreeEntry, BrowserEntryKind } from '../../../../../gen/proto/bff/v1/browser_pb';
 import Layout from '../../../../../layouts/Layout.astro';
 import CommandPalette from '../../../../../components/CommandPalette';
+import RepoHeader from '../../../../../components/RepoHeader.astro';
 
 const { repositoryID, revision } = Astro.params;
 const entries: BrowserTreeEntry[] = [];
@@ -30,51 +31,48 @@ const isFile = (kind: BrowserEntryKind) => kind === 1;
 
 <Layout title={`${repositoryID} @ ${revision}`}>
   <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
-  <main style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
-    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
-      <h1 style={{ fontSize: 20, margin: 0 }}>{repositoryID}</h1>
-      <code style={{ color: '#57606a' }}>{revision}</code>
-    </header>
+  <RepoHeader title={repositoryID!} revision={revision} />
 
-    {loadError && (
-      <p style={{ color: '#cf222e' }}>This view is unavailable. Check your session or the revision.</p>
-    )}
+  {loadError && (
+    <p class="gf-status gf-status-danger">This view is unavailable. Check your session or the revision.</p>
+  )}
 
-    {!loadError && (
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-        {entries.map((entry) => (
-          <li key={entry.path} style={{ borderBottom: '1px solid #eaeef2' }}>
-            {isDirectory(entry.kind) ? (
-              <a
-                href={`/repos/${repositoryID}/tree/${encodeURIComponent(revision!)}/${entry.path.split('/').map(encodeURIComponent).join('/')}`}
-                style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 4px', textDecoration: 'none', color: '#0969da' }}
-              >
-                <span>{entry.path}/</span>
-                <span style={{ color: '#6e7781', fontSize: 12 }}>dir</span>
-              </a>
-            ) : isFile(entry.kind) ? (
-              <a
-                href={`/repos/${repositoryID}/file/${encodeURIComponent(revision!)}/${entry.path.split('/').map(encodeURIComponent).join('/')}`}
-                style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 4px', textDecoration: 'none', color: '#0969da' }}
-              >
-                <span>{entry.path}</span>
-                <span style={{ color: '#6e7781', fontSize: 12 }}>{entry.sizeBytes.toString()} B</span>
-              </a>
-            ) : (
-              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 4px', color: '#6e7781' }}>
-                <span>{entry.path}</span>
-                <span style={{ fontSize: 12 }}>symlink</span>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-    )}
+  {!loadError && (
+    <ul style="list-style:none; margin:0; padding:0;">
+      {entries.map((entry) => (
+        <li style="border-bottom:1px solid var(--gf-line);">
+          {isDirectory(entry.kind) ? (
+            <a
+              href={`/repos/${repositoryID}/tree/${encodeURIComponent(revision!)}/${entry.path.split('/').map(encodeURIComponent).join('/')}`}
+              style="display:flex; justify-content:space-between; gap:var(--gf-space-4); padding:var(--gf-space-2) var(--gf-space-1);"
+            >
+              <span>{entry.path}/</span>
+              {/* The kind is a word, not an icon colour: "dir" reads in
+                  grayscale and to a screen reader alike. */}
+              <span class="gf-muted">dir</span>
+            </a>
+          ) : isFile(entry.kind) ? (
+            <a
+              href={`/repos/${repositoryID}/file/${encodeURIComponent(revision!)}/${entry.path.split('/').map(encodeURIComponent).join('/')}`}
+              style="display:flex; justify-content:space-between; gap:var(--gf-space-4); padding:var(--gf-space-2) var(--gf-space-1);"
+            >
+              <span>{entry.path}</span>
+              <span class="gf-muted">{entry.sizeBytes.toString()} B</span>
+            </a>
+          ) : (
+            <div class="gf-muted" style="display:flex; justify-content:space-between; gap:var(--gf-space-4); padding:var(--gf-space-2) var(--gf-space-1);">
+              <span>{entry.path}</span>
+              <span>symlink</span>
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  )}
 
-    {nextPageToken && (
-      <p style={{ color: '#6e7781', fontSize: 13, padding: '8px 0' }}>
-        More entries exist; page through with a page token.
-      </p>
-    )}
-  </main>
+  {nextPageToken && (
+    <p class="gf-muted" style="padding:var(--gf-space-2) 0;">
+      More entries exist; page through with a page token.
+    </p>
+  )}
 </Layout>
