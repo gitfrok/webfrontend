@@ -1,10 +1,18 @@
 ---
 // Shared SSR shell (ADR-0015 GitHub-clean). Thin proxy: no business logic,
 // no data fetching beyond what the page itself does through the BFF.
+//
+// The auth affordance is a presentation hint, not a decision: it switches on
+// session-cookie PRESENCE only (the BFF validates the session on every call).
+// Sign in goes to same-origin GET /login; Sign out POSTs to same-origin
+// /logout — both served by the BFF behind the ingress, never by this shell.
+import { hasSessionCookie } from '../lib/session';
+
 interface Props {
   title: string;
 }
 const { title } = Astro.props;
+const signedIn = hasSessionCookie(Astro.request);
 ---
 <!doctype html>
 <html lang="en">
@@ -14,6 +22,30 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body style="margin:0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#fff; color:#1f2328;">
+    <header style="border-bottom:1px solid #d0d7de; background:#f6f8fa;">
+      <nav style="max-width:1080px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:16px;">
+        <a href="/" style="font-weight:600; font-size:14px; color:#1f2328; text-decoration:none;">gitfrok</a>
+        <a href="/usage" style="font-size:14px; color:#1f2328; text-decoration:none;">Usage</a>
+        <span style="flex:1;"></span>
+        {signedIn ? (
+          <span data-auth="signed-in" style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:14px; color:#57606a;">Signed in</span>
+            <form method="post" action="/logout" style="margin:0;">
+              <button
+                type="submit"
+                style="font:inherit; font-size:14px; color:#1f2328; background:#f6f8fa; border:1px solid #d0d7de; border-radius:6px; padding:4px 12px; cursor:pointer;"
+              >Sign out</button>
+            </form>
+          </span>
+        ) : (
+          <a
+            href="/login"
+            data-auth="sign-in"
+            style="font-size:14px; font-weight:500; color:#1f2328; background:#f6f8fa; border:1px solid #d0d7de; border-radius:6px; padding:4px 12px; text-decoration:none;"
+          >Sign in</a>
+        )}
+      </nav>
+    </header>
     <slot />
   </body>
 </html>

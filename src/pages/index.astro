@@ -1,19 +1,16 @@
 ---
 // Baseline landing page. Proves the Astro SSR shell builds (T-0001 AC3).
 // Real repo/file/diff views arrive in T-0015; they call the BFF only.
+import Layout from '../layouts/Layout.astro';
+
 const app = 'gitfrok';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{app}</title>
-  </head>
-  <body>
-    <main>
-      <h1>{app}</h1>
-      <p>webfrontend baseline — SSR shell wired (ADR-0015).</p>
-    </main>
-  </body>
-</html>
+<Layout title={app}>
+  <main style={{ maxWidth: 1080, margin: '0 auto', padding: '16px' }}>
+    <h1 style={{ fontSize: 24, margin: '16px 0 8px' }}>{app}</h1>
+    <p style={{ color: '#57606a', fontSize: 14, margin: 0 }}>
+      webfrontend baseline — SSR shell wired (ADR-0015).
+    </p>
+  </main>
+</Layout>
