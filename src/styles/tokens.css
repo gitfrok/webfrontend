@@ -1,0 +1,428 @@
+/*
+ * The design system, as tokens (T-0045, SPEC-0047 AC1/AC3/AC4, ADR-0069).
+ *
+ * THIS IS THE ONLY FILE IN src/ THAT MAY CONTAIN A COLOUR LITERAL. Everything
+ * else references a token; `scripts/check-hex-literals.mjs` fails the build on
+ * a hex anywhere else, which is what makes ADR-0015's "enforced, not
+ * aspirational" true rather than restated.
+ *
+ * The values come from SPEC-0047 § Binding tokens, which is governance — not
+ * from the untracked ./UI kit. Where the two disagree, governance wins.
+ *
+ * Three laws shape what is here (gitfrok-brand-identity-v2 §2):
+ *   1. Luminance before hue — anything that must be told apart differs by
+ *      ≥ 25 L*, so it survives every CVD type AND grayscale.
+ *   2. Never hue-only encoding — colour is reinforcement; the glyph and the
+ *      label carry the meaning. This file ships the glyph vocabulary as
+ *      content tokens so a component cannot invent its own.
+ *   3. The grayscale gate — reviewed under a grayscale filter and a deutan
+ *      simulation before merge.
+ *
+ * Frost (light) is the only default. Deepfreeze ships tokenized in the same
+ * file so the two cannot drift, and is opted into by `data-theme="deepfreeze"`
+ * or the OS preference. Whether users get a toggle is ADR-0069 open decision 3.
+ */
+
+/* ---------------------------------------------------------------- fonts --
+ * Self-hosted WOFF2 (ADR-0069 decision 5): org policy blocks the Google Fonts
+ * CDN, so the prototype's CDN imports are preview-only and never ship. All
+ * three faces are variable, so one file serves every weight we use.
+ */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter.woff2') format('woff2');
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Baloo 2';
+  src: url('/fonts/Baloo2.woff2') format('woff2');
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono.woff2') format('woff2');
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ------------------------------------------------- Frost (light default) -- */
+:root {
+  /* Neutrals */
+  --gf-paper: #F7F9FB;
+  --gf-surface: #FFFFFF;
+  --gf-soft: #EDF2F7;
+  --gf-ink: #1B2A3A;
+  --gf-ink-muted: #5A6B7C;
+  --gf-line: #DCE4EC;
+  --gf-stick: #9AA5B1;
+  --gf-code-bg: #F1F5F9;
+
+  /* Interactive. #0072B2 is Okabe-Ito blue: 5.4:1 on Frost paper, AA for text
+   * and components, and it is the same value in both themes because the
+   * action colour is brand identity, not a neutral. */
+  --gf-action: #0072B2;
+  --gf-action-hover: #005E94;
+  --gf-action-ink: #0072B2;
+
+  /* Functional. Every one of these pairs with a mandatory glyph below —
+   * under full monochromacy success and danger converge, which is exactly
+   * why the glyph is not decorative. */
+  --gf-success: #009E73;
+  --gf-success-ink: #00664B;
+  --gf-danger: #D55E00;      /* vermillion, never red */
+  --gf-danger-ink: #A34700;
+  --gf-warn: #E69F00;
+  --gf-warn-ink: #8A6100;
+  --gf-info: #56B4E9;
+  --gf-info-ink: #0072B2;
+
+  /* Diffs are blue/orange (ADR-0069 decision 4). The gutter marker is what
+   * actually carries add-vs-remove; the tint only reinforces it. */
+  --gf-diff-add-bg: #E3F0FB;
+  --gf-diff-add-ink: #0072B2;
+  --gf-diff-del-bg: #FCEBD4;
+  --gf-diff-del-ink: #A34700;
+
+  /* Brand ramp — theme-invariant. Slice identity is lightness order, which is
+   * why the mark reads the same in deutan, protan, tritan and grayscale. */
+  --gf-frost: #A6D8F5;
+  --gf-sky: #56B4E9;
+  --gf-blue: #1F86C9;
+  --gf-deep: #0B5E96;
+  --gf-mango: #E69F00;
+
+  /* Elevation */
+  --gf-shadow-sm: 0 1px 2px rgba(11, 94, 150, 0.06);
+  --gf-shadow-md: 0 6px 20px rgba(11, 94, 150, 0.10);
+
+  /* Shape */
+  --gf-radius-control: 10px;
+  --gf-radius-card: 16px;
+  --gf-radius-pill: 999px;
+
+  /* Motion */
+  --gf-motion-fast: 120ms;
+  --gf-motion-base: 200ms;
+  --gf-motion-slow: 320ms;
+  --gf-ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Focus — 2px action colour at 2px offset, on every interactive element,
+   * in both themes. Non-negotiable (brand §5). */
+  --gf-focus-width: 2px;
+  --gf-focus-offset: 2px;
+
+  /* Type */
+  --gf-font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+  --gf-font-display: 'Baloo 2', 'Inter', system-ui, sans-serif;
+  --gf-font-code: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  --gf-text-base: 14px;      /* app density; marketing runs 16-18px */
+  --gf-leading: 1.5;
+
+  /* Spacing — 4px rhythm */
+  --gf-space-1: 4px;
+  --gf-space-2: 8px;
+  --gf-space-3: 12px;
+  --gf-space-4: 16px;
+  --gf-space-6: 24px;
+  --gf-space-8: 32px;
+
+  /* Status glyphs as content tokens. A component sets `content: var(...)`
+   * rather than typing a character, so the redundant channel law is
+   * satisfied by construction and the vocabulary stays in one place. */
+  --gf-glyph-success: '\2713';   /* ✓ */
+  --gf-glyph-danger: '\2715';    /* ✕ */
+  --gf-glyph-warn: '\0021';      /* ! */
+  --gf-glyph-info: '\25CF';      /* ● */
+  --gf-glyph-pending: '\25CB';   /* ○ hollow — colourless by design */
+  --gf-glyph-add: '\002B';       /* + */
+  --gf-glyph-del: '\2212';       /* − true minus, not a hyphen */
+}
+
+/* --------------------------------------------- Deepfreeze (dark, opt-in) --
+ * Desaturated tonal variants, not inverted colours: contrast is re-checked
+ * against the dark surface rather than assumed from the light theme.
+ */
+[data-theme='deepfreeze'] {
+  --gf-paper: #15202B;
+  --gf-surface: #1E2A38;
+  --gf-soft: #243242;
+  --gf-ink: #E8EEF4;
+  --gf-ink-muted: #9FB0C0;
+  --gf-line: #33465A;
+  --gf-stick: #6E7E8F;
+  --gf-code-bg: #101923;
+
+  --gf-action: #0072B2;
+  --gf-action-hover: #1F86C9;
+  --gf-action-ink: #7CC6EE;
+
+  --gf-success: #2FC499;
+  --gf-success-ink: #2FC499;
+  --gf-danger: #F07B2D;
+  --gf-danger-ink: #F07B2D;
+  --gf-warn: #F2B33D;
+  --gf-warn-ink: #F2B33D;
+  --gf-info: #7CC6EE;
+  --gf-info-ink: #7CC6EE;
+
+  --gf-diff-add-bg: #1C3A52;
+  --gf-diff-add-ink: #7CC6EE;
+  --gf-diff-del-bg: #4A3010;
+  --gf-diff-del-ink: #F2B33D;
+
+  --gf-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --gf-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='frost']) {
+    --gf-paper: #15202B;
+    --gf-surface: #1E2A38;
+    --gf-soft: #243242;
+    --gf-ink: #E8EEF4;
+    --gf-ink-muted: #9FB0C0;
+    --gf-line: #33465A;
+    --gf-stick: #6E7E8F;
+    --gf-code-bg: #101923;
+
+    --gf-action: #0072B2;
+    --gf-action-hover: #1F86C9;
+    --gf-action-ink: #7CC6EE;
+
+    --gf-success: #2FC499;
+    --gf-success-ink: #2FC499;
+    --gf-danger: #F07B2D;
+    --gf-danger-ink: #F07B2D;
+    --gf-warn: #F2B33D;
+    --gf-warn-ink: #F2B33D;
+    --gf-info: #7CC6EE;
+    --gf-info-ink: #7CC6EE;
+
+    --gf-diff-add-bg: #1C3A52;
+    --gf-diff-add-ink: #7CC6EE;
+    --gf-diff-del-bg: #4A3010;
+    --gf-diff-del-ink: #F2B33D;
+
+    --gf-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --gf-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
+  }
+}
+
+/* ------------------------------------------------------------- base ----- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--gf-paper);
+  color: var(--gf-ink);
+  font-family: var(--gf-font-ui);
+  font-size: var(--gf-text-base);
+  line-height: var(--gf-leading);
+  -webkit-font-smoothing: antialiased;
+}
+
+code,
+pre,
+.gf-code,
+.gf-sha {
+  font-family: var(--gf-font-code);
+}
+
+/* Links carry colour AND underline. A colour-only link fails both CVD and
+ * WCAG 1.4.1, and in body copy there is no hover to rely on. */
+a {
+  color: var(--gf-action-ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+a:hover {
+  color: var(--gf-action-hover);
+}
+
+/* One focus rule for the whole product. */
+:focus-visible {
+  outline: var(--gf-focus-width) solid var(--gf-action);
+  outline-offset: var(--gf-focus-offset);
+  border-radius: var(--gf-radius-control);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: var(--gf-motion-fast) !important;
+    transition-property: opacity !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* -------------------------------------------------------- primitives ---- */
+.gf-shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.gf-header {
+  background: var(--gf-surface);
+  border-bottom: 1px solid var(--gf-line);
+}
+
+.gf-nav {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--gf-space-2) var(--gf-space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--gf-space-4);
+}
+
+.gf-brand {
+  font-family: var(--gf-font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--gf-ink);
+  text-decoration: none;
+}
+.gf-brand span {
+  color: var(--gf-action);
+}
+
+.gf-nav-link {
+  color: var(--gf-ink);
+  text-decoration: none;
+  padding: var(--gf-space-1) var(--gf-space-2);
+  border-radius: var(--gf-radius-control);
+}
+.gf-nav-link:hover {
+  background: var(--gf-soft);
+  color: var(--gf-ink);
+}
+/* The current destination is marked by weight and a rule, not by colour
+ * alone — the same law the statuses follow. */
+.gf-nav-link[aria-current='page'] {
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--gf-action);
+}
+
+.gf-main {
+  flex: 1;
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--gf-space-6) var(--gf-space-4);
+}
+
+.gf-muted {
+  color: var(--gf-ink-muted);
+}
+
+/* Buttons. One primary per view region (brand §7.3); destructive is
+ * vermillion and always carries confirm text, never an icon alone. */
+.gf-btn {
+  font: inherit;
+  font-weight: 500;
+  padding: 6px var(--gf-space-3);
+  min-height: 32px;
+  border-radius: var(--gf-radius-control);
+  border: 1px solid var(--gf-line);
+  background: var(--gf-surface);
+  color: var(--gf-ink);
+  cursor: pointer;
+  transition: background var(--gf-motion-fast) var(--gf-ease);
+}
+.gf-btn:hover {
+  background: var(--gf-soft);
+}
+.gf-btn-primary {
+  background: var(--gf-action);
+  border-color: var(--gf-action);
+  color: var(--gf-surface);
+}
+.gf-btn-primary:hover {
+  background: var(--gf-action-hover);
+}
+.gf-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.gf-card {
+  background: var(--gf-surface);
+  border: 1px solid var(--gf-line);
+  border-radius: var(--gf-radius-card);
+  box-shadow: var(--gf-shadow-sm);
+  padding: var(--gf-space-4);
+}
+
+/* Status pill: glyph + label + colour, in that order of importance. The
+ * glyph comes from a token so no component can ship colour alone. */
+.gf-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gf-space-1);
+  padding: 2px var(--gf-space-2);
+  border-radius: var(--gf-radius-pill);
+  font-weight: 500;
+  border: 1px solid currentColor;
+}
+.gf-status::before {
+  font-weight: 700;
+}
+.gf-status-success { color: var(--gf-success-ink); }
+.gf-status-success::before { content: var(--gf-glyph-success); }
+.gf-status-danger { color: var(--gf-danger-ink); }
+.gf-status-danger::before { content: var(--gf-glyph-danger); }
+.gf-status-warn { color: var(--gf-warn-ink); }
+.gf-status-warn::before { content: var(--gf-glyph-warn); }
+.gf-status-info { color: var(--gf-info-ink); }
+.gf-status-info::before { content: var(--gf-glyph-info); }
+.gf-status-pending { color: var(--gf-ink-muted); }
+.gf-status-pending::before { content: var(--gf-glyph-pending); }
+
+/* Diff lines. The gutter marker is text, so the diff reads with colour
+ * rendering off entirely (SPEC-0047 AC5). */
+.gf-diff-line {
+  font-family: var(--gf-font-code);
+  display: grid;
+  grid-template-columns: 2ch 1fr;
+  gap: var(--gf-space-2);
+}
+.gf-diff-add {
+  background: var(--gf-diff-add-bg);
+  color: var(--gf-diff-add-ink);
+}
+.gf-diff-del {
+  background: var(--gf-diff-del-bg);
+  color: var(--gf-diff-del-ink);
+}
+.gf-diff-marker {
+  user-select: none;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Skip link — the keyboard user's first control on every page. */
+.gf-skip {
+  position: absolute;
+  left: -9999px;
+}
+.gf-skip:focus {
+  left: var(--gf-space-4);
+  top: var(--gf-space-2);
+  z-index: 100;
+  background: var(--gf-surface);
+  padding: var(--gf-space-2) var(--gf-space-3);
+  border-radius: var(--gf-radius-control);
+}

@@ -8,7 +8,8 @@
   "scripts": {
     "gen": "buf generate",
     "dev": "astro dev",
-    "prebuild": "vitest run tests/usage-regression-pins.test.ts tests/readonly-cause.test.ts",
+    "prebuild": "node scripts/check-hex-literals.mjs && vitest run tests/usage-regression-pins.test.ts tests/readonly-cause.test.ts tests/design-tokens.test.ts tests/hex-literal-gate.test.ts",
+    "check:tokens": "node scripts/check-hex-literals.mjs",
     "build": "astro build",
     "check": "tsc --noEmit",
     "test": "vitest run",
@@ -27,6 +28,7 @@
     "@playwright/test": "^1.62.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.4",
+    "@types/node": "^26.2.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "jsdom": "^30.0.1",

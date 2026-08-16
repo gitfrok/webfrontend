@@ -1,11 +1,17 @@
 ---
-// Shared SSR shell (ADR-0015 GitHub-clean). Thin proxy: no business logic,
-// no data fetching beyond what the page itself does through the BFF.
+// Shared SSR shell (ADR-0015 GitHub-clean information architecture, rendered
+// on the ADR-0069 token layer). Thin proxy: no business logic, no data
+// fetching beyond what the page itself does through the BFF.
 //
 // The auth affordance is a presentation hint, not a decision: it switches on
 // session-cookie PRESENCE only (the BFF validates the session on every call).
 // Sign in goes to same-origin GET /login; Sign out POSTs to same-origin
 // /logout — both served by the BFF behind the ingress, never by this shell.
+//
+// Every colour here comes from a token. `scripts/check-hex-literals.mjs`
+// fails the build on a literal, which is the mechanism ADR-0015 asked for and
+// never got until T-0045.
+import '../styles/tokens.css';
 import { hasSessionCookie } from '../lib/session';
 
 interface Props {
@@ -13,6 +19,19 @@ interface Props {
 }
 const { title } = Astro.props;
 const signedIn = hasSessionCookie(Astro.request);
+
+// The current destination is marked with aria-current AND weight AND a rule —
+// never colour alone (ADR-0069 law 2). Only destinations that exist appear:
+// the prototype's Issues, Releases, Settings and Admin have no BFF surface,
+// and SPEC-0047 records them out of scope rather than shipping dead nav.
+const path = new URL(Astro.request.url).pathname;
+const destinations = [
+  { href: '/', label: 'Repositories' },
+  { href: '/security', label: 'Security' },
+  { href: '/usage', label: 'Usage' },
+];
+const isCurrent = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`);
 ---
 <!doctype html>
 <html lang="en">
@@ -20,32 +39,37 @@ const signedIn = hasSessionCookie(Astro.request);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <link rel="preload" href="/fonts/Inter.woff2" as="font" type="font/woff2" crossorigin />
   </head>
-  <body style="margin:0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#fff; color:#1f2328;">
-    <header style="border-bottom:1px solid #d0d7de; background:#f6f8fa;">
-      <nav style="max-width:1080px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; gap:16px;">
-        <a href="/" style="font-weight:600; font-size:14px; color:#1f2328; text-decoration:none;">gitfrok</a>
-        <a href="/usage" style="font-size:14px; color:#1f2328; text-decoration:none;">Usage</a>
-        <span style="flex:1;"></span>
-        {signedIn ? (
-          <span data-auth="signed-in" style="display:flex; align-items:center; gap:12px;">
-            <span style="font-size:14px; color:#57606a;">Signed in</span>
-            <form method="post" action="/logout" style="margin:0;">
-              <button
-                type="submit"
-                style="font:inherit; font-size:14px; color:#1f2328; background:#f6f8fa; border:1px solid #d0d7de; border-radius:6px; padding:4px 12px; cursor:pointer;"
-              >Sign out</button>
-            </form>
-          </span>
-        ) : (
-          <a
-            href="/login"
-            data-auth="sign-in"
-            style="font-size:14px; font-weight:500; color:#1f2328; background:#f6f8fa; border:1px solid #d0d7de; border-radius:6px; padding:4px 12px; text-decoration:none;"
-          >Sign in</a>
-        )}
-      </nav>
-    </header>
-    <slot />
+  <body>
+    <div class="gf-shell">
+      <a class="gf-skip" href="#main">Skip to content</a>
+      <header class="gf-header">
+        <nav class="gf-nav" aria-label="Primary">
+          <a class="gf-brand" href="/">git<span>frok</span></a>
+          {destinations.map((d) => (
+            <a
+              class="gf-nav-link"
+              href={d.href}
+              aria-current={isCurrent(d.href) ? 'page' : undefined}
+            >{d.label}</a>
+          ))}
+          <span style="flex:1"></span>
+          {signedIn ? (
+            <span data-auth="signed-in" style="display:flex; align-items:center; gap:var(--gf-space-3);">
+              <span class="gf-muted">Signed in</span>
+              <form method="post" action="/logout" style="margin:0;">
+                <button type="submit" class="gf-btn">Sign out</button>
+              </form>
+            </span>
+          ) : (
+            <a href="/login" data-auth="sign-in" class="gf-btn gf-btn-primary" style="text-decoration:none;">Sign in</a>
+          )}
+        </nav>
+      </header>
+      <main class="gf-main" id="main">
+        <slot />
+      </main>
+    </div>
   </body>
 </html>
