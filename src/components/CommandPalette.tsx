@@ -108,17 +108,17 @@ export default function CommandPalette({ repositoryID, revision }: { repositoryI
       onKeyDown={onPanelKeyDown}
       style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', background: 'rgba(0,0,0,0.4)', paddingTop: '12vh' }}
     >
-      <div style={{ background: '#fff', color: '#1f2328', width: 'min(480px, 90vw)', borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
+      <div style={{ background: 'var(--gf-surface)', color: 'var(--gf-ink)', width: 'min(480px, 90vw)', borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
         <input
           ref={inputRef}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="What would you like to do?"
           aria-label="Command palette input"
-          style={{ width: '100%', padding: '12px 16px', border: 'none', borderBottom: '1px solid #d0d7de', borderRadius: '8px 8px 0 0', outline: 'none', fontSize: 14 }}
+          style={{ width: '100%', padding: '12px 16px', border: 'none', borderBottom: '1px solid var(--gf-line)', borderRadius: '8px 8px 0 0', outline: 'none', fontSize: 14 }}
         />
         {query.trim() === '' && (
-          <div style={{ padding: '8px 16px', color: '#6e7781', fontSize: 12 }}>
+          <div style={{ padding: '8px 16px', color: 'var(--gf-ink-muted)', fontSize: 12 }}>
             For "Open file", type the path in the input after selecting it.
           </div>
         )}
@@ -127,16 +127,16 @@ export default function CommandPalette({ repositoryID, revision }: { repositoryI
             <li key={command.id} role="option" aria-selected={index === activeIndex}>
               <a
                 href={command.run()}
-                style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 6, textDecoration: 'none', color: '#1f2328', background: index === activeIndex ? '#f6f8fa' : 'transparent' }}
+                style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', borderRadius: 6, textDecoration: 'none', color: 'var(--gf-ink)', background: index === activeIndex ? 'var(--gf-soft)' : 'transparent' }}
                 onMouseEnter={() => setActive(index)}
                 onClick={() => setOpen(false)}
               >
                 <span>{command.label}</span>
-                <span style={{ color: '#6e7781', fontSize: 12 }}>{command.hint}</span>
+                <span style={{ color: 'var(--gf-ink-muted)', fontSize: 12 }}>{command.hint}</span>
               </a>
             </li>
           ))}
-          {filtered.length === 0 && <li style={{ padding: 8, color: '#6e7781' }}>No matching command</li>}
+          {filtered.length === 0 && <li style={{ padding: 8, color: 'var(--gf-ink-muted)' }}>No matching command</li>}
         </ul>
         {path !== '' && query.toLowerCase().includes('open file') && (
           <input
@@ -144,7 +144,7 @@ export default function CommandPalette({ repositoryID, revision }: { repositoryI
             onChange={(event) => setPath(event.target.value)}
             placeholder="path/to/file"
             aria-label="File path"
-            style={{ width: '100%', padding: '8px 16px', border: 'none', borderTop: '1px solid #d0d7de', outline: 'none', fontSize: 14 }}
+            style={{ width: '100%', padding: '8px 16px', border: 'none', borderTop: '1px solid var(--gf-line)', outline: 'none', fontSize: 14 }}
           />
         )}
       </div>

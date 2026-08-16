@@ -81,10 +81,10 @@ const unavailableReasons: Record<string, string> = {
 };
 
 const severityStyles: Record<string, { color: string; background: string }> = {
-  CRITICAL: { color: '#82071e', background: '#ffebe9' },
-  HIGH: { color: '#953800', background: '#fff1e5' },
-  MEDIUM: { color: '#7d4e00', background: '#fff8c5' },
-  LOW: { color: '#116329', background: '#dafbe1' },
+  CRITICAL: { color: 'var(--gf-danger-ink)', background: 'var(--gf-diff-del-bg)' },
+  HIGH: { color: 'var(--gf-warn-ink)', background: 'var(--gf-diff-del-bg)' },
+  MEDIUM: { color: 'var(--gf-warn-ink)', background: 'var(--gf-diff-del-bg)' },
+  LOW: { color: 'var(--gf-info-ink)', background: 'var(--gf-diff-add-bg)' },
 };
 
 const triageLabels: Record<string, string> = {
@@ -104,20 +104,20 @@ const attributionLabels: Record<string, string> = {
 {unavailable && (
   <div
     role="status"
-    style={{ margin: '16px 0', padding: '12px 16px', border: '1px solid #d4a72c66', borderRadius: 8, background: '#fff8c5' }}
+    style={{ margin: '16px 0', padding: '12px 16px', border: '1px solid var(--gf-warn)', borderRadius: 8, background: 'var(--gf-diff-del-bg)' }}
   >
     <p style={{ margin: 0, fontWeight: 600, fontSize: 14 }}>
       Attribution unavailable
-      <code style={{ marginLeft: 8, fontSize: 11, fontWeight: 400, color: '#57606a', background: '#ffffffaa', padding: '1px 6px', borderRadius: 4 }}>
+      <code style={{ marginLeft: 8, fontSize: 11, fontWeight: 400, color: 'var(--gf-ink-muted)', background: 'var(--gf-surface)', padding: '1px 6px', borderRadius: 4 }}>
         UNAVAILABLE
       </code>
     </p>
-    <p style={{ margin: '6px 0 0', fontSize: 13, color: '#4a3b00' }}>
+    <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--gf-warn-ink)' }}>
       {summary.unavailable_reason
         ? unavailableReasons[summary.unavailable_reason] ?? 'the comparison cannot be computed'
         : 'the comparison cannot be computed'}
       {summary.unavailable_reason && (
-        <code style={{ marginLeft: 6, fontSize: 11, color: '#57606a', background: '#ffffffaa', padding: '1px 6px', borderRadius: 4 }}>
+        <code style={{ marginLeft: 6, fontSize: 11, color: 'var(--gf-ink-muted)', background: 'var(--gf-surface)', padding: '1px 6px', borderRadius: 4 }}>
           {summary.unavailable_reason}
         </code>
       )}
@@ -126,7 +126,7 @@ const attributionLabels: Record<string, string> = {
 )}
 
 {computedEmpty && (
-  <p style={{ margin: '16px 0', fontSize: 13, color: '#57606a' }}>No findings introduced by this merge request.</p>
+  <p style={{ margin: '16px 0', fontSize: 13, color: 'var(--gf-ink-muted)' }}>No findings introduced by this merge request.</p>
 )}
 
 {perFile.map(({ file, annotations }) => (
@@ -135,7 +135,7 @@ const attributionLabels: Record<string, string> = {
       style={{
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-all',
-        background: '#f6f8fa',
+        background: 'var(--gf-soft)',
         padding: 16,
         borderRadius: 8,
         overflowX: 'auto',
@@ -147,7 +147,7 @@ const attributionLabels: Record<string, string> = {
       {file.body}
     </pre>
     {annotations.map((view) => {
-      const severityStyle = severityStyles[view.finding.severity] ?? { color: '#24292f', background: '#eaeef2' };
+      const severityStyle = severityStyles[view.finding.severity] ?? { color: 'var(--gf-ink)', background: 'var(--gf-line)' };
       const triageLabel = view.triage ? triageLabels[view.triage.state] ?? view.triage.state : '';
       return (
         <div
@@ -155,8 +155,8 @@ const attributionLabels: Record<string, string> = {
           style={{
             margin: '8px 0 0 24px',
             padding: '10px 14px',
-            borderLeft: '3px solid #cf222e',
-            background: '#fff5f5',
+            borderLeft: '3px solid var(--gf-danger-ink)',
+            background: 'var(--gf-diff-del-bg)',
             borderRadius: '0 6px 6px 0',
             fontSize: 13,
           }}
@@ -175,8 +175,8 @@ const attributionLabels: Record<string, string> = {
               {view.finding.severity}
             </span>
             <span style={{ fontWeight: 600 }}>{view.finding.rule_id}</span>
-            <span style={{ color: '#57606a' }}>{view.finding.scanner_class}</span>
-            <span style={{ color: '#57606a', fontSize: 12 }}>
+            <span style={{ color: 'var(--gf-ink-muted)' }}>{view.finding.scanner_class}</span>
+            <span style={{ color: 'var(--gf-ink-muted)', fontSize: 12 }}>
               {attributionLabels[view.attribution] ?? 'Attribution unavailable'}
             </span>
             <span
@@ -184,19 +184,19 @@ const attributionLabels: Record<string, string> = {
                 marginLeft: 'auto',
                 fontSize: 12,
                 fontWeight: view.triage ? 600 : 400,
-                color: view.triage ? '#116329' : '#57606a',
+                color: view.triage ? 'var(--gf-info-ink)' : 'var(--gf-ink-muted)',
               }}
             >
               {triageLabel || 'Awaiting triage'}
             </span>
           </div>
           {view.head_location.enclosing_content && (
-            <p style={{ margin: '6px 0 0', color: '#57606a' }}>
+            <p style={{ margin: '6px 0 0', color: 'var(--gf-ink-muted)' }}>
               in <code style={{ fontSize: 12 }}>{view.head_location.enclosing_content}</code>
             </p>
           )}
           {view.triage && view.triage.justification && (
-            <p style={{ margin: '4px 0 0', fontSize: 12, color: '#57606a', fontStyle: 'italic' }}>
+            <p style={{ margin: '4px 0 0', fontSize: 12, color: 'var(--gf-ink-muted)', fontStyle: 'italic' }}>
               Triage ({triageLabel}): “{view.triage.justification}”
             </p>
           )}
@@ -210,7 +210,7 @@ const attributionLabels: Record<string, string> = {
   <section aria-label="Findings elsewhere in this merge request" style={{ margin: '24px 0' }}>
     <h2 style={{ fontSize: 14, margin: '0 0 8px' }}>Findings elsewhere in this merge request</h2>
     {unplaced.map((view) => {
-      const severityStyle = severityStyles[view.finding.severity] ?? { color: '#24292f', background: '#eaeef2' };
+      const severityStyle = severityStyles[view.finding.severity] ?? { color: 'var(--gf-ink)', background: 'var(--gf-line)' };
       const triageLabel = view.triage ? triageLabels[view.triage.state] ?? view.triage.state : '';
       return (
         <div
@@ -218,8 +218,8 @@ const attributionLabels: Record<string, string> = {
           style={{
             margin: '8px 0',
             padding: '10px 14px',
-            borderLeft: '3px solid #cf222e',
-            background: '#fff5f5',
+            borderLeft: '3px solid var(--gf-danger-ink)',
+            background: 'var(--gf-diff-del-bg)',
             borderRadius: '0 6px 6px 0',
             fontSize: 13,
           }}
@@ -238,13 +238,13 @@ const attributionLabels: Record<string, string> = {
               {view.finding.severity}
             </span>
             <span style={{ fontWeight: 600 }}>{view.finding.rule_id}</span>
-            <code style={{ fontSize: 12, color: '#57606a' }}>{view.head_location.artifact_path}</code>
+            <code style={{ fontSize: 12, color: 'var(--gf-ink-muted)' }}>{view.head_location.artifact_path}</code>
             <span
               style={{
                 marginLeft: 'auto',
                 fontSize: 12,
                 fontWeight: view.triage ? 600 : 400,
-                color: view.triage ? '#116329' : '#57606a',
+                color: view.triage ? 'var(--gf-info-ink)' : 'var(--gf-ink-muted)',
               }}
             >
               {triageLabel || 'Awaiting triage'}

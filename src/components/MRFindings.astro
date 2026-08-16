@@ -40,16 +40,8 @@ const unavailableReasons: Record<string, string> = {
   NO_MERGE_BASE: 'the source and target revisions share no merge base',
 };
 
-const severityStyles: Record<string, { color: string; background: string }> = {
-  CRITICAL: { color: '#82071e', background: '#ffebe9' },
-  HIGH: { color: '#953800', background: '#fff1e5' },
-  MEDIUM: { color: '#7d4e00', background: '#fff8c5' },
-  LOW: { color: '#116329', background: '#dafbe1' },
-};
-
-function severityBadge(severity: string): { color: string; background: string } {
-  return severityStyles[severity] ?? { color: '#24292f', background: '#eaeef2' };
-}
+// One vocabulary for severity, shared with the dashboard (SPEC-0047 AC6).
+import { describeStatus, type StatusKey } from '../lib/status';
 
 // Triage state as the reviewer reads it. Absence of a triage record is the
 // only thing that renders as awaiting triage — a recorded decision, whatever
@@ -62,16 +54,16 @@ const triageLabels: Record<string, string> = {
 };
 
 const attributionLabels: Record<string, { label: string; color: string; background: string }> = {
-  ATTRIBUTED: { label: 'Introduced by this MR', color: '#82071e', background: '#ffebe9' },
-  PRE_EXISTING: { label: 'Pre-existing', color: '#57606a', background: '#eaeef2' },
-  UNAVAILABLE: { label: 'Attribution unavailable', color: '#7d4e00', background: '#fff8c5' },
+  ATTRIBUTED: { label: 'Introduced by this MR', color: 'var(--gf-danger-ink)', background: 'var(--gf-diff-del-bg)' },
+  PRE_EXISTING: { label: 'Pre-existing', color: 'var(--gf-ink-muted)', background: 'var(--gf-line)' },
+  UNAVAILABLE: { label: 'Attribution unavailable', color: 'var(--gf-warn-ink)', background: 'var(--gf-diff-del-bg)' },
 };
 
 const severityCounts = [
-  { label: 'critical', count: summary.attributed_critical, style: severityBadge('CRITICAL') },
-  { label: 'high', count: summary.attributed_high, style: severityBadge('HIGH') },
-  { label: 'medium', count: summary.attributed_medium, style: severityBadge('MEDIUM') },
-  { label: 'low', count: summary.attributed_low, style: severityBadge('LOW') },
+  { label: 'critical', count: summary.attributed_critical, style: describeStatus('CRITICAL') },
+  { label: 'high', count: summary.attributed_high, style: describeStatus('HIGH') },
+  { label: 'medium', count: summary.attributed_medium, style: describeStatus('MEDIUM') },
+  { label: 'low', count: summary.attributed_low, style: describeStatus('LOW') },
 ].filter((entry) => entry.count > 0);
 
 function deepLink(findingID: string): string {
@@ -82,28 +74,19 @@ function deepLink(findingID: string): string {
 
 <section
   aria-label="Security findings introduced by this merge request"
-  style={{ margin: '24px 0', border: '1px solid #d0d7de', borderRadius: 8, overflow: 'hidden' }}
+  style={{ margin: '24px 0', border: '1px solid var(--gf-line)', borderRadius: 8, overflow: 'hidden' }}
 >
   <header
-    style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, padding: '10px 16px', background: '#f6f8fa', borderBottom: '1px solid #d0d7de' }}
+    style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, padding: '10px 16px', background: 'var(--gf-soft)', borderBottom: '1px solid var(--gf-line)' }}
   >
     <h2 style={{ fontSize: 14, margin: 0, marginRight: 'auto' }}>Security findings</h2>
     {severityCounts.map((entry) => (
-      <span
-        style={{
-          fontSize: 12,
-          fontWeight: 600,
-          padding: '1px 8px',
-          borderRadius: 999,
-          color: entry.style.color,
-          background: entry.style.background,
-        }}
-      >
+      <span class:list={['gf-status', entry.style.tone]} style={{ fontSize: 12 }}>
         {entry.count} {entry.label}
       </span>
     ))}
     {summary.stale && (
-      <span style={{ fontSize: 12, color: '#7d4e00', fontStyle: 'italic' }}>
+      <span style={{ fontSize: 12, color: 'var(--gf-warn-ink)', fontStyle: 'italic' }}>
         attribution stale — being recomputed
       </span>
     )}
@@ -112,20 +95,20 @@ function deepLink(findingID: string): string {
   {unavailable && (
     <div
       role="status"
-      style={{ margin: 16, padding: '12px 16px', border: '1px solid #d4a72c66', borderRadius: 8, background: '#fff8c5' }}
+      style={{ margin: 16, padding: '12px 16px', border: '1px solid var(--gf-warn)', borderRadius: 8, background: 'var(--gf-diff-del-bg)' }}
     >
       <p style={{ margin: 0, fontWeight: 600, fontSize: 14 }}>
         Attribution unavailable
-        <code style={{ marginLeft: 8, fontSize: 11, fontWeight: 400, color: '#57606a', background: '#ffffffaa', padding: '1px 6px', borderRadius: 4 }}>
+        <code style={{ marginLeft: 8, fontSize: 11, fontWeight: 400, color: 'var(--gf-ink-muted)', background: 'var(--gf-surface)', padding: '1px 6px', borderRadius: 4 }}>
           UNAVAILABLE
         </code>
       </p>
-      <p style={{ margin: '6px 0 0', fontSize: 13, color: '#4a3b00' }}>
+      <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--gf-warn-ink)' }}>
         {summary.unavailable_reason
           ? unavailableReasons[summary.unavailable_reason] ?? 'the comparison cannot be computed'
           : 'the comparison cannot be computed'}
         {summary.unavailable_reason && (
-          <code style={{ marginLeft: 6, fontSize: 11, color: '#57606a', background: '#ffffffaa', padding: '1px 6px', borderRadius: 4 }}>
+          <code style={{ marginLeft: 6, fontSize: 11, color: 'var(--gf-ink-muted)', background: 'var(--gf-surface)', padding: '1px 6px', borderRadius: 4 }}>
             {summary.unavailable_reason}
           </code>
         )}
@@ -136,42 +119,35 @@ function deepLink(findingID: string): string {
   )}
 
   {!unavailable && (
-    <p style={{ margin: '12px 16px 0', fontSize: 12, color: '#57606a' }}>
+    <p style={{ margin: '12px 16px 0', fontSize: 12, color: 'var(--gf-ink-muted)' }}>
       Compared head <code>{summary.head_revision.slice(0, 8)}</code> against merge base{' '}
       <code>{summary.merge_base_revision.slice(0, 8)}</code>.
     </p>
   )}
 
   {computedEmpty && (
-    <p style={{ margin: 16, fontSize: 14, color: '#57606a' }}>No findings introduced by this merge request.</p>
+    <p style={{ margin: 16, fontSize: 14, color: 'var(--gf-ink-muted)' }}>No findings introduced by this merge request.</p>
   )}
 
   {findings.length > 0 && (
     <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
       {findings.map((view) => {
-        const severityStyle = severityBadge(view.finding.severity);
+        const severityStyle = describeStatus(view.finding.severity as StatusKey);
         const attribution = attributionLabels[view.attribution] ?? attributionLabels.UNAVAILABLE;
         const triageLabel = view.triage ? triageLabels[view.triage.state] ?? view.triage.state : '';
         return (
           <li
             id={`finding-${view.finding.finding_id}`}
-            style={{ padding: '12px 16px', borderBottom: '1px solid #eaeef2', fontSize: 13 }}
+            style={{ padding: '12px 16px', borderBottom: '1px solid var(--gf-line)', fontSize: 13 }}
           >
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
-              <span
-                style={{
-                  fontWeight: 600,
-                  fontSize: 12,
-                  padding: '1px 8px',
-                  borderRadius: 999,
-                  color: severityStyle.color,
-                  background: severityStyle.background,
-                }}
-              >
-                {view.finding.severity}
+              {/* Glyph, word and rank — the severity reads with the tint
+                  removed entirely (SPEC-0047 AC6). */}
+              <span class:list={['gf-status', severityStyle.tone]} style={{ fontSize: 12 }}>
+                {severityStyle.descriptor.label} {severityStyle.descriptor.rank}/4
               </span>
               <span style={{ fontWeight: 600 }}>{view.finding.rule_id}</span>
-              <span style={{ color: '#57606a' }}>{view.finding.scanner_class}</span>
+              <span style={{ color: 'var(--gf-ink-muted)' }}>{view.finding.scanner_class}</span>
               <span
                 style={{
                   fontSize: 12,
@@ -188,13 +164,13 @@ function deepLink(findingID: string): string {
                   marginLeft: 'auto',
                   fontSize: 12,
                   fontWeight: view.triage ? 600 : 400,
-                  color: view.triage ? '#116329' : '#57606a',
+                  color: view.triage ? 'var(--gf-info-ink)' : 'var(--gf-ink-muted)',
                 }}
               >
                 {triageLabel || 'Awaiting triage'}
               </span>
             </div>
-            <p style={{ margin: '6px 0 0', color: '#57606a' }}>
+            <p style={{ margin: '6px 0 0', color: 'var(--gf-ink-muted)' }}>
               <code style={{ fontSize: 12 }}>{view.head_location.artifact_path}</code>
               {view.head_location.enclosing_content && (
                 <>
@@ -203,11 +179,11 @@ function deepLink(findingID: string): string {
               )}
             </p>
             {view.triage && view.triage.justification && (
-              <p style={{ margin: '4px 0 0', fontSize: 12, color: '#57606a', fontStyle: 'italic' }}>
+              <p style={{ margin: '4px 0 0', fontSize: 12, color: 'var(--gf-ink-muted)', fontStyle: 'italic' }}>
                 Triage ({triageLabel}): “{view.triage.justification}”
               </p>
             )}
-            <a href={deepLink(view.finding.finding_id)} style={{ color: '#0969da', textDecoration: 'none', fontSize: 12 }}>
+            <a href={deepLink(view.finding.finding_id)} style={{ color: 'var(--gf-action-ink)', textDecoration: 'none', fontSize: 12 }}>
               View in diff →
             </a>
           </li>
@@ -217,10 +193,10 @@ function deepLink(findingID: string): string {
   )}
 
   {nextPageToken && (
-    <p style={{ margin: 0, padding: '12px 16px', borderTop: '1px solid #eaeef2', fontSize: 13 }}>
+    <p style={{ margin: 0, padding: '12px 16px', borderTop: '1px solid var(--gf-line)', fontSize: 13 }}>
       <a
         href={`?mr_findings_page_token=${encodeURIComponent(nextPageToken)}`}
-        style={{ color: '#0969da', textDecoration: 'none' }}
+        style={{ color: 'var(--gf-action-ink)', textDecoration: 'none' }}
       >
         Next page of findings
       </a>

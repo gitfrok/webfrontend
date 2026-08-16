@@ -29,19 +29,10 @@ const ALLOWED = [
 // empty as T-0046..T-0048 land. A file that has been cleaned but is still
 // listed also fails: a stale exemption is how a ratchet quietly stops being
 // one.
-const LEGACY = new Set([
-  `components${sep}CommandPalette.tsx`,
-  `components${sep}ImportedHistory.astro`,
-  `components${sep}MRDiffFindings.astro`,
-  `components${sep}MRFindings.astro`,
-  `components${sep}SecurityFindings.astro`,
-  `components${sep}SecurityTriage.tsx`,
-  `components${sep}UsageView.astro`,
-  `pages${sep}index.astro`,
-  `pages${sep}repos${sep}[repositoryID]${sep}merge_requests${sep}[mergeRequestID].astro`,
-  `pages${sep}security${sep}index.astro`,
-  `pages${sep}usage${sep}index.astro`,
-]);
+// The ratchet is at zero: every file in src/ resolves its colour from a token.
+// The list stays here, empty, because the gate's stale-entry check makes an
+// empty list self-enforcing — anything re-added must also be removed again.
+const LEGACY = new Set([]);
 
 /** Directories we do not author. */
 const SKIP_DIRS = new Set(['gen', 'node_modules', '.astro']);

@@ -56,9 +56,9 @@ const scopedTitle = filters.repository ? `Security · ${filters.repository}` : '
 
 <Layout title={scopedTitle}>
   <main style={{ maxWidth: 1080, margin: '0 auto', padding: '0 16px' }}>
-    <header style={{ padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
+    <header style={{ padding: '16px 0', borderBottom: '1px solid var(--gf-line)' }}>
       <h1 style={{ fontSize: 20, margin: 0 }}>Security dashboard</h1>
-      <p style={{ color: '#57606a', margin: '4px 0 0', fontSize: 14 }}>
+      <p style={{ color: 'var(--gf-ink-muted)', margin: '4px 0 0', fontSize: 14 }}>
         {filters.repository
           ? `Findings for ${filters.repository}`
           : 'Findings across the organization'}
@@ -67,7 +67,7 @@ const scopedTitle = filters.repository ? `Security · ${filters.repository}` : '
     </header>
 
     {loadError && (
-      <p style={{ color: '#cf222e', padding: '16px 0' }}>
+      <p style={{ color: 'var(--gf-danger-ink)', padding: '16px 0' }}>
         The security dashboard is unavailable. Check your session.
       </p>
     )}

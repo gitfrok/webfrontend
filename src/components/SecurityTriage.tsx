@@ -53,8 +53,8 @@ export default function SecurityTriage({ findingID, repositoryID }: Props) {
   };
 
   return (
-    <div style={{ padding: '12px 0 4px', borderTop: '1px solid #d0d7de', marginTop: 12 }}>
-      <div id={labelID} style={{ fontSize: 12, color: '#57606a', marginBottom: 6 }}>
+    <div style={{ padding: '12px 0 4px', borderTop: '1px solid var(--gf-line)', marginTop: 12 }}>
+      <div id={labelID} style={{ fontSize: 12, color: 'var(--gf-ink-muted)', marginBottom: 6 }}>
         Record a triage decision for repository {repositoryID}. The decision is authorized, audited
         and attached to this finding's identity — it survives re-scans.
       </div>
@@ -70,7 +70,7 @@ export default function SecurityTriage({ findingID, repositoryID }: Props) {
           resize: 'vertical',
           padding: '6px 8px',
           fontSize: 13,
-          border: '1px solid #d0d7de',
+          border: '1px solid var(--gf-line)',
           borderRadius: 6,
           fontFamily: 'inherit',
           boxSizing: 'border-box',
@@ -86,10 +86,10 @@ export default function SecurityTriage({ findingID, repositoryID }: Props) {
             style={{
               padding: '4px 12px',
               fontSize: 13,
-              border: '1px solid #d0d7de',
+              border: '1px solid var(--gf-line)',
               borderRadius: 6,
-              background: recorded?.state === decision.state ? '#ddf4ff' : '#f6f8fa',
-              color: '#1f2328',
+              background: recorded?.state === decision.state ? 'var(--gf-diff-add-bg)' : 'var(--gf-soft)',
+              color: 'var(--gf-ink)',
               cursor: busy ? 'default' : 'pointer',
               fontWeight: recorded?.state === decision.state ? 600 : 400,
             }}
@@ -99,10 +99,10 @@ export default function SecurityTriage({ findingID, repositoryID }: Props) {
         ))}
       </div>
       <div aria-live="polite" style={{ marginTop: 8, fontSize: 13 }}>
-        {busy && <span style={{ color: '#57606a' }}>Recording…</span>}
-        {error && <span style={{ color: '#cf222e' }}>Triage unavailable. Check your session.</span>}
+        {busy && <span style={{ color: 'var(--gf-ink-muted)' }}>Recording…</span>}
+        {error && <span style={{ color: 'var(--gf-danger-ink)' }}>Triage unavailable. Check your session.</span>}
         {recorded && !busy && !error && (
-          <span style={{ color: '#1a7f37' }}>
+          <span style={{ color: 'var(--gf-success-ink)' }}>
             Recorded: {recorded.state} (version {recorded.version}, by {recorded.actor_id}).
           </span>
         )}

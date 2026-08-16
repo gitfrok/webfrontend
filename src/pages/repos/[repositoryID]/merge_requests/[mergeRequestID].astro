@@ -67,14 +67,14 @@ if (mr) {
   <CommandPalette client:load repositoryID={repositoryID!} revision="main" />
   <main style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
     {loadError && (
-      <p style={{ color: '#cf222e' }}>This merge request is unavailable. Check your session.</p>
+      <p style={{ color: 'var(--gf-danger-ink)' }}>This merge request is unavailable. Check your session.</p>
     )}
 
     {mr && (
       <>
-        <header style={{ padding: '16px 0', borderBottom: '1px solid #d0d7de' }}>
+        <header style={{ padding: '16px 0', borderBottom: '1px solid var(--gf-line)' }}>
           <h1 style={{ fontSize: 20, margin: 0 }}>{mr.title}</h1>
-          <p style={{ color: '#57606a', margin: '8px 0 0', fontSize: 14 }}>
+          <p style={{ color: 'var(--gf-ink-muted)', margin: '8px 0 0', fontSize: 14 }}>
             {mr.state} · {mr.source_ref} → {mr.target_ref}
           </p>
         </header>
@@ -82,17 +82,17 @@ if (mr) {
         {mr.description && <p style={{ margin: '16px 0' }}>{mr.description}</p>}
 
         <div style={{ display: 'flex', gap: 12, margin: '16px 0' }}>
-          <a href={diffHref} style={{ color: '#0969da', textDecoration: 'none', fontSize: 14 }}>
+          <a href={diffHref} style={{ color: 'var(--gf-action-ink)', textDecoration: 'none', fontSize: 14 }}>
             View diff
           </a>
         </div>
 
-        <p style={{ color: '#6e7781', fontSize: 13 }}>
+        <p style={{ color: 'var(--gf-ink-muted)', fontSize: 13 }}>
           Head revision {mr.head_revision.slice(0, 8)} · opened by {mr.creator_id} · version {mr.version}
         </p>
 
         {findingsError && (
-          <p style={{ color: '#cf222e' }}>The findings for this merge request are unavailable.</p>
+          <p style={{ color: 'var(--gf-danger-ink)' }}>The findings for this merge request are unavailable.</p>
         )}
 
         {mrFindingsPage && (
@@ -107,7 +107,7 @@ if (mr) {
     )}
 
     {importedError && (
-      <p style={{ color: '#cf222e' }}>
+      <p style={{ color: 'var(--gf-danger-ink)' }}>
         This import's declared history could not be read. It is not shown, and this is not a
         statement that the import declared none.
       </p>
