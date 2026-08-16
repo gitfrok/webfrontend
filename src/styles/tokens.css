@@ -96,6 +96,27 @@
   --gf-deep: #0B5E96;
   --gf-mango: #E69F00;
 
+  /* Data visualisation — the Okabe-Ito eight in the brand's fixed order
+   * (§4.5), each paired with a dash pattern. Colour alone never distinguishes
+   * a series: a line chart varies the dash, and a bar chart of more than three
+   * series adds texture or direct labels. */
+  --gf-series-1: #0072B2;
+  --gf-series-1-dash: none;
+  --gf-series-2: #E69F00;
+  --gf-series-2-dash: 6 3;
+  --gf-series-3: #009E73;
+  --gf-series-3-dash: 2 3;
+  --gf-series-4: #D55E00;
+  --gf-series-4-dash: 8 3 2 3;
+  --gf-series-5: #56B4E9;
+  --gf-series-5-dash: 12 4;
+  --gf-series-6: #CC79A7;
+  --gf-series-6-dash: 3 3;
+  --gf-series-7: #F0E442;
+  --gf-series-7-dash: 10 2 2 2;
+  --gf-series-8: #000000;
+  --gf-series-8-dash: 4 2;
+
   /* Elevation */
   --gf-shadow-sm: 0 1px 2px rgba(11, 94, 150, 0.06);
   --gf-shadow-md: 0 6px 20px rgba(11, 94, 150, 0.10);

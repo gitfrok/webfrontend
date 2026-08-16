@@ -91,3 +91,43 @@ export function describeStatus(key: StatusKey): { text: string; tone: StatusDesc
   const rank = d.rank ? ` ${d.rank}/4` : '';
   return { text: `${d.glyph} ${d.label}${rank}`, tone: d.tone, descriptor: d };
 }
+
+// --- the commercial surface (T-0048) -------------------------------------
+
+/**
+ * Envelope states. Three tints told these apart before ADR-0069; now each
+ * carries a distinct glyph, and a test refuses two states sharing one — the
+ * quickest way to put the whole distinction back into colour.
+ *
+ * None of these is a read-only condition and none ever becomes one: SPEC-0041
+ * AC8's prohibition is unchanged here, and `readonly-cause` still owns it.
+ */
+export const ENVELOPE_STATUS = {
+  WITHIN: { tone: 'gf-status-info', glyph: '●', label: 'Within envelope' },
+  NEAR: { tone: 'gf-status-warn', glyph: '!', label: 'Near envelope' },
+  EXCEEDED: { tone: 'gf-status-danger', glyph: '✕', label: 'Exceeded' },
+} as const;
+
+/**
+ * Trend direction. An arrow is the shape channel; the word is the text one.
+ * A trend rendered as muted grey prose was legible but invisible at a glance —
+ * the arrow restores the glance without adding a hue.
+ */
+export const TREND = {
+  RISING: { glyph: '↑', label: 'rising' },
+  FALLING: { glyph: '↓', label: 'falling' },
+  FLAT: { glyph: '→', label: 'flat' },
+} as const;
+
+/**
+ * The Okabe-Ito eight, in the brand's fixed order (§4.5). Order matters even
+ * though the set is colourblind-safe: a two-series chart takes the first two,
+ * and blue-then-orange is the pair a deutan reader separates most easily.
+ *
+ * Charts must also vary dash pattern (see --gf-series-N-dash) so lines stay
+ * separable with colour removed entirely.
+ */
+export const SERIES_ORDER = [
+  '#0072B2', '#E69F00', '#009E73', '#D55E00', // gf-allow-hex: the palette itself, mirrored as --gf-series-N
+  '#56B4E9', '#CC79A7', '#F0E442', '#000000', // gf-allow-hex: the palette itself, mirrored as --gf-series-N
+] as const;

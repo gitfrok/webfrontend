@@ -40,6 +40,12 @@ function dimensionTitle(name: string): string {
   return dimensionTitles[name] ?? name;
 }
 
+// Envelope state and trend come from the shared vocabulary (SPEC-0047 AC6):
+// each state has its own glyph, each trend its own arrow, so neither reads by
+// colour alone. The pins in usage-regression-pins.test.ts are untouched by
+// this — the STATE WORD is still rendered, it now simply arrives with shape.
+import { ENVELOPE_STATUS, TREND } from '../lib/status';
+
 const stateStyles: Record<string, { color: string; background: string }> = {
   WITHIN: { color: 'var(--gf-info-ink)', background: 'var(--gf-diff-add-bg)' },
   NEAR: { color: 'var(--gf-warn-ink)', background: 'var(--gf-diff-del-bg)' },
@@ -99,16 +105,18 @@ function formatWindow(start?: string, end?: string): string {
           <tr style={{ borderBottom: '1px solid var(--gf-line)' }} data-dimension={row.dimension} data-coverage={row.coverage} data-gap={row.telemetry_gap ? 'true' : undefined}>
             <td style={{ padding: '10px 12px 10px 0', fontWeight: 600 }}>
               {dimensionTitle(row.dimension)}
-              {row.state && style && (
+              {row.state && ENVELOPE_STATUS[row.state as keyof typeof ENVELOPE_STATUS] && (
                 <span
-                  style={{ marginLeft: 8, padding: '1px 8px', borderRadius: 12, fontSize: 12, color: style.color, background: style.background }}
+                  class:list={['gf-status', ENVELOPE_STATUS[row.state as keyof typeof ENVELOPE_STATUS].tone]}
+                  style={{ marginLeft: 8, fontSize: 12 }}
                 >
                   {row.state}
                 </span>
               )}
-              {row.trend && trendLabels[row.trend] && (
+              {row.trend && TREND[row.trend as keyof typeof TREND] && (
                 <span data-usage-trend style={{ marginLeft: 6, fontSize: 12, color: 'var(--gf-ink-muted)' }}>
-                  {trendLabels[row.trend]}
+                  <span aria-hidden="true">{TREND[row.trend as keyof typeof TREND].glyph}</span>
+                  {' '}{TREND[row.trend as keyof typeof TREND].label}
                 </span>
               )}
               {row.state && envelopeBehaviour[row.state] && (
