@@ -3,3 +3,7 @@ dist/
 .astro/
 test-results/
 playwright-report/
+
+# CVD capture output (SPEC-0047 AC10) — regenerate with `npm run cvd`;
+# binaries would churn on every run, and the exit record carries the verdict.
+artifacts/

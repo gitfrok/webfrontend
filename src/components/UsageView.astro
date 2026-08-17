@@ -81,14 +81,14 @@ function formatWindow(start?: string, end?: string): string {
 ---
 
 <section aria-label="Fair-use usage view">
-  <p style={{ color: 'var(--gf-ink-muted)', fontSize: 13, margin: '12px 0' }}>
+  <p style={{ color: 'var(--gf-ink-muted)', fontSize: '13px', margin: '12px 0' }}>
     Numbers are the control plane's own counters from telemetry it received —
     the same counters every fair-use decision is made from. Dimensions this
     phase does not meter say so; a silent data plane renders as a visible
     gap, never as zero usage.
   </p>
 
-  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
     <thead>
       <tr style={{ borderBottom: '1px solid var(--gf-line)', color: 'var(--gf-ink-muted)', textAlign: 'left' }}>
         <th style={{ padding: '8px 12px 8px 0' }}>Dimension</th>
@@ -108,19 +108,19 @@ function formatWindow(start?: string, end?: string): string {
               {row.state && ENVELOPE_STATUS[row.state as keyof typeof ENVELOPE_STATUS] && (
                 <span
                   class:list={['gf-status', ENVELOPE_STATUS[row.state as keyof typeof ENVELOPE_STATUS].tone]}
-                  style={{ marginLeft: 8, fontSize: 12 }}
+                  style={{ marginLeft: '8px', fontSize: '12px' }}
                 >
                   {row.state}
                 </span>
               )}
               {row.trend && TREND[row.trend as keyof typeof TREND] && (
-                <span data-usage-trend style={{ marginLeft: 6, fontSize: 12, color: 'var(--gf-ink-muted)' }}>
+                <span data-usage-trend style={{ marginLeft: '6px', fontSize: '12px', color: 'var(--gf-ink-muted)' }}>
                   <span aria-hidden="true">{TREND[row.trend as keyof typeof TREND].glyph}</span>
                   {' '}{TREND[row.trend as keyof typeof TREND].label}
                 </span>
               )}
               {row.state && envelopeBehaviour[row.state] && (
-                <div data-envelope-behaviour style={{ fontWeight: 400, fontSize: 12, color: 'var(--gf-ink-muted)', marginTop: 2 }}>
+                <div data-envelope-behaviour style={{ fontWeight: 400, fontSize: '12px', color: 'var(--gf-ink-muted)', marginTop: '2px' }}>
                   {envelopeBehaviour[row.state]}
                 </div>
               )}
@@ -143,11 +143,11 @@ function formatWindow(start?: string, end?: string): string {
                 <span>
                   {formatNumber(row.envelope)}
                   {row.unit ? ` ${row.unit}` : ''}
-                  {row.notification !== undefined && <span style={{ fontSize: 12 }}> (notify at {formatNumber(row.notification)})</span>}
+                  {row.notification !== undefined && <span style={{ fontSize: '12px' }}> (notify at {formatNumber(row.notification)})</span>}
                 </span>
               )}
             </td>
-            <td style={{ padding: '10px 12px', color: 'var(--gf-ink-muted)', fontSize: 13 }}>
+            <td style={{ padding: '10px 12px', color: 'var(--gf-ink-muted)', fontSize: '13px' }}>
               {row.coverage === 'DEFERRED' && row.deferred_reason}
               {row.coverage !== 'DEFERRED' && !row.telemetry_gap && formatWindow(row.window_start, row.window_end)}
               {row.telemetry_gap &&
@@ -164,15 +164,15 @@ function formatWindow(start?: string, end?: string): string {
   </table>
 
   {view.divergences.length > 0 && (
-    <section aria-labelledby="divergences-heading" style={{ marginTop: 24 }}>
-      <h2 id="divergences-heading" style={{ fontSize: 16 }}>Health findings: reported vs counted</h2>
-      <p style={{ color: 'var(--gf-ink-muted)', fontSize: 13 }}>
+    <section aria-labelledby="divergences-heading" style={{ marginTop: '24px' }}>
+      <h2 id="divergences-heading" style={{ fontSize: '16px' }}>Health findings: reported vs counted</h2>
+      <p style={{ color: 'var(--gf-ink-muted)', fontSize: '13px' }}>
         A data plane's own report disagreed with the control plane's counter
         over an interval. Both numbers are shown; the control plane's counter
         above is unchanged — a divergence is a health finding, never a
         billing adjustment.
       </p>
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
         <thead>
           <tr style={{ borderBottom: '1px solid var(--gf-line)', color: 'var(--gf-ink-muted)', textAlign: 'left' }}>
             <th style={{ padding: '8px 12px 8px 0' }}>Dimension</th>
@@ -189,7 +189,7 @@ function formatWindow(start?: string, end?: string): string {
               <td style={{ padding: '10px 12px' }}>{d.data_plane_id}</td>
               <td style={{ padding: '10px 12px' }}>{formatNumber(d.control_plane_value)}</td>
               <td style={{ padding: '10px 12px' }}>{formatNumber(d.data_plane_reported_value)}</td>
-              <td style={{ padding: '10px 12px', color: 'var(--gf-ink-muted)', fontSize: 13 }}>{formatWindow(d.window_start, d.window_end)}</td>
+              <td style={{ padding: '10px 12px', color: 'var(--gf-ink-muted)', fontSize: '13px' }}>{formatWindow(d.window_start, d.window_end)}</td>
             </tr>
           ))}
         </tbody>
@@ -198,14 +198,14 @@ function formatWindow(start?: string, end?: string): string {
   )}
 
   {view.throttle && (
-    <section aria-label="Envelope throttle observation" data-throttle-observation style={{ marginTop: 24 }}>
-      <h2 style={{ fontSize: 16 }}>Envelope throttle: metered and applied</h2>
-      <p style={{ color: 'var(--gf-ink-muted)', fontSize: 13 }}>
+    <section aria-label="Envelope throttle observation" data-throttle-observation style={{ marginTop: '24px' }}>
+      <h2 style={{ fontSize: '16px' }}>Envelope throttle: metered and applied</h2>
+      <p style={{ color: 'var(--gf-ink-muted)', fontSize: '13px' }}>
         What the control plane METERED as the desired state, and what your
         data plane acked as APPLIED — shown as two numbers, never smoothed
         into one. Git operations are never part of this throttle.
       </p>
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
         <thead>
           <tr style={{ borderBottom: '1px solid var(--gf-line)', color: 'var(--gf-ink-muted)', textAlign: 'left' }}>
             <th style={{ padding: '8px 12px 8px 0' }}>Generation</th>
@@ -247,7 +247,7 @@ function formatWindow(start?: string, end?: string): string {
     </section>
   )}
 
-  <p style={{ color: 'var(--gf-ink-muted)', fontSize: 12, marginTop: 16 }}>
+  <p style={{ color: 'var(--gf-ink-muted)', fontSize: '12px', marginTop: '16px' }}>
     Generated at {new Date(view.generated_at).toISOString().slice(0, 16)} UTC.
     Fair use is enforced by throttle and notice only — nothing here blocks
     your git traffic.

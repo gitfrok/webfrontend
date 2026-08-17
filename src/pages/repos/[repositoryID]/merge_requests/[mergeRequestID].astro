@@ -65,7 +65,7 @@ if (mr) {
 
 <Layout title={mr ? `${mr.title} · ${repositoryID}` : `${repositoryID} MR`}>
   <CommandPalette client:load repositoryID={repositoryID!} revision="main" />
-  <main style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
+  <main style={{ maxWidth: '960px', margin: '0 auto', padding: '0 16px' }}>
     {loadError && (
       <p style={{ color: 'var(--gf-danger-ink)' }}>This merge request is unavailable. Check your session.</p>
     )}
@@ -73,21 +73,21 @@ if (mr) {
     {mr && (
       <>
         <header style={{ padding: '16px 0', borderBottom: '1px solid var(--gf-line)' }}>
-          <h1 style={{ fontSize: 20, margin: 0 }}>{mr.title}</h1>
-          <p style={{ color: 'var(--gf-ink-muted)', margin: '8px 0 0', fontSize: 14 }}>
+          <h1 style={{ fontSize: '20px', margin: '0px' }}>{mr.title}</h1>
+          <p style={{ color: 'var(--gf-ink-muted)', margin: '8px 0 0', fontSize: '14px' }}>
             {mr.state} · {mr.source_ref} → {mr.target_ref}
           </p>
         </header>
 
         {mr.description && <p style={{ margin: '16px 0' }}>{mr.description}</p>}
 
-        <div style={{ display: 'flex', gap: 12, margin: '16px 0' }}>
-          <a href={diffHref} style={{ color: 'var(--gf-action-ink)', textDecoration: 'none', fontSize: 14 }}>
+        <div style={{ display: 'flex', gap: '12px', margin: '16px 0' }}>
+          <a href={diffHref} style={{ color: 'var(--gf-action-ink)', textDecoration: 'none', fontSize: '14px' }}>
             View diff
           </a>
         </div>
 
-        <p style={{ color: 'var(--gf-ink-muted)', fontSize: 13 }}>
+        <p style={{ color: 'var(--gf-ink-muted)', fontSize: '13px' }}>
           Head revision {mr.head_revision.slice(0, 8)} · opened by {mr.creator_id} · version {mr.version}
         </p>
 

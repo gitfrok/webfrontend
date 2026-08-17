@@ -55,10 +55,10 @@ const scopedTitle = filters.repository ? `Security · ${filters.repository}` : '
 ---
 
 <Layout title={scopedTitle}>
-  <main style={{ maxWidth: 1080, margin: '0 auto', padding: '0 16px' }}>
+  <main style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 16px' }}>
     <header style={{ padding: '16px 0', borderBottom: '1px solid var(--gf-line)' }}>
-      <h1 style={{ fontSize: 20, margin: 0 }}>Security dashboard</h1>
-      <p style={{ color: 'var(--gf-ink-muted)', margin: '4px 0 0', fontSize: 14 }}>
+      <h1 style={{ fontSize: '20px', margin: '0px' }}>Security dashboard</h1>
+      <p style={{ color: 'var(--gf-ink-muted)', margin: '4px 0 0', fontSize: '14px' }}>
         {filters.repository
           ? `Findings for ${filters.repository}`
           : 'Findings across the organization'}

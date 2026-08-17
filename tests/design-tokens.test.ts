@@ -134,3 +134,43 @@ describe('SPEC-0047 AC4 — focus is visible', () => {
     expect(offenders.map((m) => m[0])).toEqual([]);
   });
 });
+
+// A defect the AC10 capture run surfaced: Astro renders a style-object value
+// verbatim, so `gap: 24` ships as `gap:24` and the browser drops it — React
+// adds the px, Astro does not. Every spacing value in the product was being
+// silently discarded. This guards the fix.
+describe('SPEC-0047 AC1 — spacing survives the render', () => {
+  const LENGTH_PROPS = [
+    'fontSize', 'padding', 'margin', 'gap', 'width', 'minWidth', 'maxWidth',
+    'height', 'minHeight', 'maxHeight', 'borderRadius', 'top', 'left', 'right', 'bottom',
+  ];
+
+  it('never leaves a unitless number in an Astro style object', async () => {
+    const { readdirSync, statSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const root = fileURLToPath(new URL('../src', import.meta.url));
+
+    function* walk(dir: string): Generator<string> {
+      for (const entry of readdirSync(dir)) {
+        const full = join(dir, entry);
+        if (statSync(full).isDirectory()) {
+          if (entry !== 'gen') yield* walk(full);
+        } else if (entry.endsWith('.astro')) yield full;
+      }
+    }
+
+    const offenders: string[] = [];
+    for (const file of walk(root)) {
+      const text = readFileSync(file, 'utf8');
+      text.split('\n').forEach((line, i) => {
+        for (const prop of LENGTH_PROPS) {
+          // `prop: 24,` or `prop: 24 }` — a bare number with no unit.
+          if (new RegExp(`\\b${prop}:\\s*-?\\d+(\\.\\d+)?\\s*[,}]`).test(line)) {
+            offenders.push(`${file.split('/src/')[1]}:${i + 1}: ${prop}`);
+          }
+        }
+      });
+    }
+    expect(offenders, 'unitless lengths are dropped by the browser').toEqual([]);
+  });
+});

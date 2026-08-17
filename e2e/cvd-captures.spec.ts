@@ -1,0 +1,122 @@
+// SPEC-0047 AC10 — the grayscale gate as an artifact, not a promise.
+//
+// ADR-0069 makes three laws binding, and the third is a review: every surface
+// is looked at once through a grayscale filter and once through a deuteranopia
+// simulation before it merges. A claim like "the encodings should survive
+// grayscale" is exactly the kind of accessibility assertion that goes unchecked
+// for years, so this run produces files a human can open and disagree with.
+//
+// Two things this run does NOT claim:
+//   1. It does not compare the captures automatically. Deciding whether two
+//      states are *distinguishable* is a judgement, and ADR-0069 open decision
+//      4 is precisely whether to automate it. What is automated here is that
+//      the artifacts exist, cover every surface, and are captured under the
+//      real stylesheet.
+//   2. It runs against the stub BFF, not a live cluster. That is deliberate:
+//      the fixtures are state-DENSE (every severity, every envelope state, a
+//      telemetry gap, a deferred dimension) in a way live data on any given day
+//      is not. A grayscale review is only as good as the states on the screen.
+import { test, expect } from '@playwright/test';
+import { mkdirSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+const OUT = join(process.cwd(), 'artifacts', 'cvd');
+
+/**
+ * The deuteranopia transform, as an SVG colour matrix injected into the page.
+ *
+ * These are the Viénot-Brettel-Mollon coefficients Chrome DevTools' own
+ * "emulate vision deficiencies" uses, so a reviewer comparing this capture with
+ * a manual DevTools pass sees the same image rather than two different
+ * approximations.
+ */
+const DEUTAN_MATRIX = '0.625 0.375 0 0 0  0.7 0.3 0 0 0  0 0.3 0.7 0 0  0 0 0 1 0';
+
+/** Production names the session cookie with a __Host- prefix; see the note at
+ *  each use for why the capture sends it as a header instead. */
+const SESSION_HEADER = { cookie: '__Host-gitfrok_session=capture-session' };
+
+const SURFACES = [
+  { name: 'shell-and-repo-tree', path: '/repos/gateway-api/tree/main/' },
+  { name: 'file-view', path: '/repos/gateway-api/file/main/README.md' },
+  { name: 'diff-view', path: '/repos/gateway-api/diff/main' },
+  { name: 'security-dashboard', path: '/security' },
+  { name: 'usage-view', path: '/usage' },
+];
+
+test.beforeAll(() => {
+  mkdirSync(OUT, { recursive: true });
+});
+
+test.describe('SPEC-0047 AC10 — CVD capture set', () => {
+  for (const surface of SURFACES) {
+    test(`captures ${surface.name} in colour, grayscale and deuteranopia`, async ({ page }) => {
+      // The production cookie name carries the __Host- prefix, which Chromium
+      // accepts only over https. Rather than weaken the cookie the app really
+      // sets, the capture sends it as a request header — the same choice
+      // browse.spec.ts made, and the SSR layer forwards either form.
+      await page.setExtraHTTPHeaders(SESSION_HEADER);
+
+      await page.goto(surface.path, { waitUntil: 'networkidle' });
+
+      // The fonts are ours and self-hosted; wait for them so the capture shows
+      // the shipped typography rather than a fallback (AC3 is what makes this
+      // deterministic — there is no CDN to be slow).
+      await page.evaluate(() => document.fonts.ready);
+
+      await page.screenshot({ path: join(OUT, `${surface.name}.colour.png`), fullPage: true });
+
+      // Grayscale: the monochromacy case, and the one a reviewer can reproduce
+      // by printing the page.
+      await page.addStyleTag({ content: 'html { filter: grayscale(1) !important; }' });
+      await page.screenshot({ path: join(OUT, `${surface.name}.grayscale.png`), fullPage: true });
+      await page.evaluate(() => {
+        document.querySelectorAll('style').forEach((s) => {
+          if (s.textContent?.includes('grayscale(1)')) s.remove();
+        });
+      });
+
+      // Deuteranopia: the ~6% case the brand kit is built around.
+      await page.evaluate((matrix) => {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('style', 'position:absolute;width:0;height:0');
+        svg.innerHTML =
+          `<filter id="deutan"><feColorMatrix type="matrix" values="${matrix}"/></filter>`;
+        document.body.appendChild(svg);
+        document.documentElement.style.filter = 'url(#deutan)';
+      }, DEUTAN_MATRIX);
+      await page.screenshot({ path: join(OUT, `${surface.name}.deuteranopia.png`), fullPage: true });
+
+      for (const variant of ['colour', 'grayscale', 'deuteranopia']) {
+        expect(
+          existsSync(join(OUT, `${surface.name}.${variant}.png`)),
+          `${surface.name}.${variant}.png was not written`,
+        ).toBe(true);
+      }
+    });
+  }
+
+  // The captures prove the encodings are VISIBLE. These assertions prove they
+  // are PRESENT — a screenshot cannot tell you a marker was missing from the
+  // DOM rather than merely hard to see.
+  test('the diff carries its markers as text, not as tint', async ({ page }) => {
+    await page.setExtraHTTPHeaders(SESSION_HEADER);
+    await page.goto('/repos/gateway-api/diff/main', { waitUntil: 'networkidle' });
+
+    const added = page.locator('[data-diff-kind="add"]');
+    await expect(added.first()).toBeVisible();
+    await expect(added.first()).toContainText('+');
+    await expect(page.getByLabel('added line').first()).toBeVisible();
+  });
+
+  test('every envelope state on the usage view carries a word', async ({ page }) => {
+    await page.setExtraHTTPHeaders(SESSION_HEADER);
+    await page.goto('/usage', { waitUntil: 'networkidle' });
+
+    for (const state of ['WITHIN', 'NEAR', 'EXCEEDED']) {
+      await expect(page.getByText(state, { exact: false }).first()).toBeVisible();
+    }
+    // The deferred row says why, and never shows a zero (SPEC-0046 AC5).
+    await expect(page.getByText('Not metered yet').first()).toBeVisible();
+  });
+});
