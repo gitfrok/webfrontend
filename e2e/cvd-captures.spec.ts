@@ -66,6 +66,11 @@ const SURFACES = [
   { name: 'search-results', path: '/search?q=BuildQuery&mode=SUBSTRING' },
   { name: 'search-empty', path: '/search?q=nothing&mode=SUBSTRING' },
   { name: 'search-cold-index', path: '/search?q=cold&mode=SUBSTRING' },
+  // T-0055: the landing page, at last showing something. The empty variant is
+  // the one to read closely — it is the page where a false absence claim
+  // would be believed fastest.
+  { name: 'repository-list', path: '/' },
+  { name: 'repository-list-empty', path: '/?page_token=empty' },
 ];
 
 test.beforeAll(() => {

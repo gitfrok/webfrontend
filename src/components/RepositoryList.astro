@@ -1,0 +1,49 @@
+---
+// The caller's repositories (T-0055, SPEC-0052 AC10, AC11, AC12).
+//
+// The rule this component holds: **an empty list asserts nothing.** The
+// landing page is where a false absence claim would be most believed — a
+// reader who sees "you have no repositories" concludes the product is empty,
+// when the honest reading is that nothing here is visible to them.
+//
+// It renders no count. The contract carries no total, so any figure here would
+// be invented, and on this surface an invented figure is a claim about what
+// was withheld.
+import { REPOSITORY_MESSAGES } from '../lib/repositories';
+import type { RepositorySummary } from '../lib/bff';
+
+interface Props {
+  repositories: RepositorySummary[];
+  nextPageToken: string;
+}
+const { repositories, nextPageToken } = Astro.props;
+const nextHref = nextPageToken ? `/?page_token=${encodeURIComponent(nextPageToken)}` : '';
+---
+
+{repositories.length === 0 && (
+  <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-info-ink)' }}>
+    {REPOSITORY_MESSAGES.empty}
+  </p>
+)}
+
+<ul style={{ listStyle: 'none', padding: '0px', margin: '0px' }}>
+  {repositories.map((repo) => (
+    <li class="gf-card" style={{ marginBottom: 'var(--gf-space-3)' }}>
+      <a
+        href={`/repos/${encodeURIComponent(repo.repository_id)}/tree/main/`}
+        style={{ color: 'var(--gf-action-ink)', fontWeight: '600', fontSize: '15px', textDecoration: 'none' }}
+      >{repo.name}</a>
+      <p class="gf-muted" style={{ margin: 'var(--gf-space-1) 0 0', fontSize: '13px', fontFamily: 'var(--gf-font-code)' }}>
+        {repo.repository_id}
+      </p>
+    </li>
+  ))}
+</ul>
+
+{nextHref && (
+  <p style={{ margin: 'var(--gf-space-4) 0' }}>
+    {/* The opaque token, forwarded. No page number, because the contract
+        offers no position and a position would imply a total. */}
+    <a class="gf-btn" href={nextHref} style={{ textDecoration: 'none' }}>More repositories</a>
+  </p>
+)}

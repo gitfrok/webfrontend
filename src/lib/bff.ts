@@ -943,3 +943,40 @@ export async function searchIndexStatus(request: Request): Promise<IndexStatusPa
   const view = (await response.json()) as Partial<IndexStatusPageView>;
   return { entries: view.entries ?? [] };
 }
+
+// --- the repository list (T-0055, SPEC-0052 AC10) -------------------------
+//
+// PR-24: the repositories the caller may see, and only those, with a
+// repository they may not see indistinguishable from one that does not exist.
+//
+// The request carries no scope, because the contract defines none — the
+// listable set is derived by the backend from the caller's authorization at
+// request time. The response carries no total for the same reason it carries
+// none at every other layer: no field is capable of expressing how many
+// repositories were withheld, so non-enumeration is a property of the shape
+// rather than a discipline each layer re-decides.
+
+export interface RepositorySummary {
+  repository_id: string;
+  name: string;
+}
+
+export interface RepositoryListView {
+  repositories: RepositorySummary[];
+  next_page_token: string;
+}
+
+/** Lists the repositories the caller may see. */
+export async function listRepositories(request: Request, pageToken: string): Promise<RepositoryListView> {
+  const params = new URLSearchParams();
+  if (pageToken) params.set('page_token', pageToken);
+  const query = params.toString();
+  const response = await bffFetch(request, `/v1/repositories${query ? `?${query}` : ''}`);
+  if (!response.ok) {
+    throw new Error('repositories unavailable');
+  }
+  const view = (await response.json()) as Partial<RepositoryListView>;
+  // Reshaped rather than passed through, so a total invented anywhere upstream
+  // cannot reach a component that might render it.
+  return { repositories: view.repositories ?? [], next_page_token: view.next_page_token ?? '' };
+}

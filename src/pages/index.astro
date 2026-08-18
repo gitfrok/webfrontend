@@ -1,16 +1,43 @@
 ---
-// Baseline landing page. Proves the Astro SSR shell builds (T-0001 AC3).
-// Real repo/file/diff views arrive in T-0015; they call the BFF only.
+// The landing page (T-0055, SPEC-0052; PRD PR-24).
+//
+// This was the T-0001 scaffolding stub from Phase 0 until now, and it stayed
+// one for a reason that outlived the scaffolding: no route could answer what
+// belongs here. The Repository context had no durable registry to list from —
+// its only store was a map that emptied on restart — so the question "which
+// repositories exist" had no answer the product could stand behind
+// (ADR-0071).
 import Layout from '../layouts/Layout.astro';
+import RepositoryList from '../components/RepositoryList.astro';
+import { listRepositories } from '../lib/bff';
+import type { RepositoryListView } from '../lib/bff';
+import { REPOSITORY_MESSAGES } from '../lib/repositories';
 
-const app = 'gitfrok';
+const pageToken = Astro.url.searchParams.get('page_token') ?? '';
+
+let page: RepositoryListView | null = null;
+let loadError = false;
+try {
+  page = await listRepositories(Astro.request, pageToken);
+} catch {
+  loadError = true;
+}
 ---
 
-<Layout title={app}>
-  <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '16px' }}>
-    <h1 style={{ fontSize: '24px', margin: '16px 0 8px' }}>{app}</h1>
-    <p style={{ color: 'var(--gf-ink-muted)', fontSize: '14px', margin: '0px' }}>
-      webfrontend baseline — SSR shell wired (ADR-0015).
+<Layout title="gitfrok">
+  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Repositories</h1>
+    <p class="gf-muted" style={{ fontSize: '14px', margin: '0 0 var(--gf-space-4)' }}>
+      What your access covers, decided by the server when you loaded this page.
     </p>
+
+    {loadError ? (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        {' '}{REPOSITORY_MESSAGES.unavailable}
+      </p>
+    ) : (
+      page && <RepositoryList repositories={page.repositories} nextPageToken={page.next_page_token} />
+    )}
   </div>
 </Layout>

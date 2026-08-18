@@ -345,6 +345,29 @@ const server = createServer((request, response) => {
     response.end(JSON.stringify(payload));
   };
 
+  // --- the repository list (SPEC-0052) ----------------------------------
+  //
+  // Three fixtures, because the list has three answers that must not be
+  // confused: a populated list, an EMPTY one (which is a 200 and must never
+  // read as "there are none"), and a refusal.
+  if (url.pathname === '/v1/repositories') {
+    if (url.searchParams.get('page_token') === 'refuse') {
+      response.writeHead(404, { 'cache-control': 'private, no-store' });
+      response.end('repositories unavailable');
+      return;
+    }
+    if (url.searchParams.get('page_token') === 'empty') {
+      return json({ repositories: [], next_page_token: '' });
+    }
+    return json({
+      repositories: [
+        { repository_id: 'repo-1', name: 'Gateway API' },
+        { repository_id: 'repo-2', name: 'Billing' },
+      ],
+      next_page_token: '',
+    });
+  }
+
   // --- code search (SPEC-0049) ------------------------------------------
   if (url.pathname === '/api/v1/search/query' && request.method === 'POST') {
     return readJSON(request).then((body) => {
