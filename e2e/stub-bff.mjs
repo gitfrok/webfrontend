@@ -211,10 +211,17 @@ const packs = {
 const anchors = { first_seq: 1, last_seq: 12, first_record_hash: 'h1', last_record_hash: 'h12', prev_record_hash: 'h0' };
 
 const packStreams = {
+  // All four control sections, matching this pack's status exactly. They were
+  // two until the AC11 review: a capture whose status table listed four
+  // sections above a stream that delivered two depicts a state no real backend
+  // produces, and a reviewer who learns to ignore that mismatch is a reviewer
+  // who would ignore a real one.
   'pack-ready': [
     { header: { pack_id: 'pack-ready', range_from: '2026-07-01T00:00:00Z', range_to: '2026-08-01T00:00:00Z' } },
     { section: { type: 'APPROVALS', complete: true, gaps: [], records: [], records_digest: 'sha256:aaa', anchors } },
     { section: { type: 'POLICY_DECISIONS', complete: true, gaps: [], records: [], records_digest: 'sha256:bbb', anchors } },
+    { section: { type: 'SCAN_GATES', complete: true, gaps: [], records: [], records_digest: 'sha256:eee', anchors } },
+    { section: { type: 'ACCESS_CHANGES', complete: true, gaps: [], records: [], records_digest: 'sha256:fff', anchors } },
   ],
   // No final marker is ever written for this one. The response is still 200,
   // which is exactly the shape the real handler produces when assembly fails
@@ -353,8 +360,13 @@ const server = createServer((request, response) => {
   if (revokeMatch && request.method === 'DELETE') {
     const grant = grants.find((g) => g.grant_id === decodeURIComponent(revokeMatch[1]));
     if (!grant) return refuse();
-    // Answered as revoked without mutating the fixture, so the journeys and
-    // the captures stay independent of run order.
+    // Answered as revoked WITHOUT mutating the fixture, so the journeys and the
+    // captures stay independent of run order. The consequence is deliberate and
+    // worth knowing before you extend this: after a revoke journey the page
+    // renders "Applied" above a grant-1 that is still ACTIVE, because the list
+    // re-reads this unchanged fixture. Asserting post-revoke state here would
+    // need a mutating fixture, and that would put capture output back at the
+    // mercy of test order — which is the trade this comment records.
     return json({ ...grant, state: 'REVOKED', revoked_at: '2026-08-18T12:00:00Z' });
   }
 
