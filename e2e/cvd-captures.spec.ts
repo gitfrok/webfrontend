@@ -81,6 +81,9 @@ const SURFACES = [
   // scans this table — and succeeded against failed is the pair a deutan
   // reader separates least well.
   { name: 'pipeline-runs', path: '/pipelines' },
+  // T-0063: allow against deny is the pair a reader most expects in green and
+  // red, so the grayscale pass is the one that matters here.
+  { name: 'policy-decision-denied', path: '/policy?decision_id=denied' },
 ];
 
 test.beforeAll(() => {

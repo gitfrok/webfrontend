@@ -1097,3 +1097,46 @@ export async function pipelineRuns(
   const view = (await response.json()) as Partial<RunListView>;
   return { runs: view.runs ?? [], next_page_token: view.next_page_token ?? '' };
 }
+
+// --- policy visibility (T-0063, SPEC-0055) --------------------------------
+//
+// Reads only. There is no write client here and no route to call: ADR-0073
+// defers what a tenant-authored policy is, and check-contracts.sh check 14
+// keeps the contract free of a verb for it.
+
+export interface BundleStatusView {
+  bundle_revision: string;
+  loaded_at: string;
+}
+
+export interface DecisionRecordView {
+  decision_id: string;
+  action: string;
+  resource_type: string;
+  resource_id: string;
+  allowed: boolean;
+  policy_revision: string;
+  input_digest: string;
+  mode: string;
+  decided_at: string;
+}
+
+/** Reads which policy bundle is in force. */
+export async function policyBundle(request: Request): Promise<BundleStatusView> {
+  const response = await bffFetch(request, '/api/v1/policy/bundle');
+  if (!response.ok) {
+    throw new Error('policy unavailable');
+  }
+  const view = (await response.json()) as Partial<BundleStatusView>;
+  return { bundle_revision: view.bundle_revision ?? '', loaded_at: view.loaded_at ?? '' };
+}
+
+/** Reads one recorded decision. */
+export async function policyDecision(request: Request, decisionID: string): Promise<DecisionRecordView> {
+  if (!decisionID) throw new Error('policy unavailable');
+  const response = await bffFetch(request, `/api/v1/policy/decisions/${encodeURIComponent(decisionID)}`);
+  if (!response.ok) {
+    throw new Error('policy unavailable');
+  }
+  return (await response.json()) as DecisionRecordView;
+}

@@ -29,7 +29,9 @@ export type StatusKey =
   // auditor grant lifecycle (T-0052)
   | 'ACTIVE' | 'REVOKED' | 'EXPIRED'
   // CI job state (T-0061)
-  | 'QUEUED' | 'RUNNING_JOB' | 'SUCCEEDED' | 'FAILED_JOB' | 'CANCELLED';
+  | 'QUEUED' | 'RUNNING_JOB' | 'SUCCEEDED' | 'FAILED_JOB' | 'CANCELLED'
+  // policy decision outcome (T-0063)
+  | 'ALLOWED' | 'DENIED';
 
 export interface StatusDescriptor {
   /** Token class from tokens.css. Never a colour value. */
@@ -110,6 +112,14 @@ export const STATUS_VOCABULARY: Record<StatusKey, StatusDescriptor> = {
   SUCCEEDED: { tone: 'gf-status-success', glyph: '✓', label: 'Succeeded' },
   FAILED_JOB: { tone: 'gf-status-warn', glyph: '!', label: 'Failed' },
   CANCELLED: { tone: 'gf-status-pending', glyph: '⊘', label: 'Cancelled' },
+
+  // --- policy decision outcome (T-0063, SPEC-0055 AC8) -------------------
+  // Allowed and denied are the pair a reader most expects in green and red,
+  // and therefore the pair most worth refusing to render that way. A denial is
+  // also not a failure — deny-by-default means most denials are the system
+  // working — so it takes the muted tone rather than the danger one.
+  ALLOWED: { tone: 'gf-status-success', glyph: '✓', label: 'Allowed' },
+  DENIED: { tone: 'gf-status-pending', glyph: '⊘', label: 'Denied' },
 };
 
 const UNKNOWN: StatusDescriptor = {

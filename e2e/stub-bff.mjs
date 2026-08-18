@@ -345,6 +345,29 @@ const server = createServer((request, response) => {
     response.end(JSON.stringify(payload));
   };
 
+  // --- policy visibility (SPEC-0055) ------------------------------------
+  if (url.pathname === '/api/v1/policy/bundle') {
+    return json({ bundle_revision: '0.10.0', loaded_at: '2026-08-19T09:00:00Z' });
+  }
+  const decisionMatch = url.pathname.match(/^\/api\/v1\/policy\/decisions\/([^/]+)$/);
+  if (decisionMatch) {
+    const id = decodeURIComponent(decisionMatch[1]);
+    if (id === 'missing') {
+      response.writeHead(404, { 'cache-control': 'private, no-store' });
+      response.end('policy unavailable');
+      return;
+    }
+    // A DENIED, dry-run decision: the two states most easily misread — a
+    // denial as a failure, and a dry run as something that took effect.
+    return json({
+      decision_id: id, action: 'repo.read', resource_type: 'repository', resource_id: 'repo-1',
+      allowed: id !== 'denied' ? true : false,
+      policy_revision: '0.10.0', input_digest: 'sha256:abcdef',
+      mode: id === 'dryrun' ? 'EVALUATION_MODE_DRY_RUN' : 'EVALUATION_MODE_ENFORCE',
+      decided_at: '2026-08-19T09:30:00Z',
+    });
+  }
+
   // --- pipeline runs (SPEC-0054) ----------------------------------------
   //
   // Every job state at once, so a grayscale pass sees the whole column a
