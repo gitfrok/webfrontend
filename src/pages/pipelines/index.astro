@@ -1,0 +1,48 @@
+---
+// Pipeline runs (T-0061, SPEC-0054; PRD PR-26's runs half).
+//
+// PR-26 asks for runs and job logs. This page is the runs. ADR-0072 defers the
+// logs to their own decision — capture, redaction, retention, access and
+// residency — and the page says so rather than leaving a reader to hunt.
+import Layout from '../../layouts/Layout.astro';
+import RunList from '../../components/RunList.astro';
+import { pipelineRuns } from '../../lib/bff';
+import type { RunListView } from '../../lib/bff';
+import { PIPELINE_MESSAGES } from '../../lib/pipelines';
+
+const repositoryID = Astro.url.searchParams.get('repository_id') ?? '';
+const pageToken = Astro.url.searchParams.get('page_token') ?? '';
+
+let page: RunListView | null = null;
+let loadError = false;
+try {
+  page = await pipelineRuns(Astro.request, repositoryID, pageToken);
+} catch {
+  loadError = true;
+}
+
+const nextHref = page?.next_page_token
+  ? `/pipelines?${new URLSearchParams({
+      ...(repositoryID ? { repository_id: repositoryID } : {}),
+      page_token: page.next_page_token,
+    })}`
+  : '';
+---
+
+<Layout title="Pipelines">
+  <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Pipelines</h1>
+    <p class="gf-muted" style={{ fontSize: '14px', margin: '0 0 var(--gf-space-4)' }}>
+      What has run, across the repositories your access covers.
+    </p>
+
+    {loadError ? (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        {' '}{PIPELINE_MESSAGES.unavailable}
+      </p>
+    ) : (
+      page && <RunList runs={page.runs} nextHref={nextHref} />
+    )}
+  </div>
+</Layout>

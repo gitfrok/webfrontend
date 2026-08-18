@@ -345,6 +345,37 @@ const server = createServer((request, response) => {
     response.end(JSON.stringify(payload));
   };
 
+  // --- pipeline runs (SPEC-0054) ----------------------------------------
+  //
+  // Every job state at once, so a grayscale pass sees the whole column a
+  // reader actually scans rather than one badge at a time. Write-free.
+  if (url.pathname === '/api/v1/pipelines/runs') {
+    if (url.searchParams.get('page_token') === 'refuse') {
+      response.writeHead(404, { 'cache-control': 'private, no-store' });
+      response.end('pipelines unavailable');
+      return;
+    }
+    if (url.searchParams.get('page_token') === 'empty') {
+      return json({ runs: [], next_page_token: '' });
+    }
+    const run = (id, state, finished) => ({
+      job_id: id, repository_id: 'repo-1', ref: 'refs/heads/main',
+      commit_sha: 'abcdef1234567890', trigger: 'JOB_TRIGGER_KIND_REF_UPDATED',
+      state, queued_at: '2026-08-19T09:00:00Z', started_at: '2026-08-19T09:00:10Z',
+      finished_at: finished, outcome_summary: '',
+    });
+    return json({
+      runs: [
+        run('job-1', 'JOB_STATE_SUCCEEDED', '2026-08-19T09:02:00Z'),
+        run('job-2', 'JOB_STATE_FAILED', '2026-08-19T08:41:00Z'),
+        run('job-3', 'JOB_STATE_RUNNING', ''),
+        run('job-4', 'JOB_STATE_QUEUED', ''),
+        run('job-5', 'JOB_STATE_CANCELLED', '2026-08-19T08:10:00Z'),
+      ],
+      next_page_token: '',
+    });
+  }
+
   // --- the repository list (SPEC-0052) ----------------------------------
   //
   // Three fixtures, because the list has three answers that must not be

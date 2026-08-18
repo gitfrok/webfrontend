@@ -27,7 +27,9 @@ export type StatusKey =
   // evidence pack
   | 'READY' | 'PENDING' | 'FAILED' | 'ASSEMBLING'
   // auditor grant lifecycle (T-0052)
-  | 'ACTIVE' | 'REVOKED' | 'EXPIRED';
+  | 'ACTIVE' | 'REVOKED' | 'EXPIRED'
+  // CI job state (T-0061)
+  | 'QUEUED' | 'RUNNING_JOB' | 'SUCCEEDED' | 'FAILED_JOB' | 'CANCELLED';
 
 export interface StatusDescriptor {
   /** Token class from tokens.css. Never a colour value. */
@@ -93,6 +95,21 @@ export const STATUS_VOCABULARY: Record<StatusKey, StatusDescriptor> = {
   ACTIVE: { tone: 'gf-status-success', glyph: '✓', label: 'Active' },
   REVOKED: { tone: 'gf-status-warn', glyph: '!', label: 'Revoked' },
   EXPIRED: { tone: 'gf-status-pending', glyph: '○', label: 'Expired' },
+
+  // --- CI job state (T-0061, SPEC-0054 AC12) -----------------------------
+  // Succeeded and failed are deliberately not a green/red pair: it is the
+  // pairing a deutan reader separates least well, and a pipeline list is read
+  // by scanning down a column of exactly these two.
+  //
+  // RUNNING_JOB and FAILED_JOB carry the suffix because RUNNING and FAILED are
+  // already taken by the scan and evidence-pack vocabularies, and one key
+  // meaning two things in two contexts is how a badge quietly starts rendering
+  // the wrong word.
+  QUEUED: { tone: 'gf-status-pending', glyph: '○', label: 'Queued' },
+  RUNNING_JOB: { tone: 'gf-status-info', glyph: '●', label: 'Running' },
+  SUCCEEDED: { tone: 'gf-status-success', glyph: '✓', label: 'Succeeded' },
+  FAILED_JOB: { tone: 'gf-status-warn', glyph: '!', label: 'Failed' },
+  CANCELLED: { tone: 'gf-status-pending', glyph: '⊘', label: 'Cancelled' },
 };
 
 const UNKNOWN: StatusDescriptor = {

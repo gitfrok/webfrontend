@@ -1,0 +1,77 @@
+---
+// Pipeline runs (T-0061, SPEC-0054 AC10, AC11, AC12).
+//
+// The rule holding this component is an absence. A run that failed shows that
+// it failed and cannot show why, because ADR-0072 defers retaining job output
+// to its own decision. To anyone who has used a forge that reads as "the logs
+// are somewhere else on this page", so the page says they are nowhere — once,
+// in words, above the list where someone looking for them will be.
+//
+// There is deliberately no "coming soon" and no disabled control. Both convert
+// a decision nobody has taken into a promise somebody made.
+import { describeStatus } from '../lib/status';
+import { PIPELINE_MESSAGES, jobStateKey, triggerLabel, jobStateGlyphClass } from '../lib/pipelines';
+import { shortCommit } from '../lib/commits';
+import type { RunView } from '../lib/bff';
+
+interface Props {
+  runs: RunView[];
+  nextHref: string;
+}
+const { runs, nextHref } = Astro.props;
+
+const when = (iso: string) => (iso ? iso.slice(0, 16).replace('T', ' ') : '—');
+---
+
+<p class="gf-note" style={{ borderLeftColor: 'var(--gf-info-ink)' }}>
+  {PIPELINE_MESSAGES.noOutputRetained}
+</p>
+
+{runs.length === 0 && (
+  <p class="gf-muted" style={{ fontSize: '14px' }}>{PIPELINE_MESSAGES.empty}</p>
+)}
+
+{runs.length > 0 && (
+  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+    <thead>
+      <tr>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>State</th>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Repository</th>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Ref</th>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Commit</th>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Trigger</th>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Queued</th>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Finished</th>
+      </tr>
+    </thead>
+    <tbody>
+      {runs.map((run) => {
+        const stateKey = jobStateKey(run.state);
+        const state = describeStatus(stateKey);
+        return (
+          <tr style={{ borderTop: '1px solid var(--gf-line)' }}>
+            <td style={{ padding: 'var(--gf-space-1) 0' }}>
+              <span class:list={['gf-status', state.tone, jobStateGlyphClass(stateKey)]} style={{ fontSize: '12px' }}>
+                {state.descriptor.label}
+              </span>
+            </td>
+            <td style={{ padding: 'var(--gf-space-1) 0' }}>{run.repository_id}</td>
+            <td style={{ padding: 'var(--gf-space-1) 0' }}>{run.ref}</td>
+            <td style={{ padding: 'var(--gf-space-1) 0', fontFamily: 'var(--gf-font-code)' }} title={run.commit_sha}>
+              {shortCommit(run.commit_sha)}
+            </td>
+            <td style={{ padding: 'var(--gf-space-1) 0' }}>{triggerLabel(run.trigger)}</td>
+            <td style={{ padding: 'var(--gf-space-1) 0' }}>{when(run.queued_at)}</td>
+            <td style={{ padding: 'var(--gf-space-1) 0' }}>{when(run.finished_at)}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+)}
+
+{nextHref && (
+  <p style={{ margin: 'var(--gf-space-4) 0' }}>
+    <a class="gf-btn" href={nextHref} style={{ textDecoration: 'none' }}>Older runs</a>
+  </p>
+)}

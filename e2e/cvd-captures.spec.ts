@@ -77,6 +77,10 @@ const SURFACES = [
   { name: 'file-blame', path: '/repos/repo-1/file/main/README.md?view=blame' },
   { name: 'file-blame-capped', path: '/repos/repo-1/file/main/capped.go?view=blame' },
   { name: 'file-history', path: '/repos/repo-1/file/main/README.md?view=history' },
+  // T-0061: every job state in one column, which is how a reader actually
+  // scans this table — and succeeded against failed is the pair a deutan
+  // reader separates least well.
+  { name: 'pipeline-runs', path: '/pipelines' },
 ];
 
 test.beforeAll(() => {

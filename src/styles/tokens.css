@@ -166,6 +166,11 @@
   --gf-glyph-approve: '\2713';          /* ✓ */
   --gf-glyph-request-changes: '\21BA';  /* ↺ */
   --gf-glyph-comment: '\270E';          /* ✎ */
+  /* Cancelled (T-0061). Queued and cancelled both sit on the muted tone and
+   * would otherwise share the hollow circle — in the one column a reader
+   * scans down. A circled slash reads as stopped rather than failed, which ✕
+   * would wrongly imply. */
+  --gf-glyph-cancelled: '\2298';        /* ⊘ */
   --gf-glyph-add: '\002B';       /* + */
   --gf-glyph-del: '\2212';       /* − true minus, not a hyphen */
 }
@@ -518,3 +523,8 @@ a:hover {
   margin: var(--gf-space-4) 0;
   background: var(--gf-soft);
 }
+
+/* Job state (T-0061, SPEC-0054 AC12). Composed onto .gf-status so the colour
+ * still comes from the one tone table; the override exists because queued and
+ * cancelled share a tone and must not also share a shape. */
+.gf-jobstate-cancelled::before { content: var(--gf-glyph-cancelled); }

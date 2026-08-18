@@ -1056,3 +1056,44 @@ export async function blame(
   // do not know" is the one that does not claim completeness.
   return { ranges: view.ranges ?? [], capped: view.capped ?? true };
 }
+
+// --- pipeline runs (T-0061, SPEC-0054) ------------------------------------
+//
+// No log field, and no link to one: ADR-0072 defers retaining job output, and
+// check-contracts.sh check 13 keeps the wire free of a field for it.
+
+export interface RunView {
+  job_id: string;
+  repository_id: string;
+  ref: string;
+  commit_sha: string;
+  trigger: string;
+  state: string;
+  queued_at: string;
+  started_at: string;
+  finished_at: string;
+  outcome_summary: string;
+}
+
+export interface RunListView {
+  runs: RunView[];
+  next_page_token: string;
+}
+
+/** Lists the pipeline runs the caller may see. */
+export async function pipelineRuns(
+  request: Request,
+  repositoryID = '',
+  pageToken = '',
+): Promise<RunListView> {
+  const params = new URLSearchParams();
+  if (repositoryID) params.set('repository_id', repositoryID);
+  if (pageToken) params.set('page_token', pageToken);
+  const query = params.toString();
+  const response = await bffFetch(request, `/api/v1/pipelines/runs${query ? `?${query}` : ''}`);
+  if (!response.ok) {
+    throw new Error('pipelines unavailable');
+  }
+  const view = (await response.json()) as Partial<RunListView>;
+  return { runs: view.runs ?? [], next_page_token: view.next_page_token ?? '' };
+}
