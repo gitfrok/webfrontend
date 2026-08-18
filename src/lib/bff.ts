@@ -6,6 +6,7 @@
 // in the browser's session cookie, which the SSR fetch forwards unchanged.
 import type { BrowserTreeEntry, TreeView, FileViewMetadata } from '../gen/proto/bff/v1/browser_pb.js';
 import type { ImportedHistoryView } from './provenance.js';
+import { readPackStream, type PackStreamResult } from './evidenceStream.js';
 
 // bffOrigin is the sole per-environment upstream. In a cluster it is the BFF
 // Service; in local dev it is the host the SSR server runs on. Astro exposes
@@ -634,4 +635,204 @@ export async function mergeMergeRequest(
     `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/merge`,
     { expected_version: String(expectedVersion) },
   );
+}
+
+// --- evidence packs (T-0051, SPEC-0050 AC1–AC3) ---------------------------
+//
+// Three routes, and the third behaves unlike anything else in this file: the
+// pack stream writes 200 on its first chunk, so a failure after that arrives
+// as a truncated body with a success status. `evidencePackStream` therefore
+// never throws on truncation — it returns the truncated result, because "this
+// pack is incomplete" and "there is no such pack" are different facts and the
+// page has to be able to say which one it has.
+
+export interface PackReference {
+  pack_id: string;
+  state: string;
+}
+
+export interface PackSectionStatus {
+  type: string;
+  record_count: number;
+  gaps: { from: string; to: string; reason: string }[];
+}
+
+export interface PackStatusView {
+  state: string;
+  failure_reason?: string;
+  sections: PackSectionStatus[];
+  appendix_record_count: number;
+  range_from: string;
+  range_to: string;
+  repository_id?: string;
+}
+
+/**
+ * A closed, ordered, parseable range. The BFF's `ValidatePackRequest` refuses
+ * the same shapes, but its refusal is the coarse 404 that names nothing — so
+ * the check happens here too, where the cause is still visible to whoever
+ * typed it.
+ */
+function closedRange(from: string, to: string): boolean {
+  if (!from || !to) return false;
+  const start = Date.parse(from);
+  const end = Date.parse(to);
+  return Number.isFinite(start) && Number.isFinite(end) && start < end;
+}
+
+/** Requests a pack for a closed range with an optional repository scope. */
+export async function requestEvidencePack(
+  request: Request,
+  input: { range_from: string; range_to: string; repository_id: string },
+): Promise<PackReference> {
+  if (!closedRange(input.range_from, input.range_to)) {
+    throw new Error('evidence pack unavailable');
+  }
+  const body: Record<string, string> = {
+    range_from: input.range_from,
+    range_to: input.range_to,
+  };
+  // An absent scope means "the whole tenant". Sending an empty string would
+  // be a scope the contract does not name.
+  if (input.repository_id) body.repository_id = input.repository_id;
+
+  const url = new URL('/api/v1/audit/evidence-packs', bffOrigin);
+  const headers = new Headers({ 'content-type': 'application/json' });
+  const cookie = request.headers.get('cookie');
+  if (cookie) headers.set('cookie', cookie);
+  const response = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body), redirect: 'manual' });
+  if (!response.ok) {
+    throw new Error('evidence pack unavailable');
+  }
+  return (await response.json()) as PackReference;
+}
+
+/** Reads one pack's assembly state. Counts only; the wire carries no content here. */
+export async function evidencePackStatus(request: Request, packID: string): Promise<PackStatusView> {
+  if (!packID) throw new Error('evidence pack unavailable');
+  const response = await bffFetch(request, `/api/v1/audit/evidence-packs/${encodeURIComponent(packID)}/status`);
+  if (!response.ok) {
+    throw new Error('evidence pack unavailable');
+  }
+  return (await response.json()) as PackStatusView;
+}
+
+/**
+ * Reads one pack's NDJSON stream.
+ *
+ * Deliberately does not throw on truncation. `readPackStream` owns the
+ * completeness judgement, and its `truncated` flag is what the page renders.
+ */
+export async function evidencePackStream(request: Request, packID: string): Promise<PackStreamResult> {
+  if (!packID) {
+    return { chunks: [], truncated: true, degraded: false, refused: true };
+  }
+  const response = await bffFetch(request, `/api/v1/audit/evidence-packs/${encodeURIComponent(packID)}`);
+  return readPackStream(response);
+}
+
+// --- auditor grants (T-0052, SPEC-0051 AC1, AC3, AC5) ---------------------
+//
+// The administration surface for PR-18: scoped, read-only, time-boxed access
+// to evidence, without repo read access. It never reads what a grant gives
+// access to — that separation is the whole of the requirement.
+//
+// One property governs every function here: **the response is the truth and
+// the request is a proposal.** The backend answers an issued grant with the
+// expiry it recognized, which may bound the one requested, and it renders the
+// grant's state from its own record at response time. Nothing below derives,
+// computes or echoes any of that.
+
+export interface AuditorGrantView {
+  grant_id: string;
+  tenant_id: string;
+  auditor_principal_id: string;
+  range_from: string;
+  range_to: string;
+  repository_id?: string;
+  pack_ids: string[];
+  expires_at: string;
+  granted_by: string;
+  issued_at: string;
+  revoked_at?: string;
+  state: string;
+}
+
+export interface GrantListView {
+  grants: AuditorGrantView[];
+}
+
+export interface GrantIssueInput {
+  auditor_principal_id: string;
+  range_from: string;
+  range_to: string;
+  repository_id: string;
+  pack_ids: string[];
+  expires_at: string;
+}
+
+/** Posts JSON to the grants surface under the browser's session. */
+async function grantsFetch(request: Request, path: string, init: RequestInit): Promise<AuditorGrantView> {
+  const url = new URL(path, bffOrigin);
+  const headers = new Headers(init.body ? { 'content-type': 'application/json' } : {});
+  const cookie = request.headers.get('cookie');
+  if (cookie) headers.set('cookie', cookie);
+  const response = await fetch(url, { ...init, headers, redirect: 'manual' });
+  if (!response.ok) {
+    throw new Error('auditor grant unavailable');
+  }
+  return (await response.json()) as AuditorGrantView;
+}
+
+/**
+ * Issues a grant.
+ *
+ * The shapes refused here are the shapes `ValidateGrantIssue` refuses at the
+ * BFF, checked again where the cause is still visible: the BFF's refusal is
+ * the coarse 404 that names nothing.
+ */
+export async function issueAuditorGrant(request: Request, input: GrantIssueInput): Promise<AuditorGrantView> {
+  const expiry = Date.parse(input.expires_at);
+  if (
+    !input.auditor_principal_id ||
+    !input.pack_ids?.length ||
+    !Number.isFinite(expiry) ||
+    !closedRange(input.range_from, input.range_to)
+  ) {
+    throw new Error('auditor grant unavailable');
+  }
+  const body: Record<string, unknown> = {
+    auditor_principal_id: input.auditor_principal_id,
+    range_from: input.range_from,
+    range_to: input.range_to,
+    pack_ids: input.pack_ids,
+    expires_at: input.expires_at,
+  };
+  if (input.repository_id) body.repository_id = input.repository_id;
+
+  return grantsFetch(request, '/api/v1/audit/auditor-grants', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+}
+
+/** Lists the tenant's grants, optionally narrowed to one auditor principal. */
+export async function listAuditorGrants(request: Request, auditorPrincipalID: string): Promise<GrantListView> {
+  const params = new URLSearchParams();
+  if (auditorPrincipalID) params.set('auditor_principal_id', auditorPrincipalID);
+  const query = params.toString();
+  const response = await bffFetch(request, `/api/v1/audit/auditor-grants${query ? `?${query}` : ''}`);
+  if (!response.ok) {
+    throw new Error('auditor grant unavailable');
+  }
+  const view = (await response.json()) as Partial<GrantListView>;
+  // No grants and no grants field are the same fact here: this tenant has
+  // nothing to show. Neither is a failure.
+  return { grants: view.grants ?? [] };
+}
+
+/** Revokes a grant. Revocation takes effect at the next decision, not here. */
+export async function revokeAuditorGrant(request: Request, grantID: string): Promise<AuditorGrantView> {
+  if (!grantID) throw new Error('auditor grant unavailable');
+  return grantsFetch(request, `/api/v1/audit/auditor-grants/${encodeURIComponent(grantID)}`, { method: 'DELETE' });
 }

@@ -49,6 +49,16 @@ const SURFACES = [
   // The staleness note, which is the only outcome copy that says something
   // more than "did not take effect" — worth seeing rendered.
   { name: 'merge-request-stale-note', path: '/repos/repo-1/merge_requests/mr-capture?mr_outcome=stale' },
+  // T-0051: the pack that streamed whole, and the one that did not. The
+  // truncation notice is the single most important thing on this surface to
+  // review with colour removed — if it reads as decoration, a reader hands an
+  // auditor a document that is not what it appears to be.
+  { name: 'evidence-pack-complete', path: '/compliance/evidence-packs?pack_id=pack-ready' },
+  { name: 'evidence-pack-truncated', path: '/compliance/evidence-packs?pack_id=pack-truncated' },
+  { name: 'evidence-pack-degraded', path: '/compliance/evidence-packs?pack_id=pack-degraded' },
+  // T-0052: all three grant states side by side, which is the whole reason
+  // they are their own distinctness set.
+  { name: 'auditor-grants', path: '/compliance/auditor-grants' },
 ];
 
 test.beforeAll(() => {
@@ -142,5 +152,34 @@ test.describe('SPEC-0047 AC10 — CVD capture set', () => {
     );
     expect(glyphs.every((g) => g && g !== 'none')).toBe(true);
     expect(new Set(glyphs).size).toBe(3);
+  });
+
+  test('every grant state is told apart by glyph and word, not by tone', async ({ page }) => {
+    await page.setExtraHTTPHeaders(SESSION_HEADER);
+    await page.goto('/compliance/auditor-grants', { waitUntil: 'networkidle' });
+
+    // All three render side by side in this list. If two ever shared a glyph,
+    // the distinction would be carried by hue alone for a reader who cannot
+    // see hue (SPEC-0051 AC8).
+    for (const word of ['Active', 'Revoked', 'Expired']) {
+      await expect(page.getByText(word, { exact: true }).first()).toBeVisible();
+    }
+    const glyphs = await page.evaluate(() =>
+      ['gf-status-success', 'gf-status-warn', 'gf-status-pending'].map((tone) => {
+        const element = document.querySelector(`.gf-status.${tone}`);
+        return element ? getComputedStyle(element, '::before').content : '';
+      }),
+    );
+    expect(new Set(glyphs).size).toBe(3);
+  });
+
+  test('a truncated pack says so in words, not only in colour', async ({ page }) => {
+    await page.setExtraHTTPHeaders(SESSION_HEADER);
+    await page.goto('/compliance/evidence-packs?pack_id=pack-truncated', { waitUntil: 'networkidle' });
+
+    // The words are the channel that survives grayscale, deuteranopia and a
+    // printed page alike.
+    await expect(page.getByText('This pack is incomplete', { exact: false })).toBeVisible();
+    await expect(page.getByText('not authoritative', { exact: false })).toBeVisible();
   });
 });

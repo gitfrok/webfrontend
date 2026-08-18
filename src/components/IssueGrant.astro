@@ -1,0 +1,56 @@
+---
+// Issue an auditor grant (T-0052, SPEC-0051 AC1, AC2).
+//
+// The form carries exactly the fields the contract names. There is no state,
+// grant identity, tenant or granting-actor input, because none of them is
+// caller-assertable — the server assigns each one (SPEC-0033 AC8).
+//
+// The expiry note is not decoration. The backend answers with the expiry it
+// recognized, which may bound the one requested, so an admin has to know the
+// date they type is a proposal. A form that implied otherwise would be the
+// interface making a promise the server never made.
+import { GRANT_MESSAGES } from '../lib/grants';
+---
+
+<section class="gf-card" aria-labelledby="issue-heading">
+  <h2 id="issue-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-3)' }}>Issue a grant</h2>
+
+  <form method="post" action="/api/compliance/auditor-grants">
+    <label class="gf-field">
+      <span>Auditor principal</span>
+      <input class="gf-input" type="text" name="auditor_principal_id" required />
+    </label>
+
+    <div style={{ display: 'flex', gap: 'var(--gf-space-3)' }}>
+      <label class="gf-field" style={{ flex: '1' }}>
+        <span>Evidence range from (UTC)</span>
+        <input class="gf-input" type="date" name="range_from" required />
+      </label>
+      <label class="gf-field" style={{ flex: '1' }}>
+        <span>Evidence range to (UTC)</span>
+        <input class="gf-input" type="date" name="range_to" required />
+      </label>
+    </div>
+
+    <label class="gf-field">
+      <span>Repository scope (optional — leave empty for the whole tenant)</span>
+      <input class="gf-input" type="text" name="repository_id" />
+    </label>
+
+    <label class="gf-field">
+      <span>Pack IDs (one per line)</span>
+      <textarea class="gf-textarea" name="pack_ids" rows="3" required></textarea>
+    </label>
+
+    <label class="gf-field">
+      <span>Expires (UTC)</span>
+      <input class="gf-input" type="date" name="expires_at" required />
+    </label>
+
+    <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+      {GRANT_MESSAGES.expiryIsRequested}
+    </p>
+
+    <button type="submit" class="gf-btn gf-btn-primary">Issue grant</button>
+  </form>
+</section>

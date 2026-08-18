@@ -1,0 +1,70 @@
+---
+// Auditor grants (T-0052, SPEC-0051; PRD PR-18).
+//
+// Scoped, read-only, time-boxed access to evidence — without repo read access.
+// This page administers that access and never renders what a grant gives
+// access to; that separation is the whole of the requirement.
+import Layout from '../../../layouts/Layout.astro';
+import GrantList from '../../../components/GrantList.astro';
+import IssueGrant from '../../../components/IssueGrant.astro';
+import { listAuditorGrants } from '../../../lib/bff';
+import type { AuditorGrantView } from '../../../lib/bff';
+import { GRANT_MESSAGES, grantMessageForKey } from '../../../lib/grants';
+
+const auditorFilter = Astro.url.searchParams.get('auditor_principal_id') ?? '';
+const outcome = grantMessageForKey(Astro.url.searchParams.get('grant_outcome'));
+const outcomeApplied = ['issued', 'revoked'].includes(Astro.url.searchParams.get('grant_outcome') ?? '');
+
+let grants: AuditorGrantView[] = [];
+let listError = false;
+try {
+  grants = (await listAuditorGrants(Astro.request, auditorFilter)).grants;
+} catch {
+  listError = true;
+}
+---
+
+<Layout title="Auditor grants">
+  <main style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Auditor grants</h1>
+    <p class="gf-muted" style={{ fontSize: '14px', margin: '0 0 var(--gf-space-2)' }}>
+      Scoped, read-only, time-boxed access to named evidence packs — and to nothing else.
+      Issuing and revoking are decided by the server; this page requests them and shows what it decided.
+    </p>
+    <p style={{ fontSize: '14px', margin: '0 0 var(--gf-space-4)' }}>
+      <a href="/compliance/evidence-packs" style={{ color: 'var(--gf-action-ink)' }}>Evidence packs</a>
+      <span class="gf-muted"> — where a pack's identifier comes from.</span>
+    </p>
+
+    {outcome && (
+      <p
+        class="gf-note"
+        role="status"
+        style={{ borderLeftColor: outcomeApplied ? 'var(--gf-success-ink)' : 'var(--gf-warn-ink)' }}
+      >
+        <strong>{outcomeApplied ? 'Applied.' : 'Not applied.'}</strong> {outcome}
+      </p>
+    )}
+
+    <IssueGrant />
+
+    <h2 style={{ fontSize: '18px', margin: 'var(--gf-space-6) 0 var(--gf-space-3)' }}>Grants</h2>
+
+    <form method="get" style={{ marginBottom: 'var(--gf-space-4)' }}>
+      <label class="gf-field">
+        <span>Filter by auditor principal (optional)</span>
+        <input class="gf-input" type="text" name="auditor_principal_id" value={auditorFilter} />
+      </label>
+      <button type="submit" class="gf-btn">Filter</button>
+    </form>
+
+    {listError ? (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        {' '}{GRANT_MESSAGES.unavailable}
+      </p>
+    ) : (
+      <GrantList grants={grants} />
+    )}
+  </main>
+</Layout>

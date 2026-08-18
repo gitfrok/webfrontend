@@ -29,6 +29,10 @@ const destinations = [
   { href: '/', label: 'Repositories' },
   { href: '/security', label: 'Security' },
   { href: '/usage', label: 'Usage' },
+  // Compliance points at the evidence-pack page rather than at a /compliance
+  // index: an index would be a destination with no BFF route behind it, which
+  // is the dead-nav shape ADR-0070's ordering law forbids (SPEC-0050 AC8).
+  { href: '/compliance/evidence-packs', label: 'Compliance' },
 ];
 const isCurrent = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`);

@@ -25,7 +25,9 @@ export type StatusKey =
   // merge-request review disposition (T-0049)
   | 'APPROVED' | 'CHANGES_REQUESTED' | 'COMMENTED'
   // evidence pack
-  | 'READY' | 'PENDING' | 'FAILED';
+  | 'READY' | 'PENDING' | 'FAILED' | 'ASSEMBLING'
+  // auditor grant lifecycle (T-0052)
+  | 'ACTIVE' | 'REVOKED' | 'EXPIRED';
 
 export interface StatusDescriptor {
   /** Token class from tokens.css. Never a colour value. */
@@ -75,8 +77,22 @@ export const STATUS_VOCABULARY: Record<StatusKey, StatusDescriptor> = {
 
   // --- evidence pack -----------------------------------------------------
   READY: { tone: 'gf-status-success', glyph: '✓', label: 'Ready' },
+  // Assembly is in progress and the pack is not yet anything a reader should
+  // trust. It is deliberately not PENDING: "queued" and "being built" are
+  // different answers to "can I use this yet".
+  ASSEMBLING: { tone: 'gf-status-info', glyph: '●', label: 'Assembling' },
   PENDING: { tone: 'gf-status-pending', glyph: '○', label: 'Pending' },
   FAILED: { tone: 'gf-status-danger', glyph: '✕', label: 'Failed' },
+
+  // --- auditor grant lifecycle (T-0052, SPEC-0051 AC8) -------------------
+  // These three render side by side in the grants list, so they are their own
+  // distinctness set. ACTIVE against REVOKED is deliberately NOT the
+  // success/danger pair: a revoked grant is a normal administrative outcome,
+  // not a failure, and the pair a deutan reader separates least well should
+  // not be carrying the product's access-control story.
+  ACTIVE: { tone: 'gf-status-success', glyph: '✓', label: 'Active' },
+  REVOKED: { tone: 'gf-status-warn', glyph: '!', label: 'Revoked' },
+  EXPIRED: { tone: 'gf-status-pending', glyph: '○', label: 'Expired' },
 };
 
 const UNKNOWN: StatusDescriptor = {

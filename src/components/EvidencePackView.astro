@@ -1,0 +1,136 @@
+---
+// One evidence pack: its assembly state, and the pack itself if it can be read
+// (T-0051, SPEC-0050 AC2, AC4, AC5, AC7).
+//
+// The rule this component exists to hold: **a truncated pack never reads as a
+// complete one.** The stream writes 200 on its first chunk, so a pack cut off
+// halfway arrives looking like a success with fewer sections — and a reader
+// who has never seen the whole pack cannot tell a short one from a truncated
+// one. Rendering fewer sections is therefore not a statement; the truncation
+// notice is, and it is words plus a glyph, never an omission.
+//
+// Completeness is likewise never inferred from the sections present. It comes
+// from the reader's `truncated` flag, which is set unless the backend's own
+// final marker arrived last.
+//
+// The truncation notice sits ABOVE the assembly-state card, and the reason is
+// a defect the AC11 grayscale review caught rather than a preference. The
+// status route reports the pack's ASSEMBLY state, which is legitimately READY
+// when assembly succeeded; the stream is a separate act that can still be cut
+// short. Rendering the "✓ Ready" badge first put the most glanceable element
+// on the page in direct contradiction of the notice below it — a reader
+// skimming saw Ready and stopped. The server's state is still shown, because
+// it is true and it is the server's; it is simply no longer the first thing
+// read when the pack in hand is not whole.
+import { EVIDENCE_MESSAGES, describePackState } from '../lib/evidence';
+import type { PackStatusView } from '../lib/bff';
+import type { PackStreamResult, PackSection } from '../lib/evidenceStream';
+
+interface Props {
+  packID: string;
+  status: PackStatusView | null;
+  stream: PackStreamResult | null;
+}
+const { packID, status, stream } = Astro.props;
+
+const state = status ? describePackState(status.state) : null;
+
+// Sections as the stream delivered them. A chunk carries at most one.
+const sections: PackSection[] = (stream?.chunks ?? [])
+  .map((chunk) => chunk.section)
+  .filter((section): section is PackSection => Boolean(section));
+
+const isDegraded = (section: PackSection) => !section.complete || (section.gaps?.length ?? 0) > 0;
+const day = (value: string) => value.slice(0, 10);
+---
+
+<section aria-labelledby="pack-heading" style={{ margin: 'var(--gf-space-6) 0' }}>
+  <h2 id="pack-heading" style={{ fontSize: '18px', margin: '0 0 var(--gf-space-2)' }}>
+    Pack <span style={{ fontFamily: 'var(--gf-font-code)' }}>{packID}</span>
+  </h2>
+
+  {stream?.refused && (
+    <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+      {' '}{EVIDENCE_MESSAGES.refused}
+    </p>
+  )}
+
+  {stream && !stream.refused && stream.truncated && (
+    <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Incomplete</span>
+      {' '}{EVIDENCE_MESSAGES.truncated}
+    </p>
+  )}
+
+  {status && state && (
+    <div class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
+      <p style={{ margin: '0 0 var(--gf-space-2)', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
+        <span class:list={['gf-status', state.tone]} style={{ fontSize: '13px' }}>{state.label}</span>
+        <span class="gf-muted" style={{ fontSize: '13px' }}>
+          assembly · {day(status.range_from)} to {day(status.range_to)}
+          {status.repository_id && ` · ${status.repository_id}`}
+        </span>
+      </p>
+
+      {/* Rendered only when the wire carried one. An absent reason stays absent
+          rather than becoming "unknown reason", which would be this layer
+          claiming to know the shape of something it was not told. */}
+      {status.failure_reason && (
+        <p style={{ margin: '0 0 var(--gf-space-2)', fontSize: '13px' }}>{status.failure_reason}</p>
+      )}
+
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+        <caption class="gf-muted" style={{ textAlign: 'left', paddingBottom: 'var(--gf-space-1)' }}>
+          Records counted per section. Counts only — no record content appears here.
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Section</th>
+            <th scope="col" style={{ textAlign: 'right', padding: 'var(--gf-space-1) 0' }}>Records</th>
+            <th scope="col" style={{ textAlign: 'right', padding: 'var(--gf-space-1) 0' }}>Gaps</th>
+          </tr>
+        </thead>
+        <tbody>
+          {status.sections.map((section) => (
+            <tr style={{ borderTop: '1px solid var(--gf-line)' }}>
+              <td style={{ padding: 'var(--gf-space-1) 0' }}>{section.type}</td>
+              <td style={{ padding: 'var(--gf-space-1) 0', textAlign: 'right' }}>{section.record_count}</td>
+              <td style={{ padding: 'var(--gf-space-1) 0', textAlign: 'right' }}>{section.gaps?.length ?? 0}</td>
+            </tr>
+          ))}
+          <tr style={{ borderTop: '1px solid var(--gf-line)' }}>
+            <td style={{ padding: 'var(--gf-space-1) 0' }}>Appendix</td>
+            <td style={{ padding: 'var(--gf-space-1) 0', textAlign: 'right' }}>{status.appendix_record_count}</td>
+            <td style={{ padding: 'var(--gf-space-1) 0', textAlign: 'right' }}>0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )}
+
+  {sections.map((section) => (
+    <div class="gf-card" style={{ marginBottom: 'var(--gf-space-3)' }}>
+      <h3 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-2)' }}>{section.type}</h3>
+
+      {isDegraded(section) && (
+        <p class="gf-note" style={{ borderLeftColor: 'var(--gf-warn-ink)', margin: '0 0 var(--gf-space-2)' }}>
+          <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Incomplete</span>
+          {' '}{EVIDENCE_MESSAGES.sectionIncomplete}
+        </p>
+      )}
+
+      {section.gaps?.map((gap) => (
+        <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-1)' }}>
+          {day(gap.from)} to {day(gap.to)} — {gap.reason}
+        </p>
+      ))}
+
+      {section.anchors && (
+        <p class="gf-muted" style={{ fontFamily: 'var(--gf-font-code)', fontSize: '12px', margin: '0px' }}>
+          seq {section.anchors.first_seq}–{section.anchors.last_seq} · {section.records_digest}
+        </p>
+      )}
+    </div>
+  ))}
+</section>

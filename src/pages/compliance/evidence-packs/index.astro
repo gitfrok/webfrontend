@@ -1,0 +1,92 @@
+---
+// Evidence packs (T-0051, SPEC-0050; PRD PR-17).
+//
+// PR-17 requires a compliance owner to export a date-ranged pack "without
+// engineer involvement". Until this page existed the only way to do it was
+// curl, which is the involvement the requirement excludes.
+//
+// The page reads a pack only when one is named in the URL. It never polls: the
+// backend has never told this layer how long assembly takes, so a timer here
+// would be the frontend guessing (SPEC-0050 open question 2).
+import Layout from '../../../layouts/Layout.astro';
+import EvidencePackView from '../../../components/EvidencePackView.astro';
+import { evidencePackStatus, evidencePackStream } from '../../../lib/bff';
+import type { PackStatusView } from '../../../lib/bff';
+import type { PackStreamResult } from '../../../lib/evidenceStream';
+import { EVIDENCE_MESSAGES, evidenceMessageForKey } from '../../../lib/evidence';
+
+const packID = Astro.url.searchParams.get('pack_id') ?? '';
+const outcome = evidenceMessageForKey(Astro.url.searchParams.get('evidence_outcome'));
+
+let status: PackStatusView | null = null;
+let stream: PackStreamResult | null = null;
+let statusError = false;
+
+if (packID) {
+  try {
+    status = await evidencePackStatus(Astro.request, packID);
+  } catch {
+    statusError = true;
+  }
+  // The stream is read only once the pack is READY. Reading it earlier would
+  // return a truncated stream that says nothing about assembly — the status is
+  // the right question while a pack is still being built.
+  if (status?.state === 'READY') {
+    stream = await evidencePackStream(Astro.request, packID);
+  }
+}
+---
+
+<Layout title="Evidence packs">
+  <main style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Evidence packs</h1>
+    <p class="gf-muted" style={{ fontSize: '14px', margin: '0 0 var(--gf-space-2)' }}>
+      A date-ranged record of approvals, policy decisions, scan gates and access changes.
+      Assembly is decided and performed by the server; this page requests one and shows what it built.
+    </p>
+    <p style={{ fontSize: '14px', margin: '0 0 var(--gf-space-4)' }}>
+      <a href="/compliance/auditor-grants" style={{ color: 'var(--gf-action-ink)' }}>Auditor grants</a>
+      <span class="gf-muted"> — give an auditor scoped, time-boxed access to these packs.</span>
+    </p>
+
+    {outcome && (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <strong>Not applied.</strong> {outcome}
+      </p>
+    )}
+
+    <section class="gf-card" aria-labelledby="request-heading">
+      <h2 id="request-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-3)' }}>Request a pack</h2>
+      <form method="post" action="/api/compliance/evidence-packs">
+        <div style={{ display: 'flex', gap: 'var(--gf-space-3)' }}>
+          <label class="gf-field" style={{ flex: '1' }}>
+            <span>From (inclusive, UTC)</span>
+            <input class="gf-input" type="date" name="range_from" required />
+          </label>
+          <label class="gf-field" style={{ flex: '1' }}>
+            <span>To (exclusive, UTC)</span>
+            <input class="gf-input" type="date" name="range_to" required />
+          </label>
+        </div>
+        <label class="gf-field">
+          <span>Repository (optional — leave empty for the whole tenant)</span>
+          <input class="gf-input" type="text" name="repository_id" />
+        </label>
+        <button type="submit" class="gf-btn gf-btn-primary">Request pack</button>
+      </form>
+    </section>
+
+    {statusError && (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        {' '}{EVIDENCE_MESSAGES.refused}
+      </p>
+    )}
+
+    {packID && status && status.state !== 'READY' && status.state !== 'FAILED' && (
+      <p class="gf-note" role="status">{EVIDENCE_MESSAGES.assembling}</p>
+    )}
+
+    {packID && status && <EvidencePackView packID={packID} status={status} stream={stream} />}
+  </main>
+</Layout>

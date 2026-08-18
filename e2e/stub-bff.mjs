@@ -154,6 +154,129 @@ function readForm(request) {
   });
 }
 
+// --- compliance fixtures (T-0051 SPEC-0050, T-0052 SPEC-0051) ------------
+//
+// Three packs, because the three facts the surface must tell apart cannot be
+// driven from one: a pack that streams whole, a pack whose stream stops
+// without the final marker (the 200-with-truncation case), and a pack with a
+// degraded section. All are write-free — nothing in the e2e journeys mutates
+// them, so the captures do not drift with test order.
+const packs = {
+  'pack-ready': {
+    state: 'READY',
+    sections: [
+      { type: 'APPROVALS', record_count: 12, gaps: [] },
+      { type: 'POLICY_DECISIONS', record_count: 4, gaps: [] },
+      { type: 'SCAN_GATES', record_count: 7, gaps: [] },
+      { type: 'ACCESS_CHANGES', record_count: 2, gaps: [] },
+    ],
+    appendix_record_count: 0,
+    range_from: '2026-07-01T00:00:00Z',
+    range_to: '2026-08-01T00:00:00Z',
+  },
+  'pack-truncated': {
+    state: 'READY',
+    sections: [{ type: 'APPROVALS', record_count: 12, gaps: [] }],
+    appendix_record_count: 0,
+    range_from: '2026-07-01T00:00:00Z',
+    range_to: '2026-08-01T00:00:00Z',
+  },
+  'pack-degraded': {
+    state: 'READY',
+    sections: [{
+      type: 'ACCESS_CHANGES', record_count: 2,
+      gaps: [{ from: '2026-07-05T00:00:00Z', to: '2026-07-06T00:00:00Z', reason: 'RETENTION' }],
+    }],
+    appendix_record_count: 0,
+    range_from: '2026-07-01T00:00:00Z',
+    range_to: '2026-08-01T00:00:00Z',
+  },
+  'pack-assembling': {
+    state: 'ASSEMBLING',
+    sections: [{ type: 'APPROVALS', record_count: 0, gaps: [] }],
+    appendix_record_count: 0,
+    range_from: '2026-07-01T00:00:00Z',
+    range_to: '2026-08-01T00:00:00Z',
+  },
+  'pack-failed': {
+    state: 'FAILED',
+    failure_reason: 'the audit chain was unreadable for part of the range',
+    sections: [],
+    appendix_record_count: 0,
+    range_from: '2026-07-01T00:00:00Z',
+    range_to: '2026-08-01T00:00:00Z',
+  },
+};
+
+const anchors = { first_seq: 1, last_seq: 12, first_record_hash: 'h1', last_record_hash: 'h12', prev_record_hash: 'h0' };
+
+const packStreams = {
+  'pack-ready': [
+    { header: { pack_id: 'pack-ready', range_from: '2026-07-01T00:00:00Z', range_to: '2026-08-01T00:00:00Z' } },
+    { section: { type: 'APPROVALS', complete: true, gaps: [], records: [], records_digest: 'sha256:aaa', anchors } },
+    { section: { type: 'POLICY_DECISIONS', complete: true, gaps: [], records: [], records_digest: 'sha256:bbb', anchors } },
+  ],
+  // No final marker is ever written for this one. The response is still 200,
+  // which is exactly the shape the real handler produces when assembly fails
+  // after the first chunk.
+  'pack-truncated': [
+    { header: { pack_id: 'pack-truncated', range_from: '2026-07-01T00:00:00Z', range_to: '2026-08-01T00:00:00Z' } },
+    { section: { type: 'APPROVALS', complete: true, gaps: [], records: [], records_digest: 'sha256:ccc', anchors } },
+  ],
+  'pack-degraded': [
+    { header: { pack_id: 'pack-degraded', range_from: '2026-07-01T00:00:00Z', range_to: '2026-08-01T00:00:00Z' } },
+    {
+      section: {
+        type: 'ACCESS_CHANGES', complete: false,
+        gaps: [{ from: '2026-07-05T00:00:00Z', to: '2026-07-06T00:00:00Z', reason: 'RETENTION' }],
+        records: [], records_digest: 'sha256:ddd', anchors,
+      },
+    },
+  ],
+};
+
+// Grants. The list carries a bounded-expiry grant and — the fixture AC4 needs —
+// one whose expiry is long past while the server still calls it ACTIVE. A UI
+// that computed state from the clock would render that one expired.
+const grants = [
+  {
+    grant_id: 'grant-1', tenant_id: 'tenant-1', auditor_principal_id: 'auditor@example.test',
+    range_from: '2026-07-01T00:00:00Z', range_to: '2026-08-01T00:00:00Z',
+    pack_ids: ['pack-ready'], expires_at: '2026-09-01T00:00:00Z',
+    granted_by: 'admin@gitsaas.test', issued_at: '2026-08-18T00:00:00Z', state: 'ACTIVE',
+  },
+  {
+    grant_id: 'grant-past-active', tenant_id: 'tenant-1', auditor_principal_id: 'auditor@example.test',
+    range_from: '2026-01-01T00:00:00Z', range_to: '2026-02-01T00:00:00Z',
+    pack_ids: ['pack-ready'], expires_at: '2020-01-01T00:00:00Z',
+    granted_by: 'admin@gitsaas.test', issued_at: '2019-12-01T00:00:00Z', state: 'ACTIVE',
+  },
+  {
+    grant_id: 'grant-revoked', tenant_id: 'tenant-1', auditor_principal_id: 'other@example.test',
+    range_from: '2026-06-01T00:00:00Z', range_to: '2026-07-01T00:00:00Z',
+    pack_ids: ['pack-degraded'], expires_at: '2026-10-01T00:00:00Z',
+    granted_by: 'admin@gitsaas.test', issued_at: '2026-06-02T00:00:00Z',
+    revoked_at: '2026-06-20T00:00:00Z', state: 'REVOKED',
+  },
+  {
+    grant_id: 'grant-expired', tenant_id: 'tenant-1', auditor_principal_id: 'past@example.test',
+    range_from: '2026-05-01T00:00:00Z', range_to: '2026-06-01T00:00:00Z',
+    pack_ids: ['pack-ready'], expires_at: '2026-06-15T00:00:00Z',
+    granted_by: 'admin@gitsaas.test', issued_at: '2026-05-02T00:00:00Z', state: 'EXPIRED',
+  },
+];
+
+/** Reads a JSON body. */
+function readJSON(request) {
+  return new Promise((resolve) => {
+    let body = '';
+    request.on('data', (chunk) => { body += chunk; });
+    request.on('end', () => {
+      try { resolve(JSON.parse(body)); } catch { resolve(null); }
+    });
+  });
+}
+
 const server = createServer((request, response) => {
   const url = new URL(request.url, `http://localhost:${port}`);
   const cookies = request.headers.cookie ?? '';
@@ -167,6 +290,73 @@ const server = createServer((request, response) => {
     response.writeHead(200, { 'cache-control': 'private, no-store', 'content-type': 'application/json' });
     response.end(JSON.stringify(payload));
   };
+
+  // --- compliance surfaces (SPEC-0050, SPEC-0051) -----------------------
+  const refuse = () => {
+    response.writeHead(404, { 'cache-control': 'private, no-store' });
+    response.end();
+  };
+
+  if (url.pathname === '/api/v1/audit/evidence-packs' && request.method === 'POST') {
+    return readJSON(request).then((body) => {
+      if (!body || !body.range_from || !body.range_to) return refuse();
+      return json({ pack_id: 'pack-ready', state: 'PENDING' });
+    });
+  }
+
+  const packStatusMatch = url.pathname.match(/^\/api\/v1\/audit\/evidence-packs\/([^/]+)\/status$/);
+  if (packStatusMatch) {
+    const pack = packs[decodeURIComponent(packStatusMatch[1])];
+    return pack ? json(pack) : refuse();
+  }
+
+  const packStreamMatch = url.pathname.match(/^\/api\/v1\/audit\/evidence-packs\/([^/]+)$/);
+  if (packStreamMatch) {
+    const id = decodeURIComponent(packStreamMatch[1]);
+    const lines = packStreams[id];
+    if (!lines) return refuse();
+    response.writeHead(200, { 'cache-control': 'private, no-store', 'content-type': 'application/x-ndjson' });
+    lines.forEach((line, index) => {
+      // pack-truncated never gets a final marker: the stream simply stops,
+      // and the status stays 200 because it was written on the first chunk.
+      const final = id !== 'pack-truncated' && index === lines.length - 1;
+      response.write(`${JSON.stringify({ chunk_index: index, final_chunk: final, ...line })}\n`);
+    });
+    response.end();
+    return;
+  }
+
+  if (url.pathname === '/api/v1/audit/auditor-grants') {
+    if (request.method === 'GET') {
+      const filter = url.searchParams.get('auditor_principal_id');
+      return json({ grants: filter ? grants.filter((g) => g.auditor_principal_id === filter) : grants });
+    }
+    if (request.method === 'POST') {
+      return readJSON(request).then((body) => {
+        if (!body || !body.auditor_principal_id || !body.pack_ids?.length || !body.expires_at) return refuse();
+        // The server bounds the requested expiry. A UI that echoed the form's
+        // value would show the date that was asked for, not the one granted.
+        return json({
+          grant_id: 'grant-new', tenant_id: 'tenant-1',
+          auditor_principal_id: body.auditor_principal_id,
+          range_from: body.range_from, range_to: body.range_to,
+          repository_id: body.repository_id ?? '',
+          pack_ids: body.pack_ids,
+          expires_at: '2026-09-01T00:00:00Z',
+          granted_by: 'admin@gitsaas.test', issued_at: '2026-08-18T00:00:00Z', state: 'ACTIVE',
+        });
+      });
+    }
+  }
+
+  const revokeMatch = url.pathname.match(/^\/api\/v1\/audit\/auditor-grants\/([^/]+)$/);
+  if (revokeMatch && request.method === 'DELETE') {
+    const grant = grants.find((g) => g.grant_id === decodeURIComponent(revokeMatch[1]));
+    if (!grant) return refuse();
+    // Answered as revoked without mutating the fixture, so the journeys and
+    // the captures stay independent of run order.
+    return json({ ...grant, state: 'REVOKED', revoked_at: '2026-08-18T12:00:00Z' });
+  }
 
   // The capture surfaces (SPEC-0047 AC10).
   if (url.pathname === '/api/v1/usage/view') return json(usageViewFixture);

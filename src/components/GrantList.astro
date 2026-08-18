@@ -1,0 +1,70 @@
+---
+// The tenant's auditor grants (T-0052, SPEC-0051 AC3, AC4, AC5, AC7).
+//
+// Two rules hold this component:
+//
+//   1. **State is never computed.** The badge shows the `state` string the
+//      server sent. There is no comparison of `expires_at` against a clock
+//      anywhere here, because the grant's validity is read at decision time
+//      (SPEC-0033 AC7) and a browser guessing at it would render a grant
+//      expired while the server still honours it.
+//
+//   2. **Revoke renders on every grant.** Whether the reader may revoke is an
+//      owner-only PDP decision this surface is never told; hiding the control
+//      would encode a guess as certainty. It posts to an SSR relay because an
+//      HTML form speaks GET and POST only, and a form keeps the control as
+//      markup rather than as script.
+import { describeGrantState, GRANT_MESSAGES } from '../lib/grants';
+import type { AuditorGrantView } from '../lib/bff';
+
+interface Props {
+  grants: AuditorGrantView[];
+}
+const { grants } = Astro.props;
+const day = (value: string) => (value ? value.slice(0, 10) : '');
+---
+
+{grants.length === 0 && (
+  <p class="gf-muted" style={{ fontSize: '14px' }}>{GRANT_MESSAGES.noGrants}</p>
+)}
+
+{grants.map((grant) => {
+  const state = describeGrantState(grant.state);
+  return (
+    <article class="gf-card" style={{ marginBottom: 'var(--gf-space-3)' }}>
+      <header style={{ display: 'flex', alignItems: 'center', gap: 'var(--gf-space-3)', flexWrap: 'wrap' }}>
+        <span class:list={['gf-status', state.tone]} style={{ fontSize: '13px' }}>{state.label}</span>
+        <strong style={{ fontSize: '15px' }}>{grant.auditor_principal_id}</strong>
+        <span class="gf-muted" style={{ fontSize: '13px', fontFamily: 'var(--gf-font-code)' }}>{grant.grant_id}</span>
+      </header>
+
+      <dl style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 'var(--gf-space-1) var(--gf-space-3)', fontSize: '13px', margin: 'var(--gf-space-3) 0' }}>
+        <dt class="gf-muted">Evidence range</dt>
+        <dd style={{ margin: '0px' }}>{day(grant.range_from)} to {day(grant.range_to)}</dd>
+
+        <dt class="gf-muted">Repository scope</dt>
+        <dd style={{ margin: '0px' }}>{grant.repository_id || 'the whole tenant'}</dd>
+
+        <dt class="gf-muted">Packs</dt>
+        <dd style={{ margin: '0px', fontFamily: 'var(--gf-font-code)' }}>{grant.pack_ids.join(', ')}</dd>
+
+        <dt class="gf-muted">Expires</dt>
+        <dd style={{ margin: '0px' }}>{day(grant.expires_at)}</dd>
+
+        <dt class="gf-muted">Granted by</dt>
+        <dd style={{ margin: '0px' }}>{grant.granted_by} on {day(grant.issued_at)}</dd>
+
+        {grant.revoked_at && (
+          <>
+            <dt class="gf-muted">Revoked</dt>
+            <dd style={{ margin: '0px' }}>{day(grant.revoked_at)}</dd>
+          </>
+        )}
+      </dl>
+
+      <form method="post" action={`/api/compliance/auditor-grants/${encodeURIComponent(grant.grant_id)}/revoke`}>
+        <button type="submit" class="gf-btn">Revoke</button>
+      </form>
+    </article>
+  );
+})}
