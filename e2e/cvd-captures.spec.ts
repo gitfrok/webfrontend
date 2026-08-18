@@ -59,6 +59,13 @@ const SURFACES = [
   // T-0052: all three grant states side by side, which is the whole reason
   // they are their own distinctness set.
   { name: 'auditor-grants', path: '/compliance/auditor-grants' },
+  // T-0050: results, and the empty state that means three different things.
+  // The empty one matters most — it is the surface where the honest copy is
+  // longer than the dishonest copy, and a grayscale read is where you find
+  // out whether length made it unreadable.
+  { name: 'search-results', path: '/search?q=BuildQuery&mode=SUBSTRING' },
+  { name: 'search-empty', path: '/search?q=nothing&mode=SUBSTRING' },
+  { name: 'search-cold-index', path: '/search?q=cold&mode=SUBSTRING' },
 ];
 
 test.beforeAll(() => {
@@ -181,5 +188,19 @@ test.describe('SPEC-0047 AC10 — CVD capture set', () => {
     // printed page alike.
     await expect(page.getByText('This pack is incomplete', { exact: false })).toBeVisible();
     await expect(page.getByText('not authoritative', { exact: false })).toBeVisible();
+  });
+
+  test('the empty search page states no absence and no count', async ({ page }) => {
+    await page.setExtraHTTPHeaders(SESSION_HEADER);
+    await page.goto('/search?q=nothing&mode=SUBSTRING', { waitUntil: 'networkidle' });
+
+    // PR-19's leak, inverted: telling an unauthorized reader that nothing
+    // exists is as much a disclosure as showing them what does.
+    const body = ((await page.locator('body').textContent()) ?? '').toLowerCase();
+    for (const claim of ['no results', 'no matches', 'not found', '0 results']) {
+      expect(body).not.toContain(claim);
+    }
+    expect(body).not.toMatch(/\bof\s+\d+\b/);
+    await expect(page.getByText('That is not the same as nothing existing', { exact: false })).toBeVisible();
   });
 });

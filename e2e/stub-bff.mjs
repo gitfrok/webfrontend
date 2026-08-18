@@ -273,6 +273,53 @@ const grants = [
   },
 ];
 
+// --- code search fixtures (T-0050, SPEC-0049 AC12) -----------------------
+//
+// The three empty states share one wire shape and mean different things, so
+// each needs its own query text to drive it:
+//
+//   'nothing'      -> empty page, index populated  ("matched nothing, or you
+//                     may not see what it matched" — indistinguishable)
+//   'cold'         -> empty page, index EMPTY      ("nothing is indexed")
+//   'statusbroken' -> empty page, status route 404 ("index state unknown")
+//
+// All are write-free, so the captures do not drift with test order.
+const searchHits = [
+  {
+    repository_id: 'repo-1', revision: 'main', path: 'internal/db/query.go',
+    line_start: 42, line_end: 44, matched_content: 'func BuildQuery(ctx context.Context) (string, error) {',
+    metadata: { path: 'internal/db/query.go', object_id: 'blob0001abcd', mode: 33188, size_bytes: 4096 },
+  },
+  {
+    repository_id: 'repo-1', revision: 'main', path: 'internal/db/query_test.go',
+    line_start: 11, line_end: 12, matched_content: 'got, err := BuildQuery(ctx)',
+    // No metadata on purpose: enrichment degrades to no metadata, never to
+    // no result, and the capture should show both kinds side by side.
+  },
+];
+
+const indexEntries = [
+  { repository_id: 'repo-1', last_indexed_revision: 'abc1234', indexed_at: '2026-08-18T00:00:00Z', freshness_lag_ms: 1200 },
+  { repository_id: 'repo-2', last_indexed_revision: 'def5678', indexed_at: '2026-08-18T00:00:00Z', freshness_lag_ms: 900 },
+];
+
+// One repository far behind, so the stale reading has a fixture. The page
+// reports the WORST lag, which is what this pair exists to prove.
+const staleIndexEntries = [
+  ...indexEntries,
+  { repository_id: 'repo-3', last_indexed_revision: '0000000', indexed_at: '2026-08-17T00:00:00Z', freshness_lag_ms: 3_600_000 },
+];
+
+/** Which index-status answer the last query asked for. Read-only per query text. */
+function statusFor(query) {
+  if (query === 'cold') return { entries: [] };
+  if (query === 'statusbroken') return null;
+  if (query === 'stale') return { entries: staleIndexEntries };
+  return { entries: indexEntries };
+}
+
+let lastSearchQuery = '';
+
 /** Reads a JSON body. */
 function readJSON(request) {
   return new Promise((resolve) => {
@@ -297,6 +344,34 @@ const server = createServer((request, response) => {
     response.writeHead(200, { 'cache-control': 'private, no-store', 'content-type': 'application/json' });
     response.end(JSON.stringify(payload));
   };
+
+  // --- code search (SPEC-0049) ------------------------------------------
+  if (url.pathname === '/api/v1/search/query' && request.method === 'POST') {
+    return readJSON(request).then((body) => {
+      if (!body || !body.query || !['SUBSTRING', 'REGEX', 'SYMBOL'].includes(body.mode)) {
+        response.writeHead(404, { 'cache-control': 'private, no-store' });
+        response.end();
+        return;
+      }
+      lastSearchQuery = body.query;
+      // Every one of these returns the SAME empty shape. That is the point.
+      if (['nothing', 'cold', 'statusbroken'].includes(body.query)) {
+        return json({ results: [], next_page_token: '' });
+      }
+      if (body.page_token) return json({ results: [searchHits[1]], next_page_token: '' });
+      return json({ results: searchHits, next_page_token: 'page-2' });
+    });
+  }
+
+  if (url.pathname === '/api/v1/search/status') {
+    const status = statusFor(lastSearchQuery);
+    if (!status) {
+      response.writeHead(404, { 'cache-control': 'private, no-store' });
+      response.end();
+      return;
+    }
+    return json(status);
+  }
 
   // --- compliance surfaces (SPEC-0050, SPEC-0051) -----------------------
   const refuse = () => {

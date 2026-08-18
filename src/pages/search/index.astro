@@ -1,0 +1,96 @@
+---
+// Code search (T-0050, SPEC-0049; PRD PR-19).
+//
+// The page runs the query server-side and always reads the index status
+// alongside it, because the two answers are only meaningful together: an
+// empty result page means one of three things, and the status route is the
+// only thing that narrows it.
+//
+// A failed status read is passed through as null rather than as an empty
+// status. `readIndexFreshness` turns null into "unknown" and an empty entry
+// list into "nothing is indexed" — different facts that would otherwise
+// collapse into each other (SPEC-0049 AC6).
+import Layout from '../../layouts/Layout.astro';
+import SearchResults from '../../components/SearchResults.astro';
+import { searchCode, searchIndexStatus, SEARCH_MODES, type SearchMode } from '../../lib/bff';
+import type { SearchPageView, IndexStatusPageView } from '../../lib/bff';
+import { readIndexFreshness, searchMessageForKey, SEARCH_MESSAGES } from '../../lib/search';
+
+const query = (Astro.url.searchParams.get('q') ?? '').trim();
+const requestedMode = Astro.url.searchParams.get('mode') ?? 'SUBSTRING';
+const mode: SearchMode = SEARCH_MODES.includes(requestedMode as SearchMode)
+  ? (requestedMode as SearchMode)
+  : 'SUBSTRING';
+const pageToken = Astro.url.searchParams.get('page_token') ?? '';
+const outcome = searchMessageForKey(Astro.url.searchParams.get('search_outcome'));
+
+let page: SearchPageView | null = null;
+let queryRefused = false;
+if (query) {
+  try {
+    page = await searchCode(Astro.request, { query, mode, page_token: pageToken });
+  } catch {
+    queryRefused = true;
+  }
+}
+
+// Read unconditionally when a query ran: the freshness is part of what an
+// empty page means, not a detail shown only when someone asks.
+let status: IndexStatusPageView | null = null;
+if (query && !queryRefused) {
+  try {
+    status = await searchIndexStatus(Astro.request);
+  } catch {
+    status = null;
+  }
+}
+const freshness = readIndexFreshness(status);
+---
+
+<Layout title={query ? `Search — ${query}` : 'Search'}>
+  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Code search</h1>
+    <p class="gf-muted" style={{ fontSize: '14px', margin: '0 0 var(--gf-space-4)' }}>
+      Scope is decided by the server from your access at the moment you search. There is no
+      repository selector because a query cannot carry one.
+    </p>
+
+    {outcome && (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>{outcome}</p>
+    )}
+
+    <form method="post" action="/api/search" class="gf-card">
+      <label class="gf-field">
+        <span>Query</span>
+        <input class="gf-input" type="text" name="q" value={query} required />
+      </label>
+      <label class="gf-field">
+        <span>Query language</span>
+        <select class="gf-input" name="mode">
+          {SEARCH_MODES.map((m) => (
+            <option value={m} selected={m === mode}>{m}</option>
+          ))}
+        </select>
+      </label>
+      <button type="submit" class="gf-btn gf-btn-primary">Search</button>
+    </form>
+
+    {queryRefused && (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        {' '}{SEARCH_MESSAGES.refused}
+      </p>
+    )}
+
+    {page && (
+      <div style={{ marginTop: 'var(--gf-space-4)' }}>
+        <SearchResults
+          query={query}
+          results={page.results}
+          nextPageToken={page.next_page_token}
+          freshness={freshness}
+        />
+      </div>
+    )}
+  </div>
+</Layout>

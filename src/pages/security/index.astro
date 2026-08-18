@@ -55,7 +55,7 @@ const scopedTitle = filters.repository ? `Security · ${filters.repository}` : '
 ---
 
 <Layout title={scopedTitle}>
-  <main style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 16px' }}>
+  <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 16px' }}>
     <header style={{ padding: '16px 0', borderBottom: '1px solid var(--gf-line)' }}>
       <h1 style={{ fontSize: '20px', margin: '0px' }}>Security dashboard</h1>
       <p style={{ color: 'var(--gf-ink-muted)', margin: '4px 0 0', fontSize: '14px' }}>
@@ -75,5 +75,5 @@ const scopedTitle = filters.repository ? `Security · ${filters.repository}` : '
     {!loadError && (
       <SecurityFindings findings={findings} summary={summary} filters={filters} nextPageToken={nextPageToken} />
     )}
-  </main>
+  </div>
 </Layout>

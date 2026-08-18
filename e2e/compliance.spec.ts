@@ -5,6 +5,18 @@
 // cannot: that a truncated pack reaches a reader as a warning rather than as a
 // shorter pack, and that a bounded expiry reaches an admin as the date the
 // server granted rather than the one they typed.
+// **Harness limit, and why the journeys re-navigate after a form submit.**
+// The production session cookie is named `__Host-gitfrok_session`, and
+// Chromium accepts a `__Host-` cookie only over https — so rather than weaken
+// the cookie the app actually sets, these journeys send it as a request
+// header (`extraHTTPHeaders`). Those headers are NOT applied when the browser
+// follows the 303 that every form POST here answers with, so the redirected
+// page renders signed-out and reads nothing from the BFF.
+//
+// The submit therefore proves the redirect, and a `page.goto` of the resulting
+// URL proves what that URL renders. Asserting page CONTENT directly after a
+// submit would silently assert the signed-out page instead, which is how a
+// green journey can prove less than it appears to.
 import { test, expect, type Page } from '@playwright/test';
 
 const sessionHeader = { cookie: '__Host-gitfrok_session=e2e-session' };
@@ -68,6 +80,9 @@ test.describe('signed in', () => {
     await page.getByLabel('To (exclusive, UTC)').fill('2026-08-01');
     await page.getByRole('button', { name: 'Request pack' }).click();
     await expect(page).toHaveURL(/pack_id=pack-ready/);
+
+    await page.goto(page.url());
+    await expect(page.getByText('Ready', { exact: true })).toBeVisible();
   });
 
   test('grants list renders each state, and never computes one', async ({ page }) => {
@@ -94,6 +109,13 @@ test.describe('signed in', () => {
     await page.getByRole('button', { name: 'Issue grant' }).click();
 
     await expect(page).toHaveURL(/grant_outcome=issued/);
+
+    // Re-request so the list below is the signed-in render. The stub bounds
+    // the requested December expiry to September; the December date must not
+    // appear anywhere, and an empty page would pass that vacuously — so the
+    // September one is asserted present too.
+    await page.goto(page.url());
+    await expect(page.getByText('2026-09-01').first()).toBeVisible();
     const body = (await page.locator('body').textContent()) ?? '';
     expect(body).not.toContain('2026-12-01');
   });

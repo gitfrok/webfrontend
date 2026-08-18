@@ -1,0 +1,100 @@
+---
+// Code search results and — inseparable from them — what an empty page means
+// (T-0050, SPEC-0049 AC2–AC7).
+//
+// The rule holding this component: **the empty page asserts nothing.** It is
+// the same shape for a query that matched nothing, a query whose every match
+// the caller may not see, and a query against an index that holds nothing
+// (the index is in-process and lost on restart). "No results found" would
+// pick one of those three and state it as fact, and on the second it would
+// tell an unauthorized reader that nothing exists where something does —
+// PR-19's leak, inverted.
+//
+// The index reading sits BESIDE the empty state rather than replacing it,
+// because "nothing is indexed" explains the empty page without contradicting
+// what it says: even with a full index, this query would still not report
+// what is outside the reader's access.
+import { SEARCH_MESSAGES, describeLag, type IndexFreshness } from '../lib/search';
+import type { SearchResultView } from '../lib/bff';
+
+interface Props {
+  query: string;
+  results: SearchResultView[];
+  nextPageToken: string;
+  freshness: IndexFreshness;
+}
+const { query, results, nextPageToken, freshness } = Astro.props;
+
+// Deliberately no count, no total, no "showing N of M". The contract carries
+// no field for how much was not returned, so any figure here is invented
+// (SPEC-0035 AC3, SPEC-0049 AC7).
+const nextHref = nextPageToken
+  ? `/search?q=${encodeURIComponent(query)}&page_token=${encodeURIComponent(nextPageToken)}`
+  : '';
+---
+
+{results.length === 0 && (
+  <div class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-info-ink)' }}>
+    <p style={{ margin: '0px' }}>{SEARCH_MESSAGES.empty}</p>
+
+    {freshness.kind === 'nothing-indexed' && (
+      <p style={{ margin: 'var(--gf-space-2) 0 0', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Not indexed</span>
+        <span>{SEARCH_MESSAGES.nothingIndexed}</span>
+      </p>
+    )}
+
+    {freshness.kind === 'unknown' && (
+      <p style={{ margin: 'var(--gf-space-2) 0 0', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
+        <span class="gf-status gf-status-pending" style={{ fontSize: '13px' }}>Index unknown</span>
+        <span>{SEARCH_MESSAGES.indexUnknown}</span>
+      </p>
+    )}
+
+    {freshness.kind === 'stale' && (
+      <p style={{ margin: 'var(--gf-space-2) 0 0', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Index behind</span>
+        <span>{SEARCH_MESSAGES.indexStale} Worst lag {describeLag(freshness.worstLagMS)}.</span>
+      </p>
+    )}
+
+    {freshness.kind === 'fresh' && (
+      <p class="gf-muted" style={{ margin: 'var(--gf-space-2) 0 0', fontSize: '13px' }}>
+        <span class="gf-status gf-status-success" style={{ fontSize: '13px' }}>Index current</span>
+        {' '}Worst lag {describeLag(freshness.worstLagMS)} across {freshness.repositoryCount} repositories.
+      </p>
+    )}
+  </div>
+)}
+
+{results.map((match) => (
+  <article class="gf-card" style={{ marginBottom: 'var(--gf-space-3)' }}>
+    <header style={{ display: 'flex', gap: 'var(--gf-space-2)', flexWrap: 'wrap', alignItems: 'baseline' }}>
+      <a
+        href={`/repos/${encodeURIComponent(match.repository_id)}/file/${encodeURIComponent(match.revision)}/${match.path}`}
+        style={{ color: 'var(--gf-action-ink)', fontWeight: '600' }}
+      >{match.path}</a>
+      <span class="gf-muted" style={{ fontSize: '13px' }}>
+        {match.repository_id} @ {match.revision.slice(0, 8)} · lines {match.line_start}–{match.line_end}
+      </span>
+    </header>
+
+    <pre style={{ fontFamily: 'var(--gf-font-code)', fontSize: '13px', background: 'var(--gf-code-bg)', padding: 'var(--gf-space-2)', borderRadius: 'var(--gf-radius-control)', overflowX: 'auto', margin: 'var(--gf-space-2) 0 0' }}>{match.matched_content}</pre>
+
+    {/* Enrichment is additive. Its absence removes the metadata line and
+        nothing else — a failed enrichment must never remove a result. */}
+    {match.metadata && (
+      <p class="gf-muted" style={{ fontSize: '12px', fontFamily: 'var(--gf-font-code)', margin: 'var(--gf-space-2) 0 0' }}>
+        {match.metadata.object_id.slice(0, 8)} · {match.metadata.size_bytes} bytes
+      </p>
+    )}
+  </article>
+))}
+
+{nextHref && (
+  <p style={{ margin: 'var(--gf-space-4) 0' }}>
+    {/* The opaque token, forwarded. No page number is computed, because the
+        contract offers no position and inventing one would imply a total. */}
+    <a class="gf-btn" href={nextHref} style={{ textDecoration: 'none' }}>More results</a>
+  </p>
+)}

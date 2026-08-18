@@ -70,7 +70,7 @@ if (mr) {
 
 <Layout title={mr ? `${mr.title} · ${repositoryID}` : `${repositoryID} MR`}>
   <CommandPalette client:load repositoryID={repositoryID!} revision="main" />
-  <main style={{ maxWidth: '960px', margin: '0 auto', padding: '0 16px' }}>
+  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 16px' }}>
     <ActionOutcome outcomeKey={outcomeKey} />
 
     {loadError && (
@@ -122,5 +122,5 @@ if (mr) {
       </p>
     )}
     <ImportedHistory records={imported} />
-  </main>
+  </div>
 </Layout>

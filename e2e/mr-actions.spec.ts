@@ -7,6 +7,18 @@
 //
 // It runs with JavaScript doing nothing — these are plain forms, which is what
 // keeps AC6 honest: a control that is markup cannot decide not to render.
+// **Harness limit, and why the journeys re-navigate after a form submit.**
+// The production session cookie is named `__Host-gitfrok_session`, and
+// Chromium accepts a `__Host-` cookie only over https — so rather than weaken
+// the cookie the app actually sets, these journeys send it as a request
+// header (`extraHTTPHeaders`). Those headers are NOT applied when the browser
+// follows the 303 that every form POST here answers with, so the redirected
+// page renders signed-out and reads nothing from the BFF.
+//
+// The submit therefore proves the redirect, and a `page.goto` of the resulting
+// URL proves what that URL renders. Asserting page CONTENT directly after a
+// submit would silently assert the signed-out page instead, which is how a
+// green journey can prove less than it appears to.
 import { test, expect, type Page } from '@playwright/test';
 
 const sessionHeader = { cookie: '__Host-gitfrok_session=e2e-session' };
@@ -40,7 +52,11 @@ test.describe('signed in', () => {
     await page.getByRole('button', { name: 'Submit review' }).click();
 
     await expect(page).toHaveURL(/mr_outcome=applied/);
+
+    await page.goto(page.url());
     await expect(page.getByText('The merge request below is as it now stands.')).toBeVisible();
+    // The review landed: the stub advances the version on a successful write.
+    await expect(page.getByText('version 2', { exact: false })).toBeVisible();
 
     // Everything came from this origin's SSR routes; the BFF is upstream of
     // the server and never of the browser.

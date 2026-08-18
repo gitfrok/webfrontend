@@ -836,3 +836,110 @@ export async function revokeAuditorGrant(request: Request, grantID: string): Pro
   if (!grantID) throw new Error('auditor grant unavailable');
   return grantsFetch(request, `/api/v1/audit/auditor-grants/${encodeURIComponent(grantID)}`, { method: 'DELETE' });
 }
+
+// --- code search (T-0050, SPEC-0049 AC1–AC3, AC7, AC8) --------------------
+//
+// PR-19: results filtered by the caller's permissions, never leaking the
+// existence of unauthorized content. Two properties of the wire carry that,
+// and both are easy to undo from here.
+//
+// `SearchPage` has **no total**, and SPEC-0035 AC3 makes that a type property
+// rather than a convention: there is no field capable of expressing how many
+// matches the caller may not see, so nothing downstream can render one. The
+// type below keeps that true — a total arriving from anywhere is not part of
+// the shape this layer hands on.
+//
+// The empty page is also the identical shape for "nothing matched" and "every
+// match was unauthorized" (SPEC-0035 AC4). This client therefore returns an
+// empty page rather than raising, because those are not failures; what the
+// page is then allowed to SAY about them is `src/lib/search.ts`'s problem.
+
+/** The three query languages the contract names. Nothing else is a query. */
+export const SEARCH_MODES = ['SUBSTRING', 'REGEX', 'SYMBOL'] as const;
+
+export type SearchMode = (typeof SEARCH_MODES)[number];
+
+export interface SearchFileMetadata {
+  path: string;
+  object_id: string;
+  mode: number;
+  size_bytes: number;
+}
+
+export interface SearchResultView {
+  repository_id: string;
+  revision: string;
+  path: string;
+  line_start: number;
+  line_end: number;
+  matched_content: string;
+  metadata?: SearchFileMetadata;
+}
+
+export interface SearchPageView {
+  results: SearchResultView[];
+  next_page_token: string;
+}
+
+export interface IndexStatusView {
+  repository_id: string;
+  last_indexed_revision: string;
+  indexed_at: string;
+  freshness_lag_ms: number;
+}
+
+export interface IndexStatusPageView {
+  entries: IndexStatusView[];
+}
+
+/**
+ * Runs one query.
+ *
+ * The text travels verbatim, including a regex: the backend owns evaluation
+ * and its own resource bounds, and rewriting a pattern here would be this
+ * layer deciding what a query means.
+ */
+export async function searchCode(
+  request: Request,
+  input: { query: string; mode: SearchMode; page_token: string },
+): Promise<SearchPageView> {
+  if (!input.query?.trim() || !SEARCH_MODES.includes(input.mode)) {
+    throw new Error('search unavailable');
+  }
+  const url = new URL('/api/v1/search/query', bffOrigin);
+  const headers = new Headers({ 'content-type': 'application/json' });
+  const cookie = request.headers.get('cookie');
+  if (cookie) headers.set('cookie', cookie);
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    // No repository, scope or offset field: the contract names none of them,
+    // and paging is the opaque token or nothing (SPEC-0049 AC8).
+    body: JSON.stringify({ query: input.query, mode: input.mode, page_token: input.page_token ?? '' }),
+    redirect: 'manual',
+  });
+  if (!response.ok) {
+    throw new Error('search unavailable');
+  }
+  const page = (await response.json()) as Partial<SearchPageView>;
+  // Reshaped rather than passed through, so a total invented anywhere upstream
+  // cannot reach a component that might render it.
+  return { results: page.results ?? [], next_page_token: page.next_page_token ?? '' };
+}
+
+/**
+ * Reads the index's per-repository freshness.
+ *
+ * This throws on a refusal on purpose. An unreadable index and an empty index
+ * are different facts: an empty `entries` list means nothing is indexed, and a
+ * refusal means we could not ask. Collapsing them would let the second render
+ * as the first (SPEC-0049 AC6).
+ */
+export async function searchIndexStatus(request: Request): Promise<IndexStatusPageView> {
+  const response = await bffFetch(request, '/api/v1/search/status');
+  if (!response.ok) {
+    throw new Error('search unavailable');
+  }
+  const view = (await response.json()) as Partial<IndexStatusPageView>;
+  return { entries: view.entries ?? [] };
+}
