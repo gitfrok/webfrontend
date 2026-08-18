@@ -1,0 +1,50 @@
+---
+// A ref's history (T-0058, SPEC-0053 AC10, AC11).
+//
+// Every name here is git's word. The note above the list says so once, in
+// words, and nothing in the list implies otherwise: no avatar, no profile
+// link, no element that would suggest an account stands behind the name. That
+// absence is the design — an avatar beside a name IS the assertion that the
+// platform knows who this is.
+import { COMMIT_MESSAGES, shortCommit, commitDay } from '../lib/commits';
+import type { CommitView } from '../lib/bff';
+
+interface Props {
+  commits: CommitView[];
+  nextHref: string;
+}
+const { commits, nextHref } = Astro.props;
+---
+
+<section aria-labelledby="history-heading" style={{ margin: 'var(--gf-space-6) 0' }}>
+  <h2 id="history-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-2)' }}>History</h2>
+
+  <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+    {COMMIT_MESSAGES.gitIdentityNote}
+  </p>
+
+  <ol style={{ listStyle: 'none', padding: '0px', margin: '0px' }}>
+    {commits.map((commit) => (
+      <li class="gf-card" style={{ marginBottom: 'var(--gf-space-2)' }}>
+        <p style={{ margin: '0px', fontSize: '14px', fontWeight: '500' }}>{commit.subject}</p>
+        <p class="gf-muted" style={{ margin: 'var(--gf-space-1) 0 0', fontSize: '13px' }}>
+          <span style={{ fontFamily: 'var(--gf-font-code)' }} title={commit.commit_id}>
+            {shortCommit(commit.commit_id)}
+          </span>
+          {' · '}
+          {/* Labelled at the point of use, not only in the note above: a reader
+              who scrolls past the note still needs to know what this name is. */}
+          <span>git author {commit.identity.git_author_name}</span>
+          {' · '}
+          <span>{commitDay(commit.identity.authored_at)}</span>
+        </p>
+      </li>
+    ))}
+  </ol>
+
+  {nextHref && (
+    <p style={{ margin: 'var(--gf-space-3) 0 0' }}>
+      <a class="gf-btn" href={nextHref} style={{ textDecoration: 'none' }}>Older commits</a>
+    </p>
+  )}
+</section>

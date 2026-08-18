@@ -2,10 +2,14 @@
 // File view (T-0015, SPEC-0008 AC1): stream one file's bytes at a revision,
 // served via SSR from the BFF only. The file is rendered inline as UTF-8 text;
 // a raw link points at the same BFF surface for the browser's own download.
-import { file } from '../../../../../lib/bff';
+import { file, history, blame } from '../../../../../lib/bff';
+import type { HistoryView, BlameView as BlameViewShape } from '../../../../../lib/bff';
 import Layout from '../../../../../layouts/Layout.astro';
 import CommandPalette from '../../../../../components/CommandPalette';
 import RepoHeader from '../../../../../components/RepoHeader.astro';
+import CommitHistory from '../../../../../components/CommitHistory.astro';
+import BlameView from '../../../../../components/BlameView.astro';
+import { COMMIT_MESSAGES } from '../../../../../lib/commits';
 
 const { repositoryID, revision } = Astro.params;
 const pathParts = Astro.params.path ?? [];
@@ -24,6 +28,38 @@ if (revision) {
   }
 }
 
+// History and blame for this file (T-0058, SPEC-0053). Both are separate
+// reads: a file that renders is still useful when its history does not, so a
+// failure in either is reported where it happened rather than failing the page.
+const view = Astro.url.searchParams.get('view') ?? '';
+const historyToken = Astro.url.searchParams.get('history_token') ?? '';
+
+let fileHistory: HistoryView | null = null;
+let historyError = false;
+let fileBlame: BlameViewShape | null = null;
+let blameError = false;
+
+if (revision && view === 'history') {
+  try {
+    fileHistory = await history(Astro.request, repositoryID!, revision, filePath, historyToken);
+  } catch {
+    historyError = true;
+  }
+}
+if (revision && view === 'blame') {
+  try {
+    fileBlame = await blame(Astro.request, repositoryID!, revision, filePath);
+  } catch {
+    blameError = true;
+  }
+}
+
+const viewHref = (name: string) =>
+  `/repos/${repositoryID}/file/${encodeURIComponent(revision!)}/${filePath.split('/').map(encodeURIComponent).join('/')}${name ? `?view=${name}` : ''}`;
+const historyNextHref = fileHistory?.next_page_token
+  ? `${viewHref('history')}&history_token=${encodeURIComponent(fileHistory.next_page_token)}`
+  : '';
+
 const rawHref = `/repos/${repositoryID}/raw/${encodeURIComponent(revision!)}/${filePath.split('/').map(encodeURIComponent).join('/')}`;
 ---
 
@@ -35,10 +71,41 @@ const rawHref = `/repos/${repositoryID}/raw/${encodeURIComponent(revision!)}/${f
     <p class="gf-status gf-status-danger">This file is unavailable. Check your session, the revision, or the path.</p>
   )}
 
-  {!loadError && (
+  {/* The three readings of one file, as links rather than a script: content,
+      who touched which lines, and what happened to it over time. */}
+  <nav aria-label="File views" style={{ display: 'flex', gap: 'var(--gf-space-3)', margin: 'var(--gf-space-3) 0', fontSize: '14px' }}>
+    <a href={viewHref('')} aria-current={view === '' ? 'page' : undefined}
+       style={{ color: 'var(--gf-action-ink)' }}>Content</a>
+    <a href={viewHref('blame')} aria-current={view === 'blame' ? 'page' : undefined}
+       style={{ color: 'var(--gf-action-ink)' }}>Blame</a>
+    <a href={viewHref('history')} aria-current={view === 'history' ? 'page' : undefined}
+       style={{ color: 'var(--gf-action-ink)' }}>History</a>
+  </nav>
+
+  {view === '' && !loadError && (
     <pre
       class="gf-card"
       style="font-family:var(--gf-font-code); white-space:pre-wrap; overflow-wrap:anywhere; background:var(--gf-code-bg); overflow-x:auto; margin:0;"
     >{content}</pre>
+  )}
+
+  {view === 'blame' && blameError && (
+    <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+      {' '}{COMMIT_MESSAGES.blameUnavailable}
+    </p>
+  )}
+  {view === 'blame' && fileBlame && (
+    <BlameView ranges={fileBlame.ranges} capped={fileBlame.capped} />
+  )}
+
+  {view === 'history' && historyError && (
+    <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+      {' '}{COMMIT_MESSAGES.historyUnavailable}
+    </p>
+  )}
+  {view === 'history' && fileHistory && (
+    <CommitHistory commits={fileHistory.commits} nextHref={historyNextHref} />
   )}
 </Layout>

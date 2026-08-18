@@ -71,6 +71,12 @@ const SURFACES = [
   // would be believed fastest.
   { name: 'repository-list', path: '/' },
   { name: 'repository-list-empty', path: '/?page_token=empty' },
+  // T-0058: blame is where "who wrote this line" reads as accountability, so
+  // the grayscale pass is checking that the git-identity note survives being
+  // the least prominent thing on the page.
+  { name: 'file-blame', path: '/repos/repo-1/file/main/README.md?view=blame' },
+  { name: 'file-blame-capped', path: '/repos/repo-1/file/main/capped.go?view=blame' },
+  { name: 'file-history', path: '/repos/repo-1/file/main/README.md?view=history' },
 ];
 
 test.beforeAll(() => {

@@ -1,0 +1,65 @@
+---
+// One file's blame (T-0058, SPEC-0053 AC11, AC12).
+//
+// Two rules hold this component.
+//
+// **The names are git's.** "Who wrote this line" is the most accountability-
+// shaped question a forge answers, and the answer here is unverified by
+// construction. The note says so, each range repeats the label, and there is
+// deliberately no avatar and no profile link — those are what turn a string
+// into a claim that someone stands behind it.
+//
+// **A capped attribution says so.** The server stops attributing past a cap;
+// what is shown is the first part of the file and the rest is not shown at
+// all. Rendering the ranges without the notice would present a partial
+// attribution as a whole one, which is the same failure the evidence pack's
+// truncation notice exists to prevent.
+import { COMMIT_MESSAGES, shortCommit, commitDay } from '../lib/commits';
+import type { BlameRangeView } from '../lib/bff';
+
+interface Props {
+  ranges: BlameRangeView[];
+  capped: boolean;
+}
+const { ranges, capped } = Astro.props;
+---
+
+<section aria-labelledby="blame-heading" style={{ margin: 'var(--gf-space-6) 0' }}>
+  <h2 id="blame-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-2)' }}>Blame</h2>
+
+  <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+    {COMMIT_MESSAGES.gitIdentityNote}
+  </p>
+
+  {capped && (
+    <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Partial</span>
+      {' '}{COMMIT_MESSAGES.blameCapped}
+    </p>
+  )}
+
+  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+    <thead>
+      <tr>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Lines</th>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Commit</th>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Git author</th>
+        <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Authored</th>
+      </tr>
+    </thead>
+    <tbody>
+      {ranges.map((range) => (
+        <tr style={{ borderTop: '1px solid var(--gf-line)' }}>
+          <td style={{ padding: 'var(--gf-space-1) 0', fontFamily: 'var(--gf-font-code)' }}>
+            {range.start_line === range.end_line ? range.start_line : `${range.start_line}–${range.end_line}`}
+          </td>
+          <td style={{ padding: 'var(--gf-space-1) 0', fontFamily: 'var(--gf-font-code)' }} title={range.commit_id}>
+            {shortCommit(range.commit_id)}
+          </td>
+          <td style={{ padding: 'var(--gf-space-1) 0' }}>{range.identity.git_author_name}</td>
+          <td style={{ padding: 'var(--gf-space-1) 0' }}>{commitDay(range.identity.authored_at)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</section>

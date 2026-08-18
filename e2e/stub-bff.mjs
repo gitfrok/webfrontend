@@ -538,6 +538,47 @@ const server = createServer((request, response) => {
     return deny();
   }
 
+  // --- history and blame (SPEC-0053) ------------------------------------
+  //
+  // The blame fixture for 'capped.go' returns capped:true so the partial
+  // notice has a journey. Write-free, like every other capture fixture.
+  const gitIdentity = {
+    git_author_name: 'Ada Lovelace', git_author_email: 'ada@example.test',
+    git_committer_name: 'Grace Hopper', git_committer_email: 'grace@example.test',
+    authored_at: '2026-08-19T09:00:00Z', committed_at: '2026-08-19T10:00:00Z',
+  };
+
+  const [, , , historyRepo, historyView] = url.pathname.split('/');
+  if (historyView === 'history') {
+    if (!historyRepo || historyRepo === 'unknown-repo') {
+      response.writeHead(404, { 'cache-control': 'private, no-store' });
+      response.end();
+      return;
+    }
+    return json({
+      commits: [
+        { commit_id: 'abcdef1234567890', identity: gitIdentity, subject: 'Add the thing' },
+        { commit_id: '1234567890abcdef', identity: gitIdentity, subject: 'Fix the other thing' },
+      ],
+      next_page_token: '',
+    });
+  }
+  if (historyView === 'blame') {
+    if (!historyRepo || historyRepo === 'unknown-repo') {
+      response.writeHead(404, { 'cache-control': 'private, no-store' });
+      response.end();
+      return;
+    }
+    const capped = url.searchParams.get('path') === 'capped.go';
+    return json({
+      ranges: [
+        { start_line: 1, end_line: 12, commit_id: 'abcdef1234567890', identity: gitIdentity },
+        { start_line: 13, end_line: 13, commit_id: '1234567890abcdef', identity: gitIdentity },
+      ],
+      capped,
+    });
+  }
+
   const [, , , repositoryID, view] = url.pathname.split('/');
   if (!repositoryID || repositoryID === 'unknown-repo') {
     response.writeHead(404, { 'cache-control': 'private, no-store' });

@@ -980,3 +980,79 @@ export async function listRepositories(request: Request, pageToken: string): Pro
   // cannot reach a component that might render it.
   return { repositories: view.repositories ?? [], next_page_token: view.next_page_token ?? '' };
 }
+
+// --- history and blame (T-0058, SPEC-0053) --------------------------------
+//
+// The identity fields keep their git_ names from the contract through to here,
+// which is the last layer before a human reads them. See src/lib/commits.ts
+// for why that matters more than it looks.
+
+import type { CommitIdentityView } from './commits.js';
+
+export interface CommitView {
+  commit_id: string;
+  identity: CommitIdentityView;
+  subject: string;
+}
+
+export interface HistoryView {
+  commits: CommitView[];
+  next_page_token: string;
+}
+
+export interface BlameRangeView {
+  start_line: number;
+  end_line: number;
+  commit_id: string;
+  identity: CommitIdentityView;
+}
+
+export interface BlameView {
+  ranges: BlameRangeView[];
+  /** True when the file outran the server's attribution cap. */
+  capped: boolean;
+}
+
+/** Reads one ref's history, optionally narrowed to a path. */
+export async function history(
+  request: Request,
+  repositoryID: string,
+  revision: string,
+  path = '',
+  pageToken = '',
+): Promise<HistoryView> {
+  const params = new URLSearchParams({ revision });
+  if (path) params.set('path', path);
+  if (pageToken) params.set('page_token', pageToken);
+  const response = await bffFetch(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/history?${params}`,
+  );
+  if (!response.ok) {
+    throw new Error('history unavailable');
+  }
+  const view = (await response.json()) as Partial<HistoryView>;
+  return { commits: view.commits ?? [], next_page_token: view.next_page_token ?? '' };
+}
+
+/** Attributes one file's lines at a revision. */
+export async function blame(
+  request: Request,
+  repositoryID: string,
+  revision: string,
+  path: string,
+): Promise<BlameView> {
+  const params = new URLSearchParams({ revision, path });
+  const response = await bffFetch(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/blame?${params}`,
+  );
+  if (!response.ok) {
+    throw new Error('blame unavailable');
+  }
+  const view = (await response.json()) as Partial<BlameView>;
+  // capped defaults to TRUE when the field is missing. An absent flag means we
+  // do not know whether this attribution is whole, and the safe reading of "we
+  // do not know" is the one that does not claim completeness.
+  return { ranges: view.ranges ?? [], capped: view.capped ?? true };
+}
