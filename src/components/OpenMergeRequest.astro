@@ -1,0 +1,41 @@
+---
+// Open a merge request from the repository browse surface (T-0049,
+// SPEC-0048 AC1).
+//
+// It lives here rather than on a global "new merge request" page because a
+// global one would need a repository picker, and no repository list endpoint
+// exists (ADR-0070 Tier B, proposed PR-24). The repository is the one being
+// browsed, so the context is already established and no list is needed.
+interface Props {
+  repositoryID: string;
+  /** The revision being browsed — the natural default source ref. */
+  revision: string;
+}
+const { repositoryID, revision } = Astro.props;
+const action = `/api/repos/${encodeURIComponent(repositoryID)}/merge_requests`;
+---
+
+<details class="gf-card" style={{ margin: 'var(--gf-space-4) 0' }}>
+  <summary style={{ cursor: 'pointer', fontWeight: '500' }}>Open a merge request</summary>
+  <form method="post" action={action} style={{ marginTop: 'var(--gf-space-3)' }}>
+    <label class="gf-field">
+      <span>Title</span>
+      <input class="gf-input" type="text" name="title" required maxlength="200" />
+    </label>
+    <div style={{ display: 'flex', gap: 'var(--gf-space-3)' }}>
+      <label class="gf-field" style={{ flex: '1' }}>
+        <span>Source ref</span>
+        <input class="gf-input" type="text" name="source_ref" required value={revision} />
+      </label>
+      <label class="gf-field" style={{ flex: '1' }}>
+        <span>Target ref</span>
+        <input class="gf-input" type="text" name="target_ref" required value="main" />
+      </label>
+    </div>
+    <label class="gf-field">
+      <span>Description (optional)</span>
+      <textarea class="gf-textarea" name="description" rows="3"></textarea>
+    </label>
+    <button type="submit" class="gf-btn gf-btn-primary">Open merge request</button>
+  </form>
+</details>

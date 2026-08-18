@@ -42,6 +42,13 @@ const SURFACES = [
   { name: 'diff-view', path: '/repos/gateway-api/diff/main' },
   { name: 'security-dashboard', path: '/security' },
   { name: 'usage-view', path: '/usage' },
+  // T-0049: the review controls. The dispositions are the phase's newest
+  // colour-carrying vocabulary, and approve/request-changes is exactly the
+  // pair a deutan reader would lose if the glyphs ever came off.
+  { name: 'merge-request-actions', path: '/repos/repo-1/merge_requests/mr-capture' },
+  // The staleness note, which is the only outcome copy that says something
+  // more than "did not take effect" — worth seeing rendered.
+  { name: 'merge-request-stale-note', path: '/repos/repo-1/merge_requests/mr-capture?mr_outcome=stale' },
 ];
 
 test.beforeAll(() => {
@@ -118,5 +125,22 @@ test.describe('SPEC-0047 AC10 — CVD capture set', () => {
     }
     // The deferred row says why, and never shows a zero (SPEC-0046 AC5).
     await expect(page.getByText('Not metered yet').first()).toBeVisible();
+  });
+
+  test('every review disposition carries its own glyph, not only a tone', async ({ page }) => {
+    // The pill's glyph comes from CSS ::before content, so this reads the
+    // computed value rather than the markup: a disposition that lost its
+    // override would silently inherit its tone's glyph and two dispositions
+    // would start looking alike (SPEC-0048 AC8).
+    await page.setExtraHTTPHeaders(SESSION_HEADER);
+    await page.goto('/repos/repo-1/merge_requests/mr-capture', { waitUntil: 'networkidle' });
+    const glyphs = await page.evaluate(() =>
+      ['approve', 'request-changes', 'comment'].map((name) => {
+        const element = document.querySelector(`.gf-disposition-${name}`);
+        return element ? getComputedStyle(element, '::before').content : '';
+      }),
+    );
+    expect(glyphs.every((g) => g && g !== 'none')).toBe(true);
+    expect(new Set(glyphs).size).toBe(3);
   });
 });

@@ -92,6 +92,68 @@ const usageViewFixture = {
   generated_at: '2026-08-17T02:00:00Z',
 };
 
+// --- merge-request state (T-0049, SPEC-0048 AC11) ------------------------
+//
+// A mutable version counter, because the whole point of AC5 is that the UI can
+// tell "your write was refused" apart from "the merge request moved under you".
+// One fixture MR refuses every write while its version advances anyway, which
+// is the only way to drive the staleness branch end to end.
+const mergeRequests = {
+  'mr-1': {
+    merge_request_id: 'mr-1', repository_id: 'repo-1',
+    source_ref: 'feature', target_ref: 'main',
+    title: 'Add the thing', description: 'it does the thing',
+    creator_id: 'dev@gitsaas.test', state: 'OPEN',
+    head_revision: 'abcdef1234567890', version: 1,
+    created_at: '2026-08-18T00:00:00Z',
+  },
+  // Every write here is refused. Its version advances on each refusal so the
+  // re-read reports a NEWER version — the stale branch.
+  'mr-stale': {
+    merge_request_id: 'mr-stale', repository_id: 'repo-1',
+    source_ref: 'feature-2', target_ref: 'main',
+    title: 'Moves under you', description: '',
+    creator_id: 'dev@gitsaas.test', state: 'OPEN',
+    head_revision: 'beefcafe12345678', version: 4,
+    created_at: '2026-08-18T00:00:00Z',
+  },
+  // The capture fixture. No test writes to it, so the captures do not drift
+  // with test order — mr-1 is merged by the write journey, and a capture that
+  // shows MERGED on one run and OPEN on another is not a reviewable artifact.
+  'mr-capture': {
+    merge_request_id: 'mr-capture', repository_id: 'repo-1',
+    source_ref: 'feature', target_ref: 'main',
+    title: 'Add the thing', description: 'it does the thing',
+    creator_id: 'dev@gitsaas.test', state: 'OPEN',
+    head_revision: 'abcdef1234567890', version: 1,
+    created_at: '2026-08-18T00:00:00Z',
+  },
+  // Refuses every write and never moves — the not-applied branch.
+  'mr-refuses': {
+    merge_request_id: 'mr-refuses', repository_id: 'repo-1',
+    source_ref: 'feature-3', target_ref: 'main',
+    title: 'Refuses quietly', description: '',
+    creator_id: 'dev@gitsaas.test', state: 'OPEN',
+    head_revision: 'facefeed12345678', version: 2,
+    created_at: '2026-08-18T00:00:00Z',
+  },
+};
+
+const DISPOSITION_ENUM = [
+  'REVIEW_DISPOSITION_APPROVE',
+  'REVIEW_DISPOSITION_REQUEST_CHANGES',
+  'REVIEW_DISPOSITION_COMMENT',
+];
+
+/** Reads a form-encoded body, exactly as the BFF's r.ParseForm() would. */
+function readForm(request) {
+  return new Promise((resolve) => {
+    let body = '';
+    request.on('data', (chunk) => { body += chunk; });
+    request.on('end', () => resolve(new URLSearchParams(body)));
+  });
+}
+
 const server = createServer((request, response) => {
   const url = new URL(request.url, `http://localhost:${port}`);
   const cookies = request.headers.cookie ?? '';
@@ -110,6 +172,71 @@ const server = createServer((request, response) => {
   if (url.pathname === '/api/v1/usage/view') return json(usageViewFixture);
   if (url.pathname === '/api/v1/security/dashboard') return json(securityFindings);
   if (url.pathname === '/api/v1/security/findings/summary') return json(securitySummary);
+
+  const deny = () => {
+    response.writeHead(404, { 'cache-control': 'private, no-store' });
+    response.end('merge request unavailable');
+  };
+
+  // --- merge-request surface (SPEC-0048) --------------------------------
+  const mrMatch = url.pathname.match(/^\/v1\/repositories\/([^/]+)\/merge_requests(?:\/([^/]+))?(?:\/(review|merge))?$/);
+  if (mrMatch) {
+    const [, , mergeRequestID, action] = mrMatch;
+
+    if (request.method === 'GET' && mergeRequestID && !action) {
+      const mr = mergeRequests[mergeRequestID];
+      return mr ? json(mr) : deny();
+    }
+
+    if (request.method === 'POST' && !mergeRequestID) {
+      // Open. A JSON body reaches ParseForm as no fields, so it is refused
+      // here the same way the real handler would refuse it.
+      return readForm(request).then((form) => {
+        if (!form.get('source_ref') || !form.get('target_ref') || !form.get('title')) return deny();
+        const created = {
+          ...mergeRequests['mr-1'],
+          merge_request_id: 'mr-new',
+          source_ref: form.get('source_ref'),
+          target_ref: form.get('target_ref'),
+          title: form.get('title'),
+          description: form.get('description') ?? '',
+          version: 1,
+        };
+        mergeRequests['mr-new'] = created;
+        return json(created);
+      });
+    }
+
+    if (request.method === 'POST' && mergeRequestID && action) {
+      const mr = mergeRequests[mergeRequestID];
+      if (!mr) return deny();
+      return readForm(request).then((form) => {
+        const expected = Number.parseInt(form.get('expected_version') ?? '', 10);
+
+        if (mergeRequestID === 'mr-stale') {
+          // Refuse, but move — the re-read must report a newer version.
+          mr.version += 1;
+          return deny();
+        }
+        if (mergeRequestID === 'mr-refuses') return deny();
+
+        if (!Number.isInteger(expected) || expected !== mr.version) return deny();
+        if (action === 'review') {
+          // The enum-name trap: a bare "APPROVE" would be UNSPECIFIED at the
+          // real BFF and refused, so it is refused here too.
+          if (!DISPOSITION_ENUM.includes(form.get('disposition') ?? '')) return deny();
+          if (!form.get('head_revision')) return deny();
+          mr.version += 1;
+          return json(mr);
+        }
+        mr.state = 'MERGED';
+        mr.version += 1;
+        return json(mr);
+      });
+    }
+
+    return deny();
+  }
 
   const [, , , repositoryID, view] = url.pathname.split('/');
   if (!repositoryID || repositoryID === 'unknown-repo') {

@@ -1,0 +1,76 @@
+---
+// Review and merge controls (T-0049, SPEC-0048 AC2, AC3, AC6, AC7).
+//
+// Two properties of this surface are load-bearing and easy to undo by accident:
+//
+//   1. **No control is a permission claim.** Both forms render for every
+//      session, whatever roles it holds. Hiding or disabling the merge button
+//      to signal an authorization outcome would be a decision this layer never
+//      receives — the backend's PDP decides, and a refusal arrives as one
+//      coarse 404 (SPEC-0001). The refusal path carries the outcome; the
+//      control's absence never does (AC6).
+//
+//   2. **The version and head revision come from the rendered view.** Both
+//      travel as hidden fields read off the MRView this page was given, never
+//      from the URL and never defaulted. That is what makes the optimistic
+//      concurrency check mean something.
+//
+// Plain forms, no client script: the controls are markup, so nothing can
+// decide not to render them.
+import type { MergeRequestView } from '../lib/bff';
+import { MR_DISPOSITIONS, describeDisposition, dispositionGlyphClass, type MRDisposition } from '../lib/mrAction';
+
+interface Props {
+  mr: MergeRequestView;
+}
+const { mr } = Astro.props;
+
+const reviewAction = `/api/repos/${encodeURIComponent(mr.repository_id)}/merge_requests/${encodeURIComponent(mr.merge_request_id)}/review`;
+const mergeAction = `/api/repos/${encodeURIComponent(mr.repository_id)}/merge_requests/${encodeURIComponent(mr.merge_request_id)}/merge`;
+
+const dispositions = (Object.keys(MR_DISPOSITIONS) as MRDisposition[]).map((key) => ({
+  key,
+  style: describeDisposition(key),
+  glyphClass: dispositionGlyphClass(key),
+}));
+---
+
+<section class="gf-card" style={{ margin: 'var(--gf-space-6) 0' }} aria-labelledby="mr-actions-heading">
+  <h2 id="mr-actions-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-3)' }}>Review</h2>
+
+  <form method="post" action={reviewAction}>
+    <input type="hidden" name="expected_version" value={String(mr.version)} />
+    <input type="hidden" name="head_revision" value={mr.head_revision} />
+
+    <fieldset class="gf-fieldset">
+      <legend>Your position on this merge request</legend>
+      {dispositions.map((d, index) => (
+        <label class="gf-choice">
+          <input type="radio" name="disposition" value={d.key} required checked={index === 0} />
+          <span class:list={['gf-status', d.style.tone, d.glyphClass]} style={{ fontSize: '13px' }}>
+            {d.style.label}
+          </span>
+        </label>
+      ))}
+    </fieldset>
+
+    <label class="gf-field">
+      <span>Comment (optional)</span>
+      <textarea class="gf-textarea" name="comment" rows="3"></textarea>
+    </label>
+
+    <button type="submit" class="gf-btn gf-btn-primary">Submit review</button>
+  </form>
+
+  <hr style={{ border: '0px', borderTop: '1px solid var(--gf-line)', margin: 'var(--gf-space-4) 0' }} />
+
+  <h2 style={{ fontSize: '16px', margin: '0 0 var(--gf-space-2)' }}>Merge</h2>
+  <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+    Merging is decided by the server against the target branch's rules at the moment you submit.
+    This page does not know that decision in advance and does not predict it here.
+  </p>
+  <form method="post" action={mergeAction}>
+    <input type="hidden" name="expected_version" value={String(mr.version)} />
+    <button type="submit" class="gf-btn">Merge into {mr.target_ref}</button>
+  </form>
+</section>

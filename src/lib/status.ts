@@ -22,6 +22,8 @@ export type StatusKey =
   | 'OPEN' | 'RESOLVED'
   // triage disposition
   | 'ACCEPTED' | 'FALSE_POSITIVE' | 'FIX' | 'DEFER'
+  // merge-request review disposition (T-0049)
+  | 'APPROVED' | 'CHANGES_REQUESTED' | 'COMMENTED'
   // evidence pack
   | 'READY' | 'PENDING' | 'FAILED';
 
@@ -61,6 +63,15 @@ export const STATUS_VOCABULARY: Record<StatusKey, StatusDescriptor> = {
   FALSE_POSITIVE: { tone: 'gf-status-pending', glyph: '○', label: 'False positive' },
   FIX: { tone: 'gf-status-warn', glyph: '!', label: 'Fix' },
   DEFER: { tone: 'gf-status-pending', glyph: '○', label: 'Deferred' },
+
+  // --- merge-request review (T-0049, SPEC-0048 AC7/AC8) -------------------
+  // Approve and request-changes are deliberately NOT the success/danger pair:
+  // that is the encoding the diff view already refuses, and it is the pair a
+  // deutan reader separates least well. The distinction that actually carries
+  // is the glyph and the word — no two dispositions share either.
+  APPROVED: { tone: 'gf-status-success', glyph: '✓', label: 'Approved' },
+  CHANGES_REQUESTED: { tone: 'gf-status-warn', glyph: '↺', label: 'Changes requested' },
+  COMMENTED: { tone: 'gf-status-info', glyph: '✎', label: 'Commented' },
 
   // --- evidence pack -----------------------------------------------------
   READY: { tone: 'gf-status-success', glyph: '✓', label: 'Ready' },

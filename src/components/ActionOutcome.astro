@@ -1,0 +1,28 @@
+---
+// The note a write leaves behind (T-0049, SPEC-0048 AC4, AC5).
+//
+// Every string it can render comes from MR_ACTION_MESSAGES, and a key that is
+// not in that table renders nothing at all. That is the whole guard: a message
+// written inline in a page is a message the AC4 enumeration never reads, and
+// the natural inline copy for a failed merge is a permission claim this layer
+// has no evidence for.
+import { messageForKey } from '../lib/mrAction';
+
+interface Props {
+  /** The mr_outcome query parameter, as it arrived. */
+  outcomeKey: string | null;
+}
+const { outcomeKey } = Astro.props;
+const message = messageForKey(outcomeKey);
+const applied = outcomeKey === 'applied';
+---
+
+{message && (
+  <p
+    class="gf-note"
+    role="status"
+    style={{ borderLeftColor: applied ? 'var(--gf-success-ink)' : 'var(--gf-warn-ink)' }}
+  >
+    <strong>{applied ? 'Applied.' : 'Not applied.'}</strong> {message}
+  </p>
+)}

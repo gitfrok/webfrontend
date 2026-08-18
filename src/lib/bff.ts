@@ -512,3 +512,126 @@ export async function usageView(request: Request): Promise<UsageViewResponse> {
     generated_at: view.generated_at,
   };
 }
+
+// --- merge-request writes (T-0049, SPEC-0048 AC1–AC3) ---------------------
+//
+// These three are the only writes in this file that are FORM-ENCODED, and the
+// difference is not cosmetic: the BFF's mr handler parses them with
+// `r.ParseForm()` and reads `PostFormValue`, so a JSON body arrives as no
+// fields at all and is refused with the same coarse 404 as a dead session.
+// `setSecurityTriage` above posts JSON and is not a template for these.
+//
+// Each write travels with the session cookie and nothing else. No tenant, no
+// actor, no role, no approval count, no authorization outcome: the backend
+// decides, and this layer would have no way to be right about any of them.
+
+/**
+ * The wire vocabulary for a review disposition.
+ *
+ * The BFF resolves the posted string through
+ * `codereviewv1.ReviewDisposition_value[disposition]` — a Go map lookup, which
+ * yields 0 (`REVIEW_DISPOSITION_UNSPECIFIED`) for a key it does not hold, with
+ * no error anywhere. So `APPROVE` — the obvious string, and the one the
+ * backend's own domain type uses internally — would travel as UNSPECIFIED, be
+ * refused by `validDisposition`, and surface as the same 404 as everything
+ * else: a review button that never works and cannot be diagnosed from either
+ * side. The full protobuf enum name is the only thing that works.
+ */
+export const MR_DISPOSITION_WIRE = {
+  APPROVE: 'REVIEW_DISPOSITION_APPROVE',
+  REQUEST_CHANGES: 'REVIEW_DISPOSITION_REQUEST_CHANGES',
+  COMMENT: 'REVIEW_DISPOSITION_COMMENT',
+} as const;
+
+export type MRDispositionKey = keyof typeof MR_DISPOSITION_WIRE;
+
+/** Posts one form-encoded write to the BFF under the browser's session. */
+async function bffPostForm(request: Request, path: string, fields: Record<string, string>): Promise<MergeRequestView> {
+  const url = new URL(path, bffOrigin);
+  const headers = new Headers({ 'content-type': 'application/x-www-form-urlencoded' });
+  const cookie = request.headers.get('cookie');
+  if (cookie) headers.set('cookie', cookie);
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: new URLSearchParams(fields).toString(),
+    redirect: 'manual',
+  });
+  if (!response.ok) {
+    throw new Error('merge request unavailable');
+  }
+  return (await response.json()) as MergeRequestView;
+}
+
+/**
+ * A version this layer is allowed to submit: a non-negative integer that came
+ * from a rendered view. A defaulted or invented version is refused before a
+ * request is compiled, because the write would otherwise be an optimistic
+ * concurrency check against a number nobody read.
+ */
+function usableVersion(version: number): boolean {
+  return typeof version === 'number' && Number.isInteger(version) && version >= 0;
+}
+
+/** Opens a merge request (SPEC-0048 AC1). */
+export async function openMergeRequest(
+  request: Request,
+  repositoryID: string,
+  input: { source_ref: string; target_ref: string; title: string; description: string },
+): Promise<MergeRequestView> {
+  if (!repositoryID || !input.source_ref || !input.target_ref || !input.title) {
+    throw new Error('merge request unavailable');
+  }
+  return bffPostForm(request, `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests`, {
+    source_ref: input.source_ref,
+    target_ref: input.target_ref,
+    title: input.title,
+    description: input.description ?? '',
+  });
+}
+
+/**
+ * Submits a review (SPEC-0048 AC2).
+ *
+ * `head_revision` is mandatory: the backend refuses an empty one, and the
+ * refusal is indistinguishable from every other refusal, so it is caught here
+ * where the cause is still visible.
+ */
+export async function submitMergeRequestReview(
+  request: Request,
+  repositoryID: string,
+  mergeRequestID: string,
+  input: { disposition: MRDispositionKey; comment: string; head_revision: string; expected_version: number },
+): Promise<MergeRequestView> {
+  const wire = MR_DISPOSITION_WIRE[input.disposition];
+  if (!repositoryID || !mergeRequestID || !wire || !input.head_revision || !usableVersion(input.expected_version)) {
+    throw new Error('merge request unavailable');
+  }
+  return bffPostForm(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/review`,
+    {
+      disposition: wire,
+      comment: input.comment ?? '',
+      head_revision: input.head_revision,
+      expected_version: String(input.expected_version),
+    },
+  );
+}
+
+/** Merges a merge request (SPEC-0048 AC3). It carries no opinion about whether it should be allowed. */
+export async function mergeMergeRequest(
+  request: Request,
+  repositoryID: string,
+  mergeRequestID: string,
+  expectedVersion: number,
+): Promise<MergeRequestView> {
+  if (!repositoryID || !mergeRequestID || !usableVersion(expectedVersion)) {
+    throw new Error('merge request unavailable');
+  }
+  return bffPostForm(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/merge`,
+    { expected_version: String(expectedVersion) },
+  );
+}

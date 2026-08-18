@@ -160,6 +160,12 @@
   --gf-glyph-warn: '\0021';      /* ! */
   --gf-glyph-info: '\25CF';      /* ● */
   --gf-glyph-pending: '\25CB';   /* ○ hollow — colourless by design */
+  /* Review dispositions (T-0049). Three distinct shapes, so the disposition
+   * survives with colour removed entirely — the tone is the least of the three
+   * channels, not the one carrying the meaning. */
+  --gf-glyph-approve: '\2713';          /* ✓ */
+  --gf-glyph-request-changes: '\21BA';  /* ↺ */
+  --gf-glyph-comment: '\270E';          /* ✎ */
   --gf-glyph-add: '\002B';       /* + */
   --gf-glyph-del: '\2212';       /* − true minus, not a hyphen */
 }
@@ -446,4 +452,69 @@ a:hover {
   background: var(--gf-surface);
   padding: var(--gf-space-2) var(--gf-space-3);
   border-radius: var(--gf-radius-control);
+}
+
+/* Review disposition pills (T-0049, SPEC-0048 AC7/AC8). Composed onto
+ * .gf-status so the colour still comes from the one tone table; these rules
+ * follow the status rules deliberately, so the disposition's own glyph wins
+ * on equal specificity. Approve and request-changes are not the
+ * success/danger pair — that is the encoding the diff view already refuses. */
+.gf-disposition-approve::before { content: var(--gf-glyph-approve); }
+.gf-disposition-request-changes::before { content: var(--gf-glyph-request-changes); }
+.gf-disposition-comment::before { content: var(--gf-glyph-comment); }
+
+/* Forms. The only place the product takes typed input, so the focus ring and
+ * the label association matter more than the styling does. */
+.gf-field {
+  display: block;
+  margin-bottom: var(--gf-space-3);
+}
+.gf-field > span {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: var(--gf-space-1);
+}
+.gf-input,
+.gf-textarea {
+  font: inherit;
+  width: 100%;
+  padding: 6px var(--gf-space-2);
+  min-height: 32px;
+  color: var(--gf-ink);
+  background: var(--gf-surface);
+  border: 1px solid var(--gf-line);
+  border-radius: var(--gf-radius-control);
+}
+.gf-textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+.gf-fieldset {
+  border: 1px solid var(--gf-line);
+  border-radius: var(--gf-radius-control);
+  padding: var(--gf-space-3);
+  margin: 0 0 var(--gf-space-3);
+}
+.gf-fieldset > legend {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 var(--gf-space-1);
+}
+.gf-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--gf-space-2);
+  margin-bottom: var(--gf-space-1);
+}
+
+/* An outcome note. It is a note, not an alert: the surface knows only that
+ * something did or did not take effect, and the copy says exactly that. */
+.gf-note {
+  border: 1px solid var(--gf-line);
+  border-left-width: 4px;
+  border-radius: var(--gf-radius-control);
+  padding: var(--gf-space-3);
+  margin: var(--gf-space-4) 0;
+  background: var(--gf-soft);
 }

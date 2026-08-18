@@ -19,9 +19,14 @@ import Layout from '../../../../layouts/Layout.astro';
 import CommandPalette from '../../../../components/CommandPalette';
 import ImportedHistory from '../../../../components/ImportedHistory.astro';
 import MRFindings from '../../../../components/MRFindings.astro';
+import MergeRequestActions from '../../../../components/MergeRequestActions.astro';
+import ActionOutcome from '../../../../components/ActionOutcome.astro';
 import type { ImportedMergeRequestView } from '../../../../lib/provenance';
 
 const { repositoryID, mergeRequestID } = Astro.params;
+// What a write left behind, if the reader arrived from one (SPEC-0048 AC4/AC5).
+// The key is resolved against MR_ACTION_MESSAGES; anything else renders nothing.
+const outcomeKey = Astro.url.searchParams.get('mr_outcome');
 let mr: Awaited<ReturnType<typeof mergeRequest>> | null = null;
 let loadError = false;
 
@@ -66,6 +71,8 @@ if (mr) {
 <Layout title={mr ? `${mr.title} · ${repositoryID}` : `${repositoryID} MR`}>
   <CommandPalette client:load repositoryID={repositoryID!} revision="main" />
   <main style={{ maxWidth: '960px', margin: '0 auto', padding: '0 16px' }}>
+    <ActionOutcome outcomeKey={outcomeKey} />
+
     {loadError && (
       <p style={{ color: 'var(--gf-danger-ink)' }}>This merge request is unavailable. Check your session.</p>
     )}
@@ -90,6 +97,8 @@ if (mr) {
         <p style={{ color: 'var(--gf-ink-muted)', fontSize: '13px' }}>
           Head revision {mr.head_revision.slice(0, 8)} · opened by {mr.creator_id} · version {mr.version}
         </p>
+
+        <MergeRequestActions mr={mr} />
 
         {findingsError && (
           <p style={{ color: 'var(--gf-danger-ink)' }}>The findings for this merge request are unavailable.</p>
