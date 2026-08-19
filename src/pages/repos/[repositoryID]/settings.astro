@@ -7,6 +7,7 @@
 // reader they lack a permission; they do not. The capability does not exist, so
 // the page says what is not a setting rather than showing a door that is locked.
 import Layout from '../../../layouts/Layout.astro';
+import PageShell from '../../../components/PageShell.astro';
 import RepoHeader from '../../../components/RepoHeader.astro';
 import RepositorySettings from '../../../components/RepositorySettings.astro';
 import { repositorySettings } from '../../../lib/bff';
@@ -30,8 +31,7 @@ try {
 <Layout title={`${repositoryID} settings`}>
   <RepoHeader title={repositoryID!} revision="main" />
 
-  <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
-    <h1 style={{ fontSize: '20px', margin: 'var(--gf-space-4) 0 var(--gf-space-3)' }}>Settings</h1>
+  <PageShell title="Settings" measure="prose">
 
     {outcome && (
       <p
@@ -45,7 +45,7 @@ try {
 
     {loadError || !settings ? (
       <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
         {' '}{SETTINGS_MESSAGES.unavailable}
       </p>
     ) : (
@@ -53,5 +53,5 @@ try {
         <RepositorySettings repositoryID={repositoryID!} settings={settings} />
       </>
     )}
-  </div>
+  </PageShell>
 </Layout>

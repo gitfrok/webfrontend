@@ -7,6 +7,7 @@
 // identity provider and this product has no membership read — so the page says so
 // rather than showing an empty table that would assert this org has no members.
 import Layout from '../../layouts/Layout.astro';
+import PageShell from '../../components/PageShell.astro';
 import FleetReport from '../../components/FleetReport.astro';
 import { adminFleet } from '../../lib/bff';
 import type { PlaneView } from '../../lib/bff';
@@ -26,16 +27,15 @@ const now = new Date();
 ---
 
 <Layout title="Admin">
-  <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
-    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Admin</h1>
+  <PageShell title="Admin" measure="wide">
 
     {loadError ? (
       <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
         {' '}{ADMIN_MESSAGES.unavailable}
       </p>
     ) : (
       <FleetReport planes={planes} now={now} />
     )}
-  </div>
+  </PageShell>
 </Layout>

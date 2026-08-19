@@ -25,20 +25,20 @@ const { ranges, capped } = Astro.props;
 ---
 
 <section aria-labelledby="blame-heading" style={{ margin: 'var(--gf-space-6) 0' }}>
-  <h2 id="blame-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-2)' }}>Blame</h2>
+  <h2 id="blame-heading" style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>Blame</h2>
 
-  <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+  <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
     {COMMIT_MESSAGES.gitIdentityNote}
   </p>
 
   {capped && (
     <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Partial</span>
+      <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Partial</span>
       {' '}{COMMIT_MESSAGES.blameCapped}
     </p>
   )}
 
-  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--gf-text-sm)' }}>
     <thead>
       <tr>
         <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>Lines</th>

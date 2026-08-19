@@ -14,7 +14,7 @@ const { title, revision, actionHref, actionLabel } = Astro.props;
 <header
   style="display:flex; justify-content:space-between; align-items:baseline; gap:var(--gf-space-4); padding-bottom:var(--gf-space-3); margin-bottom:var(--gf-space-4); border-bottom:1px solid var(--gf-line);"
 >
-  <h1 style="font-size:20px; font-weight:600; margin:0; overflow-wrap:anywhere;">{title}</h1>
+  <h1 style="font-size: var(--gf-text-xl); font-weight:600; margin:0; overflow-wrap:anywhere;">{title}</h1>
   <div style="display:flex; gap:var(--gf-space-4); align-items:baseline;">
     {revision && <code class="gf-muted gf-sha">{revision}</code>}
     {actionHref && actionLabel && <a href={actionHref}>{actionLabel}</a>}

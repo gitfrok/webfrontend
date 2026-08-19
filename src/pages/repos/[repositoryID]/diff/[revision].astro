@@ -13,6 +13,7 @@
 import { diff, mergeRequestFindings } from '../../../../lib/bff';
 import type { MRFindingsPage } from '../../../../lib/bff';
 import Layout from '../../../../layouts/Layout.astro';
+import PageShell from '../../../../components/PageShell.astro';
 import CommandPalette from '../../../../components/CommandPalette';
 import MRDiffFindings from '../../../../components/MRDiffFindings.astro';
 import DiffView from '../../../../components/DiffView.astro';
@@ -47,6 +48,7 @@ if (mergeRequestID) {
 ---
 
 <Layout title={`diff ${baseRevision}..${revision}`}>
+  <PageShell title={`diff ${baseRevision}..${revision}`} measure="full" headingHidden>
   <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
   <RepoHeader title={repositoryID!} revision={`${baseRevision}..${revision}`} />
 
@@ -65,4 +67,5 @@ if (mergeRequestID) {
   {!loadError && mrFindingsPage && (
     <MRDiffFindings patch={patch} findings={mrFindingsPage.findings} summary={mrFindingsPage.summary} />
   )}
+  </PageShell>
 </Layout>

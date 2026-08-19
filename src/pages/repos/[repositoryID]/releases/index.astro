@@ -5,6 +5,7 @@
 // no download. It says so once, above the list, rather than leaving a reader
 // to hunt for a button that does not exist.
 import Layout from '../../../../layouts/Layout.astro';
+import PageShell from '../../../../components/PageShell.astro';
 import RepoHeader from '../../../../components/RepoHeader.astro';
 import ReleaseList from '../../../../components/ReleaseList.astro';
 import { repositoryTags, repositoryReleases } from '../../../../lib/bff';
@@ -45,8 +46,7 @@ const nextHref = nextToken
 <Layout title={`${repositoryID} releases`}>
   <RepoHeader title={repositoryID!} revision="main" />
 
-  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
-    <h1 style={{ fontSize: '20px', margin: 'var(--gf-space-4) 0 var(--gf-space-3)' }}>Releases</h1>
+  <PageShell title="Releases" measure="prose">
 
     {outcome && (
       <p
@@ -60,7 +60,7 @@ const nextHref = nextToken
 
     {loadError ? (
       <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
         {' '}{RELEASE_MESSAGES.unavailable}
       </p>
     ) : (
@@ -68,7 +68,7 @@ const nextHref = nextToken
         <details class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
           <summary style={{ cursor: 'pointer', fontWeight: '500' }}>Publish a release</summary>
           {publishable.length === 0 ? (
-            <p class="gf-muted" style={{ fontSize: '13px', margin: 'var(--gf-space-3) 0 0' }}>
+            <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: 'var(--gf-space-3) 0 0' }}>
               Every tag in this repository already has a release. A release is published against a
               tag, and tags are made by pushing them.
             </p>
@@ -95,5 +95,5 @@ const nextHref = nextToken
         <ReleaseList repositoryID={repositoryID!} releases={releases} tags={tags} nextHref={nextHref} />
       </>
     )}
-  </div>
+  </PageShell>
 </Layout>

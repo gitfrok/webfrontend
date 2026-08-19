@@ -35,52 +35,52 @@ const unverified = {
 {records.length > 0 && (
   <section
     aria-labelledby="imported-history-heading"
-    style={{ margin: '24px 0', padding: '16px', ...unverified, borderRadius: '6px' }}
+    style={{ margin: 'var(--gf-space-6) 0', padding: 'var(--gf-space-4)', ...unverified, borderRadius: 'var(--gf-radius-control)' }}
   >
-    <h2 id="imported-history-heading" style={{ fontSize: '16px', margin: '0px' }}>
+    <h2 id="imported-history-heading" style={{ fontSize: 'var(--gf-text-md)', margin: '0' }}>
       Imported history — not verified by this platform
     </h2>
-    <p style={{ margin: '8px 0 0', fontSize: '13px' }}>
+    <p style={{ margin: 'var(--gf-space-2) 0 0', fontSize: 'var(--gf-text-sm)' }}>
       These records were declared by the source system during a repository import. This platform did
       not witness them: the names, dates and approvals below are as the source declared them, they
       are not platform identities, and no approval here satisfies a merge policy.
     </p>
 
     {records.map((record) => (
-      <article style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid var(--gf-warn)' }}>
-        <h3 style={{ fontSize: '14px', margin: '0px' }}>
-          <span style={{ fontWeight: 400, fontSize: '12px', marginRight: '8px', padding: '1px 6px', border: '1px solid var(--gf-warn-ink)', borderRadius: '10px' }}>
+      <article style={{ marginTop: 'var(--gf-space-4)', paddingTop: 'var(--gf-space-3)', borderTop: '1px solid var(--gf-warn)' }}>
+        <h3 style={{ fontSize: 'var(--gf-text-base)', margin: '0' }}>
+          <span style={{ fontWeight: 400, fontSize: 'var(--gf-text-xs)', marginRight: 'var(--gf-space-2)', padding: 'var(--gf-space-1) var(--gf-space-1)', border: '1px solid var(--gf-warn-ink)', borderRadius: 'var(--gf-radius-control)' }}>
             {originLabel(record.provenance)}
           </span>
           {record.title}
         </h3>
-        <p style={{ margin: '6px 0 0', fontSize: '13px' }}>
+        <p style={{ margin: 'var(--gf-space-1) 0 0', fontSize: 'var(--gf-text-sm)' }}>
           {record.state} · {record.source_ref} → {record.target_ref} · declared by{' '}
           {declaredActorLabel(record.provenance, record.declared_creator)}
         </p>
 
         {record.threads?.map((thread) => (
-          <div style={{ marginTop: '12px' }}>
-            <p style={{ margin: '0px', fontSize: '12px' }}>{thread.path || 'merge request'}</p>
+          <div style={{ marginTop: 'var(--gf-space-3)' }}>
+            <p style={{ margin: '0', fontSize: 'var(--gf-text-xs)' }}>{thread.path || 'merge request'}</p>
             {anchorNote(thread) && (
-              <p style={{ margin: '4px 0 0', fontSize: '12px', fontStyle: 'italic' }}>{anchorNote(thread)}</p>
+              <p style={{ margin: 'var(--gf-space-1) 0 0', fontSize: 'var(--gf-text-xs)', fontStyle: 'italic' }}>{anchorNote(thread)}</p>
             )}
             {thread.comments?.map((comment) => (
-              <blockquote style={{ margin: '8px 0 0', paddingLeft: '12px', borderLeft: '3px solid var(--gf-warn)' }}>
-                <p style={{ margin: '0px', fontSize: '12px' }}>
+              <blockquote style={{ margin: 'var(--gf-space-2) 0 0', paddingLeft: 'var(--gf-space-3)', borderLeft: '3px solid var(--gf-warn)' }}>
+                <p style={{ margin: '0', fontSize: 'var(--gf-text-xs)' }}>
                   {declaredActorLabel(comment.provenance, comment.declared_actor)} ·{' '}
                   {declaredAtLabel(comment.declared_at ?? comment.provenance?.declared_at)}
                 </p>
-                <p style={{ margin: '4px 0 0', fontSize: '13px' }}>{comment.body}</p>
+                <p style={{ margin: 'var(--gf-space-1) 0 0', fontSize: 'var(--gf-text-sm)' }}>{comment.body}</p>
               </blockquote>
             ))}
           </div>
         ))}
 
         {record.approvals?.length > 0 && (
-          <ul style={{ margin: '12px 0 0', padding: '0px', listStyle: 'none' }}>
+          <ul style={{ margin: 'var(--gf-space-3) 0 0', padding: '0', listStyle: 'none' }}>
             {record.approvals.map((approval) => (
-              <li style={{ fontSize: '12px', marginTop: '4px' }}>{approvalPresentation(approval).label}</li>
+              <li style={{ fontSize: 'var(--gf-text-xs)', marginTop: 'var(--gf-space-1)' }}>{approvalPresentation(approval).label}</li>
             ))}
           </ul>
         )}

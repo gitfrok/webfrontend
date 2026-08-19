@@ -17,17 +17,17 @@ const { commits, nextHref } = Astro.props;
 ---
 
 <section aria-labelledby="history-heading" style={{ margin: 'var(--gf-space-6) 0' }}>
-  <h2 id="history-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-2)' }}>History</h2>
+  <h2 id="history-heading" style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>History</h2>
 
-  <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+  <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
     {COMMIT_MESSAGES.gitIdentityNote}
   </p>
 
-  <ol style={{ listStyle: 'none', padding: '0px', margin: '0px' }}>
+  <ol style={{ listStyle: 'none', padding: '0', margin: '0' }}>
     {commits.map((commit) => (
       <li class="gf-card" style={{ marginBottom: 'var(--gf-space-2)' }}>
-        <p style={{ margin: '0px', fontSize: '14px', fontWeight: '500' }}>{commit.subject}</p>
-        <p class="gf-muted" style={{ margin: 'var(--gf-space-1) 0 0', fontSize: '13px' }}>
+        <p style={{ margin: '0', fontSize: 'var(--gf-text-base)', fontWeight: '500' }}>{commit.subject}</p>
+        <p class="gf-muted" style={{ margin: 'var(--gf-space-1) 0 0', fontSize: 'var(--gf-text-sm)' }}>
           <span style={{ fontFamily: 'var(--gf-font-code)' }} title={commit.commit_id}>
             {shortCommit(commit.commit_id)}
           </span>

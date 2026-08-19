@@ -35,32 +35,32 @@ const nextHref = nextPageToken
 
 {results.length === 0 && (
   <div class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-info-ink)' }}>
-    <p style={{ margin: '0px' }}>{SEARCH_MESSAGES.empty}</p>
+    <p style={{ margin: '0' }}>{SEARCH_MESSAGES.empty}</p>
 
     {freshness.kind === 'nothing-indexed' && (
       <p style={{ margin: 'var(--gf-space-2) 0 0', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Not indexed</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Not indexed</span>
         <span>{SEARCH_MESSAGES.nothingIndexed}</span>
       </p>
     )}
 
     {freshness.kind === 'unknown' && (
       <p style={{ margin: 'var(--gf-space-2) 0 0', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
-        <span class="gf-status gf-status-pending" style={{ fontSize: '13px' }}>Index unknown</span>
+        <span class="gf-status gf-status-pending" style={{ fontSize: 'var(--gf-text-sm)' }}>Index unknown</span>
         <span>{SEARCH_MESSAGES.indexUnknown}</span>
       </p>
     )}
 
     {freshness.kind === 'stale' && (
       <p style={{ margin: 'var(--gf-space-2) 0 0', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Index behind</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Index behind</span>
         <span>{SEARCH_MESSAGES.indexStale} Worst lag {describeLag(freshness.worstLagMS)}.</span>
       </p>
     )}
 
     {freshness.kind === 'fresh' && (
-      <p class="gf-muted" style={{ margin: 'var(--gf-space-2) 0 0', fontSize: '13px' }}>
-        <span class="gf-status gf-status-success" style={{ fontSize: '13px' }}>Index current</span>
+      <p class="gf-muted" style={{ margin: 'var(--gf-space-2) 0 0', fontSize: 'var(--gf-text-sm)' }}>
+        <span class="gf-status gf-status-success" style={{ fontSize: 'var(--gf-text-sm)' }}>Index current</span>
         {' '}Worst lag {describeLag(freshness.worstLagMS)} across {freshness.repositoryCount} repositories.
       </p>
     )}
@@ -74,17 +74,17 @@ const nextHref = nextPageToken
         href={`/repos/${encodeURIComponent(match.repository_id)}/file/${encodeURIComponent(match.revision)}/${match.path}`}
         style={{ color: 'var(--gf-action-ink)', fontWeight: '600' }}
       >{match.path}</a>
-      <span class="gf-muted" style={{ fontSize: '13px' }}>
+      <span class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)' }}>
         {match.repository_id} @ {match.revision.slice(0, 8)} · lines {match.line_start}–{match.line_end}
       </span>
     </header>
 
-    <pre style={{ fontFamily: 'var(--gf-font-code)', fontSize: '13px', background: 'var(--gf-code-bg)', padding: 'var(--gf-space-2)', borderRadius: 'var(--gf-radius-control)', overflowX: 'auto', margin: 'var(--gf-space-2) 0 0' }}>{match.matched_content}</pre>
+    <pre style={{ fontFamily: 'var(--gf-font-code)', fontSize: 'var(--gf-text-sm)', background: 'var(--gf-code-bg)', padding: 'var(--gf-space-2)', borderRadius: 'var(--gf-radius-control)', overflowX: 'auto', margin: 'var(--gf-space-2) 0 0' }}>{match.matched_content}</pre>
 
     {/* Enrichment is additive. Its absence removes the metadata line and
         nothing else — a failed enrichment must never remove a result. */}
     {match.metadata && (
-      <p class="gf-muted" style={{ fontSize: '12px', fontFamily: 'var(--gf-font-code)', margin: 'var(--gf-space-2) 0 0' }}>
+      <p class="gf-muted" style={{ fontSize: 'var(--gf-text-xs)', fontFamily: 'var(--gf-font-code)', margin: 'var(--gf-space-2) 0 0' }}>
         {match.metadata.object_id.slice(0, 8)} · {match.metadata.size_bytes} bytes
       </p>
     )}

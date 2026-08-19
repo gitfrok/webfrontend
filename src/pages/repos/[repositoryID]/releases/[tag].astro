@@ -6,6 +6,7 @@
 // hold both: the Release context cannot ask git, and Repository/Git knows
 // nothing about releases.
 import Layout from '../../../../layouts/Layout.astro';
+import PageShell from '../../../../components/PageShell.astro';
 import RepoHeader from '../../../../components/RepoHeader.astro';
 import ReleaseList from '../../../../components/ReleaseList.astro';
 import { repositoryTags, repositoryReleases } from '../../../../lib/bff';
@@ -33,7 +34,7 @@ try {
 <Layout title={`${tag} · ${repositoryID}`}>
   <RepoHeader title={`${repositoryID} · ${tag}`} revision="main" />
 
-  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+  <PageShell title={`${tag} · ${repositoryID}`} measure="prose" headingHidden>
     {outcome && (
       <p
         class="gf-note"
@@ -46,7 +47,7 @@ try {
 
     {loadError || !release ? (
       <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
         {' '}{RELEASE_MESSAGES.unavailable}
       </p>
     ) : (
@@ -54,8 +55,8 @@ try {
         <ReleaseList repositoryID={repositoryID!} releases={[release]} tags={tags} nextHref="" />
 
         <section class="gf-card" aria-labelledby="notes-heading">
-          <h2 id="notes-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-2)' }}>Edit notes</h2>
-          <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+          <h2 id="notes-heading" style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>Edit notes</h2>
+          <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
             Notes are documentation and may be corrected. What this release points at cannot be
             changed — publishing against a different commit is a different release.
           </p>
@@ -70,5 +71,5 @@ try {
         </section>
       </>
     )}
-  </div>
+  </PageShell>
 </Layout>

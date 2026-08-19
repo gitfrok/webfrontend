@@ -28,11 +28,11 @@ const when = (iso: string) => (iso ? iso.slice(0, 16).replace('T', ' ') : '—')
 </p>
 
 {runs.length === 0 && (
-  <p class="gf-muted" style={{ fontSize: '14px' }}>{PIPELINE_MESSAGES.empty}</p>
+  <p class="gf-muted" style={{ fontSize: 'var(--gf-text-base)' }}>{PIPELINE_MESSAGES.empty}</p>
 )}
 
 {runs.length > 0 && (
-  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--gf-text-sm)' }}>
     <thead>
       <tr>
         <th scope="col" style={{ textAlign: 'left', padding: 'var(--gf-space-1) 0' }}>State</th>
@@ -51,7 +51,7 @@ const when = (iso: string) => (iso ? iso.slice(0, 16).replace('T', ' ') : '—')
         return (
           <tr style={{ borderTop: '1px solid var(--gf-line)' }}>
             <td style={{ padding: 'var(--gf-space-1) 0' }}>
-              <span class:list={['gf-status', state.tone, jobStateGlyphClass(stateKey)]} style={{ fontSize: '12px' }}>
+              <span class:list={['gf-status', state.tone, jobStateGlyphClass(stateKey)]} style={{ fontSize: 'var(--gf-text-xs)' }}>
                 {state.descriptor.label}
               </span>
             </td>

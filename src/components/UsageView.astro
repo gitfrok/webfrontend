@@ -81,21 +81,21 @@ function formatWindow(start?: string, end?: string): string {
 ---
 
 <section aria-label="Fair-use usage view">
-  <p style={{ color: 'var(--gf-ink-muted)', fontSize: '13px', margin: '12px 0' }}>
+  <p style={{ color: 'var(--gf-ink-muted)', fontSize: 'var(--gf-text-sm)', margin: 'var(--gf-space-3) 0' }}>
     Numbers are the control plane's own counters from telemetry it received —
     the same counters every fair-use decision is made from. Dimensions this
     phase does not meter say so; a silent data plane renders as a visible
     gap, never as zero usage.
   </p>
 
-  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--gf-text-base)' }}>
     <thead>
       <tr style={{ borderBottom: '1px solid var(--gf-line)', color: 'var(--gf-ink-muted)', textAlign: 'left' }}>
-        <th style={{ padding: '8px 12px 8px 0' }}>Dimension</th>
-        <th style={{ padding: '8px 12px' }}>Coverage</th>
-        <th style={{ padding: '8px 12px' }}>Current</th>
-        <th style={{ padding: '8px 12px' }}>Envelope</th>
-        <th style={{ padding: '8px 12px' }}>Interval</th>
+        <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3) var(--gf-space-2) 0' }}>Dimension</th>
+        <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Coverage</th>
+        <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Current</th>
+        <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Envelope</th>
+        <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Interval</th>
       </tr>
     </thead>
     <tbody>
@@ -103,32 +103,32 @@ function formatWindow(start?: string, end?: string): string {
         const style = row.state ? stateStyles[row.state] : undefined;
         return (
           <tr style={{ borderBottom: '1px solid var(--gf-line)' }} data-dimension={row.dimension} data-coverage={row.coverage} data-gap={row.telemetry_gap ? 'true' : undefined}>
-            <td style={{ padding: '10px 12px 10px 0', fontWeight: 600 }}>
+            <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3) var(--gf-space-2) 0', fontWeight: 600 }}>
               {dimensionTitle(row.dimension)}
               {row.state && ENVELOPE_STATUS[row.state as keyof typeof ENVELOPE_STATUS] && (
                 <span
                   class:list={['gf-status', ENVELOPE_STATUS[row.state as keyof typeof ENVELOPE_STATUS].tone]}
-                  style={{ marginLeft: '8px', fontSize: '12px' }}
+                  style={{ marginLeft: 'var(--gf-space-2)', fontSize: 'var(--gf-text-xs)' }}
                 >
                   {row.state}
                 </span>
               )}
               {row.trend && TREND[row.trend as keyof typeof TREND] && (
-                <span data-usage-trend style={{ marginLeft: '6px', fontSize: '12px', color: 'var(--gf-ink-muted)' }}>
+                <span data-usage-trend style={{ marginLeft: 'var(--gf-space-1)', fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)' }}>
                   <span aria-hidden="true">{TREND[row.trend as keyof typeof TREND].glyph}</span>
                   {' '}{TREND[row.trend as keyof typeof TREND].label}
                 </span>
               )}
               {row.state && envelopeBehaviour[row.state] && (
-                <div data-envelope-behaviour style={{ fontWeight: 400, fontSize: '12px', color: 'var(--gf-ink-muted)', marginTop: '2px' }}>
+                <div data-envelope-behaviour style={{ fontWeight: 400, fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', marginTop: 'var(--gf-space-1)' }}>
                   {envelopeBehaviour[row.state]}
                 </div>
               )}
             </td>
-            <td style={{ padding: '10px 12px', color: row.coverage === 'METERED' ? 'var(--gf-ink-muted)' : 'var(--gf-action-ink)' }}>
+            <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)', color: row.coverage === 'METERED' ? 'var(--gf-ink-muted)' : 'var(--gf-action-ink)' }}>
               {row.coverage === 'DEFERRED' ? 'Not metered yet' : row.telemetry_gap ? 'Telemetry gap' : 'Metered'}
             </td>
-            <td style={{ padding: '10px 12px' }}>
+            <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>
               {row.coverage === 'DEFERRED' && <em>No measurement in this phase</em>}
               {row.coverage !== 'DEFERRED' && row.telemetry_gap && <em>No telemetry received</em>}
               {row.coverage === 'METERED' && !row.telemetry_gap && row.value !== undefined && (
@@ -138,16 +138,16 @@ function formatWindow(start?: string, end?: string): string {
                 </span>
               )}
             </td>
-            <td style={{ padding: '10px 12px', color: 'var(--gf-ink-muted)' }}>
+            <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)', color: 'var(--gf-ink-muted)' }}>
               {row.coverage === 'METERED' && !row.telemetry_gap && row.envelope !== undefined && (
                 <span>
                   {formatNumber(row.envelope)}
                   {row.unit ? ` ${row.unit}` : ''}
-                  {row.notification !== undefined && <span style={{ fontSize: '12px' }}> (notify at {formatNumber(row.notification)})</span>}
+                  {row.notification !== undefined && <span style={{ fontSize: 'var(--gf-text-xs)' }}> (notify at {formatNumber(row.notification)})</span>}
                 </span>
               )}
             </td>
-            <td style={{ padding: '10px 12px', color: 'var(--gf-ink-muted)', fontSize: '13px' }}>
+            <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)', color: 'var(--gf-ink-muted)', fontSize: 'var(--gf-text-sm)' }}>
               {row.coverage === 'DEFERRED' && row.deferred_reason}
               {row.coverage !== 'DEFERRED' && !row.telemetry_gap && formatWindow(row.window_start, row.window_end)}
               {row.telemetry_gap &&
@@ -164,32 +164,32 @@ function formatWindow(start?: string, end?: string): string {
   </table>
 
   {view.divergences.length > 0 && (
-    <section aria-labelledby="divergences-heading" style={{ marginTop: '24px' }}>
-      <h2 id="divergences-heading" style={{ fontSize: '16px' }}>Health findings: reported vs counted</h2>
-      <p style={{ color: 'var(--gf-ink-muted)', fontSize: '13px' }}>
+    <section aria-labelledby="divergences-heading" style={{ marginTop: 'var(--gf-space-6)' }}>
+      <h2 id="divergences-heading" style={{ fontSize: 'var(--gf-text-md)' }}>Health findings: reported vs counted</h2>
+      <p style={{ color: 'var(--gf-ink-muted)', fontSize: 'var(--gf-text-sm)' }}>
         A data plane's own report disagreed with the control plane's counter
         over an interval. Both numbers are shown; the control plane's counter
         above is unchanged — a divergence is a health finding, never a
         billing adjustment.
       </p>
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--gf-text-base)' }}>
         <thead>
           <tr style={{ borderBottom: '1px solid var(--gf-line)', color: 'var(--gf-ink-muted)', textAlign: 'left' }}>
-            <th style={{ padding: '8px 12px 8px 0' }}>Dimension</th>
-            <th style={{ padding: '8px 12px' }}>Data plane</th>
-            <th style={{ padding: '8px 12px' }}>Control plane counted</th>
-            <th style={{ padding: '8px 12px' }}>Reported by plane</th>
-            <th style={{ padding: '8px 12px' }}>Interval</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3) var(--gf-space-2) 0' }}>Dimension</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Data plane</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Control plane counted</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Reported by plane</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Interval</th>
           </tr>
         </thead>
         <tbody>
           {view.divergences.map((d) => (
             <tr style={{ borderBottom: '1px solid var(--gf-line)' }}>
-              <td style={{ padding: '10px 12px 10px 0', fontWeight: 600 }}>{dimensionTitle(d.dimension)}</td>
-              <td style={{ padding: '10px 12px' }}>{d.data_plane_id}</td>
-              <td style={{ padding: '10px 12px' }}>{formatNumber(d.control_plane_value)}</td>
-              <td style={{ padding: '10px 12px' }}>{formatNumber(d.data_plane_reported_value)}</td>
-              <td style={{ padding: '10px 12px', color: 'var(--gf-ink-muted)', fontSize: '13px' }}>{formatWindow(d.window_start, d.window_end)}</td>
+              <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3) var(--gf-space-2) 0', fontWeight: 600 }}>{dimensionTitle(d.dimension)}</td>
+              <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>{d.data_plane_id}</td>
+              <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>{formatNumber(d.control_plane_value)}</td>
+              <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>{formatNumber(d.data_plane_reported_value)}</td>
+              <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)', color: 'var(--gf-ink-muted)', fontSize: 'var(--gf-text-sm)' }}>{formatWindow(d.window_start, d.window_end)}</td>
             </tr>
           ))}
         </tbody>
@@ -198,36 +198,36 @@ function formatWindow(start?: string, end?: string): string {
   )}
 
   {view.throttle && (
-    <section aria-label="Envelope throttle observation" data-throttle-observation style={{ marginTop: '24px' }}>
-      <h2 style={{ fontSize: '16px' }}>Envelope throttle: metered and applied</h2>
-      <p style={{ color: 'var(--gf-ink-muted)', fontSize: '13px' }}>
+    <section aria-label="Envelope throttle observation" data-throttle-observation style={{ marginTop: 'var(--gf-space-6)' }}>
+      <h2 style={{ fontSize: 'var(--gf-text-md)' }}>Envelope throttle: metered and applied</h2>
+      <p style={{ color: 'var(--gf-ink-muted)', fontSize: 'var(--gf-text-sm)' }}>
         What the control plane METERED as the desired state, and what your
         data plane acked as APPLIED — shown as two numbers, never smoothed
         into one. Git operations are never part of this throttle.
       </p>
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--gf-text-base)' }}>
         <thead>
           <tr style={{ borderBottom: '1px solid var(--gf-line)', color: 'var(--gf-ink-muted)', textAlign: 'left' }}>
-            <th style={{ padding: '8px 12px 8px 0' }}>Generation</th>
-            <th style={{ padding: '8px 12px' }}>Max CI concurrency</th>
-            <th style={{ padding: '8px 12px' }}>Queue depth cap</th>
-            <th style={{ padding: '8px 12px' }}>Applied by data plane</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3) var(--gf-space-2) 0' }}>Generation</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Max CI concurrency</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Queue depth cap</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>Applied by data plane</th>
           </tr>
         </thead>
         <tbody>
           <tr style={{ borderBottom: '1px solid var(--gf-line)' }}>
-            <td style={{ padding: '10px 12px 10px 0' }}>{view.throttle.desired_generation}</td>
-            <td style={{ padding: '10px 12px' }}>
+            <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3) var(--gf-space-2) 0' }}>{view.throttle.desired_generation}</td>
+            <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>
               {view.throttle.desired_max_ci_concurrency > 0
                 ? view.throttle.desired_max_ci_concurrency
                 : 'unchanged (no throttle metered)'}
             </td>
-            <td style={{ padding: '10px 12px' }}>
+            <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>
               {view.throttle.desired_queue_depth_cap > 0
                 ? `${view.throttle.desired_queue_depth_cap} (queued jobs delayed, never dropped)`
                 : 'unchanged (no throttle metered)'}
             </td>
-            <td style={{ padding: '10px 12px' }}>
+            <td style={{ padding: 'var(--gf-space-2) var(--gf-space-3)' }}>
               {!view.throttle.has_applied_ack && <em data-throttle-unacked>No acknowledgement recorded yet</em>}
               {view.throttle.has_applied_ack && view.throttle.applied && (
                 <span data-throttle-applied style={{ color: 'var(--gf-info-ink)' }}>
@@ -247,7 +247,7 @@ function formatWindow(start?: string, end?: string): string {
     </section>
   )}
 
-  <p style={{ color: 'var(--gf-ink-muted)', fontSize: '12px', marginTop: '16px' }}>
+  <p style={{ color: 'var(--gf-ink-muted)', fontSize: 'var(--gf-text-xs)', marginTop: 'var(--gf-space-4)' }}>
     Generated at {new Date(view.generated_at).toISOString().slice(0, 16)} UTC.
     Fair use is enforced by throttle and notice only — nothing here blocks
     your git traffic.

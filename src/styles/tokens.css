@@ -141,8 +141,41 @@
   --gf-font-ui: 'Inter', system-ui, -apple-system, sans-serif;
   --gf-font-display: 'Baloo 2', 'Inter', system-ui, sans-serif;
   --gf-font-code: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  /* The type scale (ADR-0079 decision 2, SPEC-0060 AC2).
+   *
+   * Seven steps, chosen from what the product already rendered rather than from
+   * a ratio: before this existed there were TEN sizes in use against one token,
+   * because every surface invented its own. Three near-duplicates were merged
+   * into their neighbours — 11 into xs, 15 into md, 24 into 2xl — and nothing
+   * else changed size.
+   *
+   * xs and sm are one pixel apart and both survive. That is ugly and it is
+   * deliberate: they carry 154 call sites between them, and collapsing them is a
+   * decision about the visual language rather than about tokens (ADR-0079's
+   * named follow-up). */
+  --gf-text-xs: 12px;        /* badges, table meta, timestamps */
+  --gf-text-sm: 13px;        /* secondary prose, table cells */
   --gf-text-base: 14px;      /* app density; marketing runs 16-18px */
+  --gf-text-md: 16px;        /* section headings */
+  --gf-text-lg: 18px;        /* card titles */
+  --gf-text-xl: 20px;        /* page titles on dense surfaces */
+  --gf-text-2xl: 22px;       /* page titles */
   --gf-leading: 1.5;
+
+  /* The one content measure (ADR-0079 decision 3). Pages used to declare their
+   * own — 1080, 960 and 760 px across seventeen surfaces — so the column jumped
+   * as a reader navigated. The shell owns it now, and `wide` is the one named
+   * exception, for surfaces whose content is a table rather than prose. */
+  --gf-measure: 960px;
+  --gf-measure-wide: 1080px;
+  /* The command palette's dialog. Its own measure because a dialog is not a page
+   * column: it is as wide as a line of typed input wants to be, and it shrinks to
+   * the viewport rather than to the content well. */
+  --gf-measure-dialog: 480px;
+  /* The code surfaces — diff, tree, file — are full-bleed, and were before the
+   * shell existed. Named rather than absent so they compose the shell like every
+   * other page instead of opting out of having an owner. */
+  --gf-measure-full: 100%;
 
   /* Spacing — 4px rhythm */
   --gf-space-1: 4px;
@@ -300,6 +333,33 @@ a:hover {
 }
 
 /* -------------------------------------------------------- primitives ---- */
+/* The page column (T-0077, SPEC-0060 AC6). The shell sets its max-width from a
+ * measure token; the gutters, the heading and the lede spacing live here, so a
+ * page carries no geometry at all. */
+.gf-page {
+  margin: 0 auto;
+  padding: 0 var(--gf-space-4);
+}
+.gf-page-title {
+  font-size: var(--gf-text-2xl);
+  margin: var(--gf-space-4) 0 var(--gf-space-2);
+}
+.gf-page-lede {
+  color: var(--gf-ink-muted);
+  font-size: var(--gf-text-base);
+  margin: 0 0 var(--gf-space-4);
+}
+/* Visually hidden, still read aloud. Used when a surface leads with its own
+ * header and would otherwise carry two h1s. */
+.gf-sr-only {
+  position: absolute;
+  width: 1px;              /* gf-allow-dimension: the standard visually-hidden clip, not a scale step */
+  height: 1px;             /* gf-allow-dimension: the standard visually-hidden clip, not a scale step */
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .gf-shell {
   min-height: 100dvh;
   display: flex;
@@ -323,7 +383,7 @@ a:hover {
 .gf-brand {
   font-family: var(--gf-font-display);
   font-weight: 700;
-  font-size: 18px;
+  font-size: var(--gf-text-lg);
   color: var(--gf-ink);
   text-decoration: none;
 }
@@ -476,7 +536,7 @@ a:hover {
 }
 .gf-field > span {
   display: block;
-  font-size: 13px;
+  font-size: var(--gf-text-sm);
   font-weight: 500;
   margin-bottom: var(--gf-space-1);
 }
@@ -502,7 +562,7 @@ a:hover {
   margin: 0 0 var(--gf-space-3);
 }
 .gf-fieldset > legend {
-  font-size: 13px;
+  font-size: var(--gf-text-sm);
   font-weight: 500;
   padding: 0 var(--gf-space-1);
 }

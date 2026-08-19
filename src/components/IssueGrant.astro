@@ -13,7 +13,7 @@ import { GRANT_MESSAGES } from '../lib/grants';
 ---
 
 <section class="gf-card" aria-labelledby="issue-heading">
-  <h2 id="issue-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-3)' }}>Issue a grant</h2>
+  <h2 id="issue-heading" style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-3)' }}>Issue a grant</h2>
 
   <form method="post" action="/api/compliance/auditor-grants">
     <label class="gf-field">
@@ -47,7 +47,7 @@ import { GRANT_MESSAGES } from '../lib/grants';
       <input class="gf-input" type="date" name="expires_at" required />
     </label>
 
-    <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+    <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
       {GRANT_MESSAGES.expiryIsRequested}
     </p>
 

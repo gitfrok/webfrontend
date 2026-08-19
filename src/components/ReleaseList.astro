@@ -37,7 +37,7 @@ const day = (iso: string) => (iso ? iso.slice(0, 10) : '');
 </p>
 
 {releases.length === 0 && (
-  <p class="gf-muted" style={{ fontSize: '14px' }}>{RELEASE_MESSAGES.empty}</p>
+  <p class="gf-muted" style={{ fontSize: 'var(--gf-text-base)' }}>{RELEASE_MESSAGES.empty}</p>
 )}
 
 {releases.map((release) => {
@@ -49,34 +49,34 @@ const day = (iso: string) => (iso ? iso.slice(0, 10) : '');
       <header style={{ display: 'flex', gap: 'var(--gf-space-3)', alignItems: 'center', flexWrap: 'wrap' }}>
         <a
           href={`/repos/${encodeURIComponent(repositoryID)}/releases/${encodeURIComponent(release.tag)}`}
-          style={{ color: 'var(--gf-action-ink)', fontWeight: '600', fontSize: '15px', textDecoration: 'none' }}
+          style={{ color: 'var(--gf-action-ink)', fontWeight: '600', fontSize: 'var(--gf-text-md)', textDecoration: 'none' }}
         >{release.tag}</a>
-        <span class="gf-muted" style={{ fontSize: '13px', fontFamily: 'var(--gf-font-code)' }} title={release.published_commit}>
+        <span class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', fontFamily: 'var(--gf-font-code)' }} title={release.published_commit}>
           {shortCommit(release.published_commit)}
         </span>
         {status && (
-          <span class:list={['gf-status', status.tone]} style={{ fontSize: '12px' }}>
+          <span class:list={['gf-status', status.tone]} style={{ fontSize: 'var(--gf-text-xs)' }}>
             {status.descriptor.label}
           </span>
         )}
       </header>
 
       {agreement === 'moved' && (
-        <p class="gf-note" style={{ borderLeftColor: 'var(--gf-warn-ink)', margin: 'var(--gf-space-2) 0 0', fontSize: '13px' }}>
+        <p class="gf-note" style={{ borderLeftColor: 'var(--gf-warn-ink)', margin: 'var(--gf-space-2) 0 0', fontSize: 'var(--gf-text-sm)' }}>
           {RELEASE_MESSAGES.tagMoved}
         </p>
       )}
       {agreement === 'gone' && (
-        <p class="gf-note" style={{ borderLeftColor: 'var(--gf-ink-muted)', margin: 'var(--gf-space-2) 0 0', fontSize: '13px' }}>
+        <p class="gf-note" style={{ borderLeftColor: 'var(--gf-ink-muted)', margin: 'var(--gf-space-2) 0 0', fontSize: 'var(--gf-text-sm)' }}>
           {RELEASE_MESSAGES.tagGone}
         </p>
       )}
 
       {release.notes && (
-        <p style={{ margin: 'var(--gf-space-2) 0 0', fontSize: '14px', whiteSpace: 'pre-wrap' }}>{release.notes}</p>
+        <p style={{ margin: 'var(--gf-space-2) 0 0', fontSize: 'var(--gf-text-base)', whiteSpace: 'pre-wrap' }}>{release.notes}</p>
       )}
 
-      <p class="gf-muted" style={{ margin: 'var(--gf-space-2) 0 0', fontSize: '12px' }}>
+      <p class="gf-muted" style={{ margin: 'var(--gf-space-2) 0 0', fontSize: 'var(--gf-text-xs)' }}>
         published by {release.published_by} on {day(release.published_at)}
         {release.notes_updated_at && <> · notes edited {day(release.notes_updated_at)}</>}
       </p>

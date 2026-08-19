@@ -5,6 +5,7 @@
 import { file, history, blame } from '../../../../../lib/bff';
 import type { HistoryView, BlameView as BlameViewShape } from '../../../../../lib/bff';
 import Layout from '../../../../../layouts/Layout.astro';
+import PageShell from '../../../../../components/PageShell.astro';
 import CommandPalette from '../../../../../components/CommandPalette';
 import RepoHeader from '../../../../../components/RepoHeader.astro';
 import CommitHistory from '../../../../../components/CommitHistory.astro';
@@ -64,6 +65,7 @@ const rawHref = `/repos/${repositoryID}/raw/${encodeURIComponent(revision!)}/${f
 ---
 
 <Layout title={`${filePath} @ ${revision}`}>
+  <PageShell title={`${repositoryID} file`} measure="full" headingHidden>
   <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
   <RepoHeader title={filePath} revision={revision} actionHref={rawHref} actionLabel="raw" />
 
@@ -73,7 +75,7 @@ const rawHref = `/repos/${repositoryID}/raw/${encodeURIComponent(revision!)}/${f
 
   {/* The three readings of one file, as links rather than a script: content,
       who touched which lines, and what happened to it over time. */}
-  <nav aria-label="File views" style={{ display: 'flex', gap: 'var(--gf-space-3)', margin: 'var(--gf-space-3) 0', fontSize: '14px' }}>
+  <nav aria-label="File views" style={{ display: 'flex', gap: 'var(--gf-space-3)', margin: 'var(--gf-space-3) 0', fontSize: 'var(--gf-text-base)' }}>
     <a href={viewHref('')} aria-current={view === '' ? 'page' : undefined}
        style={{ color: 'var(--gf-action-ink)' }}>Content</a>
     <a href={viewHref('blame')} aria-current={view === 'blame' ? 'page' : undefined}
@@ -91,7 +93,7 @@ const rawHref = `/repos/${repositoryID}/raw/${encodeURIComponent(revision!)}/${f
 
   {view === 'blame' && blameError && (
     <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+      <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
       {' '}{COMMIT_MESSAGES.blameUnavailable}
     </p>
   )}
@@ -101,11 +103,12 @@ const rawHref = `/repos/${repositoryID}/raw/${encodeURIComponent(revision!)}/${f
 
   {view === 'history' && historyError && (
     <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+      <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
       {' '}{COMMIT_MESSAGES.historyUnavailable}
     </p>
   )}
   {view === 'history' && fileHistory && (
     <CommitHistory commits={fileHistory.commits} nextHref={historyNextHref} />
   )}
+  </PageShell>
 </Layout>

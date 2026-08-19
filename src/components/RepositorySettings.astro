@@ -27,12 +27,12 @@ const archival = describeStatus(archivalStatusKey(settings.archived_at));
 const settingsAction = `/api/repos/${encodeURIComponent(repositoryID)}/settings`;
 ---
 
-<p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-4)' }}>
+<p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-4)' }}>
   {SETTINGS_MESSAGES.scope}
 </p>
 
 <section class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
-  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>Name and description</h2>
+  <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-3)' }}>Name and description</h2>
   <form method="post" action={settingsAction}>
     <label class="gf-field">
       <span>Name</span>
@@ -45,7 +45,7 @@ const settingsAction = `/api/repos/${encodeURIComponent(repositoryID)}/settings`
     <button type="submit" class="gf-btn gf-btn-primary">Save settings</button>
   </form>
   {settings.settings_updated_at && (
-    <p class="gf-muted" style={{ fontSize: '13px', margin: 'var(--gf-space-3) 0 0' }}>
+    <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: 'var(--gf-space-3) 0 0' }}>
       Last changed by <code>{settings.settings_updated_by}</code> at
       {' '}<time datetime={settings.settings_updated_at}>{settings.settings_updated_at}</time>.
     </p>
@@ -53,20 +53,20 @@ const settingsAction = `/api/repos/${encodeURIComponent(repositoryID)}/settings`
 </section>
 
 <section class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
-  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>
+  <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-3)' }}>
     Archived state
     {/*
       The glyph comes from the tone's ::before rule in tokens.css — the badge
       carries a shape channel whether or not this markup remembers to. Rendering
       the glyph here too printed it twice.
     */}
-    {' '}<span class:list={['gf-status', archival.tone]} style={{ fontSize: '13px' }}>
+    {' '}<span class:list={['gf-status', archival.tone]} style={{ fontSize: 'var(--gf-text-sm)' }}>
       {archival.descriptor.label}
     </span>
   </h2>
-  <p style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>{archivalMeaning(settings.archived_at)}</p>
+  <p style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>{archivalMeaning(settings.archived_at)}</p>
   {archived && settings.archived_at && (
-    <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+    <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
       Archived at <time datetime={settings.archived_at}>{settings.archived_at}</time>.
     </p>
   )}
@@ -85,7 +85,7 @@ const settingsAction = `/api/repos/${encodeURIComponent(repositoryID)}/settings`
 </section>
 
 <section class="gf-card">
-  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>What is not a setting here</h2>
-  <p style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>{SETTINGS_MESSAGES.notSettings}</p>
-  <p style={{ fontSize: '13px', margin: '0' }}>{SETTINGS_MESSAGES.noDeletion}</p>
+  <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-3)' }}>What is not a setting here</h2>
+  <p style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>{SETTINGS_MESSAGES.notSettings}</p>
+  <p style={{ fontSize: 'var(--gf-text-sm)', margin: '0' }}>{SETTINGS_MESSAGES.noDeletion}</p>
 </section>

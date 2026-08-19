@@ -5,6 +5,7 @@
 // logs to their own decision — capture, redaction, retention, access and
 // residency — and the page says so rather than leaving a reader to hunt.
 import Layout from '../../layouts/Layout.astro';
+import PageShell from '../../components/PageShell.astro';
 import RunList from '../../components/RunList.astro';
 import { pipelineRuns } from '../../lib/bff';
 import type { RunListView } from '../../lib/bff';
@@ -30,19 +31,18 @@ const nextHref = page?.next_page_token
 ---
 
 <Layout title="Pipelines">
-  <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
-    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Pipelines</h1>
-    <p class="gf-muted" style={{ fontSize: '14px', margin: '0 0 var(--gf-space-4)' }}>
+  <PageShell title="Pipelines" measure="wide">
+    <p class="gf-muted" style={{ fontSize: 'var(--gf-text-base)', margin: '0 0 var(--gf-space-4)' }}>
       What has run, across the repositories your access covers.
     </p>
 
     {loadError ? (
       <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
         {' '}{PIPELINE_MESSAGES.unavailable}
       </p>
     ) : (
       page && <RunList runs={page.runs} nextHref={nextHref} />
     )}
-  </div>
+  </PageShell>
 </Layout>

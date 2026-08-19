@@ -16,6 +16,7 @@
 import { mergeRequest, importedHistory, mergeRequestFindings } from '../../../../lib/bff';
 import type { MRFindingsPage } from '../../../../lib/bff';
 import Layout from '../../../../layouts/Layout.astro';
+import PageShell from '../../../../components/PageShell.astro';
 import CommandPalette from '../../../../components/CommandPalette';
 import ImportedHistory from '../../../../components/ImportedHistory.astro';
 import MRFindings from '../../../../components/MRFindings.astro';
@@ -77,7 +78,7 @@ if (mr) {
 
 <Layout title={mr ? `${mr.title} · ${repositoryID}` : `${repositoryID} MR`}>
   <CommandPalette client:load repositoryID={repositoryID!} revision="main" />
-  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 16px' }}>
+  <PageShell title={mr ? mr.title : `${repositoryID} merge request`} measure="prose" headingHidden>
     <ActionOutcome outcomeKey={outcomeKey} />
 
     {loadError && (
@@ -86,22 +87,22 @@ if (mr) {
 
     {mr && (
       <>
-        <header style={{ padding: '16px 0', borderBottom: '1px solid var(--gf-line)' }}>
-          <h1 style={{ fontSize: '20px', margin: '0px' }}>{mr.title}</h1>
-          <p style={{ color: 'var(--gf-ink-muted)', margin: '8px 0 0', fontSize: '14px' }}>
+        <header style={{ padding: 'var(--gf-space-4) 0', borderBottom: '1px solid var(--gf-line)' }}>
+          <h1 style={{ fontSize: 'var(--gf-text-xl)', margin: '0' }}>{mr.title}</h1>
+          <p style={{ color: 'var(--gf-ink-muted)', margin: 'var(--gf-space-2) 0 0', fontSize: 'var(--gf-text-base)' }}>
             {mr.state} · {mr.source_ref} → {mr.target_ref}
           </p>
         </header>
 
-        {mr.description && <p style={{ margin: '16px 0' }}>{mr.description}</p>}
+        {mr.description && <p style={{ margin: 'var(--gf-space-4) 0' }}>{mr.description}</p>}
 
-        <div style={{ display: 'flex', gap: '12px', margin: '16px 0' }}>
-          <a href={diffHref} style={{ color: 'var(--gf-action-ink)', textDecoration: 'none', fontSize: '14px' }}>
+        <div style={{ display: 'flex', gap: 'var(--gf-space-3)', margin: 'var(--gf-space-4) 0' }}>
+          <a href={diffHref} style={{ color: 'var(--gf-action-ink)', textDecoration: 'none', fontSize: 'var(--gf-text-base)' }}>
             View diff
           </a>
         </div>
 
-        <p style={{ color: 'var(--gf-ink-muted)', fontSize: '13px' }}>
+        <p style={{ color: 'var(--gf-ink-muted)', fontSize: 'var(--gf-text-sm)' }}>
           Head revision {mr.head_revision.slice(0, 8)} · opened by {mr.creator_id} · version {mr.version}
         </p>
 
@@ -145,5 +146,5 @@ if (mr) {
       </p>
     )}
     <ImportedHistory records={imported} />
-  </div>
+  </PageShell>
 </Layout>

@@ -26,14 +26,14 @@ const nextHref = nextPageToken ? `/?page_token=${encodeURIComponent(nextPageToke
   </p>
 )}
 
-<ul style={{ listStyle: 'none', padding: '0px', margin: '0px' }}>
+<ul style={{ listStyle: 'none', padding: '0', margin: '0' }}>
   {repositories.map((repo) => (
     <li class="gf-card" style={{ marginBottom: 'var(--gf-space-3)' }}>
       <a
         href={`/repos/${encodeURIComponent(repo.repository_id)}/tree/main/`}
-        style={{ color: 'var(--gf-action-ink)', fontWeight: '600', fontSize: '15px', textDecoration: 'none' }}
+        style={{ color: 'var(--gf-action-ink)', fontWeight: '600', fontSize: 'var(--gf-text-md)', textDecoration: 'none' }}
       >{repo.name}</a>
-      <p class="gf-muted" style={{ margin: 'var(--gf-space-1) 0 0', fontSize: '13px', fontFamily: 'var(--gf-font-code)' }}>
+      <p class="gf-muted" style={{ margin: 'var(--gf-space-1) 0 0', fontSize: 'var(--gf-text-sm)', fontFamily: 'var(--gf-font-code)' }}>
         {repo.repository_id}
       </p>
     </li>

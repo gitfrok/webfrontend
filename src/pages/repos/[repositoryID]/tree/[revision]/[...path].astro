@@ -6,6 +6,7 @@
 import { tree } from '../../../../../lib/bff';
 import type { BrowserTreeEntry, BrowserEntryKind } from '../../../../../gen/proto/bff/v1/browser_pb';
 import Layout from '../../../../../layouts/Layout.astro';
+import PageShell from '../../../../../components/PageShell.astro';
 import CommandPalette from '../../../../../components/CommandPalette';
 import RepoHeader from '../../../../../components/RepoHeader.astro';
 import OpenMergeRequest from '../../../../../components/OpenMergeRequest.astro';
@@ -35,6 +36,7 @@ const outcomeKey = Astro.url.searchParams.get('mr_outcome');
 ---
 
 <Layout title={`${repositoryID} @ ${revision}`}>
+  <PageShell title={`${repositoryID} tree`} measure="full" headingHidden>
   <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
   <RepoHeader title={repositoryID!} revision={revision} />
 
@@ -83,4 +85,5 @@ const outcomeKey = Astro.url.searchParams.get('mr_outcome');
       More entries exist; page through with a page token.
     </p>
   )}
+  </PageShell>
 </Layout>

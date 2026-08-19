@@ -11,6 +11,7 @@
 // list into "nothing is indexed" — different facts that would otherwise
 // collapse into each other (SPEC-0049 AC6).
 import Layout from '../../layouts/Layout.astro';
+import PageShell from '../../components/PageShell.astro';
 import SearchResults from '../../components/SearchResults.astro';
 import { searchCode, searchIndexStatus, SEARCH_MODES, type SearchMode } from '../../lib/bff';
 import type { SearchPageView, IndexStatusPageView } from '../../lib/bff';
@@ -48,9 +49,8 @@ const freshness = readIndexFreshness(status);
 ---
 
 <Layout title={query ? `Search — ${query}` : 'Search'}>
-  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
-    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Code search</h1>
-    <p class="gf-muted" style={{ fontSize: '14px', margin: '0 0 var(--gf-space-4)' }}>
+  <PageShell title="Code search" measure="prose">
+    <p class="gf-muted" style={{ fontSize: 'var(--gf-text-base)', margin: '0 0 var(--gf-space-4)' }}>
       Scope is decided by the server from your access at the moment you search. There is no
       repository selector because a query cannot carry one.
     </p>
@@ -77,7 +77,7 @@ const freshness = readIndexFreshness(status);
 
     {queryRefused && (
       <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
         {' '}{SEARCH_MESSAGES.refused}
       </p>
     )}
@@ -92,5 +92,5 @@ const freshness = readIndexFreshness(status);
         />
       </div>
     )}
-  </div>
+  </PageShell>
 </Layout>

@@ -53,8 +53,8 @@ export default function SecurityTriage({ findingID, repositoryID }: Props) {
   };
 
   return (
-    <div style={{ padding: '12px 0 4px', borderTop: '1px solid var(--gf-line)', marginTop: 12 }}>
-      <div id={labelID} style={{ fontSize: 12, color: 'var(--gf-ink-muted)', marginBottom: 6 }}>
+    <div style={{ padding: 'var(--gf-space-3) 0 var(--gf-space-1)', borderTop: '1px solid var(--gf-line)', marginTop: 12 }}>
+      <div id={labelID} style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', marginBottom: 6 }}>
         Record a triage decision for repository {repositoryID}. The decision is authorized, audited
         and attached to this finding's identity — it survives re-scans.
       </div>
@@ -68,10 +68,10 @@ export default function SecurityTriage({ findingID, repositoryID }: Props) {
           width: '100%',
           minHeight: 56,
           resize: 'vertical',
-          padding: '6px 8px',
-          fontSize: 13,
+          padding: 'var(--gf-space-1) var(--gf-space-2)',
+          fontSize: 'var(--gf-text-sm)',
           border: '1px solid var(--gf-line)',
-          borderRadius: 6,
+          borderRadius: 'var(--gf-radius-control)',
           fontFamily: 'inherit',
           boxSizing: 'border-box',
         }}
@@ -84,10 +84,10 @@ export default function SecurityTriage({ findingID, repositoryID }: Props) {
             disabled={busy}
             onClick={() => decide(decision.state)}
             style={{
-              padding: '4px 12px',
-              fontSize: 13,
+              padding: 'var(--gf-space-1) var(--gf-space-3)',
+              fontSize: 'var(--gf-text-sm)',
               border: '1px solid var(--gf-line)',
-              borderRadius: 6,
+              borderRadius: 'var(--gf-radius-control)',
               background: recorded?.state === decision.state ? 'var(--gf-diff-add-bg)' : 'var(--gf-soft)',
               color: 'var(--gf-ink)',
               cursor: busy ? 'default' : 'pointer',
@@ -98,7 +98,7 @@ export default function SecurityTriage({ findingID, repositoryID }: Props) {
           </button>
         ))}
       </div>
-      <div aria-live="polite" style={{ marginTop: 8, fontSize: 13 }}>
+      <div aria-live="polite" style={{ marginTop: 8, fontSize: 'var(--gf-text-sm)' }}>
         {busy && <span style={{ color: 'var(--gf-ink-muted)' }}>Recording…</span>}
         {error && <span style={{ color: 'var(--gf-danger-ink)' }}>Triage unavailable. Check your session.</span>}
         {recorded && !busy && !error && (

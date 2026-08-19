@@ -74,19 +74,19 @@ function deepLink(findingID: string): string {
 
 <section
   aria-label="Security findings introduced by this merge request"
-  style={{ margin: '24px 0', border: '1px solid var(--gf-line)', borderRadius: '8px', overflow: 'hidden' }}
+  style={{ margin: 'var(--gf-space-6) 0', border: '1px solid var(--gf-line)', borderRadius: 'var(--gf-radius-control)', overflow: 'hidden' }}
 >
   <header
-    style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', padding: '10px 16px', background: 'var(--gf-soft)', borderBottom: '1px solid var(--gf-line)' }}
+    style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--gf-space-2)', padding: 'var(--gf-space-2) var(--gf-space-4)', background: 'var(--gf-soft)', borderBottom: '1px solid var(--gf-line)' }}
   >
-    <h2 style={{ fontSize: '14px', margin: '0px', marginRight: 'auto' }}>Security findings</h2>
+    <h2 style={{ fontSize: 'var(--gf-text-base)', margin: '0', marginRight: 'auto' }}>Security findings</h2>
     {severityCounts.map((entry) => (
-      <span class:list={['gf-status', entry.style.tone]} style={{ fontSize: '12px' }}>
+      <span class:list={['gf-status', entry.style.tone]} style={{ fontSize: 'var(--gf-text-xs)' }}>
         {entry.count} {entry.label}
       </span>
     ))}
     {summary.stale && (
-      <span style={{ fontSize: '12px', color: 'var(--gf-warn-ink)', fontStyle: 'italic' }}>
+      <span style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-warn-ink)', fontStyle: 'italic' }}>
         attribution stale — being recomputed
       </span>
     )}
@@ -95,20 +95,20 @@ function deepLink(findingID: string): string {
   {unavailable && (
     <div
       role="status"
-      style={{ margin: '16px', padding: '12px 16px', border: '1px solid var(--gf-warn)', borderRadius: '8px', background: 'var(--gf-diff-del-bg)' }}
+      style={{ margin: 'var(--gf-space-4)', padding: 'var(--gf-space-3) var(--gf-space-4)', border: '1px solid var(--gf-warn)', borderRadius: 'var(--gf-radius-control)', background: 'var(--gf-diff-del-bg)' }}
     >
-      <p style={{ margin: '0px', fontWeight: 600, fontSize: '14px' }}>
+      <p style={{ margin: '0', fontWeight: 600, fontSize: 'var(--gf-text-base)' }}>
         Attribution unavailable
-        <code style={{ marginLeft: '8px', fontSize: '11px', fontWeight: 400, color: 'var(--gf-ink-muted)', background: 'var(--gf-surface)', padding: '1px 6px', borderRadius: '4px' }}>
+        <code style={{ marginLeft: 'var(--gf-space-2)', fontSize: 'var(--gf-text-xs)', fontWeight: 400, color: 'var(--gf-ink-muted)', background: 'var(--gf-surface)', padding: 'var(--gf-space-1) var(--gf-space-1)', borderRadius: 'var(--gf-radius-control)' }}>
           UNAVAILABLE
         </code>
       </p>
-      <p style={{ margin: '6px 0 0', fontSize: '13px', color: 'var(--gf-warn-ink)' }}>
+      <p style={{ margin: 'var(--gf-space-1) 0 0', fontSize: 'var(--gf-text-sm)', color: 'var(--gf-warn-ink)' }}>
         {summary.unavailable_reason
           ? unavailableReasons[summary.unavailable_reason] ?? 'the comparison cannot be computed'
           : 'the comparison cannot be computed'}
         {summary.unavailable_reason && (
-          <code style={{ marginLeft: '6px', fontSize: '11px', color: 'var(--gf-ink-muted)', background: 'var(--gf-surface)', padding: '1px 6px', borderRadius: '4px' }}>
+          <code style={{ marginLeft: 'var(--gf-space-1)', fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', background: 'var(--gf-surface)', padding: 'var(--gf-space-1) var(--gf-space-1)', borderRadius: 'var(--gf-radius-control)' }}>
             {summary.unavailable_reason}
           </code>
         )}
@@ -119,18 +119,18 @@ function deepLink(findingID: string): string {
   )}
 
   {!unavailable && (
-    <p style={{ margin: '12px 16px 0', fontSize: '12px', color: 'var(--gf-ink-muted)' }}>
+    <p style={{ margin: 'var(--gf-space-3) var(--gf-space-4) 0', fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)' }}>
       Compared head <code>{summary.head_revision.slice(0, 8)}</code> against merge base{' '}
       <code>{summary.merge_base_revision.slice(0, 8)}</code>.
     </p>
   )}
 
   {computedEmpty && (
-    <p style={{ margin: '16px', fontSize: '14px', color: 'var(--gf-ink-muted)' }}>No findings introduced by this merge request.</p>
+    <p style={{ margin: 'var(--gf-space-4)', fontSize: 'var(--gf-text-base)', color: 'var(--gf-ink-muted)' }}>No findings introduced by this merge request.</p>
   )}
 
   {findings.length > 0 && (
-    <ul style={{ listStyle: 'none', margin: '0px', padding: '0px' }}>
+    <ul style={{ listStyle: 'none', margin: '0', padding: '0' }}>
       {findings.map((view) => {
         const severityStyle = describeStatus(view.finding.severity as StatusKey);
         const attribution = attributionLabels[view.attribution] ?? attributionLabels.UNAVAILABLE;
@@ -138,21 +138,21 @@ function deepLink(findingID: string): string {
         return (
           <li
             id={`finding-${view.finding.finding_id}`}
-            style={{ padding: '12px 16px', borderBottom: '1px solid var(--gf-line)', fontSize: '13px' }}
+            style={{ padding: 'var(--gf-space-3) var(--gf-space-4)', borderBottom: '1px solid var(--gf-line)', fontSize: 'var(--gf-text-sm)' }}
           >
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
               {/* Glyph, word and rank — the severity reads with the tint
                   removed entirely (SPEC-0047 AC6). */}
-              <span class:list={['gf-status', severityStyle.tone]} style={{ fontSize: '12px' }}>
+              <span class:list={['gf-status', severityStyle.tone]} style={{ fontSize: 'var(--gf-text-xs)' }}>
                 {severityStyle.descriptor.label} {severityStyle.descriptor.rank}/4
               </span>
               <span style={{ fontWeight: 600 }}>{view.finding.rule_id}</span>
               <span style={{ color: 'var(--gf-ink-muted)' }}>{view.finding.scanner_class}</span>
               <span
                 style={{
-                  fontSize: '12px',
-                  padding: '1px 8px',
-                  borderRadius: '999px',
+                  fontSize: 'var(--gf-text-xs)',
+                  padding: 'var(--gf-space-1) var(--gf-space-2)',
+                  borderRadius: 'var(--gf-radius-pill)',
                   color: attribution.color,
                   background: attribution.background,
                 }}
@@ -162,7 +162,7 @@ function deepLink(findingID: string): string {
               <span
                 style={{
                   marginLeft: 'auto',
-                  fontSize: '12px',
+                  fontSize: 'var(--gf-text-xs)',
                   fontWeight: view.triage ? 600 : 400,
                   color: view.triage ? 'var(--gf-info-ink)' : 'var(--gf-ink-muted)',
                 }}
@@ -170,20 +170,20 @@ function deepLink(findingID: string): string {
                 {triageLabel || 'Awaiting triage'}
               </span>
             </div>
-            <p style={{ margin: '6px 0 0', color: 'var(--gf-ink-muted)' }}>
-              <code style={{ fontSize: '12px' }}>{view.head_location.artifact_path}</code>
+            <p style={{ margin: 'var(--gf-space-1) 0 0', color: 'var(--gf-ink-muted)' }}>
+              <code style={{ fontSize: 'var(--gf-text-xs)' }}>{view.head_location.artifact_path}</code>
               {view.head_location.enclosing_content && (
                 <>
-                  {' '}· <code style={{ fontSize: '12px' }}>{view.head_location.enclosing_content}</code>
+                  {' '}· <code style={{ fontSize: 'var(--gf-text-xs)' }}>{view.head_location.enclosing_content}</code>
                 </>
               )}
             </p>
             {view.triage && view.triage.justification && (
-              <p style={{ margin: '4px 0 0', fontSize: '12px', color: 'var(--gf-ink-muted)', fontStyle: 'italic' }}>
+              <p style={{ margin: 'var(--gf-space-1) 0 0', fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', fontStyle: 'italic' }}>
                 Triage ({triageLabel}): “{view.triage.justification}”
               </p>
             )}
-            <a href={deepLink(view.finding.finding_id)} style={{ color: 'var(--gf-action-ink)', textDecoration: 'none', fontSize: '12px' }}>
+            <a href={deepLink(view.finding.finding_id)} style={{ color: 'var(--gf-action-ink)', textDecoration: 'none', fontSize: 'var(--gf-text-xs)' }}>
               View in diff →
             </a>
           </li>
@@ -193,7 +193,7 @@ function deepLink(findingID: string): string {
   )}
 
   {nextPageToken && (
-    <p style={{ margin: '0px', padding: '12px 16px', borderTop: '1px solid var(--gf-line)', fontSize: '13px' }}>
+    <p style={{ margin: '0', padding: 'var(--gf-space-3) var(--gf-space-4)', borderTop: '1px solid var(--gf-line)', fontSize: 'var(--gf-text-sm)' }}>
       <a
         href={`?mr_findings_page_token=${encodeURIComponent(nextPageToken)}`}
         style={{ color: 'var(--gf-action-ink)', textDecoration: 'none' }}

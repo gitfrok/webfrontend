@@ -22,20 +22,20 @@ const action = `/api/repos/${encodeURIComponent(repositoryID)}/merge_requests/${
 ---
 
 <section class="gf-card" style={{ margin: 'var(--gf-space-4) 0' }}>
-  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-2)' }}>Issues in your tracker</h2>
-  <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+  <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>Issues in your tracker</h2>
+  <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
     {EXTERNAL_ISSUE_MESSAGES.whatThisIs}
   </p>
 
   {references.length === 0 ? (
-    <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+    <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
       {EXTERNAL_ISSUE_MESSAGES.empty}
     </p>
   ) : (
     <ul style={{ listStyle: 'none', padding: '0', margin: '0 0 var(--gf-space-3)' }}>
       {references.map((reference) => (
         <li style={{ padding: 'var(--gf-space-2) 0', borderBottom: '1px solid var(--gf-line)' }}>
-          <span class="gf-muted" style={{ fontSize: '13px' }}>{reference.tracker}</span>
+          <span class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)' }}>{reference.tracker}</span>
           {' '}
           {/*
             A link only when the stored address is https. The backend refuses
@@ -49,12 +49,12 @@ const action = `/api/repos/${encodeURIComponent(repositoryID)}/merge_requests/${
             <span>{reference.issue_key}</span>
           )}
           {isSafeIssueURL(reference.url) ? (
-            <span class="gf-muted" style={{ fontSize: '13px' }}> at {issueHost(reference.url)}</span>
+            <span class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)' }}> at {issueHost(reference.url)}</span>
           ) : (
-            <span class="gf-muted" style={{ fontSize: '13px' }}> — {EXTERNAL_ISSUE_MESSAGES.unsafeURL}</span>
+            <span class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)' }}> — {EXTERNAL_ISSUE_MESSAGES.unsafeURL}</span>
           )}
           {reference.linked_by && (
-            <span class="gf-muted" style={{ fontSize: '13px' }}>
+            <span class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)' }}>
               {' · '}referenced by {reference.linked_by}
               {reference.linked_at && <> at <time datetime={reference.linked_at}>{reference.linked_at}</time></>}
             </span>
@@ -62,7 +62,7 @@ const action = `/api/repos/${encodeURIComponent(repositoryID)}/merge_requests/${
           <form method="post" action={`${action}/unlink`} style={{ display: 'inline' }}>
             <input type="hidden" name="tracker" value={reference.tracker} />
             <input type="hidden" name="issue_key" value={reference.issue_key} />
-            <button type="submit" class="gf-btn" style={{ fontSize: '12px', marginLeft: 'var(--gf-space-2)' }}>
+            <button type="submit" class="gf-btn" style={{ fontSize: 'var(--gf-text-xs)', marginLeft: 'var(--gf-space-2)' }}>
               Remove reference
             </button>
           </form>
@@ -87,7 +87,7 @@ const action = `/api/repos/${encodeURIComponent(repositoryID)}/merge_requests/${
     <button type="submit" class="gf-btn gf-btn-primary">Reference this issue</button>
   </form>
 
-  <p class="gf-muted" style={{ fontSize: '13px', margin: 'var(--gf-space-3) 0 0' }}>
+  <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: 'var(--gf-space-3) 0 0' }}>
     {EXTERNAL_ISSUE_MESSAGES.mergingClosesNothing}
   </p>
 </section>

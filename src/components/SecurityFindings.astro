@@ -97,31 +97,31 @@ function nextHref(token: string): string {
 ---
 
 <section aria-label="Security dashboard">
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '24px', alignItems: 'flex-start', margin: '16px 0' }}>
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gf-space-6)', alignItems: 'flex-start', margin: 'var(--gf-space-4) 0' }}>
     <div
       style={{
-        padding: '10px 16px',
+        padding: 'var(--gf-space-2) var(--gf-space-4)',
         border: '1px solid var(--gf-line)',
-        borderRadius: '6px',
+        borderRadius: 'var(--gf-radius-control)',
         background: 'var(--gf-soft)',
-        minWidth: '120px',
+        minWidth: '15ch',
       }}
     >
-      <div style={{ fontSize: '24px', fontWeight: 600, lineHeight: 1.2 }}>{summary.total_count}</div>
-      <div style={{ fontSize: '12px', color: 'var(--gf-ink-muted)' }}>findings</div>
+      <div style={{ fontSize: 'var(--gf-text-2xl)', fontWeight: 600, lineHeight: 1.2 }}>{summary.total_count}</div>
+      <div style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)' }}>findings</div>
     </div>
 
     {summary.facets.map((facet) => (
-      <div style={{ minWidth: '160px' }}>
-        <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--gf-ink-muted)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+      <div style={{ minWidth: '20ch' }}>
+        <div style={{ fontSize: 'var(--gf-text-xs)', fontWeight: 600, color: 'var(--gf-ink-muted)', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
           {facetTitles[facet.dimension] ?? facet.dimension}
         </div>
-        <ul style={{ listStyle: 'none', margin: '4px 0 0', padding: '0px' }}>
+        <ul style={{ listStyle: 'none', margin: 'var(--gf-space-1) 0 0', padding: '0' }}>
           {facet.values.map((value) => {
             const filterKey = facetFilterKeys[facet.dimension];
             const active = filterKey !== undefined && filters[filterKey] === value.value;
             return (
-              <li style={{ fontSize: '13px', padding: '1px 0' }}>
+              <li style={{ fontSize: 'var(--gf-text-sm)', padding: 'var(--gf-space-1) 0' }}>
                 {filterKey !== undefined ? (
                   <a
                     href={queryOf({ key: filterKey, value: value.value })}
@@ -147,74 +147,74 @@ function nextHref(token: string): string {
     ))}
   </div>
 
-  <form method="get" action="/security" aria-label="Filter findings" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'flex-end', padding: '12px 0', borderTop: '1px solid var(--gf-line)', borderBottom: '1px solid var(--gf-line)' }}>
-    <label style={{ fontSize: '12px', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+  <form method="get" action="/security" aria-label="Filter findings" style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gf-space-3)', alignItems: 'flex-end', padding: 'var(--gf-space-3) 0', borderTop: '1px solid var(--gf-line)', borderBottom: '1px solid var(--gf-line)' }}>
+    <label style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: 'var(--gf-space-1)' }}>
       Repository
-      <input name="repository" value={filters.repository ?? ''} style={{ padding: '4px 8px', fontSize: '13px', border: '1px solid var(--gf-line)', borderRadius: '6px', minWidth: '160px' }} />
+      <input name="repository" value={filters.repository ?? ''} style={{ padding: 'var(--gf-space-1) var(--gf-space-2)', fontSize: 'var(--gf-text-sm)', border: '1px solid var(--gf-line)', borderRadius: 'var(--gf-radius-control)', minWidth: '20ch' }} />
     </label>
-    <label style={{ fontSize: '12px', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <label style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: 'var(--gf-space-1)' }}>
       Scanner class
-      <select name="scanner_class" style={{ padding: '4px 8px', fontSize: '13px', border: '1px solid var(--gf-line)', borderRadius: '6px' }}>
+      <select name="scanner_class" style={{ padding: 'var(--gf-space-1) var(--gf-space-2)', fontSize: 'var(--gf-text-sm)', border: '1px solid var(--gf-line)', borderRadius: 'var(--gf-radius-control)' }}>
         <option value="">Any</option>
         {scannerClasses.map((option) => (
           <option value={option} selected={filters.scanner_class === option}>{option}</option>
         ))}
       </select>
     </label>
-    <label style={{ fontSize: '12px', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <label style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: 'var(--gf-space-1)' }}>
       Severity
-      <select name="severity" style={{ padding: '4px 8px', fontSize: '13px', border: '1px solid var(--gf-line)', borderRadius: '6px' }}>
+      <select name="severity" style={{ padding: 'var(--gf-space-1) var(--gf-space-2)', fontSize: 'var(--gf-text-sm)', border: '1px solid var(--gf-line)', borderRadius: 'var(--gf-radius-control)' }}>
         <option value="">Any</option>
         {severities.map((option) => (
           <option value={option} selected={filters.severity === option}>{option}</option>
         ))}
       </select>
     </label>
-    <label style={{ fontSize: '12px', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <label style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: 'var(--gf-space-1)' }}>
       Lifecycle
-      <select name="lifecycle" style={{ padding: '4px 8px', fontSize: '13px', border: '1px solid var(--gf-line)', borderRadius: '6px' }}>
+      <select name="lifecycle" style={{ padding: 'var(--gf-space-1) var(--gf-space-2)', fontSize: 'var(--gf-text-sm)', border: '1px solid var(--gf-line)', borderRadius: 'var(--gf-radius-control)' }}>
         <option value="">Any</option>
         {lifecycles.map((option) => (
           <option value={option} selected={filters.lifecycle === option}>{option}</option>
         ))}
       </select>
     </label>
-    <label style={{ fontSize: '12px', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <label style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: 'var(--gf-space-1)' }}>
       Min age (days)
-      <input name="min_age_days" type="number" min="0" value={filters.min_age_days ? String(filters.min_age_days) : ''} style={{ padding: '4px 8px', fontSize: '13px', border: '1px solid var(--gf-line)', borderRadius: '6px', width: '90px' }} />
+      <input name="min_age_days" type="number" min="0" value={filters.min_age_days ? String(filters.min_age_days) : ''} style={{ padding: 'var(--gf-space-1) var(--gf-space-2)', fontSize: 'var(--gf-text-sm)', border: '1px solid var(--gf-line)', borderRadius: 'var(--gf-radius-control)', width: '11ch' }} />
     </label>
-    <label style={{ fontSize: '12px', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <label style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: 'var(--gf-space-1)' }}>
       Max age (days)
-      <input name="max_age_days" type="number" min="0" value={filters.max_age_days ? String(filters.max_age_days) : ''} style={{ padding: '4px 8px', fontSize: '13px', border: '1px solid var(--gf-line)', borderRadius: '6px', width: '90px' }} />
+      <input name="max_age_days" type="number" min="0" value={filters.max_age_days ? String(filters.max_age_days) : ''} style={{ padding: 'var(--gf-space-1) var(--gf-space-2)', fontSize: 'var(--gf-text-sm)', border: '1px solid var(--gf-line)', borderRadius: 'var(--gf-radius-control)', width: '11ch' }} />
     </label>
-    <label style={{ fontSize: '12px', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+    <label style={{ fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)', display: 'flex', flexDirection: 'column', gap: 'var(--gf-space-1)' }}>
       Owning team
-      <input name="owning_team" value={filters.owning_team ?? ''} style={{ padding: '4px 8px', fontSize: '13px', border: '1px solid var(--gf-line)', borderRadius: '6px', minWidth: '120px' }} />
+      <input name="owning_team" value={filters.owning_team ?? ''} style={{ padding: 'var(--gf-space-1) var(--gf-space-2)', fontSize: 'var(--gf-text-sm)', border: '1px solid var(--gf-line)', borderRadius: 'var(--gf-radius-control)', minWidth: '15ch' }} />
     </label>
-    <button type="submit" style={{ padding: '5px 16px', fontSize: '13px', border: '1px solid var(--gf-line)', borderRadius: '6px', background: 'var(--gf-success)', color: 'var(--gf-surface)', cursor: 'pointer' }}>
+    <button type="submit" style={{ padding: 'var(--gf-space-1) var(--gf-space-4)', fontSize: 'var(--gf-text-sm)', border: '1px solid var(--gf-line)', borderRadius: 'var(--gf-radius-control)', background: 'var(--gf-success)', color: 'var(--gf-surface)', cursor: 'pointer' }}>
       Apply filters
     </button>
     {hasFilters && (
-      <a href="/security" style={{ fontSize: '13px', color: 'var(--gf-action-ink)', textDecoration: 'none', padding: '5px 0' }}>
+      <a href="/security" style={{ fontSize: 'var(--gf-text-sm)', color: 'var(--gf-action-ink)', textDecoration: 'none', padding: 'var(--gf-space-1) 0' }}>
         Clear filters
       </a>
     )}
   </form>
 
   {findings.length === 0 ? (
-    <p style={{ padding: '24px 0', color: 'var(--gf-ink-muted)', fontSize: '14px' }}>
+    <p style={{ padding: 'var(--gf-space-6) 0', color: 'var(--gf-ink-muted)', fontSize: 'var(--gf-text-base)' }}>
       No findings to show.
     </p>
   ) : (
     <>
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '16px' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 'var(--gf-space-4)' }}>
         <thead>
           <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--gf-line)' }}>
-            <th style={{ padding: '8px 12px', fontSize: '12px', color: 'var(--gf-ink-muted)' }}>Finding</th>
-            <th style={{ padding: '8px 12px', fontSize: '12px', color: 'var(--gf-ink-muted)' }}>Repository</th>
-            <th style={{ padding: '8px 12px', fontSize: '12px', color: 'var(--gf-ink-muted)' }}>Class</th>
-            <th style={{ padding: '8px 12px', fontSize: '12px', color: 'var(--gf-ink-muted)' }}>Severity</th>
-            <th style={{ padding: '8px 12px', fontSize: '12px', color: 'var(--gf-ink-muted)' }}>Lifecycle</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)', fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)' }}>Finding</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)', fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)' }}>Repository</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)', fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)' }}>Class</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)', fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)' }}>Severity</th>
+            <th style={{ padding: 'var(--gf-space-2) var(--gf-space-3)', fontSize: 'var(--gf-text-xs)', color: 'var(--gf-ink-muted)' }}>Lifecycle</th>
           </tr>
         </thead>
         <tbody>
@@ -222,50 +222,50 @@ function nextHref(token: string): string {
             const badge = describeStatus(finding.severity as StatusKey);
             return (
               <tr>
-                <td colspan="5" style={{ padding: '0px', borderBottom: '1px solid var(--gf-line)' }}>
+                <td colspan="5" style={{ padding: '0', borderBottom: '1px solid var(--gf-line)' }}>
                   <details>
-                    <summary style={{ cursor: 'pointer', padding: '10px 12px', listStyle: 'none', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: '8px', alignItems: 'center' }}>
-                      <span style={{ fontSize: '13px' }}>
+                    <summary style={{ cursor: 'pointer', padding: 'var(--gf-space-2) var(--gf-space-3)', listStyle: 'none', display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', gap: 'var(--gf-space-2)', alignItems: 'center' }}>
+                      <span style={{ fontSize: 'var(--gf-text-sm)' }}>
                         <strong style={{ fontWeight: 600 }}>{finding.rule_id || finding.finding_id}</strong>
                         {finding.artifact_path && (
                           <span style={{ color: 'var(--gf-ink-muted)' }}> · {finding.artifact_path}</span>
                         )}
                       </span>
-                      <span style={{ fontSize: '13px', color: 'var(--gf-ink-muted)' }}>{finding.repository_id}</span>
-                      <span style={{ fontSize: '13px', color: 'var(--gf-ink-muted)' }}>{finding.scanner_class}</span>
+                      <span style={{ fontSize: 'var(--gf-text-sm)', color: 'var(--gf-ink-muted)' }}>{finding.repository_id}</span>
+                      <span style={{ fontSize: 'var(--gf-text-sm)', color: 'var(--gf-ink-muted)' }}>{finding.scanner_class}</span>
                       <span>
-                        <span class:list={['gf-status', badge.tone]} style={{ fontSize: '12px' }}>
+                        <span class:list={['gf-status', badge.tone]} style={{ fontSize: 'var(--gf-text-xs)' }}>
                           {badge.descriptor.label} {badge.descriptor.rank}/4
                         </span>
                       </span>
                       {/* Lifecycle was colour-only; it now carries its glyph
                           and word like every other status (AC6). */}
-                      <span class:list={['gf-status', describeStatus(finding.lifecycle as StatusKey).tone]} style={{ fontSize: '12px' }}>
+                      <span class:list={['gf-status', describeStatus(finding.lifecycle as StatusKey).tone]} style={{ fontSize: 'var(--gf-text-xs)' }}>
                         {describeStatus(finding.lifecycle as StatusKey).descriptor.label}
                       </span>
                     </summary>
-                    <div style={{ padding: '0 12px 12px 28px' }}>
-                      <dl style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: '2px 12px', margin: '0px', fontSize: '13px' }}>
+                    <div style={{ padding: '0 var(--gf-space-3) var(--gf-space-3) var(--gf-space-6)' }}>
+                      <dl style={{ display: 'grid', gridTemplateColumns: '140px 1fr', gap: 'var(--gf-space-1) var(--gf-space-3)', margin: '0', fontSize: 'var(--gf-text-sm)' }}>
                         <dt style={{ color: 'var(--gf-ink-muted)' }}>Finding ID</dt>
-                        <dd style={{ margin: '0px' }}>{finding.finding_id}</dd>
+                        <dd style={{ margin: '0' }}>{finding.finding_id}</dd>
                         {finding.component && (
                           <>
                             <dt style={{ color: 'var(--gf-ink-muted)' }}>Component</dt>
-                            <dd style={{ margin: '0px' }}>{finding.component}{finding.component_version ? `@${finding.component_version}` : ''}</dd>
+                            <dd style={{ margin: '0' }}>{finding.component}{finding.component_version ? `@${finding.component_version}` : ''}</dd>
                           </>
                         )}
                         {finding.enclosing_content && (
                           <>
                             <dt style={{ color: 'var(--gf-ink-muted)' }}>Enclosing content</dt>
-                            <dd style={{ margin: '0px' }}>{finding.enclosing_content}</dd>
+                            <dd style={{ margin: '0' }}>{finding.enclosing_content}</dd>
                           </>
                         )}
                         <dt style={{ color: 'var(--gf-ink-muted)' }}>Tool</dt>
-                        <dd style={{ margin: '0px' }}>{finding.tool_name}{finding.tool_version ? ` ${finding.tool_version}` : ''}</dd>
+                        <dd style={{ margin: '0' }}>{finding.tool_name}{finding.tool_version ? ` ${finding.tool_version}` : ''}</dd>
                         <dt style={{ color: 'var(--gf-ink-muted)' }}>First seen</dt>
-                        <dd style={{ margin: '0px' }}>scan {finding.first_seen_scan_id}</dd>
+                        <dd style={{ margin: '0' }}>scan {finding.first_seen_scan_id}</dd>
                         <dt style={{ color: 'var(--gf-ink-muted)' }}>Last seen</dt>
-                        <dd style={{ margin: '0px' }}>scan {finding.last_seen_scan_id}</dd>
+                        <dd style={{ margin: '0' }}>scan {finding.last_seen_scan_id}</dd>
                       </dl>
                       <SecurityTriage client:load findingID={finding.finding_id} repositoryID={finding.repository_id} />
                     </div>
@@ -276,9 +276,9 @@ function nextHref(token: string): string {
           })}
         </tbody>
       </table>
-      <div style={{ padding: '12px 0' }}>
+      <div style={{ padding: 'var(--gf-space-3) 0' }}>
         {nextPageToken && (
-          <a href={nextHref(nextPageToken)} style={{ fontSize: '13px', color: 'var(--gf-action-ink)', textDecoration: 'none' }}>
+          <a href={nextHref(nextPageToken)} style={{ fontSize: 'var(--gf-text-sm)', color: 'var(--gf-action-ink)', textDecoration: 'none' }}>
             Next page →
           </a>
         )}

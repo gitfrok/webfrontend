@@ -8,6 +8,7 @@
 // repositories exist" had no answer the product could stand behind
 // (ADR-0071).
 import Layout from '../layouts/Layout.astro';
+import PageShell from '../components/PageShell.astro';
 import RepositoryList from '../components/RepositoryList.astro';
 import { listRepositories } from '../lib/bff';
 import type { RepositoryListView } from '../lib/bff';
@@ -25,19 +26,18 @@ try {
 ---
 
 <Layout title="gitfrok">
-  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
-    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Repositories</h1>
-    <p class="gf-muted" style={{ fontSize: '14px', margin: '0 0 var(--gf-space-4)' }}>
+  <PageShell title="Repositories" measure="prose">
+    <p class="gf-muted" style={{ fontSize: 'var(--gf-text-base)', margin: '0 0 var(--gf-space-4)' }}>
       What your access covers, decided by the server when you loaded this page.
     </p>
 
     {loadError ? (
       <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
         {' '}{REPOSITORY_MESSAGES.unavailable}
       </p>
     ) : (
       page && <RepositoryList repositories={page.repositories} nextPageToken={page.next_page_token} />
     )}
-  </div>
+  </PageShell>
 </Layout>

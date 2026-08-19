@@ -10,6 +10,7 @@
 // tells the reader they are one permission away from something, and they are
 // not — ADR-0073 defers deciding what a tenant-authored policy even is.
 import Layout from '../../layouts/Layout.astro';
+import PageShell from '../../components/PageShell.astro';
 import { policyBundle, policyDecision } from '../../lib/bff';
 import type { BundleStatusView, DecisionRecordView } from '../../lib/bff';
 import { POLICY_MESSAGES, modeLabel } from '../../lib/policy';
@@ -40,35 +41,34 @@ const day = (iso: string) => (iso ? iso.slice(0, 19).replace('T', ' ') : '');
 ---
 
 <Layout title="Policy">
-  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
-    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Policy</h1>
+  <PageShell title="Policy" measure="prose">
 
     <p class="gf-note" style={{ borderLeftColor: 'var(--gf-info-ink)' }}>
       {POLICY_MESSAGES.authoredInGovernance}
     </p>
 
     <section class="gf-card" aria-labelledby="bundle-heading" style={{ margin: 'var(--gf-space-4) 0' }}>
-      <h2 id="bundle-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-2)' }}>In force</h2>
+      <h2 id="bundle-heading" style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>In force</h2>
       {bundleError ? (
-        <p style={{ margin: '0px', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
-          <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        <p style={{ margin: '0', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
+          <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
           <span>{POLICY_MESSAGES.bundleUnavailable}</span>
         </p>
       ) : bundle && bundle.bundle_revision ? (
-        <p class="gf-muted" style={{ margin: '0px', fontSize: '13px' }}>
+        <p class="gf-muted" style={{ margin: '0', fontSize: 'var(--gf-text-sm)' }}>
           Bundle revision <span style={{ fontFamily: 'var(--gf-font-code)' }}>{bundle.bundle_revision}</span>
           {bundle.loaded_at && <> · loaded {day(bundle.loaded_at)}</>}
         </p>
       ) : (
-        <p class="gf-muted" style={{ margin: '0px', fontSize: '13px' }}>{POLICY_MESSAGES.noRevision}</p>
+        <p class="gf-muted" style={{ margin: '0', fontSize: 'var(--gf-text-sm)' }}>{POLICY_MESSAGES.noRevision}</p>
       )}
     </section>
 
     <section aria-labelledby="decision-heading">
-      <h2 id="decision-heading" style={{ fontSize: '16px', margin: 'var(--gf-space-6) 0 var(--gf-space-2)' }}>
+      <h2 id="decision-heading" style={{ fontSize: 'var(--gf-text-md)', margin: 'var(--gf-space-6) 0 var(--gf-space-2)' }}>
         Look up a decision
       </h2>
-      <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+      <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
         Every decision records the bundle revision that made it. Paste a decision id to see which.
       </p>
 
@@ -82,7 +82,7 @@ const day = (iso: string) => (iso ? iso.slice(0, 19).replace('T', ' ') : '');
 
       {decisionError && (
         <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-          <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+          <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
           {' '}{POLICY_MESSAGES.decisionUnavailable}
         </p>
       )}
@@ -90,29 +90,29 @@ const day = (iso: string) => (iso ? iso.slice(0, 19).replace('T', ' ') : '');
       {decision && outcome && (
         <div class="gf-card">
           <p style={{ margin: '0 0 var(--gf-space-3)', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-3)', flexWrap: 'wrap' }}>
-            <span class:list={['gf-status', outcome.tone]} style={{ fontSize: '13px' }}>
+            <span class:list={['gf-status', outcome.tone]} style={{ fontSize: 'var(--gf-text-sm)' }}>
               {outcome.descriptor.label}
             </span>
-            <strong style={{ fontSize: '14px' }}>{decision.action}</strong>
-            <span class="gf-muted" style={{ fontSize: '13px' }}>
+            <strong style={{ fontSize: 'var(--gf-text-base)' }}>{decision.action}</strong>
+            <span class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)' }}>
               {decision.resource_type} {decision.resource_id}
             </span>
           </p>
-          <dl style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 'var(--gf-space-1) var(--gf-space-3)', fontSize: '13px', margin: '0px' }}>
+          <dl style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 'var(--gf-space-1) var(--gf-space-3)', fontSize: 'var(--gf-text-sm)', margin: '0' }}>
             <dt class="gf-muted">Decided by revision</dt>
-            <dd style={{ margin: '0px', fontFamily: 'var(--gf-font-code)' }}>{decision.policy_revision}</dd>
+            <dd style={{ margin: '0', fontFamily: 'var(--gf-font-code)' }}>{decision.policy_revision}</dd>
 
             <dt class="gf-muted">Mode</dt>
-            <dd style={{ margin: '0px' }}>{modeLabel(decision.mode)}</dd>
+            <dd style={{ margin: '0' }}>{modeLabel(decision.mode)}</dd>
 
             <dt class="gf-muted">Input digest</dt>
-            <dd style={{ margin: '0px', fontFamily: 'var(--gf-font-code)' }}>{decision.input_digest}</dd>
+            <dd style={{ margin: '0', fontFamily: 'var(--gf-font-code)' }}>{decision.input_digest}</dd>
 
             <dt class="gf-muted">Decided at</dt>
-            <dd style={{ margin: '0px' }}>{day(decision.decided_at)}</dd>
+            <dd style={{ margin: '0' }}>{day(decision.decided_at)}</dd>
           </dl>
         </div>
       )}
     </section>
-  </div>
+  </PageShell>
 </Layout>

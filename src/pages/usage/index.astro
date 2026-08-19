@@ -12,6 +12,7 @@
 // the BFF sends, and this page renders no view of its own (SPEC-0001).
 import { usageView, type UsageViewResponse } from '../../lib/bff';
 import Layout from '../../layouts/Layout.astro';
+import PageShell from '../../components/PageShell.astro';
 import UsageViewComponent from '../../components/UsageView.astro';
 
 let loadError = false;
@@ -24,21 +25,21 @@ try {
 ---
 
 <Layout title="Usage">
-  <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 16px' }}>
-    <header style={{ padding: '16px 0', borderBottom: '1px solid var(--gf-line)' }}>
-      <h1 style={{ fontSize: '20px', margin: '0px' }}>Usage</h1>
-      <p style={{ color: 'var(--gf-ink-muted)', margin: '4px 0 0', fontSize: '14px' }}>
+  <PageShell title="Usage" measure="wide" headingHidden>
+    <header style={{ padding: 'var(--gf-space-4) 0', borderBottom: '1px solid var(--gf-line)' }}>
+      <h1 style={{ fontSize: 'var(--gf-text-xl)', margin: '0' }}>Usage</h1>
+      <p style={{ color: 'var(--gf-ink-muted)', margin: 'var(--gf-space-1) 0 0', fontSize: 'var(--gf-text-base)' }}>
         Fair-use consumption per dimension — counted by the control plane
         from the telemetry it received.
       </p>
     </header>
 
     {loadError && (
-      <p style={{ color: 'var(--gf-danger-ink)', padding: '16px 0' }}>
+      <p style={{ color: 'var(--gf-danger-ink)', padding: 'var(--gf-space-4) 0' }}>
         The usage view is unavailable. Check your session.
       </p>
     )}
 
     {!loadError && <UsageViewComponent view={view} />}
-  </div>
+  </PageShell>
 </Layout>

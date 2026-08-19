@@ -9,6 +9,7 @@
 // backend has never told this layer how long assembly takes, so a timer here
 // would be the frontend guessing (SPEC-0050 open question 2).
 import Layout from '../../../layouts/Layout.astro';
+import PageShell from '../../../components/PageShell.astro';
 import EvidencePackView from '../../../components/EvidencePackView.astro';
 import { evidencePackStatus, evidencePackStream } from '../../../lib/bff';
 import type { PackStatusView } from '../../../lib/bff';
@@ -38,13 +39,12 @@ if (packID) {
 ---
 
 <Layout title="Evidence packs">
-  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
-    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Evidence packs</h1>
-    <p class="gf-muted" style={{ fontSize: '14px', margin: '0 0 var(--gf-space-2)' }}>
+  <PageShell title="Evidence packs" measure="prose">
+    <p class="gf-muted" style={{ fontSize: 'var(--gf-text-base)', margin: '0 0 var(--gf-space-2)' }}>
       A date-ranged record of approvals, policy decisions, scan gates and access changes.
       Assembly is decided and performed by the server; this page requests one and shows what it built.
     </p>
-    <p style={{ fontSize: '14px', margin: '0 0 var(--gf-space-4)' }}>
+    <p style={{ fontSize: 'var(--gf-text-base)', margin: '0 0 var(--gf-space-4)' }}>
       <a href="/compliance/auditor-grants" style={{ color: 'var(--gf-action-ink)' }}>Auditor grants</a>
       <span class="gf-muted"> — give an auditor scoped, time-boxed access to these packs.</span>
     </p>
@@ -56,7 +56,7 @@ if (packID) {
     )}
 
     <section class="gf-card" aria-labelledby="request-heading">
-      <h2 id="request-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-3)' }}>Request a pack</h2>
+      <h2 id="request-heading" style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-3)' }}>Request a pack</h2>
       <form method="post" action="/api/compliance/evidence-packs">
         <div style={{ display: 'flex', gap: 'var(--gf-space-3)' }}>
           <label class="gf-field" style={{ flex: '1' }}>
@@ -78,7 +78,7 @@ if (packID) {
 
     {statusError && (
       <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
         {' '}{EVIDENCE_MESSAGES.refused}
       </p>
     )}
@@ -88,5 +88,5 @@ if (packID) {
     )}
 
     {packID && status && <EvidencePackView packID={packID} status={status} stream={stream} />}
-  </div>
+  </PageShell>
 </Layout>

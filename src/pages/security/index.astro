@@ -11,6 +11,7 @@
 // (SPEC-0026 AC6). A failed read is one coarse "unavailable" message.
 import { securityDashboard, securityFindingsSummary, type SecurityFilters } from '../../lib/bff';
 import Layout from '../../layouts/Layout.astro';
+import PageShell from '../../components/PageShell.astro';
 import SecurityFindings from '../../components/SecurityFindings.astro';
 
 const pageSize = 25;
@@ -55,10 +56,10 @@ const scopedTitle = filters.repository ? `Security · ${filters.repository}` : '
 ---
 
 <Layout title={scopedTitle}>
-  <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 16px' }}>
-    <header style={{ padding: '16px 0', borderBottom: '1px solid var(--gf-line)' }}>
-      <h1 style={{ fontSize: '20px', margin: '0px' }}>Security dashboard</h1>
-      <p style={{ color: 'var(--gf-ink-muted)', margin: '4px 0 0', fontSize: '14px' }}>
+  <PageShell title="Security" measure="wide" headingHidden>
+    <header style={{ padding: 'var(--gf-space-4) 0', borderBottom: '1px solid var(--gf-line)' }}>
+      <h1 style={{ fontSize: 'var(--gf-text-xl)', margin: '0' }}>Security dashboard</h1>
+      <p style={{ color: 'var(--gf-ink-muted)', margin: 'var(--gf-space-1) 0 0', fontSize: 'var(--gf-text-base)' }}>
         {filters.repository
           ? `Findings for ${filters.repository}`
           : 'Findings across the organization'}
@@ -67,7 +68,7 @@ const scopedTitle = filters.repository ? `Security · ${filters.repository}` : '
     </header>
 
     {loadError && (
-      <p style={{ color: 'var(--gf-danger-ink)', padding: '16px 0' }}>
+      <p style={{ color: 'var(--gf-danger-ink)', padding: 'var(--gf-space-4) 0' }}>
         The security dashboard is unavailable. Check your session.
       </p>
     )}
@@ -75,5 +76,5 @@ const scopedTitle = filters.repository ? `Security · ${filters.repository}` : '
     {!loadError && (
       <SecurityFindings findings={findings} summary={summary} filters={filters} nextPageToken={nextPageToken} />
     )}
-  </div>
+  </PageShell>
 </Layout>

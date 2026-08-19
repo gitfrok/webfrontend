@@ -45,20 +45,20 @@ const day = (value: string) => value.slice(0, 10);
 ---
 
 <section aria-labelledby="pack-heading" style={{ margin: 'var(--gf-space-6) 0' }}>
-  <h2 id="pack-heading" style={{ fontSize: '18px', margin: '0 0 var(--gf-space-2)' }}>
+  <h2 id="pack-heading" style={{ fontSize: 'var(--gf-text-lg)', margin: '0 0 var(--gf-space-2)' }}>
     Pack <span style={{ fontFamily: 'var(--gf-font-code)' }}>{packID}</span>
   </h2>
 
   {stream?.refused && (
     <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+      <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Unavailable</span>
       {' '}{EVIDENCE_MESSAGES.refused}
     </p>
   )}
 
   {stream && !stream.refused && stream.truncated && (
     <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
-      <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Incomplete</span>
+      <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Incomplete</span>
       {' '}{EVIDENCE_MESSAGES.truncated}
     </p>
   )}
@@ -66,8 +66,8 @@ const day = (value: string) => value.slice(0, 10);
   {status && state && (
     <div class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
       <p style={{ margin: '0 0 var(--gf-space-2)', display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
-        <span class:list={['gf-status', state.tone]} style={{ fontSize: '13px' }}>{state.label}</span>
-        <span class="gf-muted" style={{ fontSize: '13px' }}>
+        <span class:list={['gf-status', state.tone]} style={{ fontSize: 'var(--gf-text-sm)' }}>{state.label}</span>
+        <span class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)' }}>
           assembly · {day(status.range_from)} to {day(status.range_to)}
           {status.repository_id && ` · ${status.repository_id}`}
         </span>
@@ -77,10 +77,10 @@ const day = (value: string) => value.slice(0, 10);
           rather than becoming "unknown reason", which would be this layer
           claiming to know the shape of something it was not told. */}
       {status.failure_reason && (
-        <p style={{ margin: '0 0 var(--gf-space-2)', fontSize: '13px' }}>{status.failure_reason}</p>
+        <p style={{ margin: '0 0 var(--gf-space-2)', fontSize: 'var(--gf-text-sm)' }}>{status.failure_reason}</p>
       )}
 
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--gf-text-sm)' }}>
         <caption class="gf-muted" style={{ textAlign: 'left', paddingBottom: 'var(--gf-space-1)' }}>
           Records counted per section. Counts only — no record content appears here.
         </caption>
@@ -111,23 +111,23 @@ const day = (value: string) => value.slice(0, 10);
 
   {sections.map((section) => (
     <div class="gf-card" style={{ marginBottom: 'var(--gf-space-3)' }}>
-      <h3 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-2)' }}>{section.type}</h3>
+      <h3 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>{section.type}</h3>
 
       {isDegraded(section) && (
         <p class="gf-note" style={{ borderLeftColor: 'var(--gf-warn-ink)', margin: '0 0 var(--gf-space-2)' }}>
-          <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Incomplete</span>
+          <span class="gf-status gf-status-warn" style={{ fontSize: 'var(--gf-text-sm)' }}>Incomplete</span>
           {' '}{EVIDENCE_MESSAGES.sectionIncomplete}
         </p>
       )}
 
       {section.gaps?.map((gap) => (
-        <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-1)' }}>
+        <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-1)' }}>
           {day(gap.from)} to {day(gap.to)} — {gap.reason}
         </p>
       ))}
 
       {section.anchors && (
-        <p class="gf-muted" style={{ fontFamily: 'var(--gf-font-code)', fontSize: '12px', margin: '0px' }}>
+        <p class="gf-muted" style={{ fontFamily: 'var(--gf-font-code)', fontSize: 'var(--gf-text-xs)', margin: '0' }}>
           seq {section.anchors.first_seq}–{section.anchors.last_seq} · {section.records_digest}
         </p>
       )}

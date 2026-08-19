@@ -22,8 +22,8 @@ const { planes, now } = Astro.props as Props;
 ---
 
 <section class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
-  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-2)' }}>Data planes</h2>
-  <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+  <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>Data planes</h2>
+  <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
     {ADMIN_MESSAGES.reportIsAReport}
   </p>
 
@@ -51,7 +51,7 @@ const { planes, now } = Astro.props as Props;
                   : <span class="gf-muted">token <code>{plane.token_id}</code></span>}
               </th>
               <td>
-                <span class:list={['gf-status', status.tone]} style={{ fontSize: '12px' }}>
+                <span class:list={['gf-status', status.tone]} style={{ fontSize: 'var(--gf-text-xs)' }}>
                   {status.descriptor.label}
                 </span>
               </td>
@@ -77,19 +77,19 @@ const { planes, now } = Astro.props as Props;
     </table>
   )}
 
-  <p class="gf-muted" style={{ fontSize: '13px', margin: 'var(--gf-space-3) 0 0' }}>
+  <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: 'var(--gf-space-3) 0 0' }}>
     {ADMIN_MESSAGES.noRunnerConsole}
   </p>
 </section>
 
 <section class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
-  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>Audit access</h2>
-  <p style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>{ADMIN_MESSAGES.auditIsAGrant}</p>
+  <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-3)' }}>Audit access</h2>
+  <p style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>{ADMIN_MESSAGES.auditIsAGrant}</p>
   {/*
     A door, not a browser. The grant surfaces already exist and are the only path
     to the trail; linking to them is the whole of this panel (ADR-0077 decision 1).
   */}
-  <p style={{ fontSize: '13px', margin: '0' }}>
+  <p style={{ fontSize: 'var(--gf-text-sm)', margin: '0' }}>
     <a href="/compliance/auditor-grants">Issue, list and revoke auditor grants</a>
     {' · '}
     <a href="/compliance/evidence-packs">Request and read an evidence pack</a>
@@ -97,6 +97,6 @@ const { planes, now } = Astro.props as Props;
 </section>
 
 <section class="gf-card">
-  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>What this page does not show</h2>
-  <p style={{ fontSize: '13px', margin: '0' }}>{ADMIN_MESSAGES.noMembers}</p>
+  <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-3)' }}>What this page does not show</h2>
+  <p style={{ fontSize: 'var(--gf-text-sm)', margin: '0' }}>{ADMIN_MESSAGES.noMembers}</p>
 </section>
