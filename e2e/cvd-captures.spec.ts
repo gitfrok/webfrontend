@@ -97,6 +97,10 @@ const SURFACES = [
   // scans this table for. The grayscale pass is the one that matters: the row that
   // stopped answering must be findable without hue.
   { name: 'admin-fleet', path: '/admin' },
+  // T-0076: the two renderings of a reference side by side — one whose address is
+  // https and is a link, one stored with plain http and shown as text. The grayscale
+  // pass is what proves the difference is not carried by hue.
+  { name: 'external-issues', path: '/repos/repo-1/merge_requests/mr-capture' },
 ];
 
 test.beforeAll(() => {

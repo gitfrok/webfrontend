@@ -1,5 +1,13 @@
 // SPEC-0057 AC15–AC20: repository settings through the browser — what can be
 // changed, what archival means, and the four controls that must not exist.
+//
+// **Harness limit, as in mr-actions.spec.ts.** The session cookie is `__Host-`
+// prefixed and Chromium accepts one only over https, so these journeys send it as a
+// request header — and those headers are NOT applied when the browser follows the 303
+// a form POST answers with. The submit proves the redirect; a page.goto of the
+// resulting URL proves what that URL renders. Without the re-navigation these
+// assertions would be reading the signed-out page, which renders the outcome note and
+// nothing else — a green journey proving less than it appears to.
 import { test, expect } from '@playwright/test';
 
 const sessionHeader = { cookie: '__Host-gitfrok_session=e2e-session' };
@@ -67,11 +75,16 @@ test.describe('signed in', () => {
     await page.getByRole('button', { name: 'Save settings' }).click();
 
     await expect(page).toHaveURL(/settings_outcome=saved/);
+    await page.goto(page.url());
     await expect(page.getByText('the change is in the audit trail', { exact: false })).toBeVisible();
+    await expect(page.getByLabel('Name')).toHaveValue('platform-infra');
   });
 
   test('an empty name changes nothing and says which field it was', async ({ page }) => {
     await page.goto('/repos/repo-1/settings');
+    // The name before the refused write. Read rather than hardcoded: the stub keeps
+    // what earlier journeys wrote, and a literal here would assert test order.
+    const before = await page.getByLabel('Name').inputValue();
     // The input is `required`, so the field is cleared and the form submitted
     // directly — the point is what the server does with an empty name, not what
     // the browser prevents.
@@ -82,7 +95,10 @@ test.describe('signed in', () => {
     });
 
     await expect(page).toHaveURL(/settings_outcome=nameRequired/);
+    await page.goto(page.url());
     await expect(page.getByText('A repository needs a name', { exact: false })).toBeVisible();
+    // Nothing was changed: the name is the one that was there before the submit.
+    await expect(page.getByLabel('Name')).toHaveValue(before);
   });
 
   test('archiving asks for a state, so submitting twice does not toggle', async ({ page }) => {
@@ -91,6 +107,7 @@ test.describe('signed in', () => {
 
     await page.getByRole('button', { name: 'Archive this repository' }).click();
     await expect(page).toHaveURL(/settings_outcome=archived/);
+    await page.goto(page.url());
     await expect(page.getByText('still listed, still readable and still writable', { exact: false })).toBeVisible();
   });
 

@@ -98,6 +98,10 @@ const usageViewFixture = {
 // tell "your write was refused" apart from "the merge request moved under you".
 // One fixture MR refuses every write while its version advances anyway, which
 // is the only way to drive the staleness branch end to end.
+// Repository settings as the stub keeps them (SPEC-0057). Mutable on purpose: a
+// journey that writes and re-reads must see what it wrote.
+const repositorySettings = {};
+
 const mergeRequests = {
   'mr-1': {
     merge_request_id: 'mr-1', repository_id: 'repo-1',
@@ -126,6 +130,34 @@ const mergeRequests = {
     title: 'Add the thing', description: 'it does the thing',
     creator_id: 'dev@gitsaas.test', state: 'OPEN',
     head_revision: 'abcdef1234567890', version: 1,
+    created_at: '2026-08-18T00:00:00Z',
+    // Two references for the capture (SPEC-0059): one whose address is https and
+    // renders as a link, and one stored with plain http, which must render as text.
+    // The second is a state the frontend should never be handed — the backend
+    // refuses it — which is exactly why the capture carries it: the fallback is only
+    // reviewable if it is rendered.
+    external_issues: [
+      {
+        tracker: 'JIRA', issue_key: 'PLAT-1421',
+        url: 'https://tracker.example.test/browse/PLAT-1421',
+        linked_by: 'dev@gitsaas.test', linked_at: '2026-08-19T09:00:00Z',
+      },
+      {
+        tracker: 'Legacy', issue_key: 'OLD-7',
+        url: 'http://tracker.example.test/OLD-7',
+        linked_by: 'dev@gitsaas.test', linked_at: '2026-08-19T09:05:00Z',
+      },
+    ],
+  },
+  // The external-issue journeys write here rather than to mr-1 (SPEC-0059). Its own
+  // fixture because every link bumps the version, and mr-actions submits against a
+  // version it read — one spec's writes must not decide whether another spec passes.
+  'mr-issues': {
+    merge_request_id: 'mr-issues', repository_id: 'repo-1',
+    source_ref: 'feature-4', target_ref: 'main',
+    title: 'References an issue', description: '',
+    creator_id: 'dev@gitsaas.test', state: 'OPEN',
+    head_revision: 'facefeed12345678', version: 1,
     created_at: '2026-08-18T00:00:00Z',
   },
   // Refuses every write and never moves — the not-applied branch.
@@ -533,6 +565,51 @@ const server = createServer((request, response) => {
   };
 
   // --- merge-request surface (SPEC-0048) --------------------------------
+  // --- external issue references (SPEC-0059) ----------------------------
+  //
+  // Two fixtures the render cannot produce on its own: a reference stored with a
+  // plain-http address, which must render as text rather than as a link, and a
+  // tracker that refuses. The stub honours the state asked for and never validates
+  // the URL — the real BFF's backend does that, and the point of the http fixture is
+  // to prove the frontend refuses even when something upstream did not.
+  const issueMatch = url.pathname.match(/^\/v1\/repositories\/([^/]+)\/merge_requests\/([^/]+)\/external_issues(?:\/(unlink))?$/);
+  if (issueMatch && request.method === 'POST') {
+    const [, , mergeRequestID, unlink] = issueMatch;
+    const mr = mergeRequests[mergeRequestID];
+    if (!mr) return deny();
+    return readForm(request).then((form) => {
+      const tracker = (form.get('tracker') ?? '').trim();
+      const issueKey = (form.get('issue_key') ?? '').trim();
+      mr.external_issues = mr.external_issues ?? [];
+      if (unlink) {
+        mr.external_issues = mr.external_issues.filter(
+          (reference) => !(reference.tracker.toLowerCase() === tracker.toLowerCase() && reference.issue_key === issueKey),
+        );
+        mr.version += 1;
+        return json(mr);
+      }
+      const issueURL = (form.get('url') ?? '').trim();
+      if (!tracker || !issueKey || !issueURL.startsWith('https://')) {
+        response.writeHead(400, { 'cache-control': 'private, no-store' });
+        response.end('a reference needs a tracker, an issue key and an https URL');
+        return;
+      }
+      if (mr.external_issues.length >= 25) {
+        response.writeHead(409, { 'cache-control': 'private, no-store' });
+        response.end('this merge request has as many issue references as it can carry');
+        return;
+      }
+      if (!mr.external_issues.some((r) => r.tracker.toLowerCase() === tracker.toLowerCase() && r.issue_key === issueKey)) {
+        mr.external_issues.push({
+          tracker, issue_key: issueKey, url: issueURL,
+          linked_by: 'dev@gitsaas.test', linked_at: '2026-08-19T09:00:00Z',
+        });
+        mr.version += 1;
+      }
+      return json(mr);
+    });
+  }
+
   const mrMatch = url.pathname.match(/^\/v1\/repositories\/([^/]+)\/merge_requests(?:\/([^/]+))?(?:\/(review|merge))?$/);
   if (mrMatch) {
     const [, , mergeRequestID, action] = mrMatch;
@@ -723,7 +800,6 @@ const server = createServer((request, response) => {
     if (!settingsRepo || settingsRepo === 'unknown-repo') {
       return refuseSettings();
     }
-    const archivedFixture = settingsRepo === 'archived-repo';
     if (request.method === 'POST') {
       return readForm(request).then((form) => {
         const name = form.get('name');
@@ -735,13 +811,10 @@ const server = createServer((request, response) => {
         return json(settingsFixture(settingsRepo, {
           name,
           description: form.get('description') ?? '',
-          archived_at: archivedFixture ? '2026-08-18T11:00:00Z' : '',
         }));
       });
     }
-    return json(settingsFixture(settingsRepo, {
-      archived_at: archivedFixture ? '2026-08-18T11:00:00Z' : '',
-    }));
+    return json(settingsFixture(settingsRepo, {}));
   }
   const archiveMatch = url.pathname.match(/^\/v1\/repositories\/([^/]+)\/settings\/archive$/);
   if (archiveMatch && request.method === 'POST') {
@@ -752,16 +825,20 @@ const server = createServer((request, response) => {
     })));
   }
 
+  // The stub KEEPS what was written, so a journey can prove the write took effect
+  // rather than only that the redirect happened. A fixture that forgets makes the
+  // re-read assert the seed, which is the same value a refused write would show.
   function settingsFixture(repositoryID, overrides) {
-    return {
+    const stored = repositorySettings[repositoryID] ?? {
       repository_id: repositoryID,
       name: repositoryID === 'archived-repo' ? 'retired-service' : 'infra',
       description: 'Cluster bootstrap and the runbooks that go with it.',
-      archived_at: '',
+      archived_at: repositoryID === 'archived-repo' ? '2026-08-18T11:00:00Z' : '',
       settings_updated_at: '2026-08-19T09:30:00Z',
       settings_updated_by: 'owner@gitsaas.test',
-      ...overrides,
     };
+    repositorySettings[repositoryID] = { ...stored, ...overrides };
+    return repositorySettings[repositoryID];
   }
 
   function refuseSettings() {

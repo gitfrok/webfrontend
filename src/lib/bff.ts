@@ -93,6 +93,23 @@ export interface MergeRequestView {
   head_revision: string;
   version: number;
   created_at: string;
+  /**
+   * References to issues in the customer's own tracker (SPEC-0059).
+   *
+   * Pointers, not copies: there is no title and no state, because this product
+   * never asks the tracker anything. Optional because a merge request read before
+   * this field existed carries none.
+   */
+  external_issues?: ExternalIssueView[];
+}
+
+/** One reference to an issue this product does not store (SPEC-0059). */
+export interface ExternalIssueView {
+  tracker: string;
+  issue_key: string;
+  url: string;
+  linked_by: string;
+  linked_at: string;
 }
 
 // mergeRequest fetches one MR from the BFF (minimal T-0016 web bar).
@@ -1390,4 +1407,45 @@ export async function adminFleet(request: Request): Promise<FleetView> {
   }
   const view = (await response.json()) as Partial<FleetView>;
   return { planes: view.planes ?? [] };
+}
+
+/**
+ * References an issue that lives in the customer's tracker (SPEC-0059).
+ *
+ * Form-encoded, as every write on this frontend is. The URL travels as the reader
+ * typed it: the backend's domain decides what may be stored, and a second opinion
+ * here would be a second place the rule lives.
+ */
+export async function linkExternalIssue(
+  request: Request,
+  repositoryID: string,
+  mergeRequestID: string,
+  tracker: string,
+  issueKey: string,
+  issueURL: string,
+): Promise<MergeRequestView> {
+  if (!repositoryID || !mergeRequestID) throw new Error('merge request unavailable');
+  return bffPostForm<MergeRequestView>(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/external_issues`,
+    { tracker, issue_key: issueKey, url: issueURL },
+    'merge request unavailable',
+  );
+}
+
+/** Removes a reference by tracker and key — its identity, never a position. */
+export async function unlinkExternalIssue(
+  request: Request,
+  repositoryID: string,
+  mergeRequestID: string,
+  tracker: string,
+  issueKey: string,
+): Promise<MergeRequestView> {
+  if (!repositoryID || !mergeRequestID) throw new Error('merge request unavailable');
+  return bffPostForm<MergeRequestView>(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/external_issues/unlink`,
+    { tracker, issue_key: issueKey },
+    'merge request unavailable',
+  );
 }

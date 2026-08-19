@@ -20,13 +20,20 @@ import CommandPalette from '../../../../components/CommandPalette';
 import ImportedHistory from '../../../../components/ImportedHistory.astro';
 import MRFindings from '../../../../components/MRFindings.astro';
 import MergeRequestActions from '../../../../components/MergeRequestActions.astro';
+import ExternalIssues from '../../../../components/ExternalIssues.astro';
 import ActionOutcome from '../../../../components/ActionOutcome.astro';
 import type { ImportedMergeRequestView } from '../../../../lib/provenance';
+import { externalIssueMessageForKey } from '../../../../lib/externalIssues';
 
 const { repositoryID, mergeRequestID } = Astro.params;
 // What a write left behind, if the reader arrived from one (SPEC-0048 AC4/AC5).
 // The key is resolved against MR_ACTION_MESSAGES; anything else renders nothing.
 const outcomeKey = Astro.url.searchParams.get('mr_outcome');
+// What an external-issue write left behind (SPEC-0059). Its own parameter, because
+// referencing an issue and reviewing a merge request are different acts and their
+// outcomes must not be reported in each other's words.
+const issueOutcome = externalIssueMessageForKey(Astro.url.searchParams.get('issue_outcome'));
+const issueOutcomeApplied = ['linked', 'unlinked'].includes(Astro.url.searchParams.get('issue_outcome') ?? '');
 let mr: Awaited<ReturnType<typeof mergeRequest>> | null = null;
 let loadError = false;
 
@@ -99,6 +106,22 @@ if (mr) {
         </p>
 
         <MergeRequestActions mr={mr} />
+
+        {issueOutcome && (
+          <p
+            class="gf-note"
+            role="status"
+            style={{ borderLeftColor: issueOutcomeApplied ? 'var(--gf-success-ink)' : 'var(--gf-warn-ink)' }}
+          >
+            <strong>{issueOutcomeApplied ? 'Done.' : 'Not changed.'}</strong> {issueOutcome}
+          </p>
+        )}
+
+        <ExternalIssues
+          repositoryID={repositoryID!}
+          mergeRequestID={mergeRequestID!}
+          references={mr.external_issues ?? []}
+        />
 
         {findingsError && (
           <p style={{ color: 'var(--gf-danger-ink)' }}>The findings for this merge request are unavailable.</p>

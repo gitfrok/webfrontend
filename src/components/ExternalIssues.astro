@@ -1,0 +1,93 @@
+---
+// External issue references on a merge request (T-0076, SPEC-0059, ADR-0074's
+// accepted scope).
+//
+// This product does not have an issue tracker, and this component's job is to be
+// clear about that while still being useful. It shows which tracker, which issue,
+// and where it is — and it says twice, in different words, the two things a reader
+// would otherwise assume: that nothing here knows whether the issue is open, and
+// that merging closes nothing.
+import type { ExternalIssueView } from '../lib/bff';
+import { EXTERNAL_ISSUE_MESSAGES, isSafeIssueURL, issueHost } from '../lib/externalIssues';
+
+interface Props {
+  repositoryID: string;
+  mergeRequestID: string;
+  references: ExternalIssueView[];
+}
+
+const { repositoryID, mergeRequestID, references } = Astro.props as Props;
+
+const action = `/api/repos/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/external_issues`;
+---
+
+<section class="gf-card" style={{ margin: 'var(--gf-space-4) 0' }}>
+  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-2)' }}>Issues in your tracker</h2>
+  <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+    {EXTERNAL_ISSUE_MESSAGES.whatThisIs}
+  </p>
+
+  {references.length === 0 ? (
+    <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+      {EXTERNAL_ISSUE_MESSAGES.empty}
+    </p>
+  ) : (
+    <ul style={{ listStyle: 'none', padding: '0', margin: '0 0 var(--gf-space-3)' }}>
+      {references.map((reference) => (
+        <li style={{ padding: 'var(--gf-space-2) 0', borderBottom: '1px solid var(--gf-line)' }}>
+          <span class="gf-muted" style={{ fontSize: '13px' }}>{reference.tracker}</span>
+          {' '}
+          {/*
+            A link only when the stored address is https. The backend refuses
+            anything else before storing, so this branch should never be taken —
+            which is the reason it exists: a control that matters only once
+            something upstream has failed is the one worth having.
+          */}
+          {isSafeIssueURL(reference.url) ? (
+            <a href={reference.url} rel="noopener noreferrer" target="_blank">{reference.issue_key}</a>
+          ) : (
+            <span>{reference.issue_key}</span>
+          )}
+          {isSafeIssueURL(reference.url) ? (
+            <span class="gf-muted" style={{ fontSize: '13px' }}> at {issueHost(reference.url)}</span>
+          ) : (
+            <span class="gf-muted" style={{ fontSize: '13px' }}> — {EXTERNAL_ISSUE_MESSAGES.unsafeURL}</span>
+          )}
+          {reference.linked_by && (
+            <span class="gf-muted" style={{ fontSize: '13px' }}>
+              {' · '}referenced by {reference.linked_by}
+              {reference.linked_at && <> at <time datetime={reference.linked_at}>{reference.linked_at}</time></>}
+            </span>
+          )}
+          <form method="post" action={`${action}/unlink`} style={{ display: 'inline' }}>
+            <input type="hidden" name="tracker" value={reference.tracker} />
+            <input type="hidden" name="issue_key" value={reference.issue_key} />
+            <button type="submit" class="gf-btn" style={{ fontSize: '12px', marginLeft: 'var(--gf-space-2)' }}>
+              Remove reference
+            </button>
+          </form>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <form method="post" action={action}>
+    <label class="gf-field">
+      <span>Tracker</span>
+      <input class="gf-input" type="text" name="tracker" placeholder="JIRA" required />
+    </label>
+    <label class="gf-field">
+      <span>Issue key</span>
+      <input class="gf-input" type="text" name="issue_key" placeholder="PLAT-1421" required />
+    </label>
+    <label class="gf-field">
+      <span>Address</span>
+      <input class="gf-input" type="url" name="url" placeholder="https://tracker.example.com/browse/PLAT-1421" required />
+    </label>
+    <button type="submit" class="gf-btn gf-btn-primary">Reference this issue</button>
+  </form>
+
+  <p class="gf-muted" style={{ fontSize: '13px', margin: 'var(--gf-space-3) 0 0' }}>
+    {EXTERNAL_ISSUE_MESSAGES.mergingClosesNothing}
+  </p>
+</section>
