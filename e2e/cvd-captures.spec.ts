@@ -93,6 +93,10 @@ const SURFACES = [
   // proves the label is not doing its work with hue alone.
   { name: 'repository-settings', path: '/repos/repo-1/settings' },
   { name: 'repository-settings-archived', path: '/repos/archived-repo/settings' },
+  // T-0073: connected against stale in one column, which is the pair an operator
+  // scans this table for. The grayscale pass is the one that matters: the row that
+  // stopped answering must be findable without hue.
+  { name: 'admin-fleet', path: '/admin' },
 ];
 
 test.beforeAll(() => {

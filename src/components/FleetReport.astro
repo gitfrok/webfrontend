@@ -1,0 +1,102 @@
+---
+// The admin area's panels (T-0073, SPEC-0058, ADR-0077's accepted increment).
+//
+// A component rather than page markup so the absences can be tested: most of what
+// PR-31 describes is deliberately not here, and an assertion about absence needs
+// something rendered to assert against.
+//
+// Three panels: the fleet report and its age, what audit access actually is, and
+// what this page does not show. The third is not an apology — members and roles
+// have no read behind them, and an audit browser is a decision ADR-0077 refused.
+import type { PlaneView } from '../lib/bff';
+import { ADMIN_MESSAGES, planeStatusKey, contactLine } from '../lib/admin';
+import { describeStatus } from '../lib/status';
+
+interface Props {
+  planes: PlaneView[];
+  /** One instant for every row, so a page does not date its rows against different clocks. */
+  now: Date;
+}
+
+const { planes, now } = Astro.props as Props;
+---
+
+<section class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
+  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-2)' }}>Data planes</h2>
+  <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+    {ADMIN_MESSAGES.reportIsAReport}
+  </p>
+
+  {planes.length === 0 ? (
+    <p class="gf-note" role="status">{ADMIN_MESSAGES.emptyFleet}</p>
+  ) : (
+    <table class="gf-table">
+      <thead>
+        <tr>
+          <th scope="col">Data plane</th>
+          <th scope="col">State</th>
+          <th scope="col">Last reported</th>
+          <th scope="col">Where</th>
+          <th scope="col">Versions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {planes.map((plane) => {
+          const status = describeStatus(planeStatusKey(plane.status));
+          return (
+            <tr>
+              <th scope="row" style={{ fontWeight: '400' }}>
+                {plane.data_plane_id
+                  ? <code>{plane.data_plane_id}</code>
+                  : <span class="gf-muted">token <code>{plane.token_id}</code></span>}
+              </th>
+              <td>
+                <span class:list={['gf-status', status.tone]} style={{ fontSize: '12px' }}>
+                  {status.descriptor.label}
+                </span>
+              </td>
+              {/*
+                Every row says something about contact. A blank cell reads as an
+                oversight, and a reader fills it in with an assumption — which for
+                a plane that has never connected would be the wrong one.
+              */}
+              <td>
+                {plane.last_seen_at
+                  ? <time datetime={plane.last_seen_at}>{contactLine(plane.last_seen_at, now)}</time>
+                  : <span class="gf-muted">{contactLine('', now)}</span>}
+              </td>
+              <td class="gf-muted">{plane.region || '—'}</td>
+              <td class="gf-muted">
+                {plane.agent_version ? `agent ${plane.agent_version}` : '—'}
+                {plane.k8s_version ? ` · k8s ${plane.k8s_version}` : ''}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  )}
+
+  <p class="gf-muted" style={{ fontSize: '13px', margin: 'var(--gf-space-3) 0 0' }}>
+    {ADMIN_MESSAGES.noRunnerConsole}
+  </p>
+</section>
+
+<section class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
+  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>Audit access</h2>
+  <p style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>{ADMIN_MESSAGES.auditIsAGrant}</p>
+  {/*
+    A door, not a browser. The grant surfaces already exist and are the only path
+    to the trail; linking to them is the whole of this panel (ADR-0077 decision 1).
+  */}
+  <p style={{ fontSize: '13px', margin: '0' }}>
+    <a href="/compliance/auditor-grants">Issue, list and revoke auditor grants</a>
+    {' · '}
+    <a href="/compliance/evidence-packs">Request and read an evidence pack</a>
+  </p>
+</section>
+
+<section class="gf-card">
+  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>What this page does not show</h2>
+  <p style={{ fontSize: '13px', margin: '0' }}>{ADMIN_MESSAGES.noMembers}</p>
+</section>

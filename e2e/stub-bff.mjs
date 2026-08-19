@@ -671,6 +671,47 @@ const server = createServer((request, response) => {
     response.end('releases unavailable');
   }
 
+  // --- the admin area's fleet report (SPEC-0058) -------------------------
+  //
+  // Three fixtures, because the panel's claim is about age and state: a plane that
+  // reported minutes ago, one that has not reported in days, and one provisioned
+  // that never connected at all. The stale row is the one an operator is scanning
+  // for, so it is not the first row.
+  if (url.pathname === '/v1/admin/fleet') {
+    // The unavailable reading is driven by the session, not by a query parameter:
+    // the page is rendered server-side, so the browser never builds this URL and
+    // could not add one. A session named for it is the only handle a browser test
+    // has on what the BFF answers.
+    if ((request.headers.cookie ?? '').includes('e2e-session-nofleet')) {
+      response.writeHead(404, { 'cache-control': 'private, no-store' });
+      response.end('fleet report unavailable');
+      return;
+    }
+    return json({
+      planes: [
+        {
+          data_plane_id: 'dp-eu-1', status: 'CONNECTED', cloud: 'CLOUD_GKE', region: 'eu-west-1',
+          agent_version: '1.4.0', k8s_version: '1.30',
+          last_seen_at: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
+          enrolled_at: '2026-08-16T09:00:00Z', certificate_expires_at: '2026-08-20T09:00:00Z',
+          token_id: '',
+        },
+        {
+          data_plane_id: 'dp-us-1', status: 'STALE', cloud: 'CLOUD_EKS', region: 'us-east-1',
+          agent_version: '1.3.2', k8s_version: '1.29',
+          last_seen_at: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+          enrolled_at: '2026-07-30T09:00:00Z', certificate_expires_at: '2026-08-19T09:00:00Z',
+          token_id: '',
+        },
+        {
+          data_plane_id: '', status: 'NEVER_CONNECTED', cloud: '', region: '',
+          agent_version: '', k8s_version: '', last_seen_at: '', enrolled_at: '',
+          certificate_expires_at: '', token_id: 'tok-provisioned-9',
+        },
+      ],
+    });
+  }
+
   // --- repository settings (SPEC-0057) ----------------------------------
   //
   // Two fixtures, because the surface's whole claim is about the archived label:

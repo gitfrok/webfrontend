@@ -1347,3 +1347,47 @@ export async function setRepositoryArchived(
     'repository settings unavailable',
   );
 }
+
+/**
+ * One data plane as the control plane last heard it (T-0073, SPEC-0058).
+ *
+ * `last_seen_at` is empty for a plane that has never connected. The emptiness is
+ * the state, and it is not the same as an old instant: a plane provisioned an hour
+ * ago and never seen is not a plane that went quiet an hour ago.
+ *
+ * There is no member, user or activity field here. ADR-0077 answered its own
+ * follow-up: `Last active` is presence telemetry about people, and this product
+ * does not collect any.
+ */
+export interface PlaneView {
+  data_plane_id: string;
+  status: string;
+  cloud: string;
+  region: string;
+  agent_version: string;
+  k8s_version: string;
+  last_seen_at: string;
+  enrolled_at: string;
+  certificate_expires_at: string;
+  token_id: string;
+}
+
+export interface FleetView {
+  planes: PlaneView[];
+}
+
+/**
+ * Reads the tenant's fleet report.
+ *
+ * A refusal here covers the door not being configured at all, and the caller must
+ * keep the two readings apart: an unavailable report says nothing was asked, while
+ * a successful empty one says this tenant has no data planes.
+ */
+export async function adminFleet(request: Request): Promise<FleetView> {
+  const response = await bffFetch(request, '/v1/admin/fleet');
+  if (!response.ok) {
+    throw new Error('fleet report unavailable');
+  }
+  const view = (await response.json()) as Partial<FleetView>;
+  return { planes: view.planes ?? [] };
+}

@@ -34,7 +34,9 @@ export type StatusKey =
   | 'ALLOWED' | 'DENIED'
   // release tag agreement (T-0066)
   | 'TAG_MOVED' | 'TAG_GONE'
-  | 'ARCHIVED';
+  | 'ARCHIVED'
+  | 'PLANE_CONNECTED' | 'PLANE_STALE' | 'PLANE_REVOKED' | 'PLANE_NEVER_CONNECTED'
+  | 'PLANE_UNKNOWN';
 
 export interface StatusDescriptor {
   /** Token class from tokens.css. Never a colour value. */
@@ -140,6 +142,26 @@ export const STATUS_VOCABULARY: Record<StatusKey, StatusDescriptor> = {
   // rather than duplicated with a second glyph, because two glyphs for one
   // state is how a vocabulary starts disagreeing with itself.
   ARCHIVED: { tone: 'gf-status-info', glyph: '▣', label: 'Archived' },
+
+  // --- data plane state (T-0073, SPEC-0058 AC12) ---------------------------
+  // STALE is not a shade of connected. SPEC-0038 AC8 says a stale plane is never
+  // rendered as healthy, and these four are the distinctness set that has to
+  // survive grayscale: an operator scanning this column is looking for the row
+  // that stopped answering.
+  //
+  // NEVER_CONNECTED takes the pending tone and an open glyph because nothing has
+  // happened yet — it is provisioned, not broken. REVOKED is a decision somebody
+  // made, so it is warn rather than danger: the plane is not failing, it has been
+  // turned off.
+  PLANE_CONNECTED: { tone: 'gf-status-success', glyph: '◉', label: 'Connected' },
+  PLANE_STALE: { tone: 'gf-status-danger', glyph: '✕', label: 'Stale' },
+  PLANE_REVOKED: { tone: 'gf-status-warn', glyph: '!', label: 'Revoked' },
+  PLANE_NEVER_CONNECTED: { tone: 'gf-status-pending', glyph: '○', label: 'Never connected' },
+  // A state this frontend has never heard of. The status vocabulary is an open
+  // string on the wire so a new plane state is additive rather than a coordinated
+  // deploy — which means a reader can meet one, and it must read as "we do not
+  // know what this is" rather than being folded into the nearest familiar state.
+  PLANE_UNKNOWN: { tone: 'gf-status-pending', glyph: '?', label: 'Unknown state' },
 };
 
 const UNKNOWN: StatusDescriptor = {

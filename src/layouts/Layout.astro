@@ -21,9 +21,14 @@ const { title } = Astro.props;
 const signedIn = hasSessionCookie(Astro.request);
 
 // The current destination is marked with aria-current AND weight AND a rule —
-// never colour alone (ADR-0069 law 2). Only destinations that exist appear:
-// the prototype's Issues, Releases, Settings and Admin have no BFF surface,
-// and SPEC-0047 records them out of scope rather than shipping dead nav.
+// never colour alone (ADR-0069 law 2). Only destinations that exist appear: a
+// nav entry with no BFF route behind it is the dead-nav shape ADR-0070's
+// ordering law forbids.
+//
+// Releases and Settings are reached from a repository rather than from here, so
+// they are not top-level destinations. Admin is one, because it is about the
+// tenant rather than about a repository (T-0073, SPEC-0058). Issues has no
+// surface at all — PR-28 is an external-tracker link, not a tracker.
 const path = new URL(Astro.request.url).pathname;
 const destinations = [
   { href: '/', label: 'Repositories' },
@@ -36,6 +41,10 @@ const destinations = [
   // index: an index would be a destination with no BFF route behind it, which
   // is the dead-nav shape ADR-0070's ordering law forbids (SPEC-0050 AC8).
   { href: '/compliance/evidence-packs', label: 'Compliance' },
+  // The admin area is the fleet report and a door into the grant flow. It is not
+  // an audit-log browser, and there is no members or roles panel behind it
+  // (ADR-0077).
+  { href: '/admin', label: 'Admin' },
 ];
 const isCurrent = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`);

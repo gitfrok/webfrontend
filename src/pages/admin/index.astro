@@ -1,0 +1,41 @@
+---
+// The admin area (T-0073, SPEC-0058; PRD PR-31's accepted increment).
+//
+// PR-31 asks for members, roles, runners and the audit log. ADR-0077 accepted the
+// two that can be answered: a fleet report with its own age, and a door into the
+// grant flow. Members and roles have no read behind them — roles live in the
+// identity provider and this product has no membership read — so the page says so
+// rather than showing an empty table that would assert this org has no members.
+import Layout from '../../layouts/Layout.astro';
+import FleetReport from '../../components/FleetReport.astro';
+import { adminFleet } from '../../lib/bff';
+import type { PlaneView } from '../../lib/bff';
+import { ADMIN_MESSAGES } from '../../lib/admin';
+
+let planes: PlaneView[] = [];
+let loadError = false;
+try {
+  planes = (await adminFleet(Astro.request)).planes;
+} catch {
+  loadError = true;
+}
+
+// One instant for the whole page: rows dated against different clocks would put
+// them in an order the fleet is not in.
+const now = new Date();
+---
+
+<Layout title="Admin">
+  <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+    <h1 style={{ fontSize: '22px', margin: 'var(--gf-space-4) 0 var(--gf-space-2)' }}>Admin</h1>
+
+    {loadError ? (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        {' '}{ADMIN_MESSAGES.unavailable}
+      </p>
+    ) : (
+      <FleetReport planes={planes} now={now} />
+    )}
+  </div>
+</Layout>
