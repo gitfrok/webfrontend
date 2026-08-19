@@ -48,9 +48,9 @@ if (mergeRequestID) {
 ---
 
 <Layout title={`diff ${baseRevision}..${revision}`}>
-  <PageShell title={`diff ${baseRevision}..${revision}`} measure="full" headingHidden>
   <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
   <RepoHeader title={repositoryID!} revision={`${baseRevision}..${revision}`} />
+  <PageShell title={`diff ${baseRevision}..${revision}`} measure="full" headingHidden>
 
   {loadError && (
     <p class="gf-status gf-status-danger">This diff is unavailable. Check your session or the revisions.</p>

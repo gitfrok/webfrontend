@@ -65,9 +65,9 @@ const rawHref = `/repos/${repositoryID}/raw/${encodeURIComponent(revision!)}/${f
 ---
 
 <Layout title={`${filePath} @ ${revision}`}>
-  <PageShell title={`${repositoryID} file`} measure="full" headingHidden>
   <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
   <RepoHeader title={filePath} revision={revision} actionHref={rawHref} actionLabel="raw" />
+  <PageShell title={`${repositoryID} file`} measure="full" headingHidden>
 
   {loadError && (
     <p class="gf-status gf-status-danger">This file is unavailable. Check your session, the revision, or the path.</p>

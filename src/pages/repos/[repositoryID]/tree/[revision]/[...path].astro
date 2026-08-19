@@ -36,9 +36,9 @@ const outcomeKey = Astro.url.searchParams.get('mr_outcome');
 ---
 
 <Layout title={`${repositoryID} @ ${revision}`}>
-  <PageShell title={`${repositoryID} tree`} measure="full" headingHidden>
   <CommandPalette client:load repositoryID={repositoryID!} revision={revision!} />
   <RepoHeader title={repositoryID!} revision={revision} />
+  <PageShell title={`${repositoryID} tree`} measure="full" headingHidden>
 
   <ActionOutcome outcomeKey={outcomeKey} />
   <OpenMergeRequest repositoryID={repositoryID!} revision={revision!} />
