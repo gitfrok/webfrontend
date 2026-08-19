@@ -33,7 +33,8 @@ export type StatusKey =
   // policy decision outcome (T-0063)
   | 'ALLOWED' | 'DENIED'
   // release tag agreement (T-0066)
-  | 'TAG_MOVED' | 'TAG_GONE';
+  | 'TAG_MOVED' | 'TAG_GONE'
+  | 'ARCHIVED';
 
 export interface StatusDescriptor {
   /** Token class from tokens.css. Never a colour value. */
@@ -131,6 +132,14 @@ export const STATUS_VOCABULARY: Record<StatusKey, StatusDescriptor> = {
   // actually means is "the tag has moved on".
   TAG_MOVED: { tone: 'gf-status-warn', glyph: '!', label: 'Tag moved' },
   TAG_GONE: { tone: 'gf-status-pending', glyph: '⊘', label: 'Tag gone' },
+  // --- archival (T-0070, SPEC-0057) ---------------------------------------
+  // ARCHIVED is 'info', not 'warn': an archived repository is not degraded and
+  // nothing about it needs attention. It is a decision someone recorded, and a
+  // warning tone would tell a reader something is wrong. Its unarchived
+  // counterpart is ACTIVE above — the same word for the same idea, reused
+  // rather than duplicated with a second glyph, because two glyphs for one
+  // state is how a vocabulary starts disagreeing with itself.
+  ARCHIVED: { tone: 'gf-status-info', glyph: '▣', label: 'Archived' },
 };
 
 const UNKNOWN: StatusDescriptor = {

@@ -671,6 +671,63 @@ const server = createServer((request, response) => {
     response.end('releases unavailable');
   }
 
+  // --- repository settings (SPEC-0057) ----------------------------------
+  //
+  // Two fixtures, because the surface's whole claim is about the archived label:
+  // repo-1 is active and archived-repo carries the label. Neither differs in any
+  // other way, which is the point — archival changes nothing else.
+  const settingsMatch = url.pathname.match(/^\/v1\/repositories\/([^/]+)\/settings$/);
+  if (settingsMatch) {
+    const [, settingsRepo] = settingsMatch;
+    if (!settingsRepo || settingsRepo === 'unknown-repo') {
+      return refuseSettings();
+    }
+    const archivedFixture = settingsRepo === 'archived-repo';
+    if (request.method === 'POST') {
+      return readForm(request).then((form) => {
+        const name = form.get('name');
+        if (!name) {
+          response.writeHead(400, { 'cache-control': 'private, no-store' });
+          response.end('a repository needs a name');
+          return;
+        }
+        return json(settingsFixture(settingsRepo, {
+          name,
+          description: form.get('description') ?? '',
+          archived_at: archivedFixture ? '2026-08-18T11:00:00Z' : '',
+        }));
+      });
+    }
+    return json(settingsFixture(settingsRepo, {
+      archived_at: archivedFixture ? '2026-08-18T11:00:00Z' : '',
+    }));
+  }
+  const archiveMatch = url.pathname.match(/^\/v1\/repositories\/([^/]+)\/settings\/archive$/);
+  if (archiveMatch && request.method === 'POST') {
+    return readForm(request).then((form) => json(settingsFixture(archiveMatch[1], {
+      // The stub honours the state asked for rather than toggling, exactly as the
+      // backend does: a resubmitted form asks for the same state again.
+      archived_at: form.get('archived') === 'true' ? '2026-08-19T12:00:00Z' : '',
+    })));
+  }
+
+  function settingsFixture(repositoryID, overrides) {
+    return {
+      repository_id: repositoryID,
+      name: repositoryID === 'archived-repo' ? 'retired-service' : 'infra',
+      description: 'Cluster bootstrap and the runbooks that go with it.',
+      archived_at: '',
+      settings_updated_at: '2026-08-19T09:30:00Z',
+      settings_updated_by: 'owner@gitsaas.test',
+      ...overrides,
+    };
+  }
+
+  function refuseSettings() {
+    response.writeHead(404, { 'cache-control': 'private, no-store' });
+    response.end('repository settings unavailable');
+  }
+
   // --- history and blame (SPEC-0053) ------------------------------------
   //
   // The blame fixture for 'capped.go' returns capped:true so the partial

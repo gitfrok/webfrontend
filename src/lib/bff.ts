@@ -1263,3 +1263,87 @@ export async function updateReleaseNotes(
     'releases unavailable',
   );
 }
+
+/**
+ * One repository's settings (T-0070, SPEC-0057).
+ *
+ * `archived_at` is empty when the repository is not archived, and there is no
+ * `archived` boolean beside it: the instant is the state, at every layer from
+ * the column to this type, so the two cannot disagree.
+ *
+ * There is no visibility, member, role or protection field here, and that is
+ * ADR-0076's decision rather than an omission. check-contracts' check 16 keeps
+ * the wire free of one, and a test asserts this type carries none.
+ */
+export interface SettingsView {
+  repository_id: string;
+  name: string;
+  description: string;
+  archived_at: string;
+  settings_updated_at: string;
+  settings_updated_by: string;
+}
+
+/** Reads a repository's settings. */
+export async function repositorySettings(request: Request, repositoryID: string): Promise<SettingsView> {
+  const response = await bffFetch(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/settings`,
+  );
+  if (!response.ok) {
+    throw new Error('repository settings unavailable');
+  }
+  const view = (await response.json()) as Partial<SettingsView>;
+  return {
+    repository_id: view.repository_id ?? repositoryID,
+    name: view.name ?? '',
+    description: view.description ?? '',
+    archived_at: view.archived_at ?? '',
+    settings_updated_at: view.settings_updated_at ?? '',
+    settings_updated_by: view.settings_updated_by ?? '',
+  };
+}
+
+/**
+ * Writes a repository's name and description. Form-encoded, as every write on
+ * this frontend is.
+ *
+ * Both fields travel every time: the contract has no way to say "leave this one
+ * alone", so a form that omitted the description would clear it, and this
+ * function does not hide that from its caller.
+ */
+export async function updateRepositorySettings(
+  request: Request,
+  repositoryID: string,
+  name: string,
+  description: string,
+): Promise<SettingsView> {
+  if (!repositoryID) throw new Error('repository settings unavailable');
+  return bffPostForm<SettingsView>(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/settings`,
+    { name, description: description ?? '' },
+    'repository settings unavailable',
+  );
+}
+
+/**
+ * Sets or clears the archived label.
+ *
+ * It states the state wanted rather than a transition, so a resubmitted form
+ * does not flip it — a person cannot tell a slow response from a lost one, and a
+ * toggle would punish them for finding out.
+ */
+export async function setRepositoryArchived(
+  request: Request,
+  repositoryID: string,
+  archived: boolean,
+): Promise<SettingsView> {
+  if (!repositoryID) throw new Error('repository settings unavailable');
+  return bffPostForm<SettingsView>(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/settings/archive`,
+    { archived: archived ? 'true' : 'false' },
+    'repository settings unavailable',
+  );
+}

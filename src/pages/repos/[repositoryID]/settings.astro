@@ -1,0 +1,57 @@
+---
+// A repository's settings (T-0070, SPEC-0057; PRD PR-30's accepted increment).
+//
+// ADR-0076 accepted name, description and archival. This page has no visibility
+// control, no members list, no branch-protection toggle and no delete button —
+// and none of them appears here disabled either. A disabled control tells a
+// reader they lack a permission; they do not. The capability does not exist, so
+// the page says what is not a setting rather than showing a door that is locked.
+import Layout from '../../../layouts/Layout.astro';
+import RepoHeader from '../../../components/RepoHeader.astro';
+import RepositorySettings from '../../../components/RepositorySettings.astro';
+import { repositorySettings } from '../../../lib/bff';
+import type { SettingsView } from '../../../lib/bff';
+import { SETTINGS_MESSAGES, settingsMessageForKey } from '../../../lib/settings';
+
+const { repositoryID } = Astro.params;
+const outcomeKey = Astro.url.searchParams.get('settings_outcome');
+const outcome = settingsMessageForKey(outcomeKey);
+const outcomeApplied = ['saved', 'archived', 'unarchived'].includes(outcomeKey ?? '');
+
+let settings: SettingsView | null = null;
+let loadError = false;
+try {
+  settings = await repositorySettings(Astro.request, repositoryID!);
+} catch {
+  loadError = true;
+}
+---
+
+<Layout title={`${repositoryID} settings`}>
+  <RepoHeader title={repositoryID!} revision="main" />
+
+  <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+    <h1 style={{ fontSize: '20px', margin: 'var(--gf-space-4) 0 var(--gf-space-3)' }}>Settings</h1>
+
+    {outcome && (
+      <p
+        class="gf-note"
+        role="status"
+        style={{ borderLeftColor: outcomeApplied ? 'var(--gf-success-ink)' : 'var(--gf-warn-ink)' }}
+      >
+        <strong>{outcomeApplied ? 'Done.' : 'Not changed.'}</strong> {outcome}
+      </p>
+    )}
+
+    {loadError || !settings ? (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        {' '}{SETTINGS_MESSAGES.unavailable}
+      </p>
+    ) : (
+      <>
+        <RepositorySettings repositoryID={repositoryID!} settings={settings} />
+      </>
+    )}
+  </div>
+</Layout>

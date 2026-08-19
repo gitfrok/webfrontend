@@ -1,0 +1,91 @@
+---
+// The repository settings panels (T-0070, SPEC-0057, ADR-0076's accepted increment).
+//
+// It is a component rather than page markup so the absences can be tested: what
+// this surface must NOT contain is most of what SPEC-0057 asks for, and an
+// assertion about absence has to render something to assert against.
+//
+// Three panels: what can be changed, what archiving means, and what is not a
+// setting in this product. The third is not an apology — visibility and
+// membership are authorization models nobody has decided, and branch protection
+// and approval requirements are policy by PR-10. None of them appears here
+// disabled, because a disabled control tells a reader they lack a permission and
+// they do not.
+import type { SettingsView } from '../lib/bff';
+import { SETTINGS_MESSAGES, isArchived, archivalStatusKey, archivalMeaning } from '../lib/settings';
+import { describeStatus } from '../lib/status';
+
+interface Props {
+  repositoryID: string;
+  settings: SettingsView;
+}
+
+const { repositoryID, settings } = Astro.props as Props;
+
+const archived = isArchived(settings.archived_at);
+const archival = describeStatus(archivalStatusKey(settings.archived_at));
+const settingsAction = `/api/repos/${encodeURIComponent(repositoryID)}/settings`;
+---
+
+<p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-4)' }}>
+  {SETTINGS_MESSAGES.scope}
+</p>
+
+<section class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
+  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>Name and description</h2>
+  <form method="post" action={settingsAction}>
+    <label class="gf-field">
+      <span>Name</span>
+      <input class="gf-input" type="text" name="name" value={settings.name} required />
+    </label>
+    <label class="gf-field">
+      <span>Description</span>
+      <textarea class="gf-textarea" name="description" rows="4">{settings.description}</textarea>
+    </label>
+    <button type="submit" class="gf-btn gf-btn-primary">Save settings</button>
+  </form>
+  {settings.settings_updated_at && (
+    <p class="gf-muted" style={{ fontSize: '13px', margin: 'var(--gf-space-3) 0 0' }}>
+      Last changed by <code>{settings.settings_updated_by}</code> at
+      {' '}<time datetime={settings.settings_updated_at}>{settings.settings_updated_at}</time>.
+    </p>
+  )}
+</section>
+
+<section class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
+  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>
+    Archived state
+    {/*
+      The glyph comes from the tone's ::before rule in tokens.css — the badge
+      carries a shape channel whether or not this markup remembers to. Rendering
+      the glyph here too printed it twice.
+    */}
+    {' '}<span class:list={['gf-status', archival.tone]} style={{ fontSize: '13px' }}>
+      {archival.descriptor.label}
+    </span>
+  </h2>
+  <p style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>{archivalMeaning(settings.archived_at)}</p>
+  {archived && settings.archived_at && (
+    <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+      Archived at <time datetime={settings.archived_at}>{settings.archived_at}</time>.
+    </p>
+  )}
+  {/*
+    The form states the state wanted, not a transition. A resubmitted form asks
+    for the same state again and changes nothing, which is what the backend does
+    with it too — a toggle would flip the state on the resubmission a person
+    makes when they cannot tell a slow response from a lost one.
+  */}
+  <form method="post" action={`${settingsAction}/archive`}>
+    <input type="hidden" name="archived" value={archived ? 'false' : 'true'} />
+    <button type="submit" class="gf-btn">
+      {archived ? 'Remove the archived label' : 'Archive this repository'}
+    </button>
+  </form>
+</section>
+
+<section class="gf-card">
+  <h2 style={{ fontSize: '15px', margin: '0 0 var(--gf-space-3)' }}>What is not a setting here</h2>
+  <p style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>{SETTINGS_MESSAGES.notSettings}</p>
+  <p style={{ fontSize: '13px', margin: '0' }}>{SETTINGS_MESSAGES.noDeletion}</p>
+</section>

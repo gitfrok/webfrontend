@@ -88,6 +88,11 @@ const SURFACES = [
   // renders no badge at all, which is the case most easily lost in grayscale
   // if the other two ever stopped carrying words.
   { name: 'releases', path: '/repos/repo-1/releases' },
+  // T-0070: the archived label against the active one, in the same panel a
+  // reader scans. Both carry a glyph and a word, so the grayscale pass is what
+  // proves the label is not doing its work with hue alone.
+  { name: 'repository-settings', path: '/repos/repo-1/settings' },
+  { name: 'repository-settings-archived', path: '/repos/archived-repo/settings' },
 ];
 
 test.beforeAll(() => {
