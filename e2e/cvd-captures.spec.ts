@@ -84,6 +84,10 @@ const SURFACES = [
   // T-0063: allow against deny is the pair a reader most expects in green and
   // red, so the grayscale pass is the one that matters here.
   { name: 'policy-decision-denied', path: '/policy?decision_id=denied' },
+  // T-0066: all three tag agreements in one column — the agreeing release
+  // renders no badge at all, which is the case most easily lost in grayscale
+  // if the other two ever stopped carrying words.
+  { name: 'releases', path: '/repos/repo-1/releases' },
 ];
 
 test.beforeAll(() => {

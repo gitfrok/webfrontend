@@ -31,7 +31,9 @@ export type StatusKey =
   // CI job state (T-0061)
   | 'QUEUED' | 'RUNNING_JOB' | 'SUCCEEDED' | 'FAILED_JOB' | 'CANCELLED'
   // policy decision outcome (T-0063)
-  | 'ALLOWED' | 'DENIED';
+  | 'ALLOWED' | 'DENIED'
+  // release tag agreement (T-0066)
+  | 'TAG_MOVED' | 'TAG_GONE';
 
 export interface StatusDescriptor {
   /** Token class from tokens.css. Never a colour value. */
@@ -120,6 +122,15 @@ export const STATUS_VOCABULARY: Record<StatusKey, StatusDescriptor> = {
   // working — so it takes the muted tone rather than the danger one.
   ALLOWED: { tone: 'gf-status-success', glyph: '✓', label: 'Allowed' },
   DENIED: { tone: 'gf-status-pending', glyph: '⊘', label: 'Denied' },
+
+  // --- release tag agreement (T-0066, SPEC-0056 AC11) --------------------
+  // Neither is a failure: a tag being moved or deleted is a thing maintainers
+  // do, and the release is still an accurate record of what it was published
+  // against. They take the warn and muted tones rather than danger, because a
+  // red badge here would read as "this release is broken" when what it
+  // actually means is "the tag has moved on".
+  TAG_MOVED: { tone: 'gf-status-warn', glyph: '!', label: 'Tag moved' },
+  TAG_GONE: { tone: 'gf-status-pending', glyph: '⊘', label: 'Tag gone' },
 };
 
 const UNKNOWN: StatusDescriptor = {

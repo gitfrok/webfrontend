@@ -1,0 +1,99 @@
+---
+// A repository's releases (T-0066, SPEC-0056; PRD PR-29's accepted increment).
+//
+// ADR-0075 accepted tags and notes only, so this page has no upload and offers
+// no download. It says so once, above the list, rather than leaving a reader
+// to hunt for a button that does not exist.
+import Layout from '../../../../layouts/Layout.astro';
+import RepoHeader from '../../../../components/RepoHeader.astro';
+import ReleaseList from '../../../../components/ReleaseList.astro';
+import { repositoryTags, repositoryReleases } from '../../../../lib/bff';
+import type { TagView, ReleaseView } from '../../../../lib/bff';
+import { RELEASE_MESSAGES, releaseMessageForKey } from '../../../../lib/releases';
+
+const { repositoryID } = Astro.params;
+const pageToken = Astro.url.searchParams.get('page_token') ?? '';
+const outcomeKey = Astro.url.searchParams.get('release_outcome');
+const outcome = releaseMessageForKey(outcomeKey);
+const outcomeApplied = ['published', 'notesUpdated'].includes(outcomeKey ?? '');
+
+// Both reads happen because the page compares them: the release records what a
+// tag pointed at, the tag list says what it points at now, and neither backend
+// is allowed to hold both facts.
+let releases: ReleaseView[] = [];
+let tags: TagView[] = [];
+let nextToken = '';
+let loadError = false;
+try {
+  const page = await repositoryReleases(Astro.request, repositoryID!, pageToken);
+  releases = page.releases;
+  nextToken = page.next_page_token;
+  tags = (await repositoryTags(Astro.request, repositoryID!)).tags;
+} catch {
+  loadError = true;
+}
+
+// Tags that have no release yet — the only ones worth offering to publish.
+const released = new Set(releases.map((r) => r.tag));
+const publishable = tags.filter((t) => !released.has(t.name));
+
+const nextHref = nextToken
+  ? `/repos/${encodeURIComponent(repositoryID!)}/releases?page_token=${encodeURIComponent(nextToken)}`
+  : '';
+---
+
+<Layout title={`${repositoryID} releases`}>
+  <RepoHeader title={repositoryID!} revision="main" />
+
+  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+    <h1 style={{ fontSize: '20px', margin: 'var(--gf-space-4) 0 var(--gf-space-3)' }}>Releases</h1>
+
+    {outcome && (
+      <p
+        class="gf-note"
+        role="status"
+        style={{ borderLeftColor: outcomeApplied ? 'var(--gf-success-ink)' : 'var(--gf-warn-ink)' }}
+      >
+        <strong>{outcomeApplied ? 'Done.' : 'Not published.'}</strong> {outcome}
+      </p>
+    )}
+
+    {loadError ? (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        {' '}{RELEASE_MESSAGES.unavailable}
+      </p>
+    ) : (
+      <>
+        <details class="gf-card" style={{ marginBottom: 'var(--gf-space-4)' }}>
+          <summary style={{ cursor: 'pointer', fontWeight: '500' }}>Publish a release</summary>
+          {publishable.length === 0 ? (
+            <p class="gf-muted" style={{ fontSize: '13px', margin: 'var(--gf-space-3) 0 0' }}>
+              Every tag in this repository already has a release. A release is published against a
+              tag, and tags are made by pushing them.
+            </p>
+          ) : (
+            <form method="post" action={`/api/repos/${encodeURIComponent(repositoryID!)}/releases`}
+                  style={{ marginTop: 'var(--gf-space-3)' }}>
+              <label class="gf-field">
+                <span>Tag</span>
+                <select class="gf-input" name="tag" required>
+                  {publishable.map((tag) => (
+                    <option value={tag.name}>{tag.name} — {tag.commit_id.slice(0, 7)}</option>
+                  ))}
+                </select>
+              </label>
+              <label class="gf-field">
+                <span>Notes</span>
+                <textarea class="gf-textarea" name="notes" rows="5"></textarea>
+              </label>
+              <button type="submit" class="gf-btn gf-btn-primary">Publish release</button>
+            </form>
+          )}
+        </details>
+
+        <ReleaseList repositoryID={repositoryID!} releases={releases} tags={tags} nextHref={nextHref} />
+      </>
+    )}
+  </div>
+</Layout>

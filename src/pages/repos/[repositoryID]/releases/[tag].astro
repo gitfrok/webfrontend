@@ -1,0 +1,74 @@
+---
+// One release (T-0066, SPEC-0056 AC11, AC13, AC14).
+//
+// The page holds both facts — what the tag pointed at when this was published,
+// and what it points at now — and says when they differ. Neither backend may
+// hold both: the Release context cannot ask git, and Repository/Git knows
+// nothing about releases.
+import Layout from '../../../../layouts/Layout.astro';
+import RepoHeader from '../../../../components/RepoHeader.astro';
+import ReleaseList from '../../../../components/ReleaseList.astro';
+import { repositoryTags, repositoryReleases } from '../../../../lib/bff';
+import type { TagView, ReleaseView } from '../../../../lib/bff';
+import { RELEASE_MESSAGES, releaseMessageForKey } from '../../../../lib/releases';
+
+const { repositoryID, tag } = Astro.params;
+const outcomeKey = Astro.url.searchParams.get('release_outcome');
+const outcome = releaseMessageForKey(outcomeKey);
+const outcomeApplied = ['published', 'notesUpdated'].includes(outcomeKey ?? '');
+
+let release: ReleaseView | null = null;
+let tags: TagView[] = [];
+let loadError = false;
+try {
+  const page = await repositoryReleases(Astro.request, repositoryID!);
+  release = page.releases.find((r) => r.tag === tag) ?? null;
+  tags = (await repositoryTags(Astro.request, repositoryID!)).tags;
+  if (!release) loadError = true;
+} catch {
+  loadError = true;
+}
+---
+
+<Layout title={`${tag} · ${repositoryID}`}>
+  <RepoHeader title={`${repositoryID} · ${tag}`} revision="main" />
+
+  <div style={{ maxWidth: '960px', margin: '0 auto', padding: '0 var(--gf-space-4)' }}>
+    {outcome && (
+      <p
+        class="gf-note"
+        role="status"
+        style={{ borderLeftColor: outcomeApplied ? 'var(--gf-success-ink)' : 'var(--gf-warn-ink)' }}
+      >
+        <strong>{outcomeApplied ? 'Done.' : 'Not applied.'}</strong> {outcome}
+      </p>
+    )}
+
+    {loadError || !release ? (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <span class="gf-status gf-status-warn" style={{ fontSize: '13px' }}>Unavailable</span>
+        {' '}{RELEASE_MESSAGES.unavailable}
+      </p>
+    ) : (
+      <>
+        <ReleaseList repositoryID={repositoryID!} releases={[release]} tags={tags} nextHref="" />
+
+        <section class="gf-card" aria-labelledby="notes-heading">
+          <h2 id="notes-heading" style={{ fontSize: '16px', margin: '0 0 var(--gf-space-2)' }}>Edit notes</h2>
+          <p class="gf-muted" style={{ fontSize: '13px', margin: '0 0 var(--gf-space-3)' }}>
+            Notes are documentation and may be corrected. What this release points at cannot be
+            changed — publishing against a different commit is a different release.
+          </p>
+          <form method="post"
+                action={`/api/repos/${encodeURIComponent(repositoryID!)}/releases/${encodeURIComponent(tag!)}/notes`}>
+            <label class="gf-field">
+              <span>Notes</span>
+              <textarea class="gf-textarea" name="notes" rows="6">{release.notes}</textarea>
+            </label>
+            <button type="submit" class="gf-btn">Save notes</button>
+          </form>
+        </section>
+      </>
+    )}
+  </div>
+</Layout>

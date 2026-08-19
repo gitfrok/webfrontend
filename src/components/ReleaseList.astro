@@ -1,0 +1,91 @@
+---
+// A repository's releases (T-0066, SPEC-0056 AC11, AC12, AC14).
+//
+// The rule this component exists for: **a release whose tag has moved says so.**
+// A release records the commit its tag pointed at when published; a tag is a
+// mutable pointer and the two can diverge. This is the only place in the
+// product holding both facts — the Release context may not ask git what a tag
+// means (ADR-0022) and Repository/Git knows nothing about releases — so the
+// comparison is made here, where both arrive.
+//
+// Notes render as TEXT. This is the product's first surface storing free-form
+// prose, and Astro escapes interpolated expressions by default; there is
+// deliberately no set:html anywhere in this file, and a test asserts markup in
+// a note is displayed rather than executed.
+import { describeStatus } from '../lib/status';
+import { RELEASE_MESSAGES, tagAgreement, agreementStatusKey } from '../lib/releases';
+import { shortCommit } from '../lib/commits';
+import type { ReleaseView, TagView } from '../lib/bff';
+
+interface Props {
+  repositoryID: string;
+  releases: ReleaseView[];
+  tags: TagView[];
+  nextHref: string;
+}
+const { repositoryID, releases, tags, nextHref } = Astro.props;
+
+// The tag's target now, or undefined when the tag is gone. Undefined and
+// "different" are kept apart: a deleted tag and a repointed one are different
+// things that happened.
+const currentCommit = new Map(tags.map((t) => [t.name, t.commit_id]));
+const day = (iso: string) => (iso ? iso.slice(0, 10) : '');
+---
+
+<p class="gf-note" style={{ borderLeftColor: 'var(--gf-info-ink)' }}>
+  {RELEASE_MESSAGES.noArtifacts}
+</p>
+
+{releases.length === 0 && (
+  <p class="gf-muted" style={{ fontSize: '14px' }}>{RELEASE_MESSAGES.empty}</p>
+)}
+
+{releases.map((release) => {
+  const agreement = tagAgreement(release.published_commit, currentCommit.get(release.tag));
+  const statusKey = agreementStatusKey(agreement);
+  const status = statusKey ? describeStatus(statusKey) : null;
+  return (
+    <article class="gf-card" style={{ marginBottom: 'var(--gf-space-3)' }}>
+      <header style={{ display: 'flex', gap: 'var(--gf-space-3)', alignItems: 'center', flexWrap: 'wrap' }}>
+        <a
+          href={`/repos/${encodeURIComponent(repositoryID)}/releases/${encodeURIComponent(release.tag)}`}
+          style={{ color: 'var(--gf-action-ink)', fontWeight: '600', fontSize: '15px', textDecoration: 'none' }}
+        >{release.tag}</a>
+        <span class="gf-muted" style={{ fontSize: '13px', fontFamily: 'var(--gf-font-code)' }} title={release.published_commit}>
+          {shortCommit(release.published_commit)}
+        </span>
+        {status && (
+          <span class:list={['gf-status', status.tone]} style={{ fontSize: '12px' }}>
+            {status.descriptor.label}
+          </span>
+        )}
+      </header>
+
+      {agreement === 'moved' && (
+        <p class="gf-note" style={{ borderLeftColor: 'var(--gf-warn-ink)', margin: 'var(--gf-space-2) 0 0', fontSize: '13px' }}>
+          {RELEASE_MESSAGES.tagMoved}
+        </p>
+      )}
+      {agreement === 'gone' && (
+        <p class="gf-note" style={{ borderLeftColor: 'var(--gf-ink-muted)', margin: 'var(--gf-space-2) 0 0', fontSize: '13px' }}>
+          {RELEASE_MESSAGES.tagGone}
+        </p>
+      )}
+
+      {release.notes && (
+        <p style={{ margin: 'var(--gf-space-2) 0 0', fontSize: '14px', whiteSpace: 'pre-wrap' }}>{release.notes}</p>
+      )}
+
+      <p class="gf-muted" style={{ margin: 'var(--gf-space-2) 0 0', fontSize: '12px' }}>
+        published by {release.published_by} on {day(release.published_at)}
+        {release.notes_updated_at && <> · notes edited {day(release.notes_updated_at)}</>}
+      </p>
+    </article>
+  );
+})}
+
+{nextHref && (
+  <p style={{ margin: 'var(--gf-space-4) 0' }}>
+    <a class="gf-btn" href={nextHref} style={{ textDecoration: 'none' }}>Older releases</a>
+  </p>
+)}

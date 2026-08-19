@@ -546,8 +546,40 @@ export const MR_DISPOSITION_WIRE = {
 
 export type MRDispositionKey = keyof typeof MR_DISPOSITION_WIRE;
 
-/** Posts one form-encoded write to the BFF under the browser's session. */
-async function bffPostForm(request: Request, path: string, fields: Record<string, string>): Promise<MergeRequestView> {
+/**
+ * A refused write, carrying the status so a caller can tell one outcome from
+ * another without parsing a message.
+ *
+ * The message stays each surface's own coarse refusal — this class adds a
+ * machine-readable status beside it rather than replacing it, because the
+ * copy a surface shows and the code a relay branches on are different needs.
+ */
+export class BffWriteError extends Error {
+  constructor(
+    readonly status: number,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'BffWriteError';
+  }
+}
+
+/**
+ * Posts one form-encoded write to the BFF under the browser's session.
+ *
+ * Generic in its response because more than one surface writes this way now:
+ * the merge-request actions it was written for, and releases. Returning one
+ * surface's shape and casting at the call site would put a lie in the types.
+ *
+ * `unavailable` is the caller's coarse refusal message, because each surface
+ * has its own and a shared helper must not flatten them.
+ */
+async function bffPostForm<T>(
+  request: Request,
+  path: string,
+  fields: Record<string, string>,
+  unavailable = 'merge request unavailable',
+): Promise<T> {
   const url = new URL(path, bffOrigin);
   const headers = new Headers({ 'content-type': 'application/x-www-form-urlencoded' });
   const cookie = request.headers.get('cookie');
@@ -559,9 +591,9 @@ async function bffPostForm(request: Request, path: string, fields: Record<string
     redirect: 'manual',
   });
   if (!response.ok) {
-    throw new Error('merge request unavailable');
+    throw new BffWriteError(response.status, unavailable);
   }
-  return (await response.json()) as MergeRequestView;
+  return (await response.json()) as T;
 }
 
 /**
@@ -583,7 +615,7 @@ export async function openMergeRequest(
   if (!repositoryID || !input.source_ref || !input.target_ref || !input.title) {
     throw new Error('merge request unavailable');
   }
-  return bffPostForm(request, `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests`, {
+  return bffPostForm<MergeRequestView>(request, `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests`, {
     source_ref: input.source_ref,
     target_ref: input.target_ref,
     title: input.title,
@@ -608,7 +640,7 @@ export async function submitMergeRequestReview(
   if (!repositoryID || !mergeRequestID || !wire || !input.head_revision || !usableVersion(input.expected_version)) {
     throw new Error('merge request unavailable');
   }
-  return bffPostForm(
+  return bffPostForm<MergeRequestView>(
     request,
     `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/review`,
     {
@@ -630,7 +662,7 @@ export async function mergeMergeRequest(
   if (!repositoryID || !mergeRequestID || !usableVersion(expectedVersion)) {
     throw new Error('merge request unavailable');
   }
-  return bffPostForm(
+  return bffPostForm<MergeRequestView>(
     request,
     `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/merge`,
     { expected_version: String(expectedVersion) },
@@ -1139,4 +1171,95 @@ export async function policyDecision(request: Request, decisionID: string): Prom
     throw new Error('policy unavailable');
   }
   return (await response.json()) as DecisionRecordView;
+}
+
+// --- releases (T-0066, SPEC-0056) -----------------------------------------
+//
+// No artifact field, and no client method that could fetch one: ADR-0075
+// accepted tags and notes, and check 15 keeps the wire free of one.
+
+export interface TagView {
+  name: string;
+  commit_id: string;
+}
+
+export interface TagListView {
+  tags: TagView[];
+  next_page_token: string;
+}
+
+export interface ReleaseView {
+  tag: string;
+  published_commit: string;
+  notes: string;
+  published_by: string;
+  published_at: string;
+  notes_updated_at: string;
+}
+
+export interface ReleaseListView {
+  releases: ReleaseView[];
+  next_page_token: string;
+}
+
+/** Lists a repository's tags with what each points at now. */
+export async function repositoryTags(request: Request, repositoryID: string): Promise<TagListView> {
+  const response = await bffFetch(request, `/v1/repositories/${encodeURIComponent(repositoryID)}/tags`);
+  if (!response.ok) {
+    throw new Error('releases unavailable');
+  }
+  const view = (await response.json()) as Partial<TagListView>;
+  return { tags: view.tags ?? [], next_page_token: view.next_page_token ?? '' };
+}
+
+/** Lists a repository's releases. */
+export async function repositoryReleases(
+  request: Request,
+  repositoryID: string,
+  pageToken = '',
+): Promise<ReleaseListView> {
+  const params = new URLSearchParams();
+  if (pageToken) params.set('page_token', pageToken);
+  const query = params.toString();
+  const response = await bffFetch(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/releases${query ? `?${query}` : ''}`,
+  );
+  if (!response.ok) {
+    throw new Error('releases unavailable');
+  }
+  const view = (await response.json()) as Partial<ReleaseListView>;
+  return { releases: view.releases ?? [], next_page_token: view.next_page_token ?? '' };
+}
+
+/** Publishes a release against a tag. Form-encoded, as every write on this frontend is. */
+export async function publishRelease(
+  request: Request,
+  repositoryID: string,
+  tag: string,
+  notes: string,
+): Promise<ReleaseView> {
+  if (!repositoryID || !tag) throw new Error('releases unavailable');
+  return bffPostForm<ReleaseView>(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/releases`,
+    { tag, notes: notes ?? '' },
+    'releases unavailable',
+  );
+}
+
+/** Corrects a release's notes. There is no parameter here that could move it. */
+export async function updateReleaseNotes(
+  request: Request,
+  repositoryID: string,
+  tag: string,
+  notes: string,
+): Promise<ReleaseView> {
+  if (!repositoryID || !tag) throw new Error('releases unavailable');
+  return bffPostForm<ReleaseView>(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/releases/${encodeURIComponent(tag)}/notes`,
+    { notes: notes ?? '' },
+    'releases unavailable',
+  );
 }

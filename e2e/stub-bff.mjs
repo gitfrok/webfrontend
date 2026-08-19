@@ -592,6 +592,85 @@ const server = createServer((request, response) => {
     return deny();
   }
 
+  // --- releases and tags (SPEC-0056) ------------------------------------
+  //
+  // The fixtures exist to drive the three tag agreements at once: v1.0.0 still
+  // points where it did, v0.9.0 has been moved, and v0.8.0's tag is gone. All
+  // write-free.
+  const releaseMatch = url.pathname.match(/^\/v1\/repositories\/([^/]+)\/(tags|releases)$/);
+  if (releaseMatch) {
+    const [, releaseRepo, kind] = releaseMatch;
+    if (!releaseRepo || releaseRepo === 'unknown-repo') {
+      response.writeHead(404, { 'cache-control': 'private, no-store' });
+      response.end('releases unavailable');
+      return;
+    }
+    if (kind === 'tags') {
+      return json({
+        tags: [
+          { name: 'v1.0.0', commit_id: 'aaaaaaa1111111111111' },
+          // Moved: the release recorded bbbbbbb, the tag now names cccccccc.
+          { name: 'v0.9.0', commit_id: 'ccccccc3333333333333' },
+          // v0.8.0 is absent on purpose — its release records a tag that is gone.
+          { name: 'v1.1.0', commit_id: 'ddddddd4444444444444' },
+        ],
+        next_page_token: '',
+      });
+    }
+    if (request.method === 'POST') {
+      return readForm(request).then((form) => {
+        const tag = form.get('tag');
+        if (!tag) return refuseReleases();
+        if (tag === 'v1.0.0') {
+          response.writeHead(409, { 'cache-control': 'private, no-store' });
+          response.end('this tag already has a release');
+          return;
+        }
+        return json({
+          tag, published_commit: 'ddddddd4444444444444', notes: form.get('notes') ?? '',
+          published_by: 'dev@gitsaas.test', published_at: '2026-08-19T12:00:00Z',
+          notes_updated_at: '',
+        });
+      });
+    }
+    return json({
+      releases: [
+        {
+          tag: 'v1.0.0', published_commit: 'aaaaaaa1111111111111',
+          notes: 'The first one. Everything works.',
+          published_by: 'dev@gitsaas.test', published_at: '2026-08-19T09:00:00Z',
+          notes_updated_at: '',
+        },
+        {
+          tag: 'v0.9.0', published_commit: 'bbbbbbb2222222222222',
+          notes: 'Release candidate.',
+          published_by: 'dev@gitsaas.test', published_at: '2026-08-18T09:00:00Z',
+          notes_updated_at: '2026-08-18T15:00:00Z',
+        },
+        {
+          tag: 'v0.8.0', published_commit: 'eeeeeee5555555555555',
+          notes: 'Older, and its tag has since been deleted.',
+          published_by: 'dev@gitsaas.test', published_at: '2026-08-17T09:00:00Z',
+          notes_updated_at: '',
+        },
+      ],
+      next_page_token: '',
+    });
+  }
+  const notesMatch = url.pathname.match(/^\/v1\/repositories\/([^/]+)\/releases\/([^/]+)\/notes$/);
+  if (notesMatch && request.method === 'POST') {
+    return readForm(request).then((form) => json({
+      tag: decodeURIComponent(notesMatch[2]), published_commit: 'aaaaaaa1111111111111',
+      notes: form.get('notes') ?? '', published_by: 'dev@gitsaas.test',
+      published_at: '2026-08-19T09:00:00Z', notes_updated_at: '2026-08-20T10:00:00Z',
+    }));
+  }
+
+  function refuseReleases() {
+    response.writeHead(404, { 'cache-control': 'private, no-store' });
+    response.end('releases unavailable');
+  }
+
   // --- history and blame (SPEC-0053) ------------------------------------
   //
   // The blame fixture for 'capped.go' returns capped:true so the partial
