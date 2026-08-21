@@ -36,6 +36,11 @@ const action = `/api/repos/${encodeURIComponent(repositoryID)}/merge_requests`;
       <span>Description (optional)</span>
       <textarea class="gf-textarea" name="description" rows="3"></textarea>
     </label>
+    <!-- A draft stays quiet until it is marked ready (ADR-0087, SPEC-0064 AC7). -->
+    <label class="gf-field" style={{ display: 'flex', alignItems: 'center', gap: 'var(--gf-space-2)' }}>
+      <input type="checkbox" name="draft" value="on" style={{ width: 'auto' }} />
+      <span>Open as a draft — it cannot merge and announces nothing until you mark it ready</span>
+    </label>
     <button type="submit" class="gf-btn gf-btn-primary">Open merge request</button>
   </form>
 </details>

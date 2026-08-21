@@ -623,11 +623,11 @@ function usableVersion(version: number): boolean {
   return typeof version === 'number' && Number.isInteger(version) && version >= 0;
 }
 
-/** Opens a merge request (SPEC-0048 AC1). */
+/** Opens a merge request, optionally as a draft (SPEC-0048 AC1, SPEC-0064 AC1). */
 export async function openMergeRequest(
   request: Request,
   repositoryID: string,
-  input: { source_ref: string; target_ref: string; title: string; description: string },
+  input: { source_ref: string; target_ref: string; title: string; description: string; draft?: boolean },
 ): Promise<MergeRequestView> {
   if (!repositoryID || !input.source_ref || !input.target_ref || !input.title) {
     throw new Error('merge request unavailable');
@@ -637,6 +637,7 @@ export async function openMergeRequest(
     target_ref: input.target_ref,
     title: input.title,
     description: input.description ?? '',
+    ...(input.draft ? { draft: 'on' } : {}),
   });
 }
 
@@ -682,6 +683,26 @@ export async function mergeMergeRequest(
   return bffPostForm<MergeRequestView>(
     request,
     `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/merge`,
+    { expected_version: String(expectedVersion) },
+  );
+}
+
+/**
+ * Marks a draft merge request ready for review (ADR-0087, SPEC-0064 AC3).
+ * Carries no opinion about whether it should be allowed.
+ */
+export async function markMergeRequestReady(
+  request: Request,
+  repositoryID: string,
+  mergeRequestID: string,
+  expectedVersion: number,
+): Promise<MergeRequestView> {
+  if (!repositoryID || !mergeRequestID || !usableVersion(expectedVersion)) {
+    throw new Error('merge request unavailable');
+  }
+  return bffPostForm<MergeRequestView>(
+    request,
+    `/v1/repositories/${encodeURIComponent(repositoryID)}/merge_requests/${encodeURIComponent(mergeRequestID)}/ready`,
     { expected_version: String(expectedVersion) },
   );
 }

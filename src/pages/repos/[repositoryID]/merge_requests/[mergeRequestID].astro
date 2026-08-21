@@ -88,7 +88,12 @@ if (mr) {
     {mr && (
       <>
         <header style={{ padding: 'var(--gf-space-4) 0', borderBottom: '1px solid var(--gf-line)' }}>
-          <h1 style={{ fontSize: 'var(--gf-text-xl)', margin: '0' }}>{mr.title}</h1>
+          <h1 style={{ fontSize: 'var(--gf-text-xl)', margin: '0' }}>
+            {mr.state === 'MERGE_REQUEST_STATE_DRAFT' && (
+              <span class="gf-status gf-status-info" style={{ fontSize: 'var(--gf-text-sm)', verticalAlign: 'middle', marginRight: 'var(--gf-space-2)' }}>Draft</span>
+            )}
+            {mr.title}
+          </h1>
           <p style={{ color: 'var(--gf-ink-muted)', margin: 'var(--gf-space-2) 0 0', fontSize: 'var(--gf-text-base)' }}>
             {mr.state} · {mr.source_ref} → {mr.target_ref}
           </p>

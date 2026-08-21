@@ -27,6 +27,10 @@ const { mr } = Astro.props;
 
 const reviewAction = `/api/repos/${encodeURIComponent(mr.repository_id)}/merge_requests/${encodeURIComponent(mr.merge_request_id)}/review`;
 const mergeAction = `/api/repos/${encodeURIComponent(mr.repository_id)}/merge_requests/${encodeURIComponent(mr.merge_request_id)}/merge`;
+const readyAction = `/api/repos/${encodeURIComponent(mr.repository_id)}/merge_requests/${encodeURIComponent(mr.merge_request_id)}/ready`;
+// A draft renders its own state and its own action (ADR-0087, SPEC-0064 AC7):
+// never folded into OPEN, and mark-ready only on a draft.
+const isDraft = mr.state === 'MERGE_REQUEST_STATE_DRAFT';
 
 const dispositions = (Object.keys(MR_DISPOSITIONS) as MRDisposition[]).map((key) => ({
   key,
@@ -64,13 +68,29 @@ const dispositions = (Object.keys(MR_DISPOSITIONS) as MRDisposition[]).map((key)
 
   <hr style={{ border: '0px', borderTop: '1px solid var(--gf-line)', margin: 'var(--gf-space-4) 0' }} />
 
-  <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>Merge</h2>
-  <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
-    Merging is decided by the server against the target branch's rules at the moment you submit.
-    This page does not know that decision in advance and does not predict it here.
-  </p>
-  <form method="post" action={mergeAction}>
-    <input type="hidden" name="expected_version" value={String(mr.version)} />
-    <button type="submit" class="gf-btn">Merge into {mr.target_ref}</button>
-  </form>
+  {isDraft ? (
+    <>
+      <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>Draft</h2>
+      <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
+        This merge request is a draft. It cannot merge and receives no updates from pushes until it
+        is marked ready; marking it ready re-reads both refs as they stand at that moment.
+      </p>
+      <form method="post" action={readyAction}>
+        <input type="hidden" name="expected_version" value={String(mr.version)} />
+        <button type="submit" class="gf-btn gf-btn-primary">Mark ready for review</button>
+      </form>
+    </>
+  ) : (
+    <>
+      <h2 style={{ fontSize: 'var(--gf-text-md)', margin: '0 0 var(--gf-space-2)' }}>Merge</h2>
+      <p class="gf-muted" style={{ fontSize: 'var(--gf-text-sm)', margin: '0 0 var(--gf-space-3)' }}>
+        Merging is decided by the server against the target branch's rules at the moment you submit.
+        This page does not know that decision in advance and does not predict it here.
+      </p>
+      <form method="post" action={mergeAction}>
+        <input type="hidden" name="expected_version" value={String(mr.version)} />
+        <button type="submit" class="gf-btn">Merge into {mr.target_ref}</button>
+      </form>
+    </>
+  )}
 </section>
