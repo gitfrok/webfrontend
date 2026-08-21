@@ -13,6 +13,7 @@
 // never got until T-0045.
 import '../styles/tokens.css';
 import { hasSessionCookie } from '../lib/session';
+import NotificationBell from '../components/NotificationBell.astro';
 
 interface Props {
   title: string;
@@ -71,6 +72,7 @@ const isCurrent = (href: string) =>
             >{d.label}</a>
           ))}
           <span style="flex:1"></span>
+          {signedIn && <NotificationBell />}
           {signedIn ? (
             <span data-auth="signed-in" style="display:flex; align-items:center; gap:var(--gf-space-3);">
               <span class="gf-muted">Signed in</span>

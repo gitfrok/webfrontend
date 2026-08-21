@@ -1,0 +1,33 @@
+---
+// The bell (T-0080, SPEC-0063 AC7): an honest unread count beside the nav.
+// Zero is zero — no badge, not a badge that says nothing — and a failed read
+// renders the count as absent rather than as zero, because "we could not
+// read it" and "you have none" are different facts. The count is fetched at
+// SSR time; no client script decides anything about it.
+import { unreadNotificationCount } from '../lib/bff';
+
+let unread: number | null = null;
+try {
+  unread = await unreadNotificationCount(Astro.request);
+} catch {
+  unread = null;
+}
+---
+
+{unread !== null && (
+  <a
+    class="gf-nav-link"
+    href="/notifications"
+    aria-label={unread === 0 ? 'Notifications, none unread' : `Notifications, ${unread} unread`}
+    style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--gf-space-1)' }}
+  >
+    Notifications
+    {unread > 0 && (
+      <span
+        data-testid="unread-count"
+        class="gf-status gf-status-info"
+        style={{ fontSize: 'var(--gf-text-sm)', borderRadius: 'var(--gf-radius-pill)', padding: '0 var(--gf-space-2)' }}
+      >{unread}</span>
+    )}
+  </a>
+)}

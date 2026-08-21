@@ -1470,3 +1470,53 @@ export async function unlinkExternalIssue(
     'merge request unavailable',
   );
 }
+
+// --- Notifications (SPEC-0063, ADR-0086): the bell reads what happened ---
+
+export interface NotificationRow {
+  id: string;
+  kind: string;
+  repository_id: string;
+  merge_request_id?: string;
+  actor_id?: string;
+  head_revision?: string;
+  occurred_at: string;
+  read: boolean;
+}
+
+export interface NotificationsPage {
+  notifications: NotificationRow[];
+  next_page_token: string;
+}
+
+/** Lists the caller's notifications, newest first. Zero rows is an empty list, not an error. */
+export async function listNotifications(request: Request, pageSize = 0, pageToken = ''): Promise<NotificationsPage> {
+  const params = new URLSearchParams();
+  if (pageSize > 0) params.set('page_size', String(pageSize));
+  if (pageToken) params.set('page_token', pageToken);
+  const suffix = params.size ? `?${params.toString()}` : '';
+  const response = await bffFetch(request, `/v1/notifications${suffix}`);
+  if (!response.ok) throw new Error('notifications unavailable');
+  const body = (await response.json()) as NotificationsPage;
+  return { notifications: body.notifications ?? [], next_page_token: body.next_page_token ?? '' };
+}
+
+/** The caller's unread count. Zero is zero — the bell renders absence honestly. */
+export async function unreadNotificationCount(request: Request): Promise<number> {
+  const response = await bffFetch(request, '/v1/notifications/unread_count');
+  if (!response.ok) throw new Error('notifications unavailable');
+  const body = (await response.json()) as { unread?: number };
+  return typeof body.unread === 'number' ? body.unread : 0;
+}
+
+/** Marks ONE notification read; marking one marks one (SPEC-0063 AC6). */
+export async function markNotificationRead(request: Request, notificationID: string): Promise<NotificationRow> {
+  if (!notificationID) throw new Error('notifications unavailable');
+  const url = new URL(`/v1/notifications/${encodeURIComponent(notificationID)}/mark_read`, bffOrigin);
+  const headers = new Headers();
+  const cookie = request.headers.get('cookie');
+  if (cookie) headers.set('cookie', cookie);
+  const response = await fetch(url, { method: 'POST', headers, redirect: 'manual' });
+  if (!response.ok) throw new Error('notifications unavailable');
+  return (await response.json()) as NotificationRow;
+}

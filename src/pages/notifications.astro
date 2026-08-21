@@ -1,0 +1,106 @@
+---
+// The notifications list (T-0080, SPEC-0063 AC7): what happened, where, and
+// when, each row linking to the thing it is about, newest first. Read state
+// is honest: unread rows carry their own mark, and marking one marks one.
+// A failed read says so rather than rendering an empty page a reader could
+// misread as "nothing happened".
+import { listNotifications } from '../lib/bff';
+import Layout from '../layouts/Layout.astro';
+import PageShell from '../components/PageShell.astro';
+
+const outcome = Astro.url.searchParams.get('notification_outcome');
+const pageToken = Astro.url.searchParams.get('page_token') ?? '';
+
+let rows: Awaited<ReturnType<typeof listNotifications>>['notifications'] = [];
+let nextPageToken = '';
+let loadError = false;
+try {
+  const page = await listNotifications(Astro.request, 50, pageToken);
+  rows = page.notifications;
+  nextPageToken = page.next_page_token;
+} catch {
+  loadError = true;
+}
+
+const KIND_LABELS: Record<string, string> = {
+  MERGE_REQUEST_READY_FOR_REVIEW: 'requested your review',
+  REVIEW_SUBMITTED: 'submitted a review',
+  MERGE_REQUEST_MERGED: 'merged',
+  FINDINGS_ATTRIBUTED: 'findings were attributed to',
+};
+const labelFor = (kind: string) => KIND_LABELS[kind] ?? kind;
+
+const hrefFor = (row: (typeof rows)[number]) =>
+  row.merge_request_id
+    ? `/repos/${encodeURIComponent(row.repository_id)}/merge_requests/${encodeURIComponent(row.merge_request_id)}`
+    : `/repos/${encodeURIComponent(row.repository_id)}`;
+---
+
+<Layout title="Notifications">
+  <PageShell title="Notifications" measure="prose">
+    {outcome === 'marked' && (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-success-ink)' }}>
+        <strong>Done.</strong> Marked read.
+      </p>
+    )}
+    {outcome === 'mark-failed' && (
+      <p class="gf-note" role="status" style={{ borderLeftColor: 'var(--gf-warn-ink)' }}>
+        <strong>Not changed.</strong> That notification could not be marked read.
+      </p>
+    )}
+
+    {loadError && <p style={{ color: 'var(--gf-danger-ink)' }}>Notifications are unavailable. Check your session.</p>}
+
+    {!loadError && rows.length === 0 && (
+      <p class="gf-muted">Nothing here yet. When someone asks for your review or merges one of yours, it shows up.</p>
+    )}
+
+    {rows.length > 0 && (
+      <ul style={{ listStyle: 'none', margin: '0', padding: '0' }}>
+        {rows.map((row) => (
+          <li
+            data-testid="notification-row"
+            data-read={String(row.read)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--gf-space-3)',
+              padding: 'var(--gf-space-3) 0',
+              borderBottom: '1px solid var(--gf-line)',
+            }}
+          >
+            <span style={{ flex: '1' }}>
+              {!row.read && (
+                <span class="gf-status gf-status-info" style={{ fontSize: 'var(--gf-text-sm)', marginRight: 'var(--gf-space-2)' }}
+                  aria-label="Unread">●</span>
+              )}
+              <a href={hrefFor(row)} style={{ color: 'var(--gf-action-ink)', textDecoration: 'none' }}>
+                {labelFor(row.kind)}
+                {row.actor_id && <> · {row.actor_id}</>}
+                {row.head_revision && <> · {row.head_revision.slice(0, 8)}</>}
+              </a>
+              <span class="gf-muted" style={{ marginLeft: 'var(--gf-space-2)', fontSize: 'var(--gf-text-sm)' }}>
+                {new Date(row.occurred_at).toISOString().slice(0, 16).replace('T', ' ')} UTC
+              </span>
+            </span>
+            {!row.read && (
+              <form
+                method="post"
+                action={`/api/notifications/${encodeURIComponent(row.id)}/mark_read`}
+                style={{ margin: '0' }}
+              >
+                <button type="submit" class="gf-btn">Mark read</button>
+              </form>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {nextPageToken && (
+      <p style={{ marginTop: 'var(--gf-space-4)' }}>
+        <a href={`/notifications?page_token=${encodeURIComponent(nextPageToken)}`} style={{ color: 'var(--gf-action-ink)' }}>Older</a>
+      </p>
+    )}
+  </PageShell>
+</Layout>
