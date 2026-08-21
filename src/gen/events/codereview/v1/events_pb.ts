@@ -20,7 +20,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file events/codereview/v1/events.proto.
  */
 export const file_events_codereview_v1_events: GenFile = /*@__PURE__*/
-  fileDesc("CiFldmVudHMvY29kZXJldmlldy92MS9ldmVudHMucHJvdG8SHGdpdHNhYXMuZXZlbnRzLmNvZGVyZXZpZXcudjEi1wEKEk1lcmdlUmVxdWVzdE9wZW5lZBIQCghldmVudF9pZBgBIAEoCRIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEhEKCXRlbmFudF9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhIKCnNvdXJjZV9yZWYYBSABKAkSEgoKdGFyZ2V0X3JlZhgGIAEoCRISCgpjcmVhdG9yX2lkGAcgASgJEi8KC29jY3VycmVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCKQAgoPUmV2aWV3U3VibWl0dGVkEhAKCGV2ZW50X2lkGAEgASgJEhgKEG1lcmdlX3JlcXVlc3RfaWQYAiABKAkSEQoJdGVuYW50X2lkGAMgASgJEhUKDXJlcG9zaXRvcnlfaWQYBCABKAkSEAoIYWN0b3JfaWQYBSABKAkSTQoLZGlzcG9zaXRpb24YBiABKA4yOC5naXRzYWFzLmV2ZW50cy5jb2RlcmV2aWV3LnYxLlJldmlld1N1Ym1pdHRlZERpc3Bvc2l0aW9uEhUKDWhlYWRfcmV2aXNpb24YByABKAkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wItgBChJNZXJnZVJlcXVlc3RNZXJnZWQSEAoIZXZlbnRfaWQYASABKAkSGAoQbWVyZ2VfcmVxdWVzdF9pZBgCIAEoCRIRCgl0ZW5hbnRfaWQYAyABKAkSFQoNcmVwb3NpdG9yeV9pZBgEIAEoCRIQCghhY3Rvcl9pZBgFIAEoCRISCgp0YXJnZXRfcmVmGAYgASgJEhUKDWhlYWRfcmV2aXNpb24YByABKAkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIu0BChNNZXJnZVJlcXVlc3RVcGRhdGVkEhAKCGV2ZW50X2lkGAEgASgJEhgKEG1lcmdlX3JlcXVlc3RfaWQYAiABKAkSEQoJdGVuYW50X2lkGAMgASgJEhUKDXJlcG9zaXRvcnlfaWQYBCABKAkSEAoIYWN0b3JfaWQYBSABKAkSFQoNaGVhZF9yZXZpc2lvbhgGIAEoCRISCgpzb3VyY2VfcmVmGAcgASgJEhIKCnRhcmdldF9yZWYYCCABKAkSLwoLb2NjdXJyZWRfYXQYCSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIt0BChdCcmFuY2hQcm90ZWN0aW9uQ2hhbmdlZBIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSFQoNcmVwb3NpdG9yeV9pZBgDIAEoCRISCgp0YXJnZXRfcmVmGAQgASgJEhoKEnJlcXVpcmVkX2FwcHJvdmFscxgFIAEoBRIvCgtvY2N1cnJlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEAoIYWN0b3JfaWQYByABKAkSEwoLYWN0b3Jfcm9sZXMYCCADKAkq0AEKGlJldmlld1N1Ym1pdHRlZERpc3Bvc2l0aW9uEiwKKFJFVklFV19TVUJNSVRURURfRElTUE9TSVRJT05fVU5TUEVDSUZJRUQQABIoCiRSRVZJRVdfU1VCTUlUVEVEX0RJU1BPU0lUSU9OX0FQUFJPVkUQARIwCixSRVZJRVdfU1VCTUlUVEVEX0RJU1BPU0lUSU9OX1JFUVVFU1RfQ0hBTkdFUxACEigKJFJFVklFV19TVUJNSVRURURfRElTUE9TSVRJT05fQ09NTUVOVBADQkhaRmdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9ldmVudHMvY29kZXJldmlldy92MTtjb2RlcmV2aWV3ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
+  fileDesc("CiFldmVudHMvY29kZXJldmlldy92MS9ldmVudHMucHJvdG8SHGdpdHNhYXMuZXZlbnRzLmNvZGVyZXZpZXcudjEi1wEKEk1lcmdlUmVxdWVzdE9wZW5lZBIQCghldmVudF9pZBgBIAEoCRIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEhEKCXRlbmFudF9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhIKCnNvdXJjZV9yZWYYBSABKAkSEgoKdGFyZ2V0X3JlZhgGIAEoCRISCgpjcmVhdG9yX2lkGAcgASgJEi8KC29jY3VycmVkX2F0GAggASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCKkAgoPUmV2aWV3U3VibWl0dGVkEhAKCGV2ZW50X2lkGAEgASgJEhgKEG1lcmdlX3JlcXVlc3RfaWQYAiABKAkSEQoJdGVuYW50X2lkGAMgASgJEhUKDXJlcG9zaXRvcnlfaWQYBCABKAkSEAoIYWN0b3JfaWQYBSABKAkSTQoLZGlzcG9zaXRpb24YBiABKA4yOC5naXRzYWFzLmV2ZW50cy5jb2RlcmV2aWV3LnYxLlJldmlld1N1Ym1pdHRlZERpc3Bvc2l0aW9uEhUKDWhlYWRfcmV2aXNpb24YByABKAkSLwoLb2NjdXJyZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhIKCmNyZWF0b3JfaWQYCSABKAkijQIKEk1lcmdlUmVxdWVzdE1lcmdlZBIQCghldmVudF9pZBgBIAEoCRIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEhEKCXRlbmFudF9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhAKCGFjdG9yX2lkGAUgASgJEhIKCnRhcmdldF9yZWYYBiABKAkSFQoNaGVhZF9yZXZpc2lvbhgHIAEoCRIvCgtvY2N1cnJlZF9hdBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASEgoKY3JlYXRvcl9pZBgJIAEoCRIfChdjb3VudGVkX2FwcHJvdmFsX2FjdG9ycxgKIAMoCSLtAQoTTWVyZ2VSZXF1ZXN0VXBkYXRlZBIQCghldmVudF9pZBgBIAEoCRIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEhEKCXRlbmFudF9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhAKCGFjdG9yX2lkGAUgASgJEhUKDWhlYWRfcmV2aXNpb24YBiABKAkSEgoKc291cmNlX3JlZhgHIAEoCRISCgp0YXJnZXRfcmVmGAggASgJEi8KC29jY3VycmVkX2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCLdAQoXQnJhbmNoUHJvdGVjdGlvbkNoYW5nZWQSEAoIZXZlbnRfaWQYASABKAkSEQoJdGVuYW50X2lkGAIgASgJEhUKDXJlcG9zaXRvcnlfaWQYAyABKAkSEgoKdGFyZ2V0X3JlZhgEIAEoCRIaChJyZXF1aXJlZF9hcHByb3ZhbHMYBSABKAUSLwoLb2NjdXJyZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEhAKCGFjdG9yX2lkGAcgASgJEhMKC2FjdG9yX3JvbGVzGAggAygJItcBChFNZXJnZVJlcXVlc3RSZWFkeRIQCghldmVudF9pZBgBIAEoCRIYChBtZXJnZV9yZXF1ZXN0X2lkGAIgASgJEhEKCXRlbmFudF9pZBgDIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAQgASgJEhAKCGFjdG9yX2lkGAUgASgJEhUKDWhlYWRfcmV2aXNpb24YBiABKAkSEgoKdGFyZ2V0X3JlZhgHIAEoCRIvCgtvY2N1cnJlZF9hdBgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAq0AEKGlJldmlld1N1Ym1pdHRlZERpc3Bvc2l0aW9uEiwKKFJFVklFV19TVUJNSVRURURfRElTUE9TSVRJT05fVU5TUEVDSUZJRUQQABIoCiRSRVZJRVdfU1VCTUlUVEVEX0RJU1BPU0lUSU9OX0FQUFJPVkUQARIwCixSRVZJRVdfU1VCTUlUVEVEX0RJU1BPU0lUSU9OX1JFUVVFU1RfQ0hBTkdFUxACEigKJFJFVklFV19TVUJNSVRURURfRElTUE9TSVRJT05fQ09NTUVOVBADQkhaRmdpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9ldmVudHMvY29kZXJldmlldy92MTtjb2RlcmV2aWV3ZXZlbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * @generated from message gitsaas.events.codereview.v1.MergeRequestOpened
@@ -117,6 +117,15 @@ export type ReviewSubmitted = Message<"gitsaas.events.codereview.v1.ReviewSubmit
    * @generated from field: google.protobuf.Timestamp occurred_at = 8;
    */
   occurredAt?: Timestamp | undefined;
+
+  /**
+   * The MR's author, announced so a recipient-deriving consumer (Notifications,
+   * SPEC-0063) can notify "the author, never the reviewer" from the event alone.
+   * Additive for SPEC-0063; the producer already holds it when publishing.
+   *
+   * @generated from field: string creator_id = 9;
+   */
+  creatorId: string;
 };
 
 /**
@@ -169,6 +178,24 @@ export type MergeRequestMerged = Message<"gitsaas.events.codereview.v1.MergeRequ
    * @generated from field: google.protobuf.Timestamp occurred_at = 8;
    */
   occurredAt?: Timestamp | undefined;
+
+  /**
+   * The MR's author. Additive for SPEC-0063 (Notifications recipient
+   * derivation); the producer already holds it when publishing.
+   *
+   * @generated from field: string creator_id = 9;
+   */
+  creatorId: string;
+
+  /**
+   * The actors whose approvals counted at the gate for this merge — APPROVE
+   * dispositions at the head revision, the author excluded (ADR-0085). Names,
+   * never a count or an outcome: a consumer still derives whatever it needs
+   * from who they are. Additive for SPEC-0063.
+   *
+   * @generated from field: repeated string counted_approval_actors = 10;
+   */
+  countedApprovalActors: string[];
 };
 
 /**
@@ -313,6 +340,70 @@ export type BranchProtectionChanged = Message<"gitsaas.events.codereview.v1.Bran
  */
 export const BranchProtectionChangedSchema: GenMessage<BranchProtectionChanged> = /*@__PURE__*/
   messageDesc(file_events_codereview_v1_events, 4);
+
+/**
+ * MergeRequestReady records that a DRAFT merge request was marked ready for
+ * review (ADR-0087, SPEC-0064). It is the draft's announcement: everything
+ * between open and ready announced nothing, and this event is what ends the
+ * quiet. Additive for SPEC-0063, whose Notifications consumer treats opened
+ * and ready as the same review-requested fact — the recipients are the
+ * target's reviewers-to-be either way — without conflating the two states in
+ * Code Review's own record.
+ *
+ * @generated from message gitsaas.events.codereview.v1.MergeRequestReady
+ */
+export type MergeRequestReady = Message<"gitsaas.events.codereview.v1.MergeRequestReady"> & {
+  /**
+   * @generated from field: string event_id = 1;
+   */
+  eventId: string;
+
+  /**
+   * @generated from field: string merge_request_id = 2;
+   */
+  mergeRequestId: string;
+
+  /**
+   * @generated from field: string tenant_id = 3;
+   */
+  tenantId: string;
+
+  /**
+   * @generated from field: string repository_id = 4;
+   */
+  repositoryId: string;
+
+  /**
+   * The verified actor who marked it ready.
+   *
+   * @generated from field: string actor_id = 5;
+   */
+  actorId: string;
+
+  /**
+   * The head revision re-read from the source ref at the ready transition.
+   *
+   * @generated from field: string head_revision = 6;
+   */
+  headRevision: string;
+
+  /**
+   * @generated from field: string target_ref = 7;
+   */
+  targetRef: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp occurred_at = 8;
+   */
+  occurredAt?: Timestamp | undefined;
+};
+
+/**
+ * Describes the message gitsaas.events.codereview.v1.MergeRequestReady.
+ * Use `create(MergeRequestReadySchema)` to create a new message.
+ */
+export const MergeRequestReadySchema: GenMessage<MergeRequestReady> = /*@__PURE__*/
+  messageDesc(file_events_codereview_v1_events, 5);
 
 /**
  * @generated from enum gitsaas.events.codereview.v1.ReviewSubmittedDisposition
