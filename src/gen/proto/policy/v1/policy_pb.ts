@@ -28,7 +28,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/policy/v1/policy.proto.
  */
 export const file_proto_policy_v1_policy: GenFile = /*@__PURE__*/
-  fileDesc("Chxwcm90by9wb2xpY3kvdjEvcG9saWN5LnByb3RvEhFnaXRzYWFzLnBvbGljeS52MSI3CgdTdWJqZWN0EgoKAmlkGAEgASgJEg0KBXJvbGVzGAIgAygJEhEKCXRlbmFudF9pZBgDIAEoCSIkCghSZXNvdXJjZRIMCgR0eXBlGAEgASgJEgoKAmlkGAIgASgJIv4BCg1EZWNpZGVSZXF1ZXN0EhEKCXRlbmFudF9pZBgBIAEoCRIrCgdzdWJqZWN0GAIgASgLMhouZ2l0c2Fhcy5wb2xpY3kudjEuU3ViamVjdBIOCgZhY3Rpb24YAyABKAkSLQoIcmVzb3VyY2UYBCABKAsyGy5naXRzYWFzLnBvbGljeS52MS5SZXNvdXJjZRI+Cgdjb250ZXh0GAUgAygLMi0uZ2l0c2Fhcy5wb2xpY3kudjEuRGVjaWRlUmVxdWVzdC5Db250ZXh0RW50cnkaLgoMQ29udGV4dEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEipgEKDkRlY2lkZVJlc3BvbnNlEg8KB2FsbG93ZWQYASABKAgSDgoGcmVhc29uGAIgASgJEhcKD3BvbGljeV9yZXZpc2lvbhgDIAEoCRITCgtkZWNpc2lvbl9pZBgEIAEoCRIUCgxpbnB1dF9kaWdlc3QYBSABKAkSLwoEbW9kZRgGIAEoDjIhLmdpdHNhYXMucG9saWN5LnYxLkV2YWx1YXRpb25Nb2RlIpABChVFdmFsdWF0ZURyeVJ1blJlcXVlc3QSEQoJdGVuYW50X2lkGAEgASgJEhwKFGNhbmRpZGF0ZV9idW5kbGVfcmVmGAIgASgJEjEKBXJhbmdlGAMgASgLMiIuZ2l0c2Fhcy5wb2xpY3kudjEuSGlzdG9yaWNhbFJhbmdlEhMKC21heF9yZXN1bHRzGAQgASgFIqIBCg9IaXN0b3JpY2FsUmFuZ2USDgoGYWN0aW9uGAEgASgJEi0KCHJlc291cmNlGAIgASgLMhsuZ2l0c2Fhcy5wb2xpY3kudjEuUmVzb3VyY2USKAoEZnJvbRgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASJgoCdG8YBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIk4KFkV2YWx1YXRlRHJ5UnVuUmVzcG9uc2USNAoJZGVjaXNpb25zGAEgAygLMiEuZ2l0c2Fhcy5wb2xpY3kudjEuRGVjaWRlUmVzcG9uc2UiPAoSR2V0RGVjaXNpb25SZXF1ZXN0EhEKCXRlbmFudF9pZBgBIAEoCRITCgtkZWNpc2lvbl9pZBgCIAEoCSKqAgoORGVjaXNpb25SZWNvcmQSEwoLZGVjaXNpb25faWQYASABKAkSFwoPcG9saWN5X3JldmlzaW9uGAIgASgJEhQKDGlucHV0X2RpZ2VzdBgDIAEoCRIvCgRtb2RlGAQgASgOMiEuZ2l0c2Fhcy5wb2xpY3kudjEuRXZhbHVhdGlvbk1vZGUSEQoJdGVuYW50X2lkGAUgASgJEhAKCGFjdG9yX2lkGAYgASgJEg4KBmFjdGlvbhgHIAEoCRItCghyZXNvdXJjZRgIIAEoCzIbLmdpdHNhYXMucG9saWN5LnYxLlJlc291cmNlEg8KB2FsbG93ZWQYCSABKAgSLgoKZGVjaWRlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiSAoTR2V0RGVjaXNpb25SZXNwb25zZRIxCgZyZWNvcmQYASABKAsyIS5naXRzYWFzLnBvbGljeS52MS5EZWNpc2lvblJlY29yZCpsCg5FdmFsdWF0aW9uTW9kZRIfChtFVkFMVUFUSU9OX01PREVfVU5TUEVDSUZJRUQQABIcChhFVkFMVUFUSU9OX01PREVfRU5GT1JDRUQQARIbChdFVkFMVUFUSU9OX01PREVfRFJZX1JVThACMqkCChNQb2xpY3lEZWNpc2lvblBvaW50Ek0KBkRlY2lkZRIgLmdpdHNhYXMucG9saWN5LnYxLkRlY2lkZVJlcXVlc3QaIS5naXRzYWFzLnBvbGljeS52MS5EZWNpZGVSZXNwb25zZRJlCg5FdmFsdWF0ZURyeVJ1bhIoLmdpdHNhYXMucG9saWN5LnYxLkV2YWx1YXRlRHJ5UnVuUmVxdWVzdBopLmdpdHNhYXMucG9saWN5LnYxLkV2YWx1YXRlRHJ5UnVuUmVzcG9uc2USXAoLR2V0RGVjaXNpb24SJS5naXRzYWFzLnBvbGljeS52MS5HZXREZWNpc2lvblJlcXVlc3QaJi5naXRzYWFzLnBvbGljeS52MS5HZXREZWNpc2lvblJlc3BvbnNlQjlaN2dpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9wcm90by9wb2xpY3kvdjE7cG9saWN5djFiBnByb3RvMw", [file_google_protobuf_timestamp]);
+  fileDesc("Chxwcm90by9wb2xpY3kvdjEvcG9saWN5LnByb3RvEhFnaXRzYWFzLnBvbGljeS52MSI3CgdTdWJqZWN0EgoKAmlkGAEgASgJEg0KBXJvbGVzGAIgAygJEhEKCXRlbmFudF9pZBgDIAEoCSIkCghSZXNvdXJjZRIMCgR0eXBlGAEgASgJEgoKAmlkGAIgASgJIv4BCg1EZWNpZGVSZXF1ZXN0EhEKCXRlbmFudF9pZBgBIAEoCRIrCgdzdWJqZWN0GAIgASgLMhouZ2l0c2Fhcy5wb2xpY3kudjEuU3ViamVjdBIOCgZhY3Rpb24YAyABKAkSLQoIcmVzb3VyY2UYBCABKAsyGy5naXRzYWFzLnBvbGljeS52MS5SZXNvdXJjZRI+Cgdjb250ZXh0GAUgAygLMi0uZ2l0c2Fhcy5wb2xpY3kudjEuRGVjaWRlUmVxdWVzdC5Db250ZXh0RW50cnkaLgoMQ29udGV4dEVudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEipgEKDkRlY2lkZVJlc3BvbnNlEg8KB2FsbG93ZWQYASABKAgSDgoGcmVhc29uGAIgASgJEhcKD3BvbGljeV9yZXZpc2lvbhgDIAEoCRITCgtkZWNpc2lvbl9pZBgEIAEoCRIUCgxpbnB1dF9kaWdlc3QYBSABKAkSLwoEbW9kZRgGIAEoDjIhLmdpdHNhYXMucG9saWN5LnYxLkV2YWx1YXRpb25Nb2RlIpABChVFdmFsdWF0ZURyeVJ1blJlcXVlc3QSEQoJdGVuYW50X2lkGAEgASgJEhwKFGNhbmRpZGF0ZV9idW5kbGVfcmVmGAIgASgJEjEKBXJhbmdlGAMgASgLMiIuZ2l0c2Fhcy5wb2xpY3kudjEuSGlzdG9yaWNhbFJhbmdlEhMKC21heF9yZXN1bHRzGAQgASgFIqIBCg9IaXN0b3JpY2FsUmFuZ2USDgoGYWN0aW9uGAEgASgJEi0KCHJlc291cmNlGAIgASgLMhsuZ2l0c2Fhcy5wb2xpY3kudjEuUmVzb3VyY2USKAoEZnJvbRgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASJgoCdG8YBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIk4KFkV2YWx1YXRlRHJ5UnVuUmVzcG9uc2USNAoJZGVjaXNpb25zGAEgAygLMiEuZ2l0c2Fhcy5wb2xpY3kudjEuRGVjaWRlUmVzcG9uc2UiPAoSR2V0RGVjaXNpb25SZXF1ZXN0EhEKCXRlbmFudF9pZBgBIAEoCRITCgtkZWNpc2lvbl9pZBgCIAEoCSKqAgoORGVjaXNpb25SZWNvcmQSEwoLZGVjaXNpb25faWQYASABKAkSFwoPcG9saWN5X3JldmlzaW9uGAIgASgJEhQKDGlucHV0X2RpZ2VzdBgDIAEoCRIvCgRtb2RlGAQgASgOMiEuZ2l0c2Fhcy5wb2xpY3kudjEuRXZhbHVhdGlvbk1vZGUSEQoJdGVuYW50X2lkGAUgASgJEhAKCGFjdG9yX2lkGAYgASgJEg4KBmFjdGlvbhgHIAEoCRItCghyZXNvdXJjZRgIIAEoCzIbLmdpdHNhYXMucG9saWN5LnYxLlJlc291cmNlEg8KB2FsbG93ZWQYCSABKAgSLgoKZGVjaWRlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiSAoTR2V0RGVjaXNpb25SZXNwb25zZRIxCgZyZWNvcmQYASABKAsyIS5naXRzYWFzLnBvbGljeS52MS5EZWNpc2lvblJlY29yZCIrChZHZXRCdW5kbGVTdGF0dXNSZXF1ZXN0EhEKCXRlbmFudF9pZBgBIAEoCSJFChdHZXRCdW5kbGVTdGF0dXNSZXNwb25zZRIXCg9idW5kbGVfcmV2aXNpb24YASABKAkSEQoJbG9hZGVkX2F0GAIgASgJKmwKDkV2YWx1YXRpb25Nb2RlEh8KG0VWQUxVQVRJT05fTU9ERV9VTlNQRUNJRklFRBAAEhwKGEVWQUxVQVRJT05fTU9ERV9FTkZPUkNFRBABEhsKF0VWQUxVQVRJT05fTU9ERV9EUllfUlVOEAIykwMKE1BvbGljeURlY2lzaW9uUG9pbnQSTQoGRGVjaWRlEiAuZ2l0c2Fhcy5wb2xpY3kudjEuRGVjaWRlUmVxdWVzdBohLmdpdHNhYXMucG9saWN5LnYxLkRlY2lkZVJlc3BvbnNlEmUKDkV2YWx1YXRlRHJ5UnVuEiguZ2l0c2Fhcy5wb2xpY3kudjEuRXZhbHVhdGVEcnlSdW5SZXF1ZXN0GikuZ2l0c2Fhcy5wb2xpY3kudjEuRXZhbHVhdGVEcnlSdW5SZXNwb25zZRJcCgtHZXREZWNpc2lvbhIlLmdpdHNhYXMucG9saWN5LnYxLkdldERlY2lzaW9uUmVxdWVzdBomLmdpdHNhYXMucG9saWN5LnYxLkdldERlY2lzaW9uUmVzcG9uc2USaAoPR2V0QnVuZGxlU3RhdHVzEikuZ2l0c2Fhcy5wb2xpY3kudjEuR2V0QnVuZGxlU3RhdHVzUmVxdWVzdBoqLmdpdHNhYXMucG9saWN5LnYxLkdldEJ1bmRsZVN0YXR1c1Jlc3BvbnNlQjlaN2dpdGh1Yi5jb20veW91cm9yZy9naXRzYWFzL2dlbi9wcm90by9wb2xpY3kvdjE7cG9saWN5djFiBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * Subject is the principal an action is attributed to.
@@ -503,6 +503,52 @@ export const GetDecisionResponseSchema: GenMessage<GetDecisionResponse> = /*@__P
   messageDesc(file_proto_policy_v1_policy, 9);
 
 /**
+ * @generated from message gitsaas.policy.v1.GetBundleStatusRequest
+ */
+export type GetBundleStatusRequest = Message<"gitsaas.policy.v1.GetBundleStatusRequest"> & {
+  /**
+   * The tenant the read runs under. Every read is tenant-scoped (invariant 1),
+   * even one whose answer is the same platform bundle for everyone: the caller
+   * must still be a verified caller.
+   *
+   * @generated from field: string tenant_id = 1;
+   */
+  tenantId: string;
+};
+
+/**
+ * Describes the message gitsaas.policy.v1.GetBundleStatusRequest.
+ * Use `create(GetBundleStatusRequestSchema)` to create a new message.
+ */
+export const GetBundleStatusRequestSchema: GenMessage<GetBundleStatusRequest> = /*@__PURE__*/
+  messageDesc(file_proto_policy_v1_policy, 10);
+
+/**
+ * The bundle in force. Deliberately no policy SOURCE: the bundle is a platform
+ * artifact and its contents are not a tenant read (SPEC-0055 out of scope).
+ *
+ * @generated from message gitsaas.policy.v1.GetBundleStatusResponse
+ */
+export type GetBundleStatusResponse = Message<"gitsaas.policy.v1.GetBundleStatusResponse"> & {
+  /**
+   * @generated from field: string bundle_revision = 1;
+   */
+  bundleRevision: string;
+
+  /**
+   * @generated from field: string loaded_at = 2;
+   */
+  loadedAt: string;
+};
+
+/**
+ * Describes the message gitsaas.policy.v1.GetBundleStatusResponse.
+ * Use `create(GetBundleStatusResponseSchema)` to create a new message.
+ */
+export const GetBundleStatusResponseSchema: GenMessage<GetBundleStatusResponse> = /*@__PURE__*/
+  messageDesc(file_proto_policy_v1_policy, 11);
+
+/**
  * EvaluationMode distinguishes an enforced decision from a dry-run one
  * (SPEC-0029 AC2, SPEC-0030). A dry-run decision is never an authorization
  * outcome and is labelled wherever it appears, so a consumer can never mistake
@@ -593,6 +639,25 @@ export const PolicyDecisionPoint: GenService<{
     methodKind: "unary";
     input: typeof GetDecisionRequestSchema;
     output: typeof GetDecisionResponseSchema;
+  },
+  /**
+   * GetBundleStatus reports which policy bundle is in force. Additive for
+   * SPEC-0055.
+   *
+   * Read only, and note what this service still has no verb for: writing a
+   * policy. ADR-0073 records why that is structural rather than missing —
+   * policies live in governance/ and ADR-0001 makes governance the Source of
+   * Truth, so a web form that writes policy is a second source of truth for
+   * the same decisions. check-contracts.sh check 14 asserts no RPC here begins
+   * Put, Create, Update, Delete or Author, so the deferral is a property of
+   * the contract rather than an intention someone remembers.
+   *
+   * @generated from rpc gitsaas.policy.v1.PolicyDecisionPoint.GetBundleStatus
+   */
+  getBundleStatus: {
+    methodKind: "unary";
+    input: typeof GetBundleStatusRequestSchema;
+    output: typeof GetBundleStatusResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_policy_v1_policy, 0);

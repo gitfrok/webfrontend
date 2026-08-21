@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/repository/v1/repository.proto.
  */
 export const file_proto_repository_v1_repository: GenFile = /*@__PURE__*/
-  fileDesc("CiRwcm90by9yZXBvc2l0b3J5L3YxL3JlcG9zaXRvcnkucHJvdG8SFWdpdHNhYXMucmVwb3NpdG9yeS52MSJyCgtSZWFkQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIn4KDkdldFRyZWVSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSEAoIcmV2aXNpb24YAiABKAkSEgoKcGFnZV90b2tlbhgDIAEoCRIRCglwYWdlX3NpemUYBCABKAUiXQoPR2V0VHJlZVJlc3BvbnNlEjEKB2VudHJpZXMYASADKAsyIC5naXRzYWFzLnJlcG9zaXRvcnkudjEuVHJlZUVudHJ5EhcKD25leHRfcGFnZV90b2tlbhgCIAEoCSJ+CglUcmVlRW50cnkSDAoEcGF0aBgBIAEoCRIuCgRraW5kGAIgASgOMiAuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkVudHJ5S2luZBIRCglvYmplY3RfaWQYAyABKAkSDAoEbW9kZRgEIAEoDRISCgpzaXplX2J5dGVzGAUgASgDImUKDkdldEZpbGVSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSEAoIcmV2aXNpb24YAiABKAkSDAoEcGF0aBgDIAEoCSJdCglGaWxlQ2h1bmsSNQoIbWV0YWRhdGEYASABKAsyIy5naXRzYWFzLnJlcG9zaXRvcnkudjEuRmlsZU1ldGFkYXRhEgwKBGRhdGEYAiABKAwSCwoDZW9mGAMgASgIIlEKDEZpbGVNZXRhZGF0YRIMCgRwYXRoGAEgASgJEhEKCW9iamVjdF9pZBgCIAEoCRIMCgRtb2RlGAMgASgNEhIKCnNpemVfYnl0ZXMYBCABKAMigQEKDkdldERpZmZSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSFQoNYmFzZV9yZXZpc2lvbhgCIAEoCRIVCg1oZWFkX3JldmlzaW9uGAMgASgJEgwKBHBhdGgYBCABKAkiJgoJRGlmZkNodW5rEgwKBGRhdGEYASABKAwSCwoDZW9mGAIgASgIImgKE0dldE1lcmdlQmFzZVJlcXVlc3QSMwoHY29udGV4dBgBIAEoCzIiLmdpdHNhYXMucmVwb3NpdG9yeS52MS5SZWFkQ29udGV4dBINCgVyZWZfYRgCIAEoCRINCgVyZWZfYhgDIAEoCSI5ChRHZXRNZXJnZUJhc2VSZXNwb25zZRINCgVmb3VuZBgBIAEoCBISCgptZXJnZV9iYXNlGAIgASgJKm4KCUVudHJ5S2luZBIaChZFTlRSWV9LSU5EX1VOU1BFQ0lGSUVEEAASEwoPRU5UUllfS0lORF9GSUxFEAESGAoURU5UUllfS0lORF9ESVJFQ1RPUlkQAhIWChJFTlRSWV9LSU5EX1NZTUxJTksQAzKBAwoQUmVwb3NpdG9yeVJlYWRlchJYCgdHZXRUcmVlEiUuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldFRyZWVSZXF1ZXN0GiYuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldFRyZWVSZXNwb25zZRJUCgdHZXRGaWxlEiUuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldEZpbGVSZXF1ZXN0GiAuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkZpbGVDaHVuazABElQKB0dldERpZmYSJS5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0RGlmZlJlcXVlc3QaIC5naXRzYWFzLnJlcG9zaXRvcnkudjEuRGlmZkNodW5rMAESZwoMR2V0TWVyZ2VCYXNlEiouZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldE1lcmdlQmFzZVJlcXVlc3QaKy5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0TWVyZ2VCYXNlUmVzcG9uc2VCQVo/Z2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL3JlcG9zaXRvcnkvdjE7cmVwb3NpdG9yeXYxYgZwcm90bzM");
+  fileDesc("CiRwcm90by9yZXBvc2l0b3J5L3YxL3JlcG9zaXRvcnkucHJvdG8SFWdpdHNhYXMucmVwb3NpdG9yeS52MSJyCgtSZWFkQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIlsKC0xpc3RDb250ZXh0EhEKCXRlbmFudF9pZBgBIAEoCRIQCghhY3Rvcl9pZBgCIAEoCRISCgpyZXF1ZXN0X2lkGAMgASgJEhMKC2FjdG9yX3JvbGVzGAQgAygJInUKF0xpc3RSZXBvc2l0b3JpZXNSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuTGlzdENvbnRleHQSEgoKcGFnZV90b2tlbhgCIAEoCRIRCglwYWdlX3NpemUYAyABKAUicwoYTGlzdFJlcG9zaXRvcmllc1Jlc3BvbnNlEj4KDHJlcG9zaXRvcmllcxgBIAMoCzIoLmdpdHNhYXMucmVwb3NpdG9yeS52MS5SZXBvc2l0b3J5U3VtbWFyeRIXCg9uZXh0X3BhZ2VfdG9rZW4YAiABKAkiOAoRUmVwb3NpdG9yeVN1bW1hcnkSFQoNcmVwb3NpdG9yeV9pZBgBIAEoCRIMCgRuYW1lGAIgASgJIn4KDkdldFRyZWVSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSEAoIcmV2aXNpb24YAiABKAkSEgoKcGFnZV90b2tlbhgDIAEoCRIRCglwYWdlX3NpemUYBCABKAUiXQoPR2V0VHJlZVJlc3BvbnNlEjEKB2VudHJpZXMYASADKAsyIC5naXRzYWFzLnJlcG9zaXRvcnkudjEuVHJlZUVudHJ5EhcKD25leHRfcGFnZV90b2tlbhgCIAEoCSJ+CglUcmVlRW50cnkSDAoEcGF0aBgBIAEoCRIuCgRraW5kGAIgASgOMiAuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkVudHJ5S2luZBIRCglvYmplY3RfaWQYAyABKAkSDAoEbW9kZRgEIAEoDRISCgpzaXplX2J5dGVzGAUgASgDImUKDkdldEZpbGVSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSEAoIcmV2aXNpb24YAiABKAkSDAoEcGF0aBgDIAEoCSJdCglGaWxlQ2h1bmsSNQoIbWV0YWRhdGEYASABKAsyIy5naXRzYWFzLnJlcG9zaXRvcnkudjEuRmlsZU1ldGFkYXRhEgwKBGRhdGEYAiABKAwSCwoDZW9mGAMgASgIIlEKDEZpbGVNZXRhZGF0YRIMCgRwYXRoGAEgASgJEhEKCW9iamVjdF9pZBgCIAEoCRIMCgRtb2RlGAMgASgNEhIKCnNpemVfYnl0ZXMYBCABKAMigQEKDkdldERpZmZSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSFQoNYmFzZV9yZXZpc2lvbhgCIAEoCRIVCg1oZWFkX3JldmlzaW9uGAMgASgJEgwKBHBhdGgYBCABKAkiJgoJRGlmZkNodW5rEgwKBGRhdGEYASABKAwSCwoDZW9mGAIgASgIIqcBCg5Db21taXRJZGVudGl0eRIXCg9naXRfYXV0aG9yX25hbWUYASABKAkSGAoQZ2l0X2F1dGhvcl9lbWFpbBgCIAEoCRIaChJnaXRfY29tbWl0dGVyX25hbWUYAyABKAkSGwoTZ2l0X2NvbW1pdHRlcl9lbWFpbBgEIAEoCRITCgthdXRob3JlZF9hdBgFIAEoCRIUCgxjb21taXR0ZWRfYXQYBiABKAkiZQoGQ29tbWl0EhEKCWNvbW1pdF9pZBgBIAEoCRI3CghpZGVudGl0eRgCIAEoCzIlLmdpdHNhYXMucmVwb3NpdG9yeS52MS5Db21taXRJZGVudGl0eRIPCgdzdWJqZWN0GAMgASgJIo8BChFHZXRIaXN0b3J5UmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiIuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLlJlYWRDb250ZXh0EhAKCHJldmlzaW9uGAIgASgJEgwKBHBhdGgYAyABKAkSEgoKcGFnZV90b2tlbhgEIAEoCRIRCglwYWdlX3NpemUYBSABKAUiXQoSR2V0SGlzdG9yeVJlc3BvbnNlEi4KB2NvbW1pdHMYASADKAsyHS5naXRzYWFzLnJlcG9zaXRvcnkudjEuQ29tbWl0EhcKD25leHRfcGFnZV90b2tlbhgCIAEoCSJmCg9HZXRCbGFtZVJlcXVlc3QSMwoHY29udGV4dBgBIAEoCzIiLmdpdHNhYXMucmVwb3NpdG9yeS52MS5SZWFkQ29udGV4dBIQCghyZXZpc2lvbhgCIAEoCRIMCgRwYXRoGAMgASgJIn4KCkJsYW1lUmFuZ2USEgoKc3RhcnRfbGluZRgBIAEoBRIQCghlbmRfbGluZRgCIAEoBRIRCgljb21taXRfaWQYAyABKAkSNwoIaWRlbnRpdHkYBCABKAsyJS5naXRzYWFzLnJlcG9zaXRvcnkudjEuQ29tbWl0SWRlbnRpdHkiVQoQR2V0QmxhbWVSZXNwb25zZRIxCgZyYW5nZXMYASADKAsyIS5naXRzYWFzLnJlcG9zaXRvcnkudjEuQmxhbWVSYW5nZRIOCgZjYXBwZWQYAiABKAgibQoPTGlzdFRhZ3NSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSEgoKcGFnZV90b2tlbhgCIAEoCRIRCglwYWdlX3NpemUYAyABKAUiJgoDVGFnEgwKBG5hbWUYASABKAkSEQoJY29tbWl0X2lkGAIgASgJIlUKEExpc3RUYWdzUmVzcG9uc2USKAoEdGFncxgBIAMoCzIaLmdpdHNhYXMucmVwb3NpdG9yeS52MS5UYWcSFwoPbmV4dF9wYWdlX3Rva2VuGAIgASgJImgKE0dldE1lcmdlQmFzZVJlcXVlc3QSMwoHY29udGV4dBgBIAEoCzIiLmdpdHNhYXMucmVwb3NpdG9yeS52MS5SZWFkQ29udGV4dBINCgVyZWZfYRgCIAEoCRINCgVyZWZfYhgDIAEoCSI5ChRHZXRNZXJnZUJhc2VSZXNwb25zZRINCgVmb3VuZBgBIAEoCBISCgptZXJnZV9iYXNlGAIgASgJIpMBCghTZXR0aW5ncxIVCg1yZXBvc2l0b3J5X2lkGAEgASgJEgwKBG5hbWUYAiABKAkSEwoLZGVzY3JpcHRpb24YAyABKAkSEwoLYXJjaGl2ZWRfYXQYBCABKAkSGwoTc2V0dGluZ3NfdXBkYXRlZF9hdBgFIAEoCRIbChNzZXR0aW5nc191cGRhdGVkX2J5GAYgASgJIkkKEkdldFNldHRpbmdzUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiIuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLlJlYWRDb250ZXh0IkgKE0dldFNldHRpbmdzUmVzcG9uc2USMQoIc2V0dGluZ3MYASABKAsyHy5naXRzYWFzLnJlcG9zaXRvcnkudjEuU2V0dGluZ3MibwoVVXBkYXRlU2V0dGluZ3NSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIi5naXRzYWFzLnJlcG9zaXRvcnkudjEuUmVhZENvbnRleHQSDAoEbmFtZRgCIAEoCRITCgtkZXNjcmlwdGlvbhgDIAEoCSJLChZVcGRhdGVTZXR0aW5nc1Jlc3BvbnNlEjEKCHNldHRpbmdzGAEgASgLMh8uZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLlNldHRpbmdzIlsKElNldEFyY2hpdmVkUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiIuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLlJlYWRDb250ZXh0EhAKCGFyY2hpdmVkGAIgASgIIkgKE1NldEFyY2hpdmVkUmVzcG9uc2USMQoIc2V0dGluZ3MYASABKAsyHy5naXRzYWFzLnJlcG9zaXRvcnkudjEuU2V0dGluZ3MqbgoJRW50cnlLaW5kEhoKFkVOVFJZX0tJTkRfVU5TUEVDSUZJRUQQABITCg9FTlRSWV9LSU5EX0ZJTEUQARIYChRFTlRSWV9LSU5EX0RJUkVDVE9SWRACEhYKEkVOVFJZX0tJTkRfU1lNTElOSxADMp4FChBSZXBvc2l0b3J5UmVhZGVyElgKB0dldFRyZWUSJS5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0VHJlZVJlcXVlc3QaJi5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0VHJlZVJlc3BvbnNlElQKB0dldEZpbGUSJS5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0RmlsZVJlcXVlc3QaIC5naXRzYWFzLnJlcG9zaXRvcnkudjEuRmlsZUNodW5rMAESVAoHR2V0RGlmZhIlLmdpdHNhYXMucmVwb3NpdG9yeS52MS5HZXREaWZmUmVxdWVzdBogLmdpdHNhYXMucmVwb3NpdG9yeS52MS5EaWZmQ2h1bmswARJnCgxHZXRNZXJnZUJhc2USKi5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0TWVyZ2VCYXNlUmVxdWVzdBorLmdpdHNhYXMucmVwb3NpdG9yeS52MS5HZXRNZXJnZUJhc2VSZXNwb25zZRJhCgpHZXRIaXN0b3J5EiguZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldEhpc3RvcnlSZXF1ZXN0GikuZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldEhpc3RvcnlSZXNwb25zZRJbCghHZXRCbGFtZRImLmdpdHNhYXMucmVwb3NpdG9yeS52MS5HZXRCbGFtZVJlcXVlc3QaJy5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0QmxhbWVSZXNwb25zZRJbCghMaXN0VGFncxImLmdpdHNhYXMucmVwb3NpdG9yeS52MS5MaXN0VGFnc1JlcXVlc3QaJy5naXRzYWFzLnJlcG9zaXRvcnkudjEuTGlzdFRhZ3NSZXNwb25zZTKJAQoSUmVwb3NpdG9yeVJlZ2lzdHJ5EnMKEExpc3RSZXBvc2l0b3JpZXMSLi5naXRzYWFzLnJlcG9zaXRvcnkudjEuTGlzdFJlcG9zaXRvcmllc1JlcXVlc3QaLy5naXRzYWFzLnJlcG9zaXRvcnkudjEuTGlzdFJlcG9zaXRvcmllc1Jlc3BvbnNlMs8CChJSZXBvc2l0b3J5U2V0dGluZ3MSZAoLR2V0U2V0dGluZ3MSKS5naXRzYWFzLnJlcG9zaXRvcnkudjEuR2V0U2V0dGluZ3NSZXF1ZXN0GiouZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLkdldFNldHRpbmdzUmVzcG9uc2USbQoOVXBkYXRlU2V0dGluZ3MSLC5naXRzYWFzLnJlcG9zaXRvcnkudjEuVXBkYXRlU2V0dGluZ3NSZXF1ZXN0Gi0uZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLlVwZGF0ZVNldHRpbmdzUmVzcG9uc2USZAoLU2V0QXJjaGl2ZWQSKS5naXRzYWFzLnJlcG9zaXRvcnkudjEuU2V0QXJjaGl2ZWRSZXF1ZXN0GiouZ2l0c2Fhcy5yZXBvc2l0b3J5LnYxLlNldEFyY2hpdmVkUmVzcG9uc2VCQVo/Z2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL3JlcG9zaXRvcnkvdjE7cmVwb3NpdG9yeXYxYgZwcm90bzM");
 
 /**
  * Roles are verified principal attributes supplied to the Repository/Git PDP
@@ -53,6 +53,122 @@ export const ReadContextSchema: GenMessage<ReadContext> = /*@__PURE__*/
   messageDesc(file_proto_repository_v1_repository, 0);
 
 /**
+ * ListContext is a ReadContext without a repository: the caller is verified,
+ * and there is no repository to name because the answer is which ones exist.
+ * Reusing ReadContext would have left a repository_id the caller could
+ * populate to mean something the server must then ignore, and a field that
+ * must be ignored is worse than no field — someone eventually stops ignoring
+ * it.
+ *
+ * @generated from message gitsaas.repository.v1.ListContext
+ */
+export type ListContext = Message<"gitsaas.repository.v1.ListContext"> & {
+  /**
+   * @generated from field: string tenant_id = 1;
+   */
+  tenantId: string;
+
+  /**
+   * @generated from field: string actor_id = 2;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: string request_id = 3;
+   */
+  requestId: string;
+
+  /**
+   * @generated from field: repeated string actor_roles = 4;
+   */
+  actorRoles: string[];
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.ListContext.
+ * Use `create(ListContextSchema)` to create a new message.
+ */
+export const ListContextSchema: GenMessage<ListContext> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 1);
+
+/**
+ * @generated from message gitsaas.repository.v1.ListRepositoriesRequest
+ */
+export type ListRepositoriesRequest = Message<"gitsaas.repository.v1.ListRepositoriesRequest"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.ListContext context = 1;
+   */
+  context?: ListContext | undefined;
+
+  /**
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+
+  /**
+   * @generated from field: int32 page_size = 3;
+   */
+  pageSize: number;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.ListRepositoriesRequest.
+ * Use `create(ListRepositoriesRequestSchema)` to create a new message.
+ */
+export const ListRepositoriesRequestSchema: GenMessage<ListRepositoriesRequest> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 2);
+
+/**
+ * The response carries no total, and that absence is load-bearing: no field
+ * here is capable of expressing how many repositories the caller may NOT see,
+ * so non-enumeration is a property of the contract rather than a discipline
+ * each consumer has to remember (SPEC-0052 AC5, as SPEC-0035 AC3 does for
+ * search).
+ *
+ * @generated from message gitsaas.repository.v1.ListRepositoriesResponse
+ */
+export type ListRepositoriesResponse = Message<"gitsaas.repository.v1.ListRepositoriesResponse"> & {
+  /**
+   * @generated from field: repeated gitsaas.repository.v1.RepositorySummary repositories = 1;
+   */
+  repositories: RepositorySummary[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.ListRepositoriesResponse.
+ * Use `create(ListRepositoriesResponseSchema)` to create a new message.
+ */
+export const ListRepositoriesResponseSchema: GenMessage<ListRepositoriesResponse> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 3);
+
+/**
+ * @generated from message gitsaas.repository.v1.RepositorySummary
+ */
+export type RepositorySummary = Message<"gitsaas.repository.v1.RepositorySummary"> & {
+  /**
+   * @generated from field: string repository_id = 1;
+   */
+  repositoryId: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.RepositorySummary.
+ * Use `create(RepositorySummarySchema)` to create a new message.
+ */
+export const RepositorySummarySchema: GenMessage<RepositorySummary> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 4);
+
+/**
  * @generated from message gitsaas.repository.v1.GetTreeRequest
  */
 export type GetTreeRequest = Message<"gitsaas.repository.v1.GetTreeRequest"> & {
@@ -82,7 +198,7 @@ export type GetTreeRequest = Message<"gitsaas.repository.v1.GetTreeRequest"> & {
  * Use `create(GetTreeRequestSchema)` to create a new message.
  */
 export const GetTreeRequestSchema: GenMessage<GetTreeRequest> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 1);
+  messageDesc(file_proto_repository_v1_repository, 5);
 
 /**
  * @generated from message gitsaas.repository.v1.GetTreeResponse
@@ -104,7 +220,7 @@ export type GetTreeResponse = Message<"gitsaas.repository.v1.GetTreeResponse"> &
  * Use `create(GetTreeResponseSchema)` to create a new message.
  */
 export const GetTreeResponseSchema: GenMessage<GetTreeResponse> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 2);
+  messageDesc(file_proto_repository_v1_repository, 6);
 
 /**
  * @generated from message gitsaas.repository.v1.TreeEntry
@@ -141,7 +257,7 @@ export type TreeEntry = Message<"gitsaas.repository.v1.TreeEntry"> & {
  * Use `create(TreeEntrySchema)` to create a new message.
  */
 export const TreeEntrySchema: GenMessage<TreeEntry> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 3);
+  messageDesc(file_proto_repository_v1_repository, 7);
 
 /**
  * @generated from message gitsaas.repository.v1.GetFileRequest
@@ -168,7 +284,7 @@ export type GetFileRequest = Message<"gitsaas.repository.v1.GetFileRequest"> & {
  * Use `create(GetFileRequestSchema)` to create a new message.
  */
 export const GetFileRequestSchema: GenMessage<GetFileRequest> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 4);
+  messageDesc(file_proto_repository_v1_repository, 8);
 
 /**
  * @generated from message gitsaas.repository.v1.FileChunk
@@ -195,7 +311,7 @@ export type FileChunk = Message<"gitsaas.repository.v1.FileChunk"> & {
  * Use `create(FileChunkSchema)` to create a new message.
  */
 export const FileChunkSchema: GenMessage<FileChunk> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 5);
+  messageDesc(file_proto_repository_v1_repository, 9);
 
 /**
  * @generated from message gitsaas.repository.v1.FileMetadata
@@ -227,7 +343,7 @@ export type FileMetadata = Message<"gitsaas.repository.v1.FileMetadata"> & {
  * Use `create(FileMetadataSchema)` to create a new message.
  */
 export const FileMetadataSchema: GenMessage<FileMetadata> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 6);
+  messageDesc(file_proto_repository_v1_repository, 10);
 
 /**
  * @generated from message gitsaas.repository.v1.GetDiffRequest
@@ -259,7 +375,7 @@ export type GetDiffRequest = Message<"gitsaas.repository.v1.GetDiffRequest"> & {
  * Use `create(GetDiffRequestSchema)` to create a new message.
  */
 export const GetDiffRequestSchema: GenMessage<GetDiffRequest> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 7);
+  messageDesc(file_proto_repository_v1_repository, 11);
 
 /**
  * @generated from message gitsaas.repository.v1.DiffChunk
@@ -281,13 +397,322 @@ export type DiffChunk = Message<"gitsaas.repository.v1.DiffChunk"> & {
  * Use `create(DiffChunkSchema)` to create a new message.
  */
 export const DiffChunkSchema: GenMessage<DiffChunk> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 8);
+  messageDesc(file_proto_repository_v1_repository, 12);
 
 /**
  * GetMergeBaseRequest names the two sides of the comparison as refs or
  * commit identifiers — a merge request's source ref and target ref are the
  * SPEC-0028 shape. An empty side is rejected; resolution is server-side.
+ * CommitIdentity is the author and committer AS GIT RECORDS THEM.
  *
+ * Every field here is named git_* on purpose. These values are whatever the
+ * person running `git commit` had in their local config: git verifies none of
+ * them, and anyone can commit as anyone. The platform does know who PUSHED —
+ * that identity is authenticated and audited — but it is a different fact and
+ * frequently a different person (a merge, an import, a rebase, a script).
+ *
+ * A field called `author` invites a consumer to render it as an account, which
+ * asserts that the platform vouches for it. It does not. The naming refuses
+ * that reading at the point where it would start, the same line ADR-0029 draws
+ * for an imported record's declared_actor.
+ *
+ * There is deliberately no actor_id and no principal_id on this message, and a
+ * contract test forbids adding one.
+ *
+ * @generated from message gitsaas.repository.v1.CommitIdentity
+ */
+export type CommitIdentity = Message<"gitsaas.repository.v1.CommitIdentity"> & {
+  /**
+   * @generated from field: string git_author_name = 1;
+   */
+  gitAuthorName: string;
+
+  /**
+   * @generated from field: string git_author_email = 2;
+   */
+  gitAuthorEmail: string;
+
+  /**
+   * @generated from field: string git_committer_name = 3;
+   */
+  gitCommitterName: string;
+
+  /**
+   * @generated from field: string git_committer_email = 4;
+   */
+  gitCommitterEmail: string;
+
+  /**
+   * @generated from field: string authored_at = 5;
+   */
+  authoredAt: string;
+
+  /**
+   * @generated from field: string committed_at = 6;
+   */
+  committedAt: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.CommitIdentity.
+ * Use `create(CommitIdentitySchema)` to create a new message.
+ */
+export const CommitIdentitySchema: GenMessage<CommitIdentity> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 13);
+
+/**
+ * @generated from message gitsaas.repository.v1.Commit
+ */
+export type Commit = Message<"gitsaas.repository.v1.Commit"> & {
+  /**
+   * @generated from field: string commit_id = 1;
+   */
+  commitId: string;
+
+  /**
+   * @generated from field: gitsaas.repository.v1.CommitIdentity identity = 2;
+   */
+  identity?: CommitIdentity | undefined;
+
+  /**
+   * @generated from field: string subject = 3;
+   */
+  subject: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.Commit.
+ * Use `create(CommitSchema)` to create a new message.
+ */
+export const CommitSchema: GenMessage<Commit> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 14);
+
+/**
+ * @generated from message gitsaas.repository.v1.GetHistoryRequest
+ */
+export type GetHistoryRequest = Message<"gitsaas.repository.v1.GetHistoryRequest"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.ReadContext context = 1;
+   */
+  context?: ReadContext | undefined;
+
+  /**
+   * @generated from field: string revision = 2;
+   */
+  revision: string;
+
+  /**
+   * Optional: narrow the history to one path. It reaches a command line, so
+   * the server places it after `--` and validates it before building one.
+   *
+   * @generated from field: string path = 3;
+   */
+  path: string;
+
+  /**
+   * @generated from field: string page_token = 4;
+   */
+  pageToken: string;
+
+  /**
+   * @generated from field: int32 page_size = 5;
+   */
+  pageSize: number;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.GetHistoryRequest.
+ * Use `create(GetHistoryRequestSchema)` to create a new message.
+ */
+export const GetHistoryRequestSchema: GenMessage<GetHistoryRequest> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 15);
+
+/**
+ * @generated from message gitsaas.repository.v1.GetHistoryResponse
+ */
+export type GetHistoryResponse = Message<"gitsaas.repository.v1.GetHistoryResponse"> & {
+  /**
+   * @generated from field: repeated gitsaas.repository.v1.Commit commits = 1;
+   */
+  commits: Commit[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.GetHistoryResponse.
+ * Use `create(GetHistoryResponseSchema)` to create a new message.
+ */
+export const GetHistoryResponseSchema: GenMessage<GetHistoryResponse> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 16);
+
+/**
+ * @generated from message gitsaas.repository.v1.GetBlameRequest
+ */
+export type GetBlameRequest = Message<"gitsaas.repository.v1.GetBlameRequest"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.ReadContext context = 1;
+   */
+  context?: ReadContext | undefined;
+
+  /**
+   * @generated from field: string revision = 2;
+   */
+  revision: string;
+
+  /**
+   * @generated from field: string path = 3;
+   */
+  path: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.GetBlameRequest.
+ * Use `create(GetBlameRequestSchema)` to create a new message.
+ */
+export const GetBlameRequestSchema: GenMessage<GetBlameRequest> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 17);
+
+/**
+ * One contiguous run of lines attributed to one commit.
+ *
+ * @generated from message gitsaas.repository.v1.BlameRange
+ */
+export type BlameRange = Message<"gitsaas.repository.v1.BlameRange"> & {
+  /**
+   * @generated from field: int32 start_line = 1;
+   */
+  startLine: number;
+
+  /**
+   * @generated from field: int32 end_line = 2;
+   */
+  endLine: number;
+
+  /**
+   * @generated from field: string commit_id = 3;
+   */
+  commitId: string;
+
+  /**
+   * @generated from field: gitsaas.repository.v1.CommitIdentity identity = 4;
+   */
+  identity?: CommitIdentity | undefined;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.BlameRange.
+ * Use `create(BlameRangeSchema)` to create a new message.
+ */
+export const BlameRangeSchema: GenMessage<BlameRange> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 18);
+
+/**
+ * capped reports that the file was longer than this build will attribute. It
+ * exists so a partial attribution can never be rendered as a whole one: the
+ * ranges below cover the first lines only, and the consumer is told so rather
+ * than left to infer it from a line count it has no reason to check.
+ *
+ * @generated from message gitsaas.repository.v1.GetBlameResponse
+ */
+export type GetBlameResponse = Message<"gitsaas.repository.v1.GetBlameResponse"> & {
+  /**
+   * @generated from field: repeated gitsaas.repository.v1.BlameRange ranges = 1;
+   */
+  ranges: BlameRange[];
+
+  /**
+   * @generated from field: bool capped = 2;
+   */
+  capped: boolean;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.GetBlameResponse.
+ * Use `create(GetBlameResponseSchema)` to create a new message.
+ */
+export const GetBlameResponseSchema: GenMessage<GetBlameResponse> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 19);
+
+/**
+ * @generated from message gitsaas.repository.v1.ListTagsRequest
+ */
+export type ListTagsRequest = Message<"gitsaas.repository.v1.ListTagsRequest"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.ReadContext context = 1;
+   */
+  context?: ReadContext | undefined;
+
+  /**
+   * @generated from field: string page_token = 2;
+   */
+  pageToken: string;
+
+  /**
+   * @generated from field: int32 page_size = 3;
+   */
+  pageSize: number;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.ListTagsRequest.
+ * Use `create(ListTagsRequestSchema)` to create a new message.
+ */
+export const ListTagsRequestSchema: GenMessage<ListTagsRequest> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 20);
+
+/**
+ * A tag and the commit it points at RIGHT NOW. Both are facts at read time and
+ * neither is stable: a tag is a mutable pointer, which is why a release records
+ * the commit it saw rather than trusting this to stay the same.
+ *
+ * @generated from message gitsaas.repository.v1.Tag
+ */
+export type Tag = Message<"gitsaas.repository.v1.Tag"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string commit_id = 2;
+   */
+  commitId: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.Tag.
+ * Use `create(TagSchema)` to create a new message.
+ */
+export const TagSchema: GenMessage<Tag> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 21);
+
+/**
+ * @generated from message gitsaas.repository.v1.ListTagsResponse
+ */
+export type ListTagsResponse = Message<"gitsaas.repository.v1.ListTagsResponse"> & {
+  /**
+   * @generated from field: repeated gitsaas.repository.v1.Tag tags = 1;
+   */
+  tags: Tag[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.ListTagsResponse.
+ * Use `create(ListTagsResponseSchema)` to create a new message.
+ */
+export const ListTagsResponseSchema: GenMessage<ListTagsResponse> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 22);
+
+/**
  * @generated from message gitsaas.repository.v1.GetMergeBaseRequest
  */
 export type GetMergeBaseRequest = Message<"gitsaas.repository.v1.GetMergeBaseRequest"> & {
@@ -312,7 +737,7 @@ export type GetMergeBaseRequest = Message<"gitsaas.repository.v1.GetMergeBaseReq
  * Use `create(GetMergeBaseRequestSchema)` to create a new message.
  */
 export const GetMergeBaseRequestSchema: GenMessage<GetMergeBaseRequest> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 9);
+  messageDesc(file_proto_repository_v1_repository, 23);
 
 /**
  * GetMergeBaseResponse names the merge base. A pair with no common ancestor
@@ -339,7 +764,187 @@ export type GetMergeBaseResponse = Message<"gitsaas.repository.v1.GetMergeBaseRe
  * Use `create(GetMergeBaseResponseSchema)` to create a new message.
  */
 export const GetMergeBaseResponseSchema: GenMessage<GetMergeBaseResponse> = /*@__PURE__*/
-  messageDesc(file_proto_repository_v1_repository, 10);
+  messageDesc(file_proto_repository_v1_repository, 24);
+
+/**
+ * Settings is one repository's changeable properties, plus the record of who
+ * last changed them.
+ *
+ * archived_at is empty when the repository is not archived; a boolean plus a
+ * timestamp would let the two disagree, and a repository that is archived with
+ * no instant is not a state anyone can act on.
+ *
+ * settings_updated_by is an actor ID and not a display name: resolving it to a
+ * person is the Identity context's job and no field here asks this surface to
+ * do it.
+ *
+ * @generated from message gitsaas.repository.v1.Settings
+ */
+export type Settings = Message<"gitsaas.repository.v1.Settings"> & {
+  /**
+   * @generated from field: string repository_id = 1;
+   */
+  repositoryId: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string description = 3;
+   */
+  description: string;
+
+  /**
+   * @generated from field: string archived_at = 4;
+   */
+  archivedAt: string;
+
+  /**
+   * @generated from field: string settings_updated_at = 5;
+   */
+  settingsUpdatedAt: string;
+
+  /**
+   * @generated from field: string settings_updated_by = 6;
+   */
+  settingsUpdatedBy: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.Settings.
+ * Use `create(SettingsSchema)` to create a new message.
+ */
+export const SettingsSchema: GenMessage<Settings> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 25);
+
+/**
+ * @generated from message gitsaas.repository.v1.GetSettingsRequest
+ */
+export type GetSettingsRequest = Message<"gitsaas.repository.v1.GetSettingsRequest"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.ReadContext context = 1;
+   */
+  context?: ReadContext | undefined;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.GetSettingsRequest.
+ * Use `create(GetSettingsRequestSchema)` to create a new message.
+ */
+export const GetSettingsRequestSchema: GenMessage<GetSettingsRequest> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 26);
+
+/**
+ * @generated from message gitsaas.repository.v1.GetSettingsResponse
+ */
+export type GetSettingsResponse = Message<"gitsaas.repository.v1.GetSettingsResponse"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.Settings settings = 1;
+   */
+  settings?: Settings | undefined;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.GetSettingsResponse.
+ * Use `create(GetSettingsResponseSchema)` to create a new message.
+ */
+export const GetSettingsResponseSchema: GenMessage<GetSettingsResponse> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 27);
+
+/**
+ * UpdateSettingsRequest carries both fields on every call: this is a write of
+ * the settings a repository has, not a patch. A partial update would need an
+ * optional-field convention, and the first thing such a convention attracts is
+ * a field that was not in the accepted increment.
+ *
+ * @generated from message gitsaas.repository.v1.UpdateSettingsRequest
+ */
+export type UpdateSettingsRequest = Message<"gitsaas.repository.v1.UpdateSettingsRequest"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.ReadContext context = 1;
+   */
+  context?: ReadContext | undefined;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string description = 3;
+   */
+  description: string;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.UpdateSettingsRequest.
+ * Use `create(UpdateSettingsRequestSchema)` to create a new message.
+ */
+export const UpdateSettingsRequestSchema: GenMessage<UpdateSettingsRequest> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 28);
+
+/**
+ * @generated from message gitsaas.repository.v1.UpdateSettingsResponse
+ */
+export type UpdateSettingsResponse = Message<"gitsaas.repository.v1.UpdateSettingsResponse"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.Settings settings = 1;
+   */
+  settings?: Settings | undefined;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.UpdateSettingsResponse.
+ * Use `create(UpdateSettingsResponseSchema)` to create a new message.
+ */
+export const UpdateSettingsResponseSchema: GenMessage<UpdateSettingsResponse> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 29);
+
+/**
+ * SetArchivedRequest states the state wanted, not the transition. Archiving an
+ * archived repository is the same fact stated twice, so a caller that repeats
+ * itself is not an error and does not produce a second audit record
+ * (SPEC-0057 AC3).
+ *
+ * @generated from message gitsaas.repository.v1.SetArchivedRequest
+ */
+export type SetArchivedRequest = Message<"gitsaas.repository.v1.SetArchivedRequest"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.ReadContext context = 1;
+   */
+  context?: ReadContext | undefined;
+
+  /**
+   * @generated from field: bool archived = 2;
+   */
+  archived: boolean;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.SetArchivedRequest.
+ * Use `create(SetArchivedRequestSchema)` to create a new message.
+ */
+export const SetArchivedRequestSchema: GenMessage<SetArchivedRequest> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 30);
+
+/**
+ * @generated from message gitsaas.repository.v1.SetArchivedResponse
+ */
+export type SetArchivedResponse = Message<"gitsaas.repository.v1.SetArchivedResponse"> & {
+  /**
+   * @generated from field: gitsaas.repository.v1.Settings settings = 1;
+   */
+  settings?: Settings | undefined;
+};
+
+/**
+ * Describes the message gitsaas.repository.v1.SetArchivedResponse.
+ * Use `create(SetArchivedResponseSchema)` to create a new message.
+ */
+export const SetArchivedResponseSchema: GenMessage<SetArchivedResponse> = /*@__PURE__*/
+  messageDesc(file_proto_repository_v1_repository, 31);
 
 /**
  * @generated from enum gitsaas.repository.v1.EntryKind
@@ -416,6 +1021,140 @@ export const RepositoryReader: GenService<{
     input: typeof GetMergeBaseRequestSchema;
     output: typeof GetMergeBaseResponseSchema;
   },
+  /**
+   * GetHistory and GetBlame complete PR-8, which has named both since Phase 1.
+   * Additive for SPEC-0053. They belong here, unlike the registry list: both
+   * are reads of one named repository, which is what this surface is.
+   *
+   * @generated from rpc gitsaas.repository.v1.RepositoryReader.GetHistory
+   */
+  getHistory: {
+    methodKind: "unary";
+    input: typeof GetHistoryRequestSchema;
+    output: typeof GetHistoryResponseSchema;
+  },
+  /**
+   * @generated from rpc gitsaas.repository.v1.RepositoryReader.GetBlame
+   */
+  getBlame: {
+    methodKind: "unary";
+    input: typeof GetBlameRequestSchema;
+    output: typeof GetBlameResponseSchema;
+  },
+  /**
+   * ListTags serves a repository's tags. Additive for SPEC-0056.
+   *
+   * It belongs here rather than in release/v1 because a tag is a git object in
+   * the bare repository, and this is the surface that reads those. The Release
+   * context never asks what a tag means — it records what one meant when a
+   * release was published (SPEC-0056 AC6).
+   *
+   * @generated from rpc gitsaas.repository.v1.RepositoryReader.ListTags
+   */
+  listTags: {
+    methodKind: "unary";
+    input: typeof ListTagsRequestSchema;
+    output: typeof ListTagsResponseSchema;
+  },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_repository_v1_repository, 0);
+
+/**
+ * RepositoryRegistry answers which repositories exist for a caller (SPEC-0052,
+ * PR-24). Additive, and deliberately a SECOND service rather than another RPC
+ * on RepositoryReader.
+ *
+ * They are served by different processes, and that is the whole reason.
+ * RepositoryReader is git-storaged: it reads bare repositories from block
+ * volumes and holds no record of which repositories the product knows about.
+ * The registry is the Repository context in the data plane, and per ADR-0071
+ * it — not the disk — is the product's truth for existence. Putting the list
+ * on RepositoryReader would have asked the process that cannot answer.
+ *
+ * @generated from service gitsaas.repository.v1.RepositoryRegistry
+ */
+export const RepositoryRegistry: GenService<{
+  /**
+   * ListRepositories answers which repositories the caller may see.
+   *
+   * The listable set is derived server-side from the caller's authorization at
+   * request time. There is deliberately no repository set, filter, owner or
+   * visibility field: a caller cannot widen what it is shown, because there is
+   * nothing to widen it with (ADR-0071 decision 4, as SPEC-0035 AC2 does for
+   * a search query).
+   *
+   * @generated from rpc gitsaas.repository.v1.RepositoryRegistry.ListRepositories
+   */
+  listRepositories: {
+    methodKind: "unary";
+    input: typeof ListRepositoriesRequestSchema;
+    output: typeof ListRepositoriesResponseSchema;
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_proto_repository_v1_repository, 1);
+
+/**
+ * RepositorySettings reads and changes the properties of one repository
+ * (SPEC-0057, PR-30, ADR-0076). Additive, and a THIRD service in this package
+ * for the same reason RepositoryRegistry is separate from RepositoryReader: a
+ * service is the surface one process serves, and these are not the same
+ * question.
+ *
+ * RepositoryRegistry answers which repositories exist for a caller and is
+ * deliberately unwidenable — it has no field a caller could use to ask
+ * differently (ADR-0071 decision 4). Settings name one repository and change
+ * it. A write verb on the listing service would put a mutation behind the one
+ * surface whose whole property is that it cannot be steered.
+ *
+ * WHAT IS ABSENT HERE IS THE DECISION. ADR-0076 accepted name, description and
+ * archival only. There is no visibility field, no member or role field, no
+ * branch-protection or approval field, and no Delete verb anywhere in this
+ * package — asserted against the compiled descriptor by check-contracts' check
+ * 16, with a fixture that proves the check can fail.
+ *
+ * PR-10 says branch protection and approval requirements are enforced
+ * server-side and expressed as policy, not UI toggles. A settings surface is
+ * exactly where that sentence erodes: not by anyone deciding to break it, but
+ * by a "require approvals" checkbox appearing where a user would look for one.
+ * The absence is a type property so that it cannot arrive quietly.
+ *
+ * @generated from service gitsaas.repository.v1.RepositorySettings
+ */
+export const RepositorySettings: GenService<{
+  /**
+   * @generated from rpc gitsaas.repository.v1.RepositorySettings.GetSettings
+   */
+  getSettings: {
+    methodKind: "unary";
+    input: typeof GetSettingsRequestSchema;
+    output: typeof GetSettingsResponseSchema;
+  },
+  /**
+   * UpdateSettings changes the name and the description. It cannot change
+   * anything else, because the request carries nothing else.
+   *
+   * @generated from rpc gitsaas.repository.v1.RepositorySettings.UpdateSettings
+   */
+  updateSettings: {
+    methodKind: "unary";
+    input: typeof UpdateSettingsRequestSchema;
+    output: typeof UpdateSettingsResponseSchema;
+  },
+  /**
+   * SetArchived sets or clears the archived state. Archival is a LABEL: an
+   * archived repository still lists, still reads and is still writable
+   * (SPEC-0057's archival rule). Making it refuse writes would be a read-only
+   * condition, and one of those must name its cause from the two-member
+   * vocabulary in repository/api/readonly.go — a git-write-path decision, not
+   * a setting.
+   *
+   * @generated from rpc gitsaas.repository.v1.RepositorySettings.SetArchived
+   */
+  setArchived: {
+    methodKind: "unary";
+    input: typeof SetArchivedRequestSchema;
+    output: typeof SetArchivedResponseSchema;
+  },
+}> = /*@__PURE__*/
+  serviceDesc(file_proto_repository_v1_repository, 2);
 

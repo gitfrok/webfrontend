@@ -18,7 +18,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/ci/v1/ci.proto.
  */
 export const file_proto_ci_v1_ci: GenFile = /*@__PURE__*/
-  fileDesc("ChRwcm90by9jaS92MS9jaS5wcm90bxINZ2l0c2Fhcy5jaS52MSJxCgpKb2JDb250ZXh0EhEKCXRlbmFudF9pZBgBIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAIgASgJEhAKCGFjdG9yX2lkGAMgASgJEhMKC2FjdG9yX3JvbGVzGAQgAygJEhIKCnJlcXVlc3RfaWQYBSABKAkirgEKEUVucXVldWVKb2JSZXF1ZXN0EioKB2NvbnRleHQYASABKAsyGS5naXRzYWFzLmNpLnYxLkpvYkNvbnRleHQSCwoDcmVmGAIgASgJEhIKCmNvbW1pdF9zaGEYAyABKAkSMwoMdHJpZ2dlcl9raW5kGAQgASgOMh0uZ2l0c2Fhcy5jaS52MS5Kb2JUcmlnZ2VyS2luZBIXCg9zb3VyY2VfZXZlbnRfaWQYBSABKAkiNwoSRW5xdWV1ZUpvYlJlc3BvbnNlEiEKA2pvYhgBIAEoCzIULmdpdHNhYXMuY2kudjEuQ0lKb2IiSwoNR2V0Sm9iUmVxdWVzdBIqCgdjb250ZXh0GAEgASgLMhkuZ2l0c2Fhcy5jaS52MS5Kb2JDb250ZXh0Eg4KBmpvYl9pZBgCIAEoCSIzCg5HZXRKb2JSZXNwb25zZRIhCgNqb2IYASABKAsyFC5naXRzYWFzLmNpLnYxLkNJSm9iIk4KEENhbmNlbEpvYlJlcXVlc3QSKgoHY29udGV4dBgBIAEoCzIZLmdpdHNhYXMuY2kudjEuSm9iQ29udGV4dBIOCgZqb2JfaWQYAiABKAkiNgoRQ2FuY2VsSm9iUmVzcG9uc2USIQoDam9iGAEgASgLMhQuZ2l0c2Fhcy5jaS52MS5DSUpvYiKaAwoFQ0lKb2ISDgoGam9iX2lkGAEgASgJEhIKCmF0dGVtcHRfaWQYAiABKAkSEQoJdGVuYW50X2lkGAMgASgJEhUKDXJlcG9zaXRvcnlfaWQYBCABKAkSCwoDcmVmGAUgASgJEhIKCmNvbW1pdF9zaGEYBiABKAkSMwoMdHJpZ2dlcl9raW5kGAcgASgOMh0uZ2l0c2Fhcy5jaS52MS5Kb2JUcmlnZ2VyS2luZBImCgVzdGF0ZRgIIAEoDjIXLmdpdHNhYXMuY2kudjEuSm9iU3RhdGUSLQoJcXVldWVkX2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIuCgpzdGFydGVkX2F0GAogASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIvCgtmaW5pc2hlZF9hdBgLIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASHAoUY29uZmlndXJhdGlvbl9kaWdlc3QYDCABKAkSFwoPb3V0Y29tZV9zdW1tYXJ5GA0gASgJKnEKDkpvYlRyaWdnZXJLaW5kEiAKHEpPQl9UUklHR0VSX0tJTkRfVU5TUEVDSUZJRUQQABIgChxKT0JfVFJJR0dFUl9LSU5EX1JFRl9VUERBVEVEEAESGwoXSk9CX1RSSUdHRVJfS0lORF9NQU5VQUwQAiqaAQoISm9iU3RhdGUSGQoVSk9CX1NUQVRFX1VOU1BFQ0lGSUVEEAASFAoQSk9CX1NUQVRFX1FVRVVFRBABEhUKEUpPQl9TVEFURV9SVU5OSU5HEAISFwoTSk9CX1NUQVRFX1NVQ0NFRURFRBADEhQKEEpPQl9TVEFURV9GQUlMRUQQBBIXChNKT0JfU1RBVEVfQ0FOQ0VMTEVEEAUy+AEKDENJSm9iU2VydmljZRJRCgpFbnF1ZXVlSm9iEiAuZ2l0c2Fhcy5jaS52MS5FbnF1ZXVlSm9iUmVxdWVzdBohLmdpdHNhYXMuY2kudjEuRW5xdWV1ZUpvYlJlc3BvbnNlEkUKBkdldEpvYhIcLmdpdHNhYXMuY2kudjEuR2V0Sm9iUmVxdWVzdBodLmdpdHNhYXMuY2kudjEuR2V0Sm9iUmVzcG9uc2USTgoJQ2FuY2VsSm9iEh8uZ2l0c2Fhcy5jaS52MS5DYW5jZWxKb2JSZXF1ZXN0GiAuZ2l0c2Fhcy5jaS52MS5DYW5jZWxKb2JSZXNwb25zZUIxWi9naXRodWIuY29tL3lvdXJvcmcvZ2l0c2Fhcy9nZW4vcHJvdG8vY2kvdjE7Y2l2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
+  fileDesc("ChRwcm90by9jaS92MS9jaS5wcm90bxINZ2l0c2Fhcy5jaS52MSJxCgpKb2JDb250ZXh0EhEKCXRlbmFudF9pZBgBIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAIgASgJEhAKCGFjdG9yX2lkGAMgASgJEhMKC2FjdG9yX3JvbGVzGAQgAygJEhIKCnJlcXVlc3RfaWQYBSABKAkirgEKEUVucXVldWVKb2JSZXF1ZXN0EioKB2NvbnRleHQYASABKAsyGS5naXRzYWFzLmNpLnYxLkpvYkNvbnRleHQSCwoDcmVmGAIgASgJEhIKCmNvbW1pdF9zaGEYAyABKAkSMwoMdHJpZ2dlcl9raW5kGAQgASgOMh0uZ2l0c2Fhcy5jaS52MS5Kb2JUcmlnZ2VyS2luZBIXCg9zb3VyY2VfZXZlbnRfaWQYBSABKAkiNwoSRW5xdWV1ZUpvYlJlc3BvbnNlEiEKA2pvYhgBIAEoCzIULmdpdHNhYXMuY2kudjEuQ0lKb2IiSwoNR2V0Sm9iUmVxdWVzdBIqCgdjb250ZXh0GAEgASgLMhkuZ2l0c2Fhcy5jaS52MS5Kb2JDb250ZXh0Eg4KBmpvYl9pZBgCIAEoCSIzCg5HZXRKb2JSZXNwb25zZRIhCgNqb2IYASABKAsyFC5naXRzYWFzLmNpLnYxLkNJSm9iIk4KEENhbmNlbEpvYlJlcXVlc3QSKgoHY29udGV4dBgBIAEoCzIZLmdpdHNhYXMuY2kudjEuSm9iQ29udGV4dBIOCgZqb2JfaWQYAiABKAkiNgoRQ2FuY2VsSm9iUmVzcG9uc2USIQoDam9iGAEgASgLMhQuZ2l0c2Fhcy5jaS52MS5DSUpvYiJ7Cg9MaXN0Sm9ic1JlcXVlc3QSKgoHY29udGV4dBgBIAEoCzIZLmdpdHNhYXMuY2kudjEuSm9iQ29udGV4dBIVCg1yZXBvc2l0b3J5X2lkGAIgASgJEhIKCnBhZ2VfdG9rZW4YAyABKAkSEQoJcGFnZV9zaXplGAQgASgFIk8KEExpc3RKb2JzUmVzcG9uc2USIgoEam9icxgBIAMoCzIULmdpdHNhYXMuY2kudjEuQ0lKb2ISFwoPbmV4dF9wYWdlX3Rva2VuGAIgASgJIpoDCgVDSUpvYhIOCgZqb2JfaWQYASABKAkSEgoKYXR0ZW1wdF9pZBgCIAEoCRIRCgl0ZW5hbnRfaWQYAyABKAkSFQoNcmVwb3NpdG9yeV9pZBgEIAEoCRILCgNyZWYYBSABKAkSEgoKY29tbWl0X3NoYRgGIAEoCRIzCgx0cmlnZ2VyX2tpbmQYByABKA4yHS5naXRzYWFzLmNpLnYxLkpvYlRyaWdnZXJLaW5kEiYKBXN0YXRlGAggASgOMhcuZ2l0c2Fhcy5jaS52MS5Kb2JTdGF0ZRItCglxdWV1ZWRfYXQYCSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi4KCnN0YXJ0ZWRfYXQYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEi8KC2ZpbmlzaGVkX2F0GAsgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIcChRjb25maWd1cmF0aW9uX2RpZ2VzdBgMIAEoCRIXCg9vdXRjb21lX3N1bW1hcnkYDSABKAkqcQoOSm9iVHJpZ2dlcktpbmQSIAocSk9CX1RSSUdHRVJfS0lORF9VTlNQRUNJRklFRBAAEiAKHEpPQl9UUklHR0VSX0tJTkRfUkVGX1VQREFURUQQARIbChdKT0JfVFJJR0dFUl9LSU5EX01BTlVBTBACKpoBCghKb2JTdGF0ZRIZChVKT0JfU1RBVEVfVU5TUEVDSUZJRUQQABIUChBKT0JfU1RBVEVfUVVFVUVEEAESFQoRSk9CX1NUQVRFX1JVTk5JTkcQAhIXChNKT0JfU1RBVEVfU1VDQ0VFREVEEAMSFAoQSk9CX1NUQVRFX0ZBSUxFRBAEEhcKE0pPQl9TVEFURV9DQU5DRUxMRUQQBTLFAgoMQ0lKb2JTZXJ2aWNlElEKCkVucXVldWVKb2ISIC5naXRzYWFzLmNpLnYxLkVucXVldWVKb2JSZXF1ZXN0GiEuZ2l0c2Fhcy5jaS52MS5FbnF1ZXVlSm9iUmVzcG9uc2USRQoGR2V0Sm9iEhwuZ2l0c2Fhcy5jaS52MS5HZXRKb2JSZXF1ZXN0Gh0uZ2l0c2Fhcy5jaS52MS5HZXRKb2JSZXNwb25zZRJOCglDYW5jZWxKb2ISHy5naXRzYWFzLmNpLnYxLkNhbmNlbEpvYlJlcXVlc3QaIC5naXRzYWFzLmNpLnYxLkNhbmNlbEpvYlJlc3BvbnNlEksKCExpc3RKb2JzEh4uZ2l0c2Fhcy5jaS52MS5MaXN0Sm9ic1JlcXVlc3QaHy5naXRzYWFzLmNpLnYxLkxpc3RKb2JzUmVzcG9uc2VCMVovZ2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL2NpL3YxO2NpdjFiBnByb3RvMw", [file_google_protobuf_timestamp]);
 
 /**
  * JobContext is derived from a verified request or RefUpdated event. It is
@@ -206,6 +206,74 @@ export const CancelJobResponseSchema: GenMessage<CancelJobResponse> = /*@__PURE_
  * raw logs, credentials, runner capabilities, Kubernetes names, node names,
  * service-account tokens, and authorization results.
  *
+ * @generated from message gitsaas.ci.v1.ListJobsRequest
+ */
+export type ListJobsRequest = Message<"gitsaas.ci.v1.ListJobsRequest"> & {
+  /**
+   * @generated from field: gitsaas.ci.v1.JobContext context = 1;
+   */
+  context?: JobContext | undefined;
+
+  /**
+   * Optional: narrow to one repository. It cannot widen anything.
+   *
+   * @generated from field: string repository_id = 2;
+   */
+  repositoryId: string;
+
+  /**
+   * @generated from field: string page_token = 3;
+   */
+  pageToken: string;
+
+  /**
+   * @generated from field: int32 page_size = 4;
+   */
+  pageSize: number;
+};
+
+/**
+ * Describes the message gitsaas.ci.v1.ListJobsRequest.
+ * Use `create(ListJobsRequestSchema)` to create a new message.
+ */
+export const ListJobsRequestSchema: GenMessage<ListJobsRequest> = /*@__PURE__*/
+  messageDesc(file_proto_ci_v1_ci, 7);
+
+/**
+ * No total, and no logs.
+ *
+ * The total is absent for the reason it is absent on every list in this
+ * product: no field may be capable of expressing how many runs the caller may
+ * NOT see.
+ *
+ * The logs are absent because ADR-0072 defers retaining job output to its own
+ * decision — capture, redaction, retention, access and residency — and a field
+ * here is precisely how that deferral would erode. check-contracts.sh check 13
+ * asserts no message in this package carries one, so the deferral is a
+ * property of the contract rather than an intention someone remembers.
+ *
+ * @generated from message gitsaas.ci.v1.ListJobsResponse
+ */
+export type ListJobsResponse = Message<"gitsaas.ci.v1.ListJobsResponse"> & {
+  /**
+   * @generated from field: repeated gitsaas.ci.v1.CIJob jobs = 1;
+   */
+  jobs: CIJob[];
+
+  /**
+   * @generated from field: string next_page_token = 2;
+   */
+  nextPageToken: string;
+};
+
+/**
+ * Describes the message gitsaas.ci.v1.ListJobsResponse.
+ * Use `create(ListJobsResponseSchema)` to create a new message.
+ */
+export const ListJobsResponseSchema: GenMessage<ListJobsResponse> = /*@__PURE__*/
+  messageDesc(file_proto_ci_v1_ci, 8);
+
+/**
  * @generated from message gitsaas.ci.v1.CIJob
  */
 export type CIJob = Message<"gitsaas.ci.v1.CIJob"> & {
@@ -280,7 +348,7 @@ export type CIJob = Message<"gitsaas.ci.v1.CIJob"> & {
  * Use `create(CIJobSchema)` to create a new message.
  */
 export const CIJobSchema: GenMessage<CIJob> = /*@__PURE__*/
-  messageDesc(file_proto_ci_v1_ci, 7);
+  messageDesc(file_proto_ci_v1_ci, 9);
 
 /**
  * @generated from enum gitsaas.ci.v1.JobTriggerKind
@@ -376,6 +444,22 @@ export const CIJobService: GenService<{
     methodKind: "unary";
     input: typeof CancelJobRequestSchema;
     output: typeof CancelJobResponseSchema;
+  },
+  /**
+   * ListJobs answers which runs the caller may see. Additive for SPEC-0054.
+   *
+   * The listable set is derived server-side from the caller's authorization at
+   * request time — one decision per candidate's repository, because being told
+   * a run happened is being told something about the repository. There is no
+   * job set, state filter or repository allow-list a caller could use to widen
+   * it; repository_id only narrows, and every candidate is decided anyway.
+   *
+   * @generated from rpc gitsaas.ci.v1.CIJobService.ListJobs
+   */
+  listJobs: {
+    methodKind: "unary";
+    input: typeof ListJobsRequestSchema;
+    output: typeof ListJobsResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_ci_v1_ci, 0);
