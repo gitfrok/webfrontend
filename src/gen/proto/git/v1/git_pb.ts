@@ -18,7 +18,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/git/v1/git.proto.
  */
 export const file_proto_git_v1_git: GenFile = /*@__PURE__*/
-  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSKoAQoQT3BlcmF0aW9uQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJEi8KCXRyYW5zcG9ydBgGIAEoDjIcLmdpdHNhYXMuZ2l0LnYxLkdpdFRyYW5zcG9ydCJ0ChFVcGxvYWRQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIgoSVXBsb2FkUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidQoSUmVjZWl2ZVBhY2tSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5PcGVyYXRpb25Db250ZXh0SAASDgoEZGF0YRgCIAEoDEgAEg8KBWNsb3NlGAMgASgISABCCQoHcGF5bG9hZCIjChNSZWNlaXZlUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidwoQUmVmVXBkYXRlQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIo0BCg9NZXJnZVJlZlJlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZUNvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIQCghyZXZpc2lvbhgDIAEoCRIhChlleHBlY3RlZF9jdXJyZW50X3JldmlzaW9uGAQgASgJIjgKEE1lcmdlUmVmUmVzcG9uc2USEgoKdGFyZ2V0X3JlZhgBIAEoCRIQCghyZXZpc2lvbhgCIAEoCSJwChFJbXBvcnRSZWZzUmVxdWVzdBIxCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dBISCgpzb3VyY2VfdXJsGAIgASgJEhQKDHNvdXJjZV90b2tlbhgDIAEoCSJVChJJbXBvcnRSZWZzUmVzcG9uc2USJwoEcmVmcxgBIAMoCzIZLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZRIWCg5pbXBvcnRlZF9ieXRlcxgCIAEoAyIqCglSZWZVcGRhdGUSCwoDcmVmGAEgASgJEhAKCHJldmlzaW9uGAIgASgJInkKFFNldFByb3RlY3Rpb25SZXF1ZXN0EjEKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5SZWZVcGRhdGVDb250ZXh0EhIKCnRhcmdldF9yZWYYAiABKAkSGgoScmVxdWlyZWRfYXBwcm92YWxzGAMgASgFIhcKFVNldFByb3RlY3Rpb25SZXNwb25zZSJGChpTdWJzY3JpYmVSZWZVcGRhdGVzUmVxdWVzdBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCSLaAQoVUmVmVXBkYXRlTm90aWZpY2F0aW9uEhAKCGV2ZW50X2lkGAEgASgJEhEKCXRlbmFudF9pZBgCIAEoCRIVCg1yZXBvc2l0b3J5X2lkGAMgASgJEgsKA3JlZhgEIAEoCRIPCgdvbGRfc2hhGAUgASgJEg8KB25ld19zaGEYBiABKAkSEAoIYWN0b3JfaWQYByABKAkSEwoLYWN0b3Jfcm9sZXMYCCADKAkSLwoLb2NjdXJyZWRfYXQYCSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wKo4BCgxHaXRUcmFuc3BvcnQSHQoZR0lUX1RSQU5TUE9SVF9VTlNQRUNJRklFRBAAEhUKEUdJVF9UUkFOU1BPUlRfU1NIEAESJgoiR0lUX1RSQU5TUE9SVF9TTUFSVF9IVFRQX0RJU0NPVkVSWRACEiAKHEdJVF9UUkFOU1BPUlRfU01BUlRfSFRUUF9SUEMQAzKvBAoKR2l0U3RvcmFnZRJXCgpVcGxvYWRQYWNrEiEuZ2l0c2Fhcy5naXQudjEuVXBsb2FkUGFja1JlcXVlc3QaIi5naXRzYWFzLmdpdC52MS5VcGxvYWRQYWNrUmVzcG9uc2UoATABEloKC1JlY2VpdmVQYWNrEiIuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXF1ZXN0GiMuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXNwb25zZSgBMAESTQoITWVyZ2VSZWYSHy5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlcXVlc3QaIC5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlc3BvbnNlElMKCkltcG9ydFJlZnMSIS5naXRzYWFzLmdpdC52MS5JbXBvcnRSZWZzUmVxdWVzdBoiLmdpdHNhYXMuZ2l0LnYxLkltcG9ydFJlZnNSZXNwb25zZRJcCg1TZXRQcm90ZWN0aW9uEiQuZ2l0c2Fhcy5naXQudjEuU2V0UHJvdGVjdGlvblJlcXVlc3QaJS5naXRzYWFzLmdpdC52MS5TZXRQcm90ZWN0aW9uUmVzcG9uc2USagoTU3Vic2NyaWJlUmVmVXBkYXRlcxIqLmdpdHNhYXMuZ2l0LnYxLlN1YnNjcmliZVJlZlVwZGF0ZXNSZXF1ZXN0GiUuZ2l0c2Fhcy5naXQudjEuUmVmVXBkYXRlTm90aWZpY2F0aW9uMAFCM1oxZ2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL2dpdC92MTtnaXR2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
+  fileDesc("ChZwcm90by9naXQvdjEvZ2l0LnByb3RvEg5naXRzYWFzLmdpdC52MSKoAQoQT3BlcmF0aW9uQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJEi8KCXRyYW5zcG9ydBgGIAEoDjIcLmdpdHNhYXMuZ2l0LnYxLkdpdFRyYW5zcG9ydCJ0ChFVcGxvYWRQYWNrUmVxdWVzdBIzCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuT3BlcmF0aW9uQ29udGV4dEgAEg4KBGRhdGEYAiABKAxIABIPCgVjbG9zZRgDIAEoCEgAQgkKB3BheWxvYWQiIgoSVXBsb2FkUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidQoSUmVjZWl2ZVBhY2tSZXF1ZXN0EjMKB2NvbnRleHQYASABKAsyIC5naXRzYWFzLmdpdC52MS5PcGVyYXRpb25Db250ZXh0SAASDgoEZGF0YRgCIAEoDEgAEg8KBWNsb3NlGAMgASgISABCCQoHcGF5bG9hZCIjChNSZWNlaXZlUGFja1Jlc3BvbnNlEgwKBGRhdGEYASABKAwidwoQUmVmVXBkYXRlQ29udGV4dBIRCgl0ZW5hbnRfaWQYASABKAkSFQoNcmVwb3NpdG9yeV9pZBgCIAEoCRIQCghhY3Rvcl9pZBgDIAEoCRISCgpyZXF1ZXN0X2lkGAQgASgJEhMKC2FjdG9yX3JvbGVzGAUgAygJIrsBCg9NZXJnZVJlZlJlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLlJlZlVwZGF0ZUNvbnRleHQSEgoKdGFyZ2V0X3JlZhgCIAEoCRIQCghyZXZpc2lvbhgDIAEoCRIhChlleHBlY3RlZF9jdXJyZW50X3JldmlzaW9uGAQgASgJEiwKB2xhbmRpbmcYBSABKAsyGy5naXRzYWFzLmdpdC52MS5MYW5kaW5nUGxhbiKNAQoLTGFuZGluZ1BsYW4SMQoIc3RyYXRlZ3kYASABKA4yHy5naXRzYWFzLmdpdC52MS5MYW5kaW5nU3RyYXRlZ3kSEwoLdHJ1bmtfYmFzZWQYAiABKAgSFQoNbWVzc2FnZV90aXRsZRgDIAEoCRIfChdtZXJnZV9yZXF1ZXN0X3JlZmVyZW5jZRgEIAEoCSKFAQoQTWVyZ2VSZWZSZXNwb25zZRISCgp0YXJnZXRfcmVmGAEgASgJEhAKCHJldmlzaW9uGAIgASgJEhcKD2xhbmRlZF9yZXZpc2lvbhgDIAEoCRIyCgxsYW5kZWRfc2hhcGUYBCABKA4yHC5naXRzYWFzLmdpdC52MS5MYW5kaW5nU2hhcGUicAoRSW1wb3J0UmVmc1JlcXVlc3QSMQoHY29udGV4dBgBIAEoCzIgLmdpdHNhYXMuZ2l0LnYxLk9wZXJhdGlvbkNvbnRleHQSEgoKc291cmNlX3VybBgCIAEoCRIUCgxzb3VyY2VfdG9rZW4YAyABKAkiVQoSSW1wb3J0UmVmc1Jlc3BvbnNlEicKBHJlZnMYASADKAsyGS5naXRzYWFzLmdpdC52MS5SZWZVcGRhdGUSFgoOaW1wb3J0ZWRfYnl0ZXMYAiABKAMiKgoJUmVmVXBkYXRlEgsKA3JlZhgBIAEoCRIQCghyZXZpc2lvbhgCIAEoCSJ5ChRTZXRQcm90ZWN0aW9uUmVxdWVzdBIxCgdjb250ZXh0GAEgASgLMiAuZ2l0c2Fhcy5naXQudjEuUmVmVXBkYXRlQ29udGV4dBISCgp0YXJnZXRfcmVmGAIgASgJEhoKEnJlcXVpcmVkX2FwcHJvdmFscxgDIAEoBSIXChVTZXRQcm90ZWN0aW9uUmVzcG9uc2UiRgoaU3Vic2NyaWJlUmVmVXBkYXRlc1JlcXVlc3QSEQoJdGVuYW50X2lkGAEgASgJEhUKDXJlcG9zaXRvcnlfaWQYAiABKAki2gEKFVJlZlVwZGF0ZU5vdGlmaWNhdGlvbhIQCghldmVudF9pZBgBIAEoCRIRCgl0ZW5hbnRfaWQYAiABKAkSFQoNcmVwb3NpdG9yeV9pZBgDIAEoCRILCgNyZWYYBCABKAkSDwoHb2xkX3NoYRgFIAEoCRIPCgduZXdfc2hhGAYgASgJEhAKCGFjdG9yX2lkGAcgASgJEhMKC2FjdG9yX3JvbGVzGAggAygJEi8KC29jY3VycmVkX2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCqOAQoMR2l0VHJhbnNwb3J0Eh0KGUdJVF9UUkFOU1BPUlRfVU5TUEVDSUZJRUQQABIVChFHSVRfVFJBTlNQT1JUX1NTSBABEiYKIkdJVF9UUkFOU1BPUlRfU01BUlRfSFRUUF9ESVNDT1ZFUlkQAhIgChxHSVRfVFJBTlNQT1JUX1NNQVJUX0hUVFBfUlBDEAMqkAEKD0xhbmRpbmdTdHJhdGVneRIgChxMQU5ESU5HX1NUUkFURUdZX1VOU1BFQ0lGSUVEEAASIQodTEFORElOR19TVFJBVEVHWV9NRVJHRV9DT01NSVQQARIbChdMQU5ESU5HX1NUUkFURUdZX1NRVUFTSBACEhsKF0xBTkRJTkdfU1RSQVRFR1lfUkVCQVNFEAMqoQEKDExhbmRpbmdTaGFwZRIdChlMQU5ESU5HX1NIQVBFX1VOU1BFQ0lGSUVEEAASHgoaTEFORElOR19TSEFQRV9GQVNUX0ZPUldBUkQQARIeChpMQU5ESU5HX1NIQVBFX01FUkdFX0NPTU1JVBACEhgKFExBTkRJTkdfU0hBUEVfU1FVQVNIEAMSGAoUTEFORElOR19TSEFQRV9SRUJBU0UQBDKvBAoKR2l0U3RvcmFnZRJXCgpVcGxvYWRQYWNrEiEuZ2l0c2Fhcy5naXQudjEuVXBsb2FkUGFja1JlcXVlc3QaIi5naXRzYWFzLmdpdC52MS5VcGxvYWRQYWNrUmVzcG9uc2UoATABEloKC1JlY2VpdmVQYWNrEiIuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXF1ZXN0GiMuZ2l0c2Fhcy5naXQudjEuUmVjZWl2ZVBhY2tSZXNwb25zZSgBMAESTQoITWVyZ2VSZWYSHy5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlcXVlc3QaIC5naXRzYWFzLmdpdC52MS5NZXJnZVJlZlJlc3BvbnNlElMKCkltcG9ydFJlZnMSIS5naXRzYWFzLmdpdC52MS5JbXBvcnRSZWZzUmVxdWVzdBoiLmdpdHNhYXMuZ2l0LnYxLkltcG9ydFJlZnNSZXNwb25zZRJcCg1TZXRQcm90ZWN0aW9uEiQuZ2l0c2Fhcy5naXQudjEuU2V0UHJvdGVjdGlvblJlcXVlc3QaJS5naXRzYWFzLmdpdC52MS5TZXRQcm90ZWN0aW9uUmVzcG9uc2USagoTU3Vic2NyaWJlUmVmVXBkYXRlcxIqLmdpdHNhYXMuZ2l0LnYxLlN1YnNjcmliZVJlZlVwZGF0ZXNSZXF1ZXN0GiUuZ2l0c2Fhcy5naXQudjEuUmVmVXBkYXRlTm90aWZpY2F0aW9uMAFCM1oxZ2l0aHViLmNvbS95b3Vyb3JnL2dpdHNhYXMvZ2VuL3Byb3RvL2dpdC92MTtnaXR2MWIGcHJvdG8z", [file_google_protobuf_timestamp]);
 
 /**
  * OperationContext identifies one Git operation. It is sent as the first client-stream message;
@@ -256,6 +256,18 @@ export type MergeRefRequest = Message<"gitsaas.git.v1.MergeRefRequest"> & {
    * @generated from field: string expected_current_revision = 4;
    */
   expectedCurrentRevision: string;
+
+  /**
+   * The landing plan (SPEC-0065, ADR-0088), additive. Absent (default) means
+   * the legacy landing: move the ref to revision, byte-for-byte as before.
+   * When present, storage may PRODUCE commits — the strategy and trunk mode
+   * are facts Code Review read from the repository record, never caller
+   * choices; the message inputs title the produced commit only, and the
+   * committer identity is always storage's own service identity.
+   *
+   * @generated from field: gitsaas.git.v1.LandingPlan landing = 5;
+   */
+  landing?: LandingPlan | undefined;
 };
 
 /**
@@ -266,8 +278,56 @@ export const MergeRefRequestSchema: GenMessage<MergeRefRequest> = /*@__PURE__*/
   messageDesc(file_proto_git_v1_git, 6);
 
 /**
+ * LandingPlan states the policy to execute, not a shape assertion: under
+ * trunk_based mode storage resolves the effective landing itself — prefer
+ * fast-forward, fall back to rebase, never produce a merge commit — because
+ * the object graph is a server fact (SPEC-0065 AC5, AC7).
+ *
+ * @generated from message gitsaas.git.v1.LandingPlan
+ */
+export type LandingPlan = Message<"gitsaas.git.v1.LandingPlan"> & {
+  /**
+   * The repository's strategy as its record holds it. UNSET is the absence of
+   * an explicit choice.
+   *
+   * @generated from field: gitsaas.git.v1.LandingStrategy strategy = 1;
+   */
+  strategy: LandingStrategy;
+
+  /**
+   * @generated from field: bool trunk_based = 2;
+   */
+  trunkBased: boolean;
+
+  /**
+   * The merge request's title, used to default a produced commit's message
+   * (squash). Prose from the record the gate decided about, not free input.
+   *
+   * @generated from field: string message_title = 3;
+   */
+  messageTitle: string;
+
+  /**
+   * The merge request's opaque reference, recorded in a produced commit's
+   * message trailer so history answers "which review landed this".
+   *
+   * @generated from field: string merge_request_reference = 4;
+   */
+  mergeRequestReference: string;
+};
+
+/**
+ * Describes the message gitsaas.git.v1.LandingPlan.
+ * Use `create(LandingPlanSchema)` to create a new message.
+ */
+export const LandingPlanSchema: GenMessage<LandingPlan> = /*@__PURE__*/
+  messageDesc(file_proto_git_v1_git, 7);
+
+/**
  * MergeRefResponse reports the ref's new revision. A refused move returns a coarse
  * error and no partial state, in the same shape as any other storage refusal.
+ * A conflicting landing refuses BEFORE anything moves, carrying a machine-
+ * readable reason beside the coarse denial (SPEC-0065 AC4).
  *
  * @generated from message gitsaas.git.v1.MergeRefResponse
  */
@@ -281,6 +341,19 @@ export type MergeRefResponse = Message<"gitsaas.git.v1.MergeRefResponse"> & {
    * @generated from field: string revision = 2;
    */
   revision: string;
+
+  /**
+   * What the ref points at now: the requested revision when the landing was a
+   * fast-forward (or legacy), the produced commit otherwise.
+   *
+   * @generated from field: string landed_revision = 3;
+   */
+  landedRevision: string;
+
+  /**
+   * @generated from field: gitsaas.git.v1.LandingShape landed_shape = 4;
+   */
+  landedShape: LandingShape;
 };
 
 /**
@@ -288,7 +361,7 @@ export type MergeRefResponse = Message<"gitsaas.git.v1.MergeRefResponse"> & {
  * Use `create(MergeRefResponseSchema)` to create a new message.
  */
 export const MergeRefResponseSchema: GenMessage<MergeRefResponse> = /*@__PURE__*/
-  messageDesc(file_proto_git_v1_git, 7);
+  messageDesc(file_proto_git_v1_git, 8);
 
 /**
  * ImportRefsRequest carries the import's git phase to storage. The source URL is
@@ -323,7 +396,7 @@ export type ImportRefsRequest = Message<"gitsaas.git.v1.ImportRefsRequest"> & {
  * Use `create(ImportRefsRequestSchema)` to create a new message.
  */
 export const ImportRefsRequestSchema: GenMessage<ImportRefsRequest> = /*@__PURE__*/
-  messageDesc(file_proto_git_v1_git, 8);
+  messageDesc(file_proto_git_v1_git, 9);
 
 /**
  * ImportRefsResponse reports the refs that moved. A refused import returns a
@@ -356,7 +429,7 @@ export type ImportRefsResponse = Message<"gitsaas.git.v1.ImportRefsResponse"> & 
  * Use `create(ImportRefsResponseSchema)` to create a new message.
  */
 export const ImportRefsResponseSchema: GenMessage<ImportRefsResponse> = /*@__PURE__*/
-  messageDesc(file_proto_git_v1_git, 9);
+  messageDesc(file_proto_git_v1_git, 10);
 
 /**
  * @generated from message gitsaas.git.v1.RefUpdate
@@ -378,7 +451,7 @@ export type RefUpdate = Message<"gitsaas.git.v1.RefUpdate"> & {
  * Use `create(RefUpdateSchema)` to create a new message.
  */
 export const RefUpdateSchema: GenMessage<RefUpdate> = /*@__PURE__*/
-  messageDesc(file_proto_git_v1_git, 10);
+  messageDesc(file_proto_git_v1_git, 11);
 
 /**
  * SetProtectionRequest delivers one exact-ref branch-protection rule.
@@ -414,7 +487,7 @@ export type SetProtectionRequest = Message<"gitsaas.git.v1.SetProtectionRequest"
  * Use `create(SetProtectionRequestSchema)` to create a new message.
  */
 export const SetProtectionRequestSchema: GenMessage<SetProtectionRequest> = /*@__PURE__*/
-  messageDesc(file_proto_git_v1_git, 11);
+  messageDesc(file_proto_git_v1_git, 12);
 
 /**
  * SetProtectionResponse is empty by design: the rule is in effect, or the call
@@ -430,7 +503,7 @@ export type SetProtectionResponse = Message<"gitsaas.git.v1.SetProtectionRespons
  * Use `create(SetProtectionResponseSchema)` to create a new message.
  */
 export const SetProtectionResponseSchema: GenMessage<SetProtectionResponse> = /*@__PURE__*/
-  messageDesc(file_proto_git_v1_git, 12);
+  messageDesc(file_proto_git_v1_git, 13);
 
 /**
  * SubscribeRefUpdatesRequest scopes a ref-update subscription. An empty
@@ -456,7 +529,7 @@ export type SubscribeRefUpdatesRequest = Message<"gitsaas.git.v1.SubscribeRefUpd
  * Use `create(SubscribeRefUpdatesRequestSchema)` to create a new message.
  */
 export const SubscribeRefUpdatesRequestSchema: GenMessage<SubscribeRefUpdatesRequest> = /*@__PURE__*/
-  messageDesc(file_proto_git_v1_git, 13);
+  messageDesc(file_proto_git_v1_git, 14);
 
 /**
  * RefUpdateNotification is the wire form of the repository RefUpdated event: it
@@ -517,7 +590,7 @@ export type RefUpdateNotification = Message<"gitsaas.git.v1.RefUpdateNotificatio
  * Use `create(RefUpdateNotificationSchema)` to create a new message.
  */
 export const RefUpdateNotificationSchema: GenMessage<RefUpdateNotification> = /*@__PURE__*/
-  messageDesc(file_proto_git_v1_git, 14);
+  messageDesc(file_proto_git_v1_git, 15);
 
 /**
  * GitTransport distinguishes SSH's stateful exchange from Smart-HTTP's
@@ -553,6 +626,81 @@ export enum GitTransport {
  */
 export const GitTransportSchema: GenEnum<GitTransport> = /*@__PURE__*/
   enumDesc(file_proto_git_v1_git, 0);
+
+/**
+ * LandingStrategy mirrors gitsaas.repository.v1.MergeStrategy: the per-
+ * repository choice. Kept a separate vocabulary here so the two services stay
+ * decoupled; the values map one-to-one and grow together additively.
+ *
+ * @generated from enum gitsaas.git.v1.LandingStrategy
+ */
+export enum LandingStrategy {
+  /**
+   * @generated from enum value: LANDING_STRATEGY_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: LANDING_STRATEGY_MERGE_COMMIT = 1;
+   */
+  MERGE_COMMIT = 1,
+
+  /**
+   * @generated from enum value: LANDING_STRATEGY_SQUASH = 2;
+   */
+  SQUASH = 2,
+
+  /**
+   * @generated from enum value: LANDING_STRATEGY_REBASE = 3;
+   */
+  REBASE = 3,
+}
+
+/**
+ * Describes the enum gitsaas.git.v1.LandingStrategy.
+ */
+export const LandingStrategySchema: GenEnum<LandingStrategy> = /*@__PURE__*/
+  enumDesc(file_proto_git_v1_git, 1);
+
+/**
+ * LandingShape reports what physically landed. It differs from the requested
+ * strategy whenever trunk mode resolved the landing differently — a merge
+ * commit request landing as a fast-forward or a rebase, for instance.
+ *
+ * @generated from enum gitsaas.git.v1.LandingShape
+ */
+export enum LandingShape {
+  /**
+   * @generated from enum value: LANDING_SHAPE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: LANDING_SHAPE_FAST_FORWARD = 1;
+   */
+  FAST_FORWARD = 1,
+
+  /**
+   * @generated from enum value: LANDING_SHAPE_MERGE_COMMIT = 2;
+   */
+  MERGE_COMMIT = 2,
+
+  /**
+   * @generated from enum value: LANDING_SHAPE_SQUASH = 3;
+   */
+  SQUASH = 3,
+
+  /**
+   * @generated from enum value: LANDING_SHAPE_REBASE = 4;
+   */
+  REBASE = 4,
+}
+
+/**
+ * Describes the enum gitsaas.git.v1.LandingShape.
+ */
+export const LandingShapeSchema: GenEnum<LandingShape> = /*@__PURE__*/
+  enumDesc(file_proto_git_v1_git, 2);
 
 /**
  * @generated from service gitsaas.git.v1.GitStorage
