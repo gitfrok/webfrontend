@@ -108,7 +108,7 @@ describe('the SSR relays', () => {
     const response = await markRoute({
       request: request('/api/notifications/x/mark_read', 'POST'),
       params: { notificationID: 'x' },
-    } as unknown as APIContext);
+    });
     expect(response.status).toBe(303);
     expect(response.headers.get('location')).toContain('notification_outcome=marked');
 
@@ -116,7 +116,7 @@ describe('the SSR relays', () => {
     const failed = await markRoute({
       request: request('/api/notifications/x/mark_read', 'POST'),
       params: { notificationID: 'x' },
-    } as unknown as APIContext);
+    });
     expect(failed.status).toBe(303);
     expect(failed.headers.get('location')).toContain('notification_outcome=mark-failed');
   });
